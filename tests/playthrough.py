@@ -135,14 +135,14 @@ def main(browser):
     act(p,'rope');use(p,'rope','hook');act(p,'hook');combine(p,'rope','hook')
     check('Inventory combines hook and rope without duplication','grapple' in state(p)['inventory'] and 'rope' not in state(p)['inventory'] and 'hook' not in state(p)['inventory'])
     use(p,'grapple','anchor',drag=True);check('Inventory drag attaches grapple to far anchor',flags(p,'grappleSet'))
-    act(p,'winch');act(p,'stream');check('Bridge repaired and reverse water clue recorded',flags(p,'bridge') and 'water' in state(p)['notes'])
+    act(p,'winch');check('Bridge requires a companion on the brake',not flags(p,'bridge'));act(p,'david');act(p,'winch');act(p,'stream');check('Bridge repaired and reverse water clue recorded',flags(p,'bridge') and 'water' in state(p)['notes'])
     shot(p,'02-forest');act(p,'next');fixture(p,3)
     act(p,'book');check('High book requires moving ladder',not flags(p,'planTaken'))
     drag_object(p,'ladder',target=(1170,585));act(p,'book')
     check('Dragging archive ladder makes high book reachable',flags(p,'planTaken') and 'plan' in state(p)['inventory'])
     act(p,'record');shot(p,'03-archive');act(p,'next');fixture(p,4)
     act(p,'pipe0');check('Water cannot run through clogged filter',not flags(p,'pump'))
-    act(p,'filter')
+    act(p,'filter');check('Intake pressure prevents premature filter removal',not flags(p,'filter'));act(p,'intake');act(p,'filter');act(p,'intake')
     for i,v in enumerate([2,0,3]):
         for _ in range(4):
             if state(p)['valves'][i]==v:break
@@ -218,6 +218,8 @@ if __name__=='__main__':
             if (ROOT/'tests/regressions.py').exists():
                 exec((ROOT/'tests/regressions.py').read_text(),globals())
                 run_regressions(browser,page,storage)
+            exec((ROOT/'tests/chapter-regressions.py').read_text(),globals())
+            run_chapter_regressions(browser)
             check('No uncaught JavaScript errors',not ERRORS)
             check('No external asset or network requests',not REQUESTS)
         except Exception as e:

@@ -38,7 +38,7 @@ def run_regressions(browser,completed,storage):
     p.wait_for_timeout(200)
     check('Malformed imported JSON leaves gameplay intact',state(p)['scene']==11 and flags(p,'ended') and '无法载入' in p.locator('#toast').inner_text())
     # A normal scene can be reloaded at the same mechanism state.
-    load(p,4);act(p,'filter');use(p,'pole','pipe0');p.evaluate('HildaTest.flush()')
+    load(p,4);act(p,'intake');act(p,'filter');use(p,'pole','pipe0');p.evaluate('HildaTest.flush()')
     partial=state(p);raw=p.evaluate('storageSnapshot()')
     p2=newpage(browser,storage=raw);p2.locator('#continueBtn').click();settle(p2)
     check('Partly rotated pipe puzzle survives save and restore',state(p2)['valves']==partial['valves'] and flags(p2,'filter'))

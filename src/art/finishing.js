@@ -46,7 +46,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
       [[640,400],[640,570],[940,570]].forEach(([x,y])=>{
         b+=rep(8,j=>{let a=j*Math.PI/4;return bolt(x+Math.cos(a)*49,y+Math.sin(a)*49,2.7);});
       });
-      b+=group(1128,668,1,rect(-36,-39,72,78,'#304f4a',8,'#9b9c78',2)+bolt(-27,-28)+bolt(27,-28)+bolt(-27,28)+bolt(27,28)+circle(0,8,15,'#bdab77','#223e41',3)+path(f.pump?'M0 8 14 26':'M0 8-11-23','none','url(#v3Brass)',9)+ell(f.pump?14:-11,f.pump?26:-23,18,7,'#d1b77f','#3d544a',2));
+      b+=group(1128,668,1,rect(-36,-39,72,78,'#304f4a',8,'#9b9c78',2)+bolt(-27,-28)+bolt(27,-28)+bolt(-27,28)+bolt(27,28)+circle(0,8,15,'#bdab77','#223e41',3)+`<g id="primeHandle">`+path(f.pump?'M0 8 14 26':'M0 8-11-23','none','url(#v3Brass)',9)+ell(f.pump?14:-11,f.pump?26:-23,18,7,'#d1b77f','#3d544a',2)+`</g>`);
       b+=plate(1128,740,100,f.pump?'运行 / 已锁紧':'试　压');
       b+=path('M1078 620h-24v-74','none','#bfbb9655',1.5)+text(998,639,'接通后缓慢试压',11,'#c2c4a1');
       b+=rep(5,j=>group(287+j*17,378,1,rect(0,-19,8,39,'#506e61',2,'#bcc095',1)));

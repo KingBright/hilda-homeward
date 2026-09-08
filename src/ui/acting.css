@@ -1,0 +1,19 @@
+/* Presentation can pause independently of saved puzzle progress. */
+#performer path,#performer ellipse{vector-effect:none}
+#heroPosition.working #performer{animation:none}
+#heroPosition.working #performer *{animation:none}
+#heroPosition.walking #performer{animation:none}
+#world .chapter-ripple{animation:chapterRipple 2.7s linear infinite;transform-box:fill-box;transform-origin:center}
+#world .stream-leaf{animation:chapterStream 9s linear infinite;transform-box:fill-box;transform-origin:center}
+#world .stream-leaf.downstream{animation-direction:reverse}
+#world .chapter-dew{animation:chapterDew 4s ease-in-out infinite}
+@keyframes chapterRipple{0%{transform:scale(.35);opacity:0}20%{opacity:.52}100%{transform:scale(2.8);opacity:0}}
+@keyframes chapterStream{0%{transform:translate(-23px,18px) rotate(-7deg);opacity:0}20%,80%{opacity:.55}100%{transform:translate(22px,-27px) rotate(12deg);opacity:0}}
+@keyframes chapterDew{0%,100%{opacity:.16}50%{opacity:.64}}
+.paused #world .chapter-ripple,.paused #world .stream-leaf,.paused #world .chapter-dew{animation-play-state:paused}
+.reduced #world .chapter-ripple,.reduced #world .stream-leaf,.reduced #world .chapter-dew{animation:none;opacity:.35}
+#game.performing #workRing{opacity:0!important}
+#game.performing #actionLabel{background:#102b36d9;border:1px solid #d3bc8755;padding:10px 20px;border-radius:24px}
+@media(max-height:500px){#game.performing #actionLabel{max-width:65vw;padding:6px 12px;font-size:11px}}
+
+#davidFollow.bracing .person-arms{visibility:hidden}

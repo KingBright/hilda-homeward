@@ -127,3 +127,82 @@ test('Every scene action handles empty and completed states without missing help
    for(const hotspot of scene.hotspots(state))assert.doesNotThrow(()=>scene.act(game,hotspot.id,null),`${sceneIndex}/${hotspot.id}/${filled}`);
  }
 });
+
+test('Action track prepares, contacts and settles without a timer',()=>{
+ const {ActionTrack}=H.use('engine/action-track'),t=new ActionTrack(1000,{kind:'pull'});
+ assert.equal(t.sample().phase,'prepare');t.advance(300);assert.equal(t.sample().phase,'contact');
+ assert.ok(t.sample().reach>.99);t.advance(560);assert.equal(t.sample().phase,'settle');
+ t.advance(1000);assert.equal(t.sample().progress,1);assert.equal(t.claim(),true);assert.equal(t.claim(),false);
+});
+test('Paused and cancelled actions cannot complete or consume twice',()=>{
+ const {ActionTrack}=H.use('engine/action-track'),t=new ActionTrack(1000);
+ t.advance(420);t.advance(10000,true);assert.equal(t.sample().progress,.42);assert.equal(t.claim(),false);
+ t.cancel();t.advance(10000);assert.equal(t.sample().progress,.42);assert.equal(t.claim(),false);
+});
+test('Action track rejects invalid durations and clocks',()=>{
+ const {ActionTrack}=H.use('engine/action-track');
+ for(const n of [0,-2,NaN,Infinity])assert.throws(()=>new ActionTrack(n));
+ const t=new ActionTrack(300);for(const n of [-1,NaN,Infinity])assert.throws(()=>t.advance(n));
+});
+test('Arm solver preserves both rigid lengths over a target grid',()=>{
+ const {solve}=H.use('engine/kinematics');
+ for(let x=-140;x<=140;x+=10)for(let y=-140;y<=140;y+=10)for(const bend of [-1,1]){
+  const o=[3,-11],r=solve(o,[x,y],31,33,bend);
+  assert.ok(Math.abs(Math.hypot(r.elbow[0]-o[0],r.elbow[1]-o[1])-31)<1e-6);
+  assert.ok(Math.abs(Math.hypot(r.end[0]-r.elbow[0],r.end[1]-r.elbow[1])-33)<1e-6);
+  assert.ok([...r.elbow,...r.end].every(Number.isFinite));
+ }
+});
+test('Coincident and unreachable contacts never produce NaN or stretching',()=>{
+ const {solve}=H.use('engine/kinematics');
+ for(const target of [[0,0],[1000,1000],[-1000,0]]){
+  const result=solve([0,0],target,25,25);assert.ok([...result.elbow,...result.end].every(Number.isFinite));
+  assert.ok(Math.hypot(...result.end)<=50.000001);
+ }
+ assert.throws(()=>solve([0,0],[NaN,1],25,25));
+});
+test('Service deck visual profile and actor feet share continuous geometry',()=>{
+ const W=H.use('content/walkways'),scene=Story.scenes[4];
+ for(let x=61;x<=1540;x++){assert.equal(scene.ground(x),W.waterworksGround(x));assert.ok(Math.abs(scene.ground(x)-scene.ground(x-1))<=.731);}
+ for(const [x,y] of W.waterworks)assert.equal(scene.ground(x),y);
+ assert.match(W.waterworksPath(),/^M60 793/);assert.throws(()=>W.waterworksGround(NaN));
+});
+test('All authored action contacts are finite and deterministic',()=>{
+ const C=H.use('content/choreography'),s=State.fresh();
+ for(const scene of [1,2,4])for(const h of Story.scenes[scene].hotspots(s)){
+  const score=C.score(scene,h.id,s,null);if(score.target)assert.ok(score.target.every(Number.isFinite));
+  assert.deepEqual(plain(C.score(scene,h.id,s,null)),plain(score));
+ }
+});
+test('New chapter flags round trip without a save schema reset',()=>{
+ const s=State.fresh();s.f.bridgeBrace=true;s.f.intakeClosed=true;
+ const result=State.validate(s);assert.equal(result.version,3);assert.equal(result.f.intakeClosed,true);assert.equal(result.f.bridgeBrace,true);
+});
+test('Completed V3 checkpoints keep their solved puzzles after the additive upgrade',()=>{
+ const s=State.fresh();s.f={filter:true,poleTaken:true,pumpPrimed:true,pump:true,bridge:true};s.inventory=['pole'];
+ const result=State.validate(s);assert.equal(result.f.pump,true);assert.equal(result.f.bridge,true);assert.equal(result.f.intakeClosed,undefined);
+});
+test('A running pump cannot import with a closed inlet or fractional detents',()=>{
+ for(const flags of [{pump:true,pumpPrimed:true,intakeClosed:true},{gateTurns:.2},{bypassTurns:1.8}]){
+  const s=State.fresh();s.f=flags;assert.throws(()=>State.validate(s));
+ }
+});
+test('SVG primitives preserve authored stroke and animation attributes',()=>{
+ const K=H.use('art/kit');assert.match(K.circle(1,2,3,'#fff','none',0,'class="test"'),/class="test"/);
+ assert.match(K.ell(0,0,2,1,'#aaa','#bbb',3),/stroke="#bbb" stroke-width="3"/);
+ assert.match(K.ell(0,0,2,1,'#aaa','opacity=".2"'),/opacity=".2"/);
+});
+test('Filter is not removed until inlet is isolated; objects commit at contact completion',()=>{
+ const s=State.fresh(),callbacks=[];
+ const g={s,set:(k,v=true)=>s.f[k]=v,take:id=>s.inventory.push(id),toast(){},sound(){},say(){},work:(ms,label,after)=>callbacks.push(after)};
+ Story.scenes[4].act(g,'filter',null);assert.equal(callbacks.length,0);assert.equal(s.f.filter,undefined);
+ s.f.intakeClosed=true;Story.scenes[4].act(g,'filter',null);assert.equal(callbacks.length,1);assert.equal(s.f.filter,undefined);
+ callbacks.shift()();assert.equal(s.f.filter,true);assert.ok(s.inventory.includes('pole'));
+});
+test('Bridge cannot lift without both anchorage and a companion on the brake',()=>{
+ const s=State.fresh(),callbacks=[];
+ const g={s,toast(){},say(){},work:(ms,label,after)=>callbacks.push(after)};
+ Story.scenes[2].act(g,'winch',null);assert.equal(callbacks.length,0);
+ s.f.grappleSet=true;Story.scenes[2].act(g,'winch',null);assert.equal(callbacks.length,0);
+ s.f.bridgeBrace=true;Story.scenes[2].act(g,'winch',null);assert.equal(callbacks.length,1);
+});

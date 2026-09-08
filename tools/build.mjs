@@ -24,6 +24,6 @@ const html=template.replace('<!-- STYLES -->',`<style>\n${css}\n</style>`).repla
 for(const name of ['index.html','hilda-homeward-v2.html']) await writeFile(resolve(root,name),html);
 const dev=template.replace('<!-- STYLES -->',styles.map(p=>`<link rel="stylesheet" href="./${relative(root,p)}">`).join('\n')).replace('<!-- SCRIPTS -->',paths.map(p=>`<script defer src="./${relative(root,p)}"></script>`).join('\n'));
 await writeFile(resolve(root,'dev.html'),dev);
-const manifest={version:'3.0.0',modules:paths.map(p=>relative(root,p)),bytes:Buffer.byteLength(html),sha256:createHash('sha256').update(html).digest('hex')};
+const manifest={version:JSON.parse(await readFile(resolve(root,'package.json'),'utf8')).version,modules:paths.map(p=>relative(root,p)),bytes:Buffer.byteLength(html),sha256:createHash('sha256').update(html).digest('hex')};
 await writeFile(resolve(root,'build-manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log(`Built ${paths.length} source modules, ${(manifest.bytes/1024).toFixed(1)} KiB, sha256 ${manifest.sha256}`);

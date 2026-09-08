@@ -2,8 +2,8 @@ Homeward.define("art/kit", [], () => {
 const P={ink:'#193841',deep:'#102e3a',pine:'#204b4b',teal:'#3d7974',sage:'#6f9581',moss:'#879b75',cream:'#f3dfb7',gold:'#dfb875',orange:'#bb694d',blue:'#63b5c5',steel:'#789d9d'};
 const path=(d,f,s='none',w=2,more='')=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${more}/>`;
 const rect=(x,y,w,h,f,r=0,s='none',sw=2)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${f}" stroke="${s}" stroke-width="${sw}"/>`;
-const circle=(x,y,r,f,s='none',sw=2)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" stroke="${s}" stroke-width="${sw}"/>`;
-const ell=(x,y,rx,ry,f,more='')=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${more}/>`;
+const circle=(x,y,r,f,s='none',sw=2,more='')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" stroke="${s}" stroke-width="${sw}" ${more}/>`;
+const ell=(x,y,rx,ry,f,more='',sw=2)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${/^(#|url\(|none$)/.test(more)?`stroke="${more}" stroke-width="${sw}"`:more}/>`;
 const text=(x,y,t,size=16,color=P.cream,extra='')=>`<text x="${x}" y="${y}" fill="${color}" font-size="${size}" font-family="Noto Sans CJK SC, sans-serif" text-anchor="middle" ${extra}>${t}</text>`;
 const group=(x,y,s,body,extra='')=>`<g transform="translate(${x} ${y}) scale(${s})" ${extra}>${body}</g>`;
 const rep=(n,fn)=>Array.from({length:n},(_,i)=>fn(i)).join('');

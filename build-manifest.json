@@ -1,21 +1,27 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "modules": [
     "src/engine/modules.js",
+    "src/art/chapter-life.js",
     "src/art/characters.js",
     "src/art/finishing.js",
     "src/art/index.js",
     "src/art/items.js",
     "src/art/kit.js",
+    "src/art/performer.js",
     "src/art/props.js",
     "src/content/catalog.js",
+    "src/content/choreography.js",
     "src/content/details.js",
     "src/content/items.js",
     "src/content/mechanisms.js",
+    "src/content/walkways.js",
+    "src/engine/action-track.js",
     "src/engine/audio.js",
     "src/engine/camera.js",
     "src/engine/dom.js",
     "src/engine/hydraulics.js",
+    "src/engine/kinematics.js",
     "src/engine/runtime.js",
     "src/engine/state.js",
     "src/engine/storage.js",
@@ -47,6 +53,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 208673,
-  "sha256": "d97438c01e39867f4f4c9e8ff79113d881c006770b3ec967c7e91247780e4f7f"
+  "bytes": 237041,
+  "sha256": "bc5eb2de2e3f7643e16852c4bb023f4d8222d72ac2ca0ee5b5e3341d4ff35e9d"
 }
