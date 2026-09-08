@@ -1,5 +1,10 @@
 .DS_Store
-*.bak
-*.tmp
-*.log
 node_modules/
+__pycache__/
+previews/
+test-report.json
+tests/fixtures.json
+tests/failure-state.json
+native-storage-report.json
+regression-report.json
+tests/regression-failure-*.json

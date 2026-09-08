@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 工坊版 V3。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><link rel="stylesheet" href="./src/ui/base.css">
+<link rel="stylesheet" href="./src/ui/refinement.css"></head>
+<body>
+<div id="game" aria-label="希尔达全屏互动冒险">
+ <div id="viewport"><svg id="world" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-label="点击场景探索，拖拽物件与机关"></svg></div>
+ <div id="vignette" aria-hidden="true"></div><div id="transition" aria-hidden="true"></div><div id="flash" aria-hidden="true"></div>
+ <header id="hud"><div id="sceneLabel"><span id="actLabel"></span><h1 id="sceneName"></h1><span id="sceneMood"></span></div><nav aria-label="游戏工具"><button id="audioBtn" title="声音" aria-label="开启声音"></button><button id="focusBtn" aria-label="放大观察场景 (E)" title="放大观察 (E)"><svg viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6M10 7v6m-3-3h6"/></svg></button><button id="revealBtn" title="短暂显示可交互对象 [H]" aria-label="显示互动对象"></button><button id="fullBtn" title="全屏 [F]" aria-label="切换全屏"></button><button id="menuBtn" title="暂停 [Esc]" aria-label="打开暂停菜单"></button></nav></header>
+ <button id="focusExit" class="hidden">返回全景 <small>E / ESC</small></button><div id="hoverLabel" aria-hidden="true"></div><div id="actionLabel" role="status" aria-live="polite"></div>
+ <div id="chapterCard" class="hidden"><span></span><h2></h2><p></p></div>
+ <button id="panLeft" class="pan" aria-label="向左查看场景">‹</button><button id="panRight" class="pan" aria-label="向右查看场景">›</button>
+ <div id="hazard" class="hidden" role="progressbar" aria-label="风暴压力" aria-valuemin="0" aria-valuemax="100"><span>风暴正在逼近</span><i><b></b></i></div>
+ <div id="speech" class="hidden" role="dialog" aria-label="角色对话" aria-live="polite"><div id="portrait"></div><div id="speechBody"><span id="speaker"></span><p id="line"></p></div><button id="nextLine" aria-label="下一句对话">继续 <span>›</span></button></div>
+ <div id="bottomBar"><button id="journalBtn" class="edgeBtn" aria-label="打开冒险手记"><span></span><small>手记</small></button><button id="bagBtn" class="edgeBtn" aria-label="打开背包"><span></span><small>背包</small><b id="bagCount">0</b></button></div>
+ <div id="pocket" class="hidden" aria-label="背包"><div id="pocketCaption">选择或拖动物品，放到场景中的目标上。</div><div id="items"></div><button id="closeBag" aria-label="收起背包">⌄</button></div>
+ <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
+ <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
+ <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · 工坊版</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+</div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
+<script defer src="./src/engine/modules.js"></script>
+<script defer src="./src/art/characters.js"></script>
+<script defer src="./src/art/finishing.js"></script>
+<script defer src="./src/art/index.js"></script>
+<script defer src="./src/art/items.js"></script>
+<script defer src="./src/art/kit.js"></script>
+<script defer src="./src/art/props.js"></script>
+<script defer src="./src/content/catalog.js"></script>
+<script defer src="./src/content/details.js"></script>
+<script defer src="./src/content/items.js"></script>
+<script defer src="./src/content/mechanisms.js"></script>
+<script defer src="./src/engine/audio.js"></script>
+<script defer src="./src/engine/camera.js"></script>
+<script defer src="./src/engine/dom.js"></script>
+<script defer src="./src/engine/hydraulics.js"></script>
+<script defer src="./src/engine/runtime.js"></script>
+<script defer src="./src/engine/state.js"></script>
+<script defer src="./src/engine/storage.js"></script>
+<script defer src="./src/scenes/00-home/art.js"></script>
+<script defer src="./src/scenes/00-home/logic.js"></script>
+<script defer src="./src/scenes/01-north-gate/art.js"></script>
+<script defer src="./src/scenes/01-north-gate/logic.js"></script>
+<script defer src="./src/scenes/02-forest/art.js"></script>
+<script defer src="./src/scenes/02-forest/logic.js"></script>
+<script defer src="./src/scenes/03-archive/art.js"></script>
+<script defer src="./src/scenes/03-archive/logic.js"></script>
+<script defer src="./src/scenes/04-waterworks/art.js"></script>
+<script defer src="./src/scenes/04-waterworks/logic.js"></script>
+<script defer src="./src/scenes/05-gondola/art.js"></script>
+<script defer src="./src/scenes/05-gondola/logic.js"></script>
+<script defer src="./src/scenes/06-shelter/art.js"></script>
+<script defer src="./src/scenes/06-shelter/logic.js"></script>
+<script defer src="./src/scenes/07-tower-door/art.js"></script>
+<script defer src="./src/scenes/07-tower-door/logic.js"></script>
+<script defer src="./src/scenes/08-water-clock/art.js"></script>
+<script defer src="./src/scenes/08-water-clock/logic.js"></script>
+<script defer src="./src/scenes/09-storm-roof/art.js"></script>
+<script defer src="./src/scenes/09-storm-roof/logic.js"></script>
+<script defer src="./src/scenes/10-dawn-ridge/art.js"></script>
+<script defer src="./src/scenes/10-dawn-ridge/logic.js"></script>
+<script defer src="./src/scenes/11-homecoming/art.js"></script>
+<script defer src="./src/scenes/11-homecoming/logic.js"></script>
+<script defer src="./src/story/helpers.js"></script>
+<script defer src="./src/story/index.js"></script>
+<script defer src="./src/bootstrap.js"></script>
+</body></html>

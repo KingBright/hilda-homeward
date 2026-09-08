@@ -1,0 +1,20 @@
+/* UI belongs around the world, never on top of a puzzle's important geometry. */
+#hud nav{gap:8px}#focusBtn.active{background:#b8995e!important;color:#132f38!important}
+#focusExit{position:absolute;z-index:10;left:50%;top:calc(25px + var(--safe-top));transform:translateX(-50%);border:1px solid #e4d5ad70;border-radius:30px;padding:11px 21px;background:#102f39e8;font-size:11px;letter-spacing:2px;color:#eadbb6}
+#focusExit small{opacity:.6;font-size:9px;margin-left:9px}#focusExit:focus-visible{outline:2px solid #efcf8e}
+#inspectSelected{font-size:10px!important;width:auto!important;padding:0 11px!important;white-space:nowrap}
+.item-hero{display:flex;justify-content:center;align-items:center;height:230px;margin:14px 0 24px;border:1px solid #c1b38738;border-radius:10px;background:radial-gradient(ellipse,#a5946238,transparent 65%),repeating-linear-gradient(0deg,transparent 0,transparent 27px,#b8b38a0d 28px);position:relative}
+.item-hero svg{width:205px;height:205px;filter:drop-shadow(0 15px 15px #071b2555)}
+.item-hero::after{content:'FIELD NOTES / 物 品 观 察';position:absolute;bottom:10px;font:8px monospace;letter-spacing:3px;color:#bbb997}
+.material-label{display:inline-block;border:1px solid #cab78e44;padding:5px 11px;border-radius:3px;font-size:10px;color:#d5bf8d}
+#itemHint{border-left:2px solid #c5ab71;padding-left:17px}.item-detail{opacity:.95}
+.hotspot[data-kind="observe"] .hotmark circle{stroke:#b3c6ac}.hotspot .hit{stroke-width:1.7}
+.v3-mote{animation:v3drift 8s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.v3-foreground-leaves{animation:v3leaves 11s ease-in-out infinite alternate;transform-origin:800px 910px}
+@keyframes v3drift{0%{opacity:.08;transform:translate(0,6px)}100%{opacity:.63;transform:translate(11px,-10px)}}
+@keyframes v3leaves{0%{transform:rotate(-.45deg)}100%{transform:rotate(.6deg)}}
+.paused .v3-mote,.paused .v3-foreground-leaves{animation-play-state:paused}
+.reduced .v3-mote,.reduced .v3-foreground-leaves{animation:none;opacity:.35}
+#game.inspecting #sceneLabel{opacity:.32}#game.inspecting #vignette{box-shadow:inset 0 0 0 1px #cbb88a22}
+@media(max-width:700px){#hud{left:16px;right:16px}#hud nav{gap:5px}#hud nav button{width:34px;height:34px}#sceneName{font-size:19px}#focusExit{top:auto;bottom:calc(90px + var(--safe-bottom));padding:10px 17px;max-width:85vw;white-space:nowrap}.item-hero{height:185px}.item-hero svg{width:158px;height:158px}#selection{max-width:73%;gap:5px;padding-left:11px}#selection span{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#inspectSelected{padding:0 7px!important}}
+@media(max-height:500px){#focusExit{top:12px;bottom:auto;padding:8px 13px}#panel{padding:24px;max-height:93dvh}.item-hero{height:133px;float:left;width:37%;margin:8px 22px 10px 0}.item-hero svg{height:112px;width:112px}.item-hero::after{display:none}.item-panel .btnrow{clear:both}#sceneLabel{max-width:45%}}

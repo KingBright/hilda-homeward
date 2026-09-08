@@ -1,0 +1,15 @@
+{
+  "name": "hilda-homeward",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Offline point-and-click adventure. No runtime dependencies.",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/unit.test.cjs",
+    "test:browser": "python3 tests/playthrough.py",
+    "check": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

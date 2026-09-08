@@ -1,0 +1,14 @@
+Homeward.define("scene/5/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+function lift(S){let f=S.f;let sum=(S.weights||[]).reduce((a,v)=>a+v,0);let tilt=(sum-4)*3;let b=mountains(true)+skyline()+path('M0 646Q346 665 593 852H-15Z','#3c5f5c')+path('M995 837 1357 654 1634 682V937H1009Z','#315556');
+b+=path('M-20 690 279 610 1049 663 1260 734 1229 811H-20Z','#5d7769','#274e4d',4)+path('M0 799 443 778 793 824 1212 807V919H-10Z','#31534f')+path('M18 686 988 672 1247 729','none','#a6a885',8);
+b+=path('M204 673 249 134 425 137 473 685M262 143 323 664M409 140 354 667','none','#28494c',27)+path('M220 668 263 154 411 154 452 669','none','#81957b',5)+gear(337,188,104,15,'url(#bronze)',0,true)+path('M273 96 1119-30M389 126 1658 107','none','#c5c4a0',4)+path('M259 85 1119-40M400 115 1650 94','none','#21424b',8);
+b+=group(1194,551,1,`${path('M-82-112 0-292 71-112','none','#78958d',7)}${path('M0-292v-122','none','#c8c29c',5)}${path('M-108-110H96L127-79H-129Z','#345756','#1d3f49',5)}${path('M-123-81v212h244V-81Z','#7c9278','#244a4b',6)}${rect(-105,-64,90,117,'#2e5762',7,'#b1b28a',3)}${rect(11,-64,88,117,'#2e5762',7,'#b1b28a',3)}${rect(-107,68,215,45,'#647f65',2)}${path('M0-78V130','none','#375b54',6)}${text(0,96,'山　谷　线',15,'#c8c9a0')}${path('M-132 136h267','none','#bdba8f',13)}${lamp(-120,-38,.43,true)}`);
+b+=group(810,487,1,`${path('M-22 225V-76h41v301Z','#516b5b','#274b46',4)}${path('M-91 225H85','none','#a2a480',17)}<g transform="rotate(${tilt})">${path('M-157-36H157','none','#b6b185',14)}${path('M-144-27v146m288-146v146','none','#b3b18a',3)}${path('M-202 119q59 55 117 0ZM83 119q61 55 118 0Z','#8c9c7b','#345e4e',3)}${text(-144,142,'Ⅳ',25,'#314c44')}${(S.weights||[]).map((v,i)=>group(121+i*21,102-i%2*20,.65,weight(v,0,0))).join('')}</g>${circle(0,-36,18,'#d1bf83','#31594c',3)}${text(1,-90,'平 衡 后 通 行',12,'#d4d0a9')}`);
+b+=[1,2,3].map((v,i)=>(S.weights||[]).includes(v)?'':weight(v,425+i*113,691)).join('');
+b+=!f.lineTaken?group(336,737,1,itemArt('line').replace(/<svg[^>]*>|<\/svg>/g,'')):'';
+b+=rect(979,589,100,112,'#395c58',12,'#9aac89',4)+wheel(1029,633,30,f.lift?160:0)+rect(974,564,113,24,'#d0bd85',3)+text(1030,580,'松开制动',11,'#355349');
+b+=person('大卫',554,769,1.34)+person('芙丽达',951,765,1.38)+fern(31,858,1.9,'#274f48')+grass(1294,809,1.7)+particles(30);return b;}
+function weight(v,x,y){return group(x,y,1,`${path('M-13-44q-9-18 13-18t13 18','none','#8ba28a',5)}${path('M-27-44H27L38 9H-38Z',v===1?'#b9b288':v===2?'#859a81':'#6b8c7d','#274c48',3)}${rep(v,i=>path(`M${(i-(v-1)/2)*11} -24v19`,'none','#e4d5a5',3))}`);}
+
+return lift;
+});
