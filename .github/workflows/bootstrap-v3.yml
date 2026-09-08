@@ -1,0 +1,74 @@
+name: Publish verified V3 source
+on:
+  push:
+    branches: [main]
+    paths: ['tools/v3-payload.*', 'tools/install-v3.py', '.github/workflows/bootstrap-v3.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish-v3
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - id: source
+        run: |
+          if test -f tools/install-v3.py; then echo 'ready=true' >> "$GITHUB_OUTPUT"; else echo 'ready=false' >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-node@v4
+        if: steps.source.outputs.ready == 'true'
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        if: steps.source.outputs.ready == 'true'
+        with:
+          python-version: '3.12'
+      - name: Restore hash-verified source and build
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          python tools/install-v3.py
+          npm run check
+          echo 'a3cdc83c002efa77f2cec470041fde2f3130b97cc1a06beefcb59cf07b2a2241  index.html' | sha256sum -c
+          git diff --check
+      - name: Install browser tests
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          python -m pip install -r tests/requirements.txt
+          python -m playwright install --with-deps chromium
+          python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print("CHROMIUM_PATH="+p.chromium.executable_path); p.stop()' >> "$GITHUB_ENV"
+      - name: Complete adventure and regressions
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          mkdir -p previews
+          python tests/playthrough.py
+      - name: Verify real browser storage and file origins
+        if: steps.source.outputs.ready == 'true'
+        run: python tests/native-storage.py
+      - name: Commit readable source to main without rewriting history
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src tests docs tools/build.mjs README.md package.json .gitignore .nojekyll index.html hilda-homeward-v2.html dev.html build-manifest.json
+          git rm tools/install-v3.py tools/v3-payload.0 tools/v3-payload.1 tools/v3-payload.2 tools/v3-payload.3
+          git commit -m 'feat: deliver modular V3 adventure with verified mechanics and persistence'
+          git push origin HEAD:main
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.source.outputs.ready == 'true'
+        with:
+          name: v3-quality-evidence
+          path: |
+            test-report.json
+            native-storage-report.json
+            tests/failure-state.json
+            tests/fixtures.json
+            previews/
+            index.html
+            build-manifest.json
+          retention-days: 14
