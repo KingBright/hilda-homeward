@@ -8,7 +8,7 @@ permissions:
   contents: write
 concurrency:
   group: publish-v3
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   publish:
     if: github.ref == 'refs/heads/main'
@@ -34,7 +34,7 @@ jobs:
         run: |
           python tools/install-v3.py
           npm run check
-          echo 'a3cdc83c002efa77f2cec470041fde2f3130b97cc1a06beefcb59cf07b2a2241  index.html' | sha256sum -c
+          echo 'd97438c01e39867f4f4c9e8ff79113d881c006770b3ec967c7e91247780e4f7f  index.html' | sha256sum -c
           git diff --check
       - name: Install browser tests
         if: steps.source.outputs.ready == 'true'

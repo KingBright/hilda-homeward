@@ -64,3 +64,12 @@ text = text.replace(old, "p.keyboard.press('Space');p.wait_for_timeout(65);conti
 text = text.replace('page.set_default_timeout(7000)', 'page.set_default_timeout(30000)')
 test.write_text(text)
 print('Restored 60 readable source files; production HTML is built separately.')
+
+# Keep dialogue keys available when an SVG hotspot retains keyboard focus.
+runtime = ROOT / "src/engine/runtime.js"
+text = runtime.read_text()
+old = "el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();interact(el.dataset.hotspot);}}"
+new = "el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(dialogue||modal)return;e.preventDefault();e.stopPropagation();interact(el.dataset.hotspot);}}"
+if text.count(old) != 1:
+    raise ValueError("Keyboard input patch no longer applies")
+runtime.write_text(text.replace(old, new))
