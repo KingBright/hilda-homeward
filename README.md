@@ -6,6 +6,13 @@
 
 ---
 
+## 🎮 在线试玩
+
+* **GitHub Pages 镜像**：[https://kingbright.github.io/hilda-homeward/](https://kingbright.github.io/hilda-homeward/)
+* **个人 NAS 生产环境**：[https://games.hackerlife.fun:8443/hilda/](https://games.hackerlife.fun:8443/hilda/)
+
+---
+
 ## 📖 故事背景
 
 特罗尔堡（Trolberg）的黄昏悄然降临，古老的城墙外迷雾翻涌，机械水钟的节拍在雨夜中低沉回荡。希尔达、小狐鹿枝枝（Twig）与挚友大卫（David）、芙丽达（Frida）被困在归途的迷津中。
@@ -83,10 +90,7 @@ npx serve .
 
 ---
 
-## 📦 部署与线上游玩
-
-### 线上体验
-- **公网访问**：[https://games.hackerlife.fun:8443/hilda/](https://games.hackerlife.fun:8443/hilda/)
+## 📦 部署
 
 ### 一键部署至 NAS / 云服务器
 项目内置了一键同步与部署脚本 `deploy.sh`：
