@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 工坊版 V3。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 扶稳归途 V3.2。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -67,7 +67,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · 工坊版</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.2</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.2 扶稳归途 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -272,12 +272,12 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
 });
 
 /* src/art/index.js */
-Homeward.define("art", ["art/chapter-life", "art/finishing", "art/items", "art/kit", "art/characters", "art/props", "scene/0/art", "scene/1/art", "scene/2/art", "scene/3/art", "scene/4/art", "scene/5/art", "scene/6/art", "scene/7/art", "scene/8/art", "scene/9/art", "scene/10/art", "scene/11/art"], (chapterLife, finishing, detailedItems, kit, characters, props, scene0, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10, scene11) => {
+Homeward.define("art", ["art/setpiece-life", "art/chapter-life", "art/finishing", "art/items", "art/kit", "art/characters", "art/props", "scene/0/art", "scene/1/art", "scene/2/art", "scene/3/art", "scene/4/art", "scene/5/art", "scene/6/art", "scene/7/art", "scene/8/art", "scene/9/art", "scene/10/art", "scene/11/art"], (setpieceLife, chapterLife, finishing, detailedItems, kit, characters, props, scene0, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10, scene11) => {
 const {rep,path}=kit;
 function weather(S){let rain=[1,2,5,7,9].includes(S.scene);let n=S.scene===9?104:rain?57:0;return `<g id="weather" pointer-events="none">${rep(n,i=>path(`M${(i*83)%1640-20} ${(i*59)%1050-110}l${S.scene===9?-23:-9} ${S.scene===9?53:29}`,'none','#c0dad9',1.2,`class="rainStroke" data-rain="${i}"`))}</g>`;}
 
 const scenes=[scene0,scene1,scene2,scene3,scene4,scene5,scene6,scene7,scene8,scene9,scene10,scene11];
-function scene(state,title=false){const i=title?7:state.scene;kit.setVisualState(state,i);return scenes[i](state)+finishing.scenery({...state,scene:i})+chapterLife.scenery({...state,scene:i});}
+function scene(state,title=false){const i=title?7:state.scene;kit.setVisualState(state,i);return scenes[i](state)+finishing.scenery({...state,scene:i})+chapterLife.scenery({...state,scene:i})+setpieceLife.scenery({...state,scene:i});}
 return {...kit,...characters,...props,...detailedItems,defs:kit.defs+finishing.defs+chapterLife.defs,foreground:finishing.foreground,scene,weather};
 });
 
@@ -366,7 +366,7 @@ return {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountain
 Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
   const path=(id,d,fill,stroke='#24434a',width=2)=>`<path id="${id}" d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
   const limb=(id,color,width)=>path(id,'M0 0L0 1','none','#203c45',width+3)+path(id+'Fill','M0 0L0 1','none',color,width);
-  function markup(){return `<g id="performer" transform="scale(1.36)"><ellipse cy="3" rx="28" ry="5" fill="#0b2c353d"/>
+  function markup(){return `<g id="performer" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
     ${limb('rigLegBack','#293e48',9)}${path('rigBootBack','M0 0','none')}
     ${limb('rigLegFront','#30434a',10)}${path('rigBootFront','M0 0','none')}
     <g id="rigUpper">
@@ -405,9 +405,9 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
     };
     const score=action?.score,frame=action?.sample(),reach=frame?.reach||0,effort=frame?.effort||0;
     const phase=distance/28,walk=moving&&!reduced?Math.sin(phase):0;
-    let crouch=['crouch','clear'].includes(score?.kind)?reach*15:score?.kind==='pull'?reach*5:0;
+    let crouch=['crouch','clear','tie'].includes(score?.kind)?reach*15:['pull','haul','lever'].includes(score?.kind)?reach*7:0;
     if(moving&&!reduced)crouch+=3;
-    const lean=score&&['pull','throw','clear'].includes(score.kind)?reach*(score.kind==='pull'?-5:7):0;
+    const lean=score&&['pull','haul','throw','clear','lever'].includes(score.kind)?reach*(['pull','haul'].includes(score.kind)?-7:7):0;
     const bob=moving&&!reduced?-Math.abs(Math.cos(phase))*1.4:reduced?0:Math.sin(time*2.1)*.4;
     const off=[lean,crouch+bob];attr('rigUpper','transform',`translate(${fixed(off[0])} ${fixed(off[1])})`);
     attr('rigHead','transform',`rotate(${fixed(reach*(score?.kind==='tool'?-8:score?.kind==='clear'?7:0))} 0 -87)`);
@@ -418,7 +418,9 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
       const step=(distance/(1.36*60)+(sign<0?.5:0))%1;
       const stride=moving&&!reduced?(step<.5?15-step*60:-15+(step-.5)*60):0;
       const lift=moving&&!reduced&&step>=.5?Math.sin((step-.5)*Math.PI*2)*9:0;
-      const foot=[sign*11+stride,-3-lift];
+      const climbing=score?.kind==='climb'&&!reduced;
+      const rung=climbing?Math.sin(frame.progress*24+sign*Math.PI/2):0;
+      const foot=[sign*11+stride+(climbing?3:0),-3-lift-(climbing?Math.max(0,rung)*19:0)];
       draw('rigLeg'+name,[sign*11+off[0],-48+crouch],foot,22.5,22.5,-1);
       attr('rigBoot'+name,'d',`M${foot[0]-6} ${foot[1]-3}L${foot[0]+6} ${foot[1]-3}L${foot[0]+14} ${foot[1]+5}H${foot[0]-7}Z`);
       attr('rigBoot'+name,'fill',name==='Front'?'#b57a54':'#965e48');
@@ -426,10 +428,17 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
     let target=[28+walk*16,-26],back=[-28-walk*13,-30];
     if(score?.target){
       let world=[...score.target];
+      if(score.effect==='ladderSlide')world[0]+=(score.to-score.from)*effort;
       if(score.kind==='turn'){const angle=(1-effort)*Math.PI;world[0]+=Math.cos(angle)*(score.radius||20);world[1]+=Math.sin(angle)*(score.radius||20);}
       if(score.kind==='pull')world[1]+=effort*(score.travel||24);
       const local=[(world[0]-x)/1.36*face,(world[1]-y)/1.36];
-      if(score.kind==='tool'){target=p(target,[28,-97],reach);back=p(back,[3,-75],reach);}
+      if(score.kind==='climb'&&!reduced){
+        const reaching=frame.progress>.43&&frame.progress<.69;
+        target=reaching?p(target,local,reach):[22,-98-Math.sin(frame.progress*24)*16];
+        back=[-16,-97+Math.sin(frame.progress*24)*16];
+      }
+      else if(score.kind==='lever'){target=p(target,[34,-70-effort*17],reach);back=p(back,[15,-67-effort*17],reach);}
+      else if(score.kind==='tool'){target=p(target,[28,-97],reach);back=p(back,[3,-75],reach);}
       else if(score.kind==='throw'){target=p(target,[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*27],reach);}
       else {target=p(target,local,reach);back=p(back,[local[0]-14,local[1]+9],reach*.85);}
     }
@@ -437,7 +446,11 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
     const hand=draw('rigArmFront',[17+off[0],-79+off[1]],target,28,28,action?1:-1);
     for(const [name,h] of [['Back',handBack],['Front',hand]]){attr('rigHand'+name,'cx',fixed(h[0]));attr('rigHand'+name,'cy',fixed(h[1]));}
     let tool='';
-    if(score?.kind==='tool'&&reach>.1){const tx=(score.target[0]-x)/1.36*face,ty=(score.target[1]-y)/1.36;
+    attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
+    if(score?.kind==='climb'&&frame.progress>.57&&frame.progress<.98){tool=`<g transform="translate(${hand[0]-13} ${hand[1]-9})"><rect width="27" height="36" rx="2" fill="#d0bb81" stroke="#365751" stroke-width="2"/><path d="M7 9h13M7 15h13M7 21h9" stroke="#607e6a" stroke-width="1.5"/></g>`;}
+    else if(['tool','lever'].includes(score?.kind)&&reach>.1){let tip=[...score.target];
+      if(score.kind==='lever'){const t=Math.max(0,Math.min(1,(frame.progress-.12)/.35)),a=t*t*(3-2*t)*24*Math.PI/180,dx=tip[0]-1225,dy=tip[1]-720;tip=[1225+dx*Math.cos(a)-dy*Math.sin(a),720+dx*Math.sin(a)+dy*Math.cos(a)];}
+      const tx=(tip[0]-x)/1.36*face,ty=(tip[1]-y)/1.36;
       tool=`<path d="M${hand[0]-6} ${hand[1]+18}L${tx} ${ty+4}q5-12 10-5" fill="none" stroke="#253d43" stroke-width="5" stroke-linecap="round"/><path d="M${hand}L${tx} ${ty+4}" stroke="#ccb384" stroke-width="3"/>`;
     }else if(score?.prop==='rope'&&reach>.1){tool=`<ellipse cx="${hand[0]}" cy="${hand[1]+12}" rx="12" ry="15" fill="none" stroke="#c4ad7d" stroke-width="3"/>`;}
     else if(!action&&['lamp','shade'].includes(selected)){tool=`<g transform="translate(${hand[0]} ${hand[1]+13})"><circle r="23" fill="#e5ba5830"/><path d="M-6-5V-12Q0-22 6-12V-5" fill="none" stroke="#b49767" stroke-width="2"/><rect x="-9" y="-5" width="18" height="23" rx="4" fill="#dab779" stroke="#635444" stroke-width="2"/><path d="M0 14Q-8 5 0 0Q6 8 0 14" fill="#fff0b0"/></g>`;}
@@ -460,6 +473,82 @@ function particles(n=28,kind='dust'){return `<g id="particles">${rep(n,i=>circle
 return {itemArt,portrait,waterLines,mushrooms,skyline,particles};
 });
 
+/* src/art/setpiece-life.js */
+/** Archive and rooftop presentation. Puzzle decisions belong to the scene modules. */
+Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpieces','engine/setpiece-motion'], (K,F,Stage,Motion) => {
+  const {path,rect,circle,ell,text,group,rep}=K;
+  function scenery(s) {
+    let b='';const f=s.f;
+    if(s.scene===3) {
+      b+=rep(3,i=>group(Stage.archive.docks[i],849,1,
+        path('M-34-41H34M0-46v11','none','#d8c38f',2)+text(0,0,['风 · 旧城','叶 · 山林','水 · 钟楼'][i],12,'#d7cea4')));
+      b+=group(1170,236,1,rect(-85,-22,170,38,'#344f46',4,'#b7b48a',2)+text(0,3,'水务卷宗 · 第七架',13,'#e1d1a0'));
+      b+=group(765,200,1,rect(-155,-38,310,56,'#b5ac80',4,'#354e42',3)+text(0,-12,'先对准 · 再锁轮 · 扶稳取书',14,'#345349')+text(0,8,'借书的人，也要好好回来。',10,'#5a6e55'));
+      b+=`<g id="archiveBrakeShift">`+group(Stage.ladderX(s)+82,777,1,
+        path('M-19 20H10L17 1H-9Z','#586b50','#253f3c',3)+circle(-6,5,7,'#cdb780','#314b40',2)+
+        `<g id="archiveBrakePedal" transform="rotate(${f.ladderBrake?26:-25} -6 5)">${path('M-6 5L19-8','none','#c1a971',7)}${rect(8,-14,28,11,'#cbb98d',3,'#385347',2)}</g>`+
+        circle(26,22,4,f.ladderBrake?'#e3c886':'#425b48','#cbc29a',1))+`</g>`;
+      b+=rep(12,i=>group(618+(i%4)*175,436+Math.floor(i/4)*113,1,
+        rect(-16,-5,32,10,'#cfbf8b',2,'#52634c',1)+text(0,2,String(17+i).padStart(3,'0'),6,'#52634c')));
+      b+=path('M428 158 500 167 876 827 627 827Z','url(#chapterBeam)');
+      b+=group(590,775,1,rect(-30,-61,61,63,'#8b8060',3,'#345348',2)+rect(-30,-61,61,63,'url(#chapterWood)')+path('M-33-48H33M-33-16H33','none','#b9aa78',3)+text(0,-30,'待归还',10,'#d3c293'));
+    }
+    if(s.scene===9) {
+      // The old inspection boards exist before rescue; the safety line makes them traversable.
+      b+=`<g id="roofInspectionBoards" opacity="${f.davidSafe?1:.38}">`+rep(11,i=>{
+        const x=481+i*24,y=Stage.roofGround(x);
+        return path(`M${x} ${y}l23-2 3 8-25 3Z`,'#9c9374','#38555a',2)+circle(x+5,y+4,1.5,'#c8baa0');
+      })+`</g>`;
+      if(f.davidSafe)b+=path('M425 652Q596 675 767 644','none','#e0c89a',5)+path('M755 742V632','none','#7d998c',7);
+      b+=path('M1000 752l24-47 27 49Z','#b0a980','#345458',3)+path('M1013 743l11-22 13 24Z','#46655f');
+      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#7d976c',12)}${circle(1025,716,5,'#e8cfa8','#315050',1.5)}</g>`;
+      b+=path('M1220 633V591L1250 569','none','#2c4548',12)+path('M1220 633V591L1250 569','none','#a9a87f',6);
+      b+=circle(1220,657,41,'#2c4950','#849d8b',3)+`<g id="roofControlWheel" transform="rotate(${s.beaconAngle??-65} 1220 657)">${circle(1220,657,29,'#4d726b','#c4b384',6)}${path('M1191 657h58m-29-29v58','none','#b8aa7c',5)}${circle(1249,657,7,'#e6c790','#3c5850',2)}</g>`;
+      b+=group(1189,617,1,path('M0-9 3-3 9-2 4 3 6 9 0 5-6 9-4 3-9-2-3-3Z','#e6d7a2','#395659',1));
+      b+=F.plate(1220,730,143,'低处检修轮 · 寻星')+F.plate(837,834,219,'先稳住，再伸手。');
+      b+=`<g id="roofPennant" transform="rotate(-8 217 392)">${path('M217 392q42-13 81 2l-19 14q-31-9-62-5Z','#c19b68','#344f55',2)}${path('M231 390l-2 13m16-14-3 15m16-14-4 15','none','#edd5a0',2)}</g>`;
+      b+=rep(13,i=>{const x=803+i*52,y=790+i%3*27;return path(`M${x} ${y}q7-10 23-2l-5 5Z`,'#557978','#365960',1);});
+    }
+    return `<g id="setpieceScenery" pointer-events="none">${b}<g id="setpieceFX"></g></g>`;
+  }
+  let rootCache=null,nodes={};
+  function animate(root,action,s,preview=null) {
+    if(!root||![3,9].includes(s.scene))return;
+    if(root!==rootCache){rootCache=root;nodes={};}
+    const node=id=>nodes[id]?.isConnected?nodes[id]:(nodes[id]=root.querySelector('#'+id));
+    const set=(id,key,value)=>node(id)?.setAttribute(key,String(value));
+    const c=action?.score,q=action?.sample(),p=q?.progress??0,e=q?.effort??0,reduced=s.settings.reduced;
+    const stage=(a,b)=>Motion.segment(p,a,b);let fx='';
+    if(s.scene===3) {
+      const dx=c?.effect==='ladderSlide'&&!reduced?(c.to-c.from)*e:0;
+      set('archiveLadderShift','transform',`translate(${dx} 0)`);set('archiveBrakeShift','transform',`translate(${dx} 0)`);
+      set('archiveLadderShift','opacity',preview?.kind==='ladder'?.48:1);
+      set('archiveBook','opacity',c?.effect==='archiveBook'&&p>.57&&!reduced?0:1);
+      const brake=c?.effect==='ladderBrake'?(c.from?26-51*e:-25+51*e):s.f.ladderBrake?26:-25;
+      set('archiveBrakePedal','transform',`rotate(${reduced?(s.f.ladderBrake?26:-25):brake} -6 5)`);
+      if(preview?.kind==='ladder')fx=text(preview.x,579,'松手后推到这里',13,'#f1dda7');
+    }
+    if(s.scene===9) {
+      const cast=Motion.cast(s,action,reduced);
+      for(const [id,point] of [['roofDavid',cast.david],['roofFrida',cast.frida],['roofTwig',cast.twig]])set(id,'transform',`translate(${point[0].toFixed(2)} ${point[1].toFixed(2)})`);
+      const lift=s.f.fridaSafe?1:c?.effect==='roofLever'&&!reduced?stage(.12,.47):0;
+      set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
+      set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
+      const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'&&!reduced?c.from+(c.to-c.from)*e:s.beaconAngle;
+      set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
+      if(c?.effect==='roofAnchor'&&!reduced)fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
+      if(c?.effect==='roofRescue'&&!reduced) {
+        const deploy=stage(.10,.34),endX=466+(cast.david[0]-466)*deploy,endY=658+(cast.david[1]-58-658)*deploy;
+        fx=path(`M426 652Q${(426+endX)/2} ${Math.min(650,endY)-Math.sin(deploy*Math.PI)*70} ${endX} ${endY}`,'none','#ead6a5',4);
+      }
+      set('roofPennant','transform',`rotate(${reduced?-8:-8+Math.sin(s.playSeconds*3.6)*7} 217 392)`);
+      if(c?.effect==='roofBoard')set('roofBraceHands','opacity',0);
+    }
+    const layer=node('setpieceFX');if(layer&&layer.innerHTML!==fx)layer.innerHTML=fx;
+  }
+  return {scenery,animate};
+});
+
 /* src/content/catalog.js */
 Homeward.define("content/catalog", [], () => {
 const items={lamp:'小提灯',scarf:'妈妈的围巾',shade:'遮光提灯',crank:'黄铜曲柄',rope:'旧绳圈',hook:'铁钩',grapple:'带钩绳索',line:'救援绳',plan:'水钟图纸',fork:'回声音叉',felt:'羊毛毡',gearS:'小齿轮',gearM:'中齿轮',gearL:'大齿轮',pole:'长柄挑杆'};
@@ -480,6 +569,8 @@ Homeward.define('content/choreography', [], () => {
       2:{rope:{kind:'crouch',target:[331,725],prop:'rope'},hook:{kind:f.branchBent?'take':'pull',target:[534,f.branchBent?642:688],effect:f.branchBent?'unhook':'branch',prop:'rope'},
         anchor:{kind:'throw',target:[1095,556],effect:'grapple',prop:'hook'},david:{kind:'gesture',target:[404,684]},
         winch:{kind:'turn',target:[481,651],radius:27,effect:'bridge'}},
+      3:{ladderBrake:{kind:'crouch',target:[(f.ladderX??769)+82,777],effect:'ladderBrake',from:!!f.ladderBrake},book:{kind:'climb',effect:'archiveBook',target:[1170,342],ladder:f.ladderX??769}},
+      9:{anchor:{kind:'tie',target:[426,652],effect:'roofAnchor',prop:'rope'},david:f.davidSafe?{kind:'gesture',effect:'roofBrace',target:[466,657]}:{kind:'haul',effect:'roofRescue',target:[487,672]},frida:{kind:'lever',effect:'roofLever',target:[1079,710],prop:'pole'},twig:{kind:'crouch',effect:'roofTwig',target:[902,730]}},
       4:{intake:{kind:'turn',target:[350,682],radius:25,effect:'intake',from:f.intakeClosed?1:0},
         filter:{kind:'clear',target:[453,640],effect:'filter'},pipe0:{kind:'tool',target:[640,400],prop:'pole',effect:'pipe',node:0,from:state.valves[0]},
         pipe1:{kind:'turn',target:[640,570],radius:25,effect:'pipe',node:1,from:state.valves[1]},
@@ -557,6 +648,40 @@ Homeward.define('content/mechanisms',[],()=>({
   witnessIndex:3,
   beacon:{pivot:[1292,492],target:[1044,176],tolerance:9}
 }));
+
+/* src/content/setpieces.js */
+/** Shared stage geometry and puzzle rules. No DOM or presentation state. */
+Homeward.define('content/setpieces', [], () => {
+  const archive = Object.freeze({min:640,max:1260,initial:769,docks:[700,925,1170],book:[1170,342],baseY:798,gripY:707,climb:290});
+  const roof = Object.freeze({wheel:[1220,657],lens:[1292,490],star:[1044,176],anchor:[426,652],david:[670,710],safe:[466,767],brace:[1069,773]});
+  const ladderX = s => s.f.ladderX ?? archive.initial;
+  function snapLadder(x) {
+    if(!Number.isFinite(x)) throw new TypeError('Ladder destination must be finite');
+    x=Math.max(archive.min,Math.min(archive.max,x));
+    return archive.docks.find(d=>Math.abs(d-x)<=38) ?? x;
+  }
+  const nextDock = s => archive.docks.find(d=>d>ladderX(s)+12) ?? archive.docks[0];
+  const aligned = s => Math.abs(ladderX(s)-archive.book[0])<=28;
+  const canRead = s => aligned(s) && !!s.f.ladderBrake;
+  function roofGround(x) {
+    if(x<=480)return 767;
+    if(x<=755)return 767-(x-480)*21/275;
+    if(x<=920)return 746+(x-755)*27/165;
+    return 773;
+  }
+  function wheelAngle(p) {
+    if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y))throw new TypeError('Invalid wheel point');
+    return Math.atan2(p.y-roof.wheel[1],p.x-roof.wheel[0])*180/Math.PI;
+  }
+  /** Retreat never undoes a completed rescue, consumes equipment or edits prior chapters. */
+  function retreat(s) {
+    const o={...s,f:{...s.f},inventory:[...s.inventory],danger:0,failures:s.failures+1};
+    o.heroX=s.f.davidSafe?802:315;
+    if(!s.f.roofAnchor&&!o.inventory.includes('line'))o.inventory.push('line');
+    return o;
+  }
+  return {archive,roof,ladderX,snapLadder,nextDock,aligned,canRead,roofGround,wheelAngle,retreat};
+});
 
 /* src/content/walkways.js */
 /** A single piecewise-linear profile for the service deck and actors' feet. */
@@ -901,7 +1026,7 @@ Homeward.define('engine/kinematics', [], () => {
 });
 
 /* src/engine/runtime.js */
-Homeward.define("engine/runtime", ["engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], ({ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -909,6 +1034,7 @@ let s=fresh(),saved=null,storageOK=true,storageWarned=false;
 let store;
 try{store=new SaveStore(localStorage,validate,KEY);saved=store.load();}
 catch{storageOK=false;store=new SaveStore({getItem(){return null;},setItem(){throw Error('Storage unavailable');}},validate,KEY);}
+let dragPreview=null;
 let inspection=false,renderQueued=false,rainNodes=[],currentInteraction=null,walkDistance=0;
 
 let started=false,titleMode=true,selected=null,bagOpen=false,modal=false,dialogue=null,activeHotspots=[],pendingMove=null,activeWork=null,sequenceActive=false,locked=false;
@@ -990,7 +1116,8 @@ function worldPoint(x,y){const r=ui.world.getBoundingClientRect();return {x:came
 function atPoint(p){return [...activeHotspots].reverse().find(h=>Math.abs(p.x-h.x)<=h.w/2&&Math.abs(p.y-h.y)<=h.h/2);}
 function render(){
  const index=titleMode?7:s.scene,artState=titleMode?{...s,scene:7}:s,scene=Story.scenes[index];
- let layers=Art.scene(artState,titleMode);
+ const visualState=dragPreview?.kind==='ladder'?{...artState,f:{...artState.f,ladderX:dragPreview.x}}:dragPreview?.kind==='beacon'?{...artState,beaconAngle:dragPreview.angle}:artState;
+ let layers=Art.scene(visualState,titleMode);
  const dog=!(s.scene===9&&!s.f.twigSafe)&&!titleMode;
  let followers='';if(!titleMode&&[2,3,4,7].includes(s.scene))followers+=`<g id="davidFollow">${Art.person('大卫',0,0,1.34)}</g>`;if(!titleMode&&s.scene===4)followers+=`<g id="fridaFollow">${Art.person('芙丽达',0,0,1.38)}</g>`;
  patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
@@ -1001,21 +1128,28 @@ function render(){
  updateActors();calcCamera();renderInventory();updateTools();
  $('actLabel').textContent=scene.actLabel;$('sceneName').textContent=scene.name;$('sceneMood').textContent=scene.mood;
  $('hazard').classList.toggle('hidden',!!(titleMode||s.scene!==9||s.f.roofDone));$('hazard').querySelector('span').textContent=s.settings.relaxed?'舒缓模式 · 从容救援':'风暴正在逼近';
- if(s.scene===9)$('hazard').querySelector('b').style.width=s.danger*100+'%';
+ if(s.scene===9){$('hazard').querySelector('b').style.width=s.danger*100+'%';$('hazard').setAttribute('aria-valuenow',String(Math.round(s.danger*100)));}
 }
 function updateActors(){
  const p=$('heroPosition');if(!p)return;
  const index=titleMode?7:s.scene,ground=Story.scenes[index].ground;
  hero.y=ground(hero.x,s);
- p.setAttribute('transform',`translate(${hero.x.toFixed(1)} ${hero.y.toFixed(1)})`);
+ const presentation=SetpieceMotion.actor(index===9&&s.f.roofDone?{...hero,x:1392,y:575}:hero,activeWork,s.settings.reduced);
+ p.setAttribute('transform',`translate(${presentation.x.toFixed(1)} ${presentation.y.toFixed(1)})`);
  p.setAttribute('class',(pendingMove?'walking ':'')+(activeWork?'working ':''));
  $('heroFacing').setAttribute('transform',`scale(${hero.face} 1)`);
- const t=$('twigPosition');if(t)t.setAttribute('transform',`translate(${petX.toFixed(1)} ${(ground(petX,s)+1).toFixed(1)}) scale(${hero.face} 1)`);
+ const t=$('twigPosition');if(t){
+  const aboard=index===9&&s.f.roofDone,boarding=activeWork?.score.effect==='roofBoard'&&!s.settings.reduced;
+  const k=aboard?1:boarding?SetpieceMotion.segment(activeWork.sample().progress,.14,.78):0;
+  const px=petX+(1345-petX)*k,py=ground(petX,s)+1+(590-ground(petX,s)-1)*k;
+  t.setAttribute('transform',`translate(${px.toFixed(1)} ${py.toFixed(1)}) scale(${hero.face} 1)`);
+ }
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
  if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
- Performer.paint($('performer'),{...hero,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected});
+ Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected});
  ChapterLife.animate(ui.world,activeWork,s);
+ SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
 }
 
@@ -1049,8 +1183,7 @@ function interact(id,itemOverride){
 function sceneDrag(down,payload){
  const h=down.h;if(!h?.drag||!Story.scenes[s.scene].drag)return;
  // Live dragging is a preview. Restore it before walking and committing the action.
- if(h.drag==='ladder'){if(down.oldLadder===undefined)delete s.f.ladderX;else s.f.ladderX=down.oldLadder;}
- if(h.drag==='beacon')s.beaconAngle=down.oldAngle;
+ dragPreview=null;
  render();toggleBag(false);
  arriveAndAct(h,null,()=>{
   if(!Story.scenes[s.scene].drag(G,h.id,payload))toast('拖动后放在合适的位置。也可以点按操作。');
@@ -1113,29 +1246,29 @@ function cancelWork(){
  activeWork?.cancel();activeWork=null;currentInteraction=null;
  ui.game.classList.remove('performing');$('actionLabel').classList.remove('show');
 }
-function work(ms,label,after){
+function work(ms,label,after,override={}){
  if(activeWork)return;
  pendingMove=null;
  const ctx=currentInteraction??{scene:s.scene,id:'work',item:null};
- activeWork=new ActionTrack(s.settings.reduced?Math.min(ms,300):ms,Choreography.score(ctx.scene,ctx.id,s,ctx.item));
+ activeWork=new ActionTrack(s.settings.reduced?Math.min(ms,300):ms,{...Choreography.score(ctx.scene,ctx.id,s,ctx.item),...override,origin:{x:hero.x,y:Story.scenes[s.scene].ground(hero.x,s)}});
  activeWork.after=after;activeWork.request=sceneRequest;
- ui.game.classList.toggle('performing',[1,2,4].includes(s.scene));
+ ui.game.classList.toggle('performing',[1,2,3,4,9].includes(s.scene));
  actionLabel(label,true);updateActors();
 }
 function effect(kind){if(s.settings.reduced)return;if(kind==='shake'||kind==='water'){ui.viewport.animate?.([{transform:'translate(0,0)'},{transform:'translate(-4px,2px)'},{transform:'translate(4px,-2px)'},{transform:'translate(-2px,1px)'},{transform:'translate(0,0)'}],{duration:620});}if(kind==='water'&&s.scene!==0){$('flash').classList.remove('lightning');void $('flash').offsetWidth;$('flash').classList.add('lightning');} }
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
-function resetRoof(){if(s.scene!==9||s.f.roofDone)return;pendingMove=null;cancelWork();for(const k of ['roofAnchor','davidSafe','fridaSafe','beacon','twigSafe'])delete s.f[k];s.danger=0;s.beaconAngle=-65;s.failures++;if(!s.inventory.includes('line'))s.inventory.push('line');hero.x=315;petX=245;selected=null;render();say([['芙丽达','抓住了！先退回这根稳固的横梁，我们重新来。'],['希尔达','大家都没受伤。绳子也取回来了。这次我们一步一步做。']],()=>toast('已回到屋顶安全检查点。之前章节的进度没有丢失。'));save(true);}
-function go(index){closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-85;camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);if(first&&Story.scenes[index].chapter)chapter(Story.scenes[index].chapter);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);else actionLabel(Story.scenes[index].objective(s));save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
+function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
+function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-85;camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);if(first&&Story.scenes[index].chapter)chapter(Story.scenes[index].chapter);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);else actionLabel(Story.scenes[index].objective(s));save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-85;camera.manual=false;render();calcCamera(true);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-85;camera.manual=false;render();calcCamera(true);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
-function showPanel(html,type='menu'){focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');if(audio&&s.settings.sound)audio.master.gain.setTargetAtTime(.035,audio.ctx.currentTime,.1);}
+function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');if(audio&&s.settings.sound)audio.master.gain.setTargetAtTime(.035,audio.ctx.currentTime,.1);}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');if(audio&&s.settings.sound)audio.master.gain.setTargetAtTime(.12,audio.ctx.currentTime,.15);if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
 function openMenu(){if(!started)return;showPanel(`<div class="eyebrow">TAKE A BREATH</div><h2>旅途中的一小会儿</h2><p>${esc(Story.scenes[s.scene].name)}<br><span class="progressText">已到访 ${s.visited.length} / 12 个场景 · 观察手记 ${s.sketches.length} / 6</span></p><div class="settingsRow"><span>环境音乐与机关音效</span><button id="soundSetting">${s.settings.sound?'已开启':'已关闭'}</button></div><div class="settingsRow"><span>舒缓模式 <small>· 屋顶风暴不计时</small></span><button id="relaxSetting">${s.settings.relaxed?'已开启':'已关闭'}</button></div><div class="settingsRow"><span>减少动态与闪光</span><button id="motionSetting">${s.settings.reduced?'已开启':'已关闭'}</button></div><div class="btnrow"><button class="panelBtn primary" id="resumePlay">回到冒险</button><button class="panelBtn" id="helpOpen">操作说明</button></div><div class="btnrow"><button class="panelBtn" id="exportBtn">导出进度</button><button class="panelBtn" id="importBtn">导入进度</button><button class="panelBtn danger" id="restartBtn">重新开始</button></div><p class="fineprint">${storageOK?'进度自动保存在当前浏览器。关闭网页不会抹去已完成的章节。':'此浏览器阻止了本地存储。请用“导出进度”保留旅程。'}<br>暂停菜单、手记、背包、对话和机关操作期间，风暴计时会暂停。</p>`,'menu');
  $('resumePlay').onclick=closePanel;$('helpOpen').onclick=openHelp;$('soundSetting').onclick=()=>{setSound(!s.settings.sound);openMenu();};$('relaxSetting').onclick=()=>{s.settings.relaxed=!s.settings.relaxed;save();render();openMenu();};$('motionSetting').onclick=()=>{s.settings.reduced=!s.settings.reduced;save();render();openMenu();};$('exportBtn').onclick=exportSave;$('importBtn').onclick=()=>{$('importFile').value='';$('importFile').click();};$('restartBtn').onclick=confirmRestart;
 }
-function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。检修顺序写在现场铭牌上。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。失败会回到该场景的安全检查点，不会死亡或丢失前面章节。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
+function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。档案梯要先对准并锁轮；救回大卫后，请他稳住支点再撬梁。检修顺序写在现场铭牌上。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。风暴逼近时会退到安全检查点，已救回的同伴、已固定的绳索和前面章节都会保留。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
 function openJournal(){if(!started)return;const count=s.hints[s.scene];const hints=Story.scenes[s.scene].hints(s);const hint=hints[Math.min(hints.length-1,Math.max(0,count-1))];showPanel(`<div class="eyebrow">FIELD NOTES · ${String(s.scene+1).padStart(2,'0')}</div><h2>这次冒险的手记</h2><h3>眼前的一步</h3><p>${esc(Story.scenes[s.scene].objective(s))}</p>${count?`<p class="spoiler-hint">提示 ${count} / 3<br>${esc(hint)}</p>`:''}<div class="btnrow"><button class="panelBtn" id="hintBtn">${count<3?'给我一点'+(count?'更明确的':'')+'提示':'查看明确提示'}</button><button class="panelBtn primary" id="backFromNotes">收好手记</button></div><h3>已经发现的事</h3>${s.notes.length?s.notes.map(k=>`<div class="journalNote"><h3>${esc(Story.notes[k][0])}</h3><p>${esc(Story.notes[k][1])}</p></div>`).join(''):'<p>第一页还空着。故事会随着你的脚步慢慢展开。</p>'}<h3>路边的小小发现 ${s.sketches.length} / 6</h3>${s.sketches.map(k=>`<div class="journalNote"><h3>${esc(sketches[k][0])}</h3><p>${esc(sketches[k][1])}</p></div>`).join('')}<p class="fineprint">提示不扣分，也不会改变结局。尚未发生的剧情不会提前写在这里。</p>`,'journal');$('hintBtn').onclick=()=>{s.hints[s.scene]=Math.min(3,s.hints[s.scene]+1);save();openJournal();};$('backFromNotes').onclick=closePanel;}
 function openEnding(){showPanel(`<div class="eyebrow">EVERYONE MADE IT HOME</div><h2>所有人，平安归来。</h2><p>希尔达把围巾留给了一个害怕黑夜的孩子。<br>山里的灯照见了一对母子。<br>城里的窗，等回了一群朋友。</p><div class="journalNote"><h3>本次夜行 · 安全记录</h3><p>希尔达、芙丽达、大卫、枝枝、阿尔弗：全部平安。<br>小巨魔：已与妈妈团聚。<br>妈妈：不用再守着那盏灯等了。</p></div><p class="progressText">十二幕旅程 · ${s.sketches.length} / 6 幅观察手记 · 完整归家结局</p><p>窗外的钟声再一次响起。很轻，很准。<br>这次，它只是在提醒大家：早饭时间到了。</p><div class="btnrow"><button class="panelBtn primary" id="stayHome">留在客厅里</button><button class="panelBtn" id="endingExport">保存这次旅程</button></div><p class="fineprint">《黄昏的回声：归途》 · 非官方同人作品<br>没有必须马上开始的下一次冒险。你可以和朋友继续说说话。</p>`,'ending');$('stayHome').onclick=closePanel;$('endingExport').onclick=exportSave;}
 function confirmRestart(){showPanel(`<div class="eyebrow">A NEW FIRST PAGE</div><h2>重新翻开第一页？</h2><p>新旅程会替换这个浏览器中的 V3 当前进度。第一版《黄昏的回声》的存档不受影响。先导出一份存档，就能保留这次冒险。</p><div class="btnrow"><button class="panelBtn" id="cancelRestart">继续现在的旅程</button><button class="panelBtn danger" id="confirmRestart">确认重新开始</button></div><div class="btnrow"><button class="panelBtn" id="beforeRestartExport">先导出当前进度</button></div>`,'confirm');$('cancelRestart').onclick=closePanel;$('confirmRestart').onclick=()=>{closePanel();start(false);};$('beforeRestartExport').onclick=exportSave;}
@@ -1145,9 +1278,12 @@ function reveal(){if(!started)return;ui.world.classList.add('revealing');$('reve
 async function fullscreen(){try{if(document.fullscreenElement){await document.exitFullscreen();}else if(ui.game.requestFullscreen){await ui.game.requestFullscreen();}else toast('当前浏览器不支持系统全屏。游戏仍会铺满网页视口。');}catch{toast('浏览器没有进入系统全屏。可以继续在当前视口游玩。');}}
 function hover(e){if(input?.moved||inventoryDrag||!canAct()){ $('hoverLabel').classList.remove('show');return;}const h=atPoint(worldPoint(e.clientX,e.clientY));if(!h){$('hoverLabel').classList.remove('show');return;}$('hoverLabel').textContent=(selected?Story.items[selected]+' → ':'')+h.label;$('hoverLabel').classList.add('show');const r=$('hoverLabel').getBoundingClientRect();$('hoverLabel').style.left=clamp(e.clientX-r.width/2,8,innerWidth-r.width-8)+'px';$('hoverLabel').style.top=clamp(e.clientY+22,8,innerHeight-r.height-85)+'px';}
 ui.viewport.addEventListener('pointerdown',e=>{if(e.button!==0||!canAct())return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY),h=atPoint(p);input={sx:e.clientX,sy:e.clientY,x:p.x,y:p.y,camX:camera.x,camY:camera.y,h,moved:false,pid:e.pointerId,oldLadder:s.f.ladderX,oldAngle:s.beaconAngle};ui.viewport.setPointerCapture?.(e.pointerId);});
-ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'){s.f.ladderX=clamp(p.x,640,1260);if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){s.beaconAngle=Math.atan2(p.y-492,p.x-1292)*180/Math.PI;if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('gearM',e.clientX,e.clientY);} });
+ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('gearM',e.clientX,e.clientY);} });
 ui.viewport.addEventListener('pointerup',e=>{if(!input||input.pid!==e.pointerId)return;const down=input;input=null;hideGhost();if(!canAct())return;const p=worldPoint(e.clientX,e.clientY);if(down.moved){sceneDrag(down,{x:p.x,y:p.y,dx:(e.clientX-down.sx)/innerWidth*camera.w,dy:(e.clientY-down.sy)/innerHeight*camera.h});return;}if(down.h)interact(down.h.id);else if(p.y>Story.scenes[s.scene].ground(p.x,s)-210)walkTo(p.x,()=>save());else actionLabel('点击人物或物件调查；点击地面移动。');});
-ui.viewport.addEventListener('pointercancel',()=>{if(input?.h?.drag==='ladder'){if(input.oldLadder===undefined)delete s.f.ladderX;else s.f.ladderX=input.oldLadder;}if(input?.h?.drag==='beacon')s.beaconAngle=input.oldAngle;input=null;hideGhost();render();});
+function cancelPointer(){input=null;inventoryDrag=null;dragPreview=null;hideGhost();if(started)render();}
+ui.viewport.addEventListener('pointercancel',cancelPointer);
+window.addEventListener('blur',cancelPointer);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelPointer();});
 ui.viewport.addEventListener('pointerleave',()=>{$('hoverLabel').classList.remove('show');});
 function showGhost(id,x,y){$('dragGhost').classList.remove('hidden');$('dragGhost').innerHTML=Art.itemArt(id);$('dragGhost').style.left=x+'px';$('dragGhost').style.top=y+'px';}
 function hideGhost(){$('dragGhost').classList.add('hidden');}
@@ -1165,11 +1301,13 @@ function tick(now){let dt=Math.min(.055,Math.max(0,(now-frameTime)/1000));frameT
  const task=activeWork,frame=task.advance(dt*1000),progress=frame.progress;
  $('workRing')?.setAttribute('opacity','1');$('workProgress')?.setAttribute('stroke-dashoffset',String(100.53*(1-progress)));
  if(task.claim()){
+  if(task.score.effect==='roofTwig')petX=hero.x+45;
+  if(Number.isFinite(task.score.destinationX))hero.x=walkLimit(task.score.destinationX);
   activeWork=null;ui.game.classList.remove('performing');$('workRing')?.setAttribute('opacity','0');$('actionLabel').classList.remove('show');
   if(task.request===sceneRequest){try{task.after?.();}catch(e){console.error('Action completion failed:',e);toast('动作未能完成。请重试或导出进度。');}}
   render();
  }
-}if(s.scene===9&&!s.f.roofDone&&!s.settings.relaxed&&!dialogue&&!locked&&!sequenceActive&&!bagOpen&&!activeWork&&!inventoryDrag){s.danger=Math.min(1,s.danger+dt/110);$('hazard').querySelector('b').style.width=s.danger*100+'%';$('hazard').setAttribute('aria-valuenow',String(Math.round(s.danger*100)));if(s.danger>=1)resetRoof();}if(sceneClock>14)$('sceneLabel').classList.add('quiet');if(s.scene===9&&!s.settings.reduced&&Math.floor(sceneClock/13)!==Math.floor((sceneClock-dt)/13))effect('water');}if(!isPaused()&&!s.settings.reduced){rainNodes.forEach((el,i)=>{let y=((elapsed*(s.scene===9?530:315)+i*43)%1120)-160;el.setAttribute('transform',`translate(${s.scene===9?-y*.16:-y*.08} ${y})`);});}if(!isPaused())petX+=(clamp(hero.x-hero.face*85,60,1540)-petX)*Math.min(1,dt*3.5);updateActors();}requestAnimationFrame(tick);}
+}if(s.scene===9&&!s.f.roofDone&&!s.settings.relaxed&&!dialogue&&!locked&&!sequenceActive&&!bagOpen&&!activeWork&&!inventoryDrag&&!input){s.danger=Math.min(1,s.danger+dt/110);$('hazard').querySelector('b').style.width=s.danger*100+'%';$('hazard').setAttribute('aria-valuenow',String(Math.round(s.danger*100)));if(s.danger>=1)resetRoof();}if(sceneClock>14)$('sceneLabel').classList.add('quiet');if(s.scene===9&&!s.settings.reduced&&Math.floor(sceneClock/13)!==Math.floor((sceneClock-dt)/13))effect('water');}if(!isPaused()&&!s.settings.reduced){rainNodes.forEach((el,i)=>{let y=((elapsed*(s.scene===9?530:315)+i*43)%1120)-160;el.setAttribute('transform',`translate(${s.scene===9?-y*.16:-y*.08} ${y})`);});}if(!isPaused())petX+=(clamp(hero.x-hero.face*85,60,1540)-petX)*Math.min(1,dt*3.5);updateActors();}requestAnimationFrame(tick);}
 const G={get s(){return s;},set:setFlag,commit,take,consume,toast,sound,say,go,work,effect,note:addNote,sketch,pulse,playSequence,finish,openEnding};
 updateTools();if(saved){$('continueBtn').classList.remove('hidden');$('continueBtn').innerHTML='继续旅程 <span>→</span>';}render();calcCamera(true);requestAnimationFrame(tick);
 if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,flush:()=>save(true)};
@@ -1177,9 +1315,53 @@ if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUEST
 return G;
 });
 
+/* src/engine/setpiece-motion.js */
+/** Pure, seekable staging. An interrupted performance has no permanent effects. */
+Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpieces'], ({smooth}, Stage) => {
+  const segment=(p,a,b)=>smooth((p-a)/(b-a));
+  const mix=(a,b,t)=>a+(b-a)*t;
+  function actor(base,action,reduced=false) {
+    if(!action)return {...base};
+    const c=action.score,p=action.sample().progress,e=action.sample().effort;
+    if(reduced)return {...base};
+    if(c.effect==='ladderSlide')return {...base,x:c.origin.x+(c.to-c.from)*e};
+    if(c.effect==='archiveBook') {
+      const climb=segment(p,.10,.43)*(1-segment(p,.69,.95));
+      const position=segment(p,0,.14)*(1-segment(p,.93,1));
+      return {...base,x:mix(base.x,c.ladder+5,position),y:base.y-Stage.archive.climb*climb};
+    }
+    if(c.effect==='roofBoard')return {...base,x:mix(base.x,1392,segment(p,.08,.68)),y:mix(base.y,575,segment(p,.08,.68))-Math.sin(segment(p,.08,.68)*Math.PI)*25};
+    return {...base};
+  }
+  function cast(state,action,reduced=false) {
+    const f=state.f,c=action?.score,p=action?.sample().progress??0;
+    let david=f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
+    let frida=f.fridaSafe?[842,759]:[1160,773],twig=[929,723];
+    if(!reduced&&c?.effect==='roofRescue') {
+      const t=segment(p,.34,.90);david=[mix(670,466,t),mix(710,767,t)-Math.sin(t*Math.PI)*58];
+    }
+    if(!reduced&&c?.effect==='roofBrace') {
+      const t=segment(p,.12,.88),x=mix(466,1069,t);david=[x,Stage.roofGround(x)];
+    }
+    if(!reduced&&c?.effect==='roofLever') {
+      const t=segment(p,.43,.84);frida=[mix(1160,842,t),mix(773,759,t)];
+    }
+    if(!reduced&&c?.effect==='roofTwig') {
+      const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*64];
+    }
+    if(!reduced&&c?.effect==='roofBoard') {
+      const t=segment(p,.05,.78);
+      david=[mix(david[0],1368,t),mix(david[1],578,t)];frida=[mix(frida[0],1428,t),mix(frida[1],578,t)];
+    }
+    if(state.f.roofDone){david=[1368,578];frida=[1428,578];twig=[1345,590];}
+    return {david,frida,twig};
+  }
+  return {segment,actor,cast};
+});
+
 /* src/engine/state.js */
 Homeward.define("engine/state", ["story"], (Story) => {
-const boolFlags=new Set(('letter promise lampTaken awning crankTaken crankMounted gateOpen ropeTaken hookTaken grappleSet bridge archiveTalk planTaken filter pump lineTaken lift shadePlaced calm towerGate feltTaken bypassMounted bypass damped fridaHold davidHold heart roofAnchor davidSafe fridaSafe beacon twigSafe roofDone reunited hug ended gearSTaken gearMTaken gearLTaken gearSSet gearMSet gearLSet trail0 trail1 trail2 hood0 hood1 hood2 tea0 tea1 tea2 branchBent poleTaken pumpPrimed gearAligned bridgeBrace intakeClosed').split(' '));
+const boolFlags=new Set(('letter promise lampTaken awning crankTaken crankMounted gateOpen ropeTaken hookTaken grappleSet bridge archiveTalk planTaken filter pump lineTaken lift shadePlaced calm towerGate feltTaken bypassMounted bypass damped fridaHold davidHold heart roofAnchor davidSafe fridaSafe beacon twigSafe roofDone reunited hug ended gearSTaken gearMTaken gearLTaken gearSSet gearMSet gearLSet trail0 trail1 trail2 hood0 hood1 hood2 tea0 tea1 tea2 branchBent poleTaken pumpPrimed gearAligned bridgeBrace intakeClosed ladderBrake roofBrace').split(' '));
 const numericFlags={gearIndex:[0,3],gateTurns:[0,3],bypassTurns:[0,2],ladderX:[640,1260],drive:[0,100]};
 const milestones=['','promise','gateOpen','bridge','planTaken','pump','lift','calm','towerGate','heart','roofDone','reunited'];
 const sketches={mountain:['妈妈画的山','画里那条小路，最后总会回到有灯的窗前。'],city:['雨里倒着一座城','灯光在水洼里摇晃，像有人把另一座城藏到了脚下。'],elf:['精灵的雨天条款','第八十二条：未经本人同意，雨滴不得落在已批准的文件上。'],oldFriends:['门上的两个手印','一个小小的人类手印，挨着一个大大的巨魔手印。时间没有把它们分开。'],dawn:['天终于亮了','害怕没有一夜之间消失。但天亮时，我们学会了牵着它继续走。'],return:['同一扇窗','昨夜世界那么大。清晨，所有的路都回到了这扇窗。']};
@@ -1211,6 +1393,10 @@ function validate(v){
  for(const key of ['gateTurns','bypassTurns'])if(o.f[key]!==undefined&&!Number.isInteger(o.f[key]))throw Error('机关刻度必须是整数。');
  if(o.f.pump&&!o.f.pumpPrimed)throw Error('水泵缺少试压记录。');
  if(o.f.towerGate&&!o.f.gearAligned)throw Error('钟楼缺少对位记录。');
+ // Completed checkpoints predate the new prerequisite, and must remain completed.
+ if(o.f.planTaken&&o.f.ladderBrake===undefined)o.f.ladderBrake=true;
+ if(o.f.fridaSafe&&o.f.roofBrace===undefined)o.f.roofBrace=true;
+ if(o.f.roofBrace&&!o.f.davidSafe)throw Error('横梁协作缺少大卫的安全记录。');
  o.savedAt=typeof v.savedAt==='string'?v.savedAt:null;return o;
 }
 
@@ -1430,9 +1616,9 @@ Homeward.define("scene/3/art", ["art/kit", "art/characters", "art/props"], ({P,p
 function archive(S){let f=S.f;let b=rect(0,0,1600,900,'url(#cave)')+path('M90 781Q20 243 309 113L696 41 1272 118Q1578 260 1530 799Z','#4e685b','#254b4b',8)+rect(150,137,1300,640,'url(#plaster)');
 b+=rep(8,i=>path(`M${90+i*204} 840Q${330+i*109} 524 ${270+i*171} -32`,'none',i%2?'#3b574d':'#48624f',31))+path('M12 24Q258 190 300 417t-84 472M1590-17q-290 275-239 471t151 451','none','#1d4244',74)+path('M-17 56q236 150 259 384T104 892M1613 27q-214 255-205 402t161 467','none','#738068',10,'opacity=".55"');
 b+=group(955,369,1,`${path('M-328-178 302-191 312 298-328 308Z','#2b4543','#7e8867',8)}${rep(4,j=>`${rect(-318,-67+j*113,625,14,'#859070',3,'#34514a',2)}${rep(20,i=>{let xx=-306+i*30,hh=45+rnd()*53;return rect(xx,-68+j*113-hh,23,hh,['#919775','#bcad79','#739587','#b58664','#708a81'][Math.floor(rnd()*5)],2,'#294943',1.5)+path(`M${xx+4} ${-78+j*113}h14`,'none','#d5c99a',2,'opacity=".5"');})}`)}`);
-b+=!f.planTaken?group(1170,342,1,`${rect(-23,-51,46,98,'#d0bb81',3,'#365751',2)}${path('M-14-25H13M-14-17H13M0-10v37','none','#607e6a',2)}${circle(0,5,9,'none','#607e6a',2)}`):rect(1147,291,46,98,'#182f33',3);
-b+=group(f.ladderX||769,766,1,`${path('M-65 0-24-456M63 0 23-456','none','#b2a778',13)}${path('M-69-7-61-44M59-44 66-7','none','#324d45',8)}${rep(11,i=>{let yy=-29-i*38;let w=62-i*3.5;return path(`M${-w} ${yy}h${w*2}`,'none','#c2b88b',9);})}${circle(-63,1,12,'#32544d','#a6a77d',3)}${circle(65,1,12,'#32544d','#a6a77d',3)}`);
+b+=!f.planTaken?`<g id="archiveBook">`+group(1170,342,1,`${rect(-23,-51,46,98,'#d0bb81',3,'#365751',2)}${path('M-14-25H13M-14-17H13M0-10v37','none','#607e6a',2)}${circle(0,5,9,'none','#607e6a',2)}`)+`</g>`:rect(1147,291,46,98,'#182f33',3);
 b+=ground(790,'#5e6e55')+path('M495 795H1336','none','#bdb68a',6)+path('M505 808H1327','none','#2f4e43',4);
+b+=`<g id="archiveLadderShift">`+group(f.ladderX??769,798,1,`${path('M-65 0-24-456M63 0 23-456','none','#b2a778',13)}${path('M-69-7-61-44M59-44 66-7','none','#324d45',8)}${rep(11,i=>{let yy=-29-i*38;let w=62-i*3.5;return path(`M${-w} ${yy}h${w*2}`,'none','#c2b88b',9);})}${circle(-63,1,12,'#32544d','#a6a77d',3)}${circle(65,1,12,'#32544d','#a6a77d',3)}`)+`</g>`;
 b+=group(380,670,1,`${path('M-184-90H157L187-62H-195Z','#b0a577','#3b5447',4)}${path('M-178-57v176h28l29-176m209 0 29 176h27V-57','#6e7757','#294b43',4)}${rect(-151,-38,262,98,'#506d54',3,'#274d48',3)}${rep(4,i=>rect(-143+i*64,-28,55,34,'#8b946b',2,'#34584c',2)+circle(-116+i*64,-11,4,'#d8c285'))}${paper(-22,-95,1.15,'plan')}${lamp(-121,-98,.53,true)}`)+person('阿尔弗',406,566,1.22);
 b+=group(339,351,1,`${path('M-116-138Q0-162 117-133L110 137-99 137Z','#aaab81','#3c5d4e',4)}${rect(-90,-110,186,215,'url(#paperlines)')}${text(0,-81,'夜 行 者 档 案',16,'#37584c')}${path('M-53-34q60-48 102-3M-58 1q59-45 115-6M-40 42q39-32 82-4','none','#627f65',3)}${circle(-49,-17,18,'none','#ac7356',4)}${text(21,88,'潮汐 · 钟声 · 归家',11,'#54725a')}`);
 b+=rep(6,i=>lamp(355+i*188,153+Math.sin(i)*22,.48,true))+path('M249 5Q808 255 1448 38','none','#163d41',5)+mushrooms(150,806,2)+mushrooms(1343,808,1.5)+fern(17,901,2.9,'#244a44')+fern(1564,860,2.5,'#204b43')+particles(55);return b;}
@@ -1441,16 +1627,46 @@ return archive;
 });
 
 /* src/scenes/03-archive/logic.js */
-Homeward.define("scene/3/logic", ["story/helpers", "content/catalog"], ({checkBeacon,H,I,exit,f,say,one,wrong,set,need,advance,book,pipeCheck,balance,lightTrail}, {items,notes}) => {
-
-return {
-name:'树根下的档案室',english:'THE ARCHIVE BENEATH THE ROOTS',actLabel:'第二幕 · 山里藏着什么',mood:'纸页、树根和一百年没被打开的抽屉',start:525,ground:x=>819,chapter:['ACT II','山里藏着什么','越往深处走，钟声越不像警报。'],
-intro:[['阿尔弗','你们终于来了！我申请了紧急查阅许可。只有七页。'],['希尔达','只有七页档案？'],['阿尔弗','不。七页申请。档案在上面。那本带水滴的。']],
-hotspots:s=>[H('alfur','和阿尔弗交谈',406,524,104,140,{walkX:480}),H('ladder','移动书架前的梯子',s.f.ladderX||769,579,133,399,{drag:'ladder',walkX:s.f.ladderX||769}),...(!s.f.planTaken?[I('book','取出带水滴的旧档案',1170,339,76,132,{walkX:1170})]:[H('book','翻看水钟档案',1170,339,76,132)]),H('record','看看精灵公告',339,351,219,264,{walkX:480}),exit('next','通向旧水道',1460,658,{walkX:1406}),exit('back','返回森林',152,685,{walkX:210})],
-act(g,id,item){if(id==='alfur'){set(g,'archiveTalk');one(g,'阿尔弗',f(g,'planTaken')?'图纸写得很清楚：先让水经过旁路，再让钟安静。顺序不能反过来。':'轮子上的梯子能沿地上的轨道移动。最右边那本，画着水滴。');}else if(id==='ladder'){g.s.f.ladderX=(g.s.f.ladderX||769)+140;if(g.s.f.ladderX>1250)g.s.f.ladderX=660;g.commit();g.sound('wood');g.toast('梯子沿着轨道滑动。也可以直接左右拖动。');}else if(id==='book'){if(f(g,'planTaken'))return one(g,'阿尔弗','水钟不是用来驱赶巨魔的。它本来是用来保护山里所有居民的。');if(Math.abs((g.s.f.ladderX||769)-1170)>75)return one(g,'希尔达','太高了。先把梯子移到这本书下面。');g.work(900,'沿梯子取出旧档案',()=>{set(g,'planTaken');g.take('plan',false);book(g,'plan');say(g,[['希尔达','这不是普通的钟楼。底下连着整座山的泄洪水道。'],['阿尔弗','很久以前，人和巨魔一起建造了它。'],['大卫','那为什么它现在只会吓人？'],['希尔达','因为有人忘了，它本来是用来帮助谁的。']]);});}else if(id==='record')g.sketch('elf','精灵的雨天条款','第八十二条：未经本人同意，雨滴不得落在已批准的文件上。');else if(id==='next')advance(g,f(g,'planTaken'),4,'先查清楚水钟的结构。我们不能一边猜，一边修。');else if(id==='back')g.go(2);else wrong(g);},
-drag(g,id,p){if(id==='ladder'){g.s.f.ladderX=Math.max(640,Math.min(1260,p.x));g.commit();return true;}return false;},
-objective:s=>!s.f.planTaken?'移动梯子，取出最右侧的水钟档案。':'带着图纸进入旧水道。',
-hints:s=>['书很高，但梯子下面有轮子。','把梯子左右拖动，移到右侧发黄的竖放档案下。','将梯子中心拖到右边那本浅黄色书的正下方，再点书。点梯子也能逐段移动。']};
+Homeward.define('scene/3/logic', ['story/helpers','content/setpieces'], ({H,I,exit,f,say,one,set,advance,book}, Stage) => {
+  function move(g,x) {
+    if(f(g,'ladderBrake'))return one(g,'希尔达','轮子已经锁住了。先松开梯脚旁的黄铜刹车，再移动。');
+    const from=Stage.ladderX(g.s),to=Stage.snapLadder(x);
+    if(Math.abs(from-to)<5)return g.toast('梯子就在这个位置。水滴标记对应右侧的水钟卷宗。');
+    g.work(800+Math.abs(to-from)*1.6,'握住侧杆，把梯子推到下一段轨道',()=>{
+      g.s.f.ladderX=to;g.commit();g.sound('wood');
+      g.toast(Stage.aligned(g.s)?'水滴刻线对齐了。锁住梯脚的刹车，再取书。':'轨道上还有其他停靠刻线。带水滴的档案在右边。');
+    },{kind:'push',effect:'ladderSlide',from,to,destinationX:to-62,target:[from-31,Stage.archive.gripY]});
+  }
+  return {
+    name:'树根下的档案室',english:'THE ARCHIVE BENEATH THE ROOTS',actLabel:'第二幕 · 山里藏着什么',mood:'纸页、树根和一百年没被打开的抽屉',start:525,ground:x=>819,
+    chapter:['ACT II','山里藏着什么','越往深处走，钟声越不像警报。'],
+    intro:[['阿尔弗','紧急查阅许可批准了。只用了七页申请！水钟卷宗在最右边，带水滴的那本。'],['希尔达','轨道旁也有水滴。梯子能推过去。'],['阿尔弗','先对准，再锁轮。档案室里最重要的一条规定是：借书的人，也要好好回来。']],
+    hotspots:s=>[H('alfur','和阿尔弗交谈',406,524,104,140,{walkX:480}),
+      H('ladder','握住侧杆，移动档案梯',Stage.ladderX(s),643,112,260,{drag:'ladder',walkX:Stage.ladderX(s)-62}),
+      H('ladderBrake',s.f.ladderBrake?'松开梯脚刹车':'锁住梯脚刹车',Stage.ladderX(s)+82,777,48,54,{walkX:Stage.ladderX(s)+38}),
+      I('book',s.f.planTaken?'翻看水钟档案':'爬梯取出带水滴的档案',1170,342,76,122,{walkX:Stage.ladderX(s)-17}),
+      H('record','看看精灵公告',339,351,219,264,{walkX:480}),exit('next','通向旧水道',1460,658,{walkX:1406}),exit('back','返回森林',152,685,{walkX:210})],
+    act(g,id) {
+      if(id==='alfur'){set(g,'archiveTalk');return one(g,'阿尔弗',f(g,'planTaken')?'先让水经过旁路，再让钟安静。顺序不能反过来。':'轨道刻线和书脊图案是对应的。推到水滴刻线，踩下梯脚旁的刹车，才能上去。');}
+      if(id==='ladder')return move(g,Stage.nextDock(g.s));
+      if(id==='ladderBrake')return g.work(650,'踩下梯脚的黄铜锁杆',()=>{set(g,'ladderBrake',!f(g,'ladderBrake'));g.sound('metal');g.toast(f(g,'ladderBrake')?'轮子停稳了。现在可以检查梯子上方的书。':'锁杆抬起来了，梯子可以沿轨道移动。');});
+      if(id==='book') {
+        if(f(g,'planTaken'))return one(g,'阿尔弗','水钟本来是用来保护山里所有居民的。图纸边上写着：先稳住，再伸手。');
+        if(!Stage.aligned(g.s))return one(g,'希尔达','侧着身子够不到。把梯子推到水滴刻线下，正对这本档案。');
+        if(!f(g,'ladderBrake'))return one(g,'希尔达','轮子还会滑。先踩下梯脚旁的刹车，不能就这样爬上去。');
+        return g.work(3800,'扶稳梯子，取出档案，再回到地面',()=>{
+          set(g,'planTaken');g.take('plan',false);book(g,'plan');g.sound('paper');
+          say(g,[['希尔达','这不是普通的钟楼。底下连着整座山的泄洪水道。'],['阿尔弗','很久以前，人和巨魔一起建造了它。'],['大卫','页角的字好像是后补的：先稳住，再伸手。'],['希尔达','修钟的人希望后来的人也安全回来。我们记住它。']]);
+        });
+      }
+      if(id==='record')return g.sketch('elf','精灵的雨天条款','第八十二条：未经本人同意，雨滴不得落在已批准的文件上。');
+      if(id==='next')return advance(g,f(g,'planTaken'),4,'先查清水钟的结构。我们不能一边猜，一边修。');
+      if(id==='back')g.go(2);
+    },
+    drag(g,id,p){if(id!=='ladder')return false;move(g,p.x);return true;},
+    objective:s=>s.f.planTaken?'带着图纸进入旧水道。':!Stage.aligned(s)?'把梯子推到带水滴的档案正下方。':!s.f.ladderBrake?'锁住梯脚旁的黄铜刹车。':'爬梯取出档案，并安全返回地面。',
+    hints:s=>['轨道的刻线，对应书脊上的图案。','把梯子移到最右侧的水滴刻线，然后锁住右侧梯脚的刹车。','点梯子可切换停靠位，也可以左右拖动。对准水滴后，点梯脚刹车，再点高处那本浅黄色档案。']
+  };
 });
 
 /* src/scenes/04-waterworks/art.js */
@@ -1669,30 +1885,75 @@ b+=path('M761 722 965 510 1251 551 1620 736V930H762Z','#385b62','#183e49',5)+rep
 b+=path('M492 727 738 700 759 920H523Z','#122f40')+path('M480 735h53l-9 93-40 26m253-151 25 106-10 63 26 22','none','#6d8379',8)+path('M516 741q102 11 224-42','none','#657d78',3);
 b+=path('M198 736H467M737 725H1427','none','#b1b698',19)+path('M195 752H470M741 741H1467','none','#263f48',8);
 b+=path('M1232 651V394h117v257','#536f69','#254c4f',5)+path('M1194 400 1289 307 1384 400Z','#324e59','#193d4b',4)+rect(1244,429,96,139,'#243f4c',47)+circle(1292,490,70,'#4e726b','#b2b38b',6)+circle(1292,490,48,f.beacon?'#f3de9b':'#648b83','#254c4e',4);
-let a=(S.beaconAngle??-65)*Math.PI/180;const ex=1292+700*Math.cos(a),ey=490+700*Math.sin(a);if(f.fridaSafe)b+=path(`M1284 474 ${ex} ${ey-140} ${ex} ${ey+140} 1284 506Z`,'url(#beam)')+circle(1292,490,165,'url(#glow)');
-b+=path(`M1292 490 ${1292+71*Math.cos(a)} ${490+71*Math.sin(a)}`,'none','#e6c995',7)+circle(1292+71*Math.cos(a),490+71*Math.sin(a),10,'#d8b781','#3f5f52',3)+text(1292,605,'朝向山脊的星标',12,'#d0d1a9');
+const angle=S.beaconAngle??-65;
+b+=`<g id="roofLightBeam" transform="rotate(${angle} 1292 490)" opacity="${f.fridaSafe?1:0}">${path('M1284 474 1992 330 1992 650 1284 506Z','url(#beam)')}</g>`;
+b+=`<g id="roofOpticPointer" transform="rotate(${angle} 1292 490)">${path('M1292 490H1363','none','#e6c995',7)}${circle(1363,490,10,'#d8b781','#3f5f52',3)}</g>`;
+b+=text(1292,605,'检修轮控制光轴',12,'#d0d1a9');
 b+=path('M412 717V646q15-21 28 0','none','#abb89b',11)+(f.roofAnchor?path(f.davidSafe?'M418 652q164-52 331 40':'M418 652q70-58 117-3','none','#ddc390',5):'');
-b+=f.davidSafe?person('大卫',824,728,1.34):group(670,710,1,`<g transform="rotate(-13)">${person('大卫',0,0,1.34)}</g>`);
-b+=person('芙丽达',1045,739,1.38)+(!f.fridaSafe?path('M968 598 1140 693 1107 729 944 629Z','#857958','#284c4b',4)+path('M960 621 1124 710','none','#c9b783',2):path('M1079 649 1176 689 1165 710 1067 670Z','#857958','#284c4b',4));
-b+=f.fridaSafe?path('M1026 730 1048 660 1062 732Z','#a5aa84','#375e52',3):'';
-b+=!f.twigSafe?twig(929,723,.95):'';
-if(f.beacon)b+=woff(1395,651,1.52)+path('M1288 641q50-26 87-17','none','#dbcb9c',3);
+b+=!f.fridaSafe?group(1172,740,1,rect(-22,-38,42,38,'#a69d75',5,'#2b4b50',3)+path('M-10-38v-13h19v13','none','#b9b089',4)):'';
+b+=`<g id="roofBeam" transform="rotate(${f.fridaSafe?24:0} 1225 720)">${path('M1040 703 1226 686 1230 713 1044 730Z','#857958','#284c4b',4)}${path('M1046 714 1224 698','none','#c9b783',2)}</g>`;
+b+=`<g id="roofDavid" transform="translate(${f.roofBrace?1069:f.davidSafe?466:670} ${f.roofBrace?773:f.davidSafe?767:710})">${person('大卫',0,0,1.34)}</g>`;
+b+=`<g id="roofFrida" transform="translate(${f.fridaSafe?842:1160} ${f.fridaSafe?759:773})">${person('芙丽达',0,0,1.38)}</g>`;
+b+=!f.twigSafe?`<g id="roofTwig" transform="translate(929 723)">${twig(0,0,.95)}</g>`:'';
+if(f.beacon)b+=`<g id="roofWoff" transform="translate(1395 651)">${woff(0,0,1.52)}</g>`+path('M1288 641q50-26 87-17','none','#dbcb9c',3);
 b+=circle(1044,176,10,'#efdab0')+path('M1044 161v30m-15-15h30','none','#efdab0',1.5)+path('M152 564 207 401 264 426 273 584Z','#32545c','#173e4b',4)+lamp(211,479,.52,true)+rect(0,682,1600,243,'url(#fog)')+particles(12);return b;}
 
 return roof;
 });
 
 /* src/scenes/09-storm-roof/logic.js */
-Homeward.define("scene/9/logic", ["story/helpers", "content/catalog"], ({checkBeacon,H,I,exit,f,say,one,wrong,set,need,advance,book,pipeCheck,balance,lightTrail}, {items,notes}) => {
-
-return {
-name:'风暴之上的约定',english:'NO ONE LEFT BEHIND',actLabel:'第四幕 · 别松开我的手',mood:'钟楼屋顶 / 谁都不能被留在风里',start:315,ground:x=>x<490?767:x<750?746:773,
-intro:[['大卫','我在这里！瓦片掉了，我过不去！'],['芙丽达','我的背包被横梁压住了。希尔达，先把绳子固定！'],['希尔达','听我的。我们一个接一个来，谁都不会被留下。']],
-hotspots:s=>[H('anchor','把救援绳固定到近处铁环',426,652,83,115,{walkX:415}),H('david','把大卫拉回安全屋面',s.f.davidSafe?824:670,s.f.davidSafe?644:629,109,204,{walkX:s.f.davidSafe?800:453}),H('frida','撬开压住芙丽达的横梁',1045,662,178,204,{walkX:960}),H('beacon','转动信标，照向山脊星标',1292,492,176,181,{drag:'beacon',walkX:1211}),...(!s.f.twigSafe?[H('twig','带上枝枝',929,686,118,83,{walkX:876})]:[]),exit('board','一起登上沃夫的背',1395,644,{walkX:1326}),H('star','观察远处山脊的星标',1044,176,55,59,{walkX:1128})],
-act(g,id,item){if(id==='anchor'){if(f(g,'roofAnchor'))return g.toast('绳头固定好了。现在把另一端抛给大卫。');if(!need(g,'line',item,'使用升降站带来的救援绳，先牢牢固定近处这一端。'))return;g.consume('line');set(g,'roofAnchor');book(g,'rescue');g.sound('rope');g.toast('救援绳牢牢固定。点击大卫，把另一端抛过去。');}else if(id==='david'){if(f(g,'davidSafe'))return one(g,'大卫','我会照看枝枝。先去帮芙丽达！');if(!f(g,'roofAnchor'))return one(g,'大卫','别直接跳过来！先固定绳子！');g.work(1600,'抓紧绳子，把大卫拉回安全处',()=>{set(g,'davidSafe');g.sound('rope');g.toast('大卫脱险了。绳索也让大家能够跨过断口。');});}else if(id==='frida'){if(f(g,'fridaSafe'))return one(g,'芙丽达','沃夫会循着亮光过来。转动屋顶的信标，朝向左上方的山脊星标。');if(!f(g,'davidSafe'))return one(g,'希尔达','我还不能越过屋顶断口。先用绳子救大卫。');if(!need(g,'pole',item,'梁下有一条缝。用带回来的长柄检修挑杆借力。大卫扶稳支点，芙丽达才能拉出背包。'))return;g.work(1000,'和大卫一起稳住支点，用长挑杆抬起横梁',()=>{set(g,'fridaSafe');g.toast('芙丽达脱险。检修挑杆已取回。现在需要一条离开屋顶的路。');});}else if(id==='beacon'){if(!f(g,'fridaSafe'))return one(g,'希尔达','先把朋友从危险的地方救出来。');if(f(g,'beacon'))return g.toast('信标已经指向山脊。沃夫来了！');g.s.beaconAngle-=21;if(g.s.beaconAngle<-178)g.s.beaconAngle=-45;g.commit();checkBeacon(g);}else if(id==='twig'){if(!f(g,'davidSafe'))return one(g,'希尔达','枝枝，待在原地。我先把绳桥拉好。');set(g,'twigSafe');g.sound('warm');g.toast('枝枝跳到了希尔达身边。一个都不能少。');}else if(id==='board'){if(!f(g,'beacon'))return one(g,'芙丽达','先用信标招来沃夫。照向左上方远处的星标。');if(!f(g,'twigSafe'))return one(g,'希尔达','等一下，枝枝还在屋面上！');set(g,'roofDone');say(g,[['大卫','我抓住芙丽达了！'],['芙丽达','枝枝在这里。希尔达，把手给我！'],['希尔达','大家都在。现在，带我们去山脊！']],()=>g.go(10));}else if(id==='star')g.toast('远处的星标在信标的左上方。让转轮指针和光线朝向它。');else wrong(g);},
-drag(g,id,p){if(id==='beacon'&&f(g,'fridaSafe')&&!f(g,'beacon')){g.s.beaconAngle=Math.atan2(p.y-492,p.x-1292)*180/Math.PI;g.commit();checkBeacon(g);return true;}return false;},
-objective:s=>!s.f.roofAnchor?'用救援绳固定近处铁环。':!s.f.davidSafe?'把大卫从断口另一侧拉回来。':!s.f.fridaSafe?'用检修挑杆撬开压住芙丽达的横梁。':!s.f.beacon?'把信标照向左上方的山脊星标。':!s.f.twigSafe?'带上枝枝，谁也不落下。':'和所有同伴一起登上沃夫。',
-hints:s=>['先救朋友，再寻找离开屋顶的路。打开手记和菜单时风暴会暂停。','救援绳固定近处铁环后才能拉大卫；长柄挑杆能撬横梁；最后调整信标方向。','依次：绳子用于铁环 → 点大卫 → 检修挑杆用于芙丽达 → 点信标三次（或向左上拖转）→ 点枝枝 → 点沃夫。可在设置开启舒缓模式。']};
+Homeward.define('scene/9/logic', ['story/helpers','content/setpieces'], ({checkBeacon,H,exit,f,say,one,set,need,book}, Stage) => {
+  function aim(g,angle) {
+    if(!f(g,'fridaSafe'))return one(g,'希尔达','先把朋友从危险的地方救出来。');
+    if(f(g,'beacon'))return g.toast('光已经照到山脊。沃夫来了，先确认所有同伴都在。');
+    g.work(750,'转动检修轮，让光轴对准山脊',()=>{g.s.beaconAngle=angle;g.commit();checkBeacon(g);},
+      {kind:'turn',effect:'roofBeacon',target:Stage.roof.wheel,radius:27,from:g.s.beaconAngle,to:angle});
+  }
+  return {
+    name:'风暴之上的约定',english:'NO ONE LEFT BEHIND',actLabel:'第四幕 · 别松开我的手',mood:'钟楼屋顶 / 谁都不能被留在风里',start:315,ground:Stage.roofGround,
+    intro:[['大卫','我在这里！瓦片掉了，我过不去！'],['芙丽达','背包被横梁压住了。先固定绳子，不要跳过来！'],['希尔达','先稳住，再伸手。我们一个接一个来，谁都不会被留下。']],
+    hotspots:s=>[H('anchor','把救援绳固定到近处铁环',426,652,83,115,{walkX:415}),
+      H('david',!s.f.davidSafe?'把绳端送给大卫':!s.f.roofBrace?'请大卫稳住横梁支点':'与稳住支点的大卫交谈',!s.f.davidSafe?670:s.f.roofBrace?1069:466,!s.f.davidSafe?629:s.f.roofBrace?671:661,92,184,{walkX:!s.f.davidSafe?453:s.f.roofBrace?1003:421}),
+      H('frida',s.f.fridaSafe?'和安全返回的芙丽达交谈':'和大卫配合，撬起压住芙丽达的横梁',s.f.fridaSafe?842:1160,s.f.fridaSafe?665:670,110,190,{walkX:s.f.fridaSafe?790:950}),
+      H('beacon','转动低处检修轮，调整信标光轴',1220,657,90,105,{drag:'beacon',walkX:1169}),
+      ...(!s.f.twigSafe?[H('twig','蹲下接住枝枝',929,696,106,72,{walkX:875})]:[]),
+      exit('board','确认同伴齐全，一起登上沃夫',1395,644,{walkX:1326}),H('star','观察远处山脊的星标',1044,176,55,59,{walkX:1128})],
+    act(g,id,item) {
+      if(id==='anchor') {
+        if(f(g,'roofAnchor'))return g.toast('锚点已经固定，绳头不会松开。现在把另一端送给大卫。');
+        if(!need(g,'line',item,'先在背包选救援绳，再固定近处铁环。'))return;
+        return g.work(1300,'绕过铁环，收紧绳结并检查锚点',()=>{g.consume('line');set(g,'roofAnchor');book(g,'rescue');g.sound('rope');g.toast('锚点固定好了。现在把绳端送给大卫。');});
+      }
+      if(id==='david') {
+        if(!f(g,'roofAnchor'))return one(g,'大卫','别直接跳过来！先固定绳子！');
+        if(!f(g,'davidSafe'))return g.work(2800,'送出绳端，扶住大卫返回稳固的屋面',()=>{set(g,'davidSafe');g.sound('rope');g.toast('大卫安全了。绳索已拉紧，可以沿着剩下的检修板通过缺口。');});
+        if(f(g,'roofBrace'))return one(g,'大卫',f(g,'fridaSafe')?'大家都站稳了。快看，信标下面有检修轮！':'我守住这个支点。用长挑杆抬起横梁，芙丽达就能把背包拉出来。');
+        return g.work(2400,'请大卫沿安全绳到横梁旁，稳住支点',()=>{set(g,'roofBrace');g.sound('wood');g.toast('大卫已稳住支点。现在用长挑杆帮助芙丽达。');});
+      }
+      if(id==='frida') {
+        if(f(g,'fridaSafe'))return one(g,'芙丽达','沃夫会循光而来。转动信标下面的检修轮，让光照到左上方的山脊星标。');
+        if(!f(g,'davidSafe'))return one(g,'希尔达','先救大卫，不能越过没有安全绳的缺口。');
+        if(!f(g,'roofBrace'))return one(g,'希尔达','挑杆会滑。请大卫先稳住横梁的支点，我们再一起抬。');
+        if(!need(g,'pole',item,'用长柄检修挑杆抬起横梁。大卫稳住支点，芙丽达抽出背包。'))return;
+        return g.work(2400,'大卫稳住支点，希尔达抬梁，芙丽达脱困',()=>{set(g,'fridaSafe');g.sound('warm');g.toast('芙丽达安全了，挑杆也收回来了。让信标为我们找到归途。');});
+      }
+      if(id==='beacon')return aim(g,g.s.beaconAngle-21<-178?-45:g.s.beaconAngle-21);
+      if(id==='twig') {
+        if(!f(g,'davidSafe'))return one(g,'希尔达','枝枝，待在原地。我先把安全绳拉好。');
+        return g.work(1000,'蹲下来，接住跃过瓦片的枝枝',()=>{set(g,'twigSafe');g.sound('warm');g.toast('枝枝也在这里了。一个都不能少。');});
+      }
+      if(id==='board') {
+        if(!f(g,'beacon'))return one(g,'芙丽达','先用信标招来沃夫。转动下方检修轮，照向左上方星标。');
+        if(!f(g,'twigSafe'))return one(g,'希尔达','等一下，枝枝还在屋面上！');
+        if(!f(g,'davidSafe')||!f(g,'fridaSafe'))return one(g,'希尔达','先确认每个人都安全。');
+        return say(g,[['大卫','阿尔弗在口袋里，枝枝也跟上来了。'],['芙丽达','希尔达，把手给我！'],['希尔达','大家都在。带我们去山脊吧！']],()=>g.work(2400,'彼此拉住手，一起登上沃夫',()=>{set(g,'roofDone');g.go(10);},{kind:'board',effect:'roofBoard'}));
+      }
+      if(id==='star')g.toast('星标在灯的左上方。低处检修轮旁的星形刻线，标出了相同方向。');
+    },
+    drag(g,id,p){if(id!=='beacon')return false;aim(g,Stage.wheelAngle(p));return true;},
+    objective:s=>!s.f.roofAnchor?'先将救援绳固定到近处铁环。':!s.f.davidSafe?'把绳端送给大卫，扶他返回稳固屋面。':!s.f.roofBrace&&!s.f.fridaSafe?'请大卫到横梁旁稳住支点。':!s.f.fridaSafe?'用长挑杆和同伴协作，帮助芙丽达脱困。':!s.f.beacon?'转动低处检修轮，把信标照向山脊星标。':!s.f.twigSafe?'带上枝枝，谁也不落下。':'同伴齐全了，一起登上沃夫。',
+    hints:s=>['先建立安全条件，再伸手帮助同伴。退回检查点不会撤销已完成的救援。','救回大卫后，再和他互动，请他稳住横梁支点；然后用长挑杆帮助芙丽达。','救援绳用于铁环 → 点大卫救回 → 再点大卫稳住支点 → 挑杆用于芙丽达 → 点低处检修轮三次 → 点枝枝 → 点沃夫。舒缓模式可关闭计时。']
+  };
 });
 
 /* src/scenes/10-dawn-ridge/art.js */

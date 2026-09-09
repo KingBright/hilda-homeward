@@ -206,3 +206,81 @@ test('Bridge cannot lift without both anchorage and a companion on the brake',()
  s.f.grappleSet=true;Story.scenes[2].act(g,'winch',null);assert.equal(callbacks.length,0);
  s.f.bridgeBrace=true;Story.scenes[2].act(g,'winch',null);assert.equal(callbacks.length,1);
 });
+
+
+const Stage=H.use('content/setpieces'),Motion=H.use('engine/setpiece-motion');
+function gameFor(state){return {s:state,tasks:[],messages:[],set(k,v=true){state.f[k]=v;},work(ms,label,after,score){this.tasks.push({ms,after,score});},toast(t){this.messages.push(t);},say(lines,after){this.messages.push(lines);after?.();},commit(){},sound(){},note(){},take(id){state.inventory.push(id);},consume(id){state.inventory=state.inventory.filter(x=>x!==id);}};}
+test('Archive docking is bounded, snapped and rejects non-finite destinations',()=>{
+ for(const x of [-100,650,707,940,1165,2500])assert.ok(Stage.snapLadder(x)>=640&&Stage.snapLadder(x)<=1260);
+ assert.equal(Stage.snapLadder(1165),1170);assert.equal(Stage.snapLadder(1050),1050);
+ for(const x of [NaN,Infinity,undefined])assert.throws(()=>Stage.snapLadder(x));
+ const s=State.fresh();assert.equal(Stage.nextDock(s),925);s.f.ladderX=925;assert.equal(Stage.nextDock(s),1170);
+});
+test('A locked but misaligned ladder cannot grant the archive',()=>{
+ const s=State.fresh();s.f.ladderBrake=true;const g=gameFor(s);
+ Story.scenes[3].act(g,'book');assert.equal(g.tasks.length,0);assert.ok(!s.f.planTaken);
+ s.f.ladderX=1170;assert.equal(Stage.canRead(s),true);Story.scenes[3].act(g,'book');assert.equal(g.tasks.length,1);
+ assert.ok(!s.inventory.includes('plan'));g.tasks[0].after();assert.ok(s.f.planTaken);assert.equal(s.inventory.filter(x=>x==='plan').length,1);
+});
+test('Ladder movement cannot bypass the wheel brake through drag',()=>{
+ const s=State.fresh();s.f.ladderBrake=true;const g=gameFor(s);Story.scenes[3].drag(g,'ladder',{x:1170});
+ assert.equal(g.tasks.length,0);assert.equal(s.f.ladderX,undefined);
+ s.f.ladderBrake=false;Story.scenes[3].drag(g,'ladder',{x:1170});assert.equal(g.tasks.length,1);
+ assert.equal(s.f.ladderX,undefined);g.tasks[0].after();assert.equal(s.f.ladderX,1170);
+});
+test('Archive climb returns to ground; its presentation never moves the saved hero',()=>{
+ const {ActionTrack}=H.use('engine/action-track'),base={x:1153,y:819},a=new ActionTrack(3800,{effect:'archiveBook',ladder:1170,origin:base});
+ a.advance(1900);const pose=Motion.actor(base,a);assert.equal(pose.y,529);assert.equal(base.y,819);
+ assert.equal(Motion.actor(base,a,true).y,819);a.advance(1900);assert.deepEqual(plain(Motion.actor(base,a)),base);
+});
+test('Rescue anchoring consumes equipment only when the completed action commits',()=>{
+ const s=State.fresh();s.inventory=['line'];const g=gameFor(s);Story.scenes[9].act(g,'anchor','line');
+ assert.ok(s.inventory.includes('line'));assert.ok(!s.f.roofAnchor);assert.equal(g.tasks.length,1);
+ g.tasks[0].after();assert.ok(s.f.roofAnchor);assert.ok(!s.inventory.includes('line'));
+});
+test('Rescuing David and bracing the beam are distinct, ordered actions',()=>{
+ const s=State.fresh(),g=gameFor(s);Story.scenes[9].act(g,'david');assert.equal(g.tasks.length,0);
+ s.f.roofAnchor=true;Story.scenes[9].act(g,'david');assert.ok(!s.f.davidSafe);g.tasks.pop().after();assert.ok(s.f.davidSafe);assert.ok(!s.f.roofBrace);
+ Story.scenes[9].act(g,'david');g.tasks.pop().after();assert.ok(s.f.roofBrace);
+});
+test('A pole cannot bypass the companion fulcrum prerequisite and is reusable',()=>{
+ const s=State.fresh();s.f.roofAnchor=true;s.f.davidSafe=true;s.inventory=['pole'];const g=gameFor(s);
+ Story.scenes[9].act(g,'frida','pole');assert.equal(g.tasks.length,0);assert.ok(!s.f.fridaSafe);
+ s.f.roofBrace=true;Story.scenes[9].act(g,'frida','pole');assert.ok(!s.f.fridaSafe);g.tasks[0].after();assert.ok(s.f.fridaSafe);assert.ok(s.inventory.includes('pole'));
+});
+test('Beacon drag angles use the reachable control wheel, not the high lamp',()=>{
+ const a=Stage.wheelAngle({x:1096,y:501});assert.ok(a<-125&&a>-132);
+ assert.equal(Stage.wheelAngle({x:1300,y:657}),0);assert.throws(()=>Stage.wheelAngle({x:NaN,y:0}));
+});
+test('Retreat preserves every completed rescue and never duplicates a secured rope',()=>{
+ const s=State.fresh();s.scene=9;s.f={roofAnchor:true,davidSafe:true,roofBrace:true,fridaSafe:true,twigSafe:true,heart:true};s.inventory=['pole'];s.danger=.95;
+ const before=plain(s),r=Stage.retreat(s);assert.deepEqual(plain(s),before);assert.deepEqual(plain(r.f),before.f);
+ assert.deepEqual(plain(r.inventory),['pole']);assert.equal(r.danger,0);assert.equal(r.failures,1);assert.equal(r.heroX,802);
+ assert.notEqual(r.f,s.f);assert.notEqual(r.inventory,s.inventory);
+});
+test('Retreat before anchoring restores exactly one rope',()=>{
+ const s=State.fresh();const r=Stage.retreat(s),r2=Stage.retreat(r);assert.deepEqual(plain(r2.inventory),['line']);assert.equal(r2.heroX,315);
+});
+test('Completed legacy archives and rescues gain prerequisites without replay',()=>{
+ const s=State.fresh();s.f.planTaken=true;s.f.davidSafe=true;s.f.fridaSafe=true;
+ const o=State.validate(s);assert.equal(o.f.ladderBrake,true);assert.equal(o.f.roofBrace,true);assert.equal(s.f.roofBrace,undefined);
+ const bad=State.fresh();bad.f.roofBrace=true;assert.throws(()=>State.validate(bad));
+});
+test('Staged actor and companion coordinates stay finite at every phase',()=>{
+ const {ActionTrack}=H.use('engine/action-track'),s=State.fresh();s.scene=9;
+ for(const effect of ['archiveBook','ladderSlide','roofRescue','roofBrace','roofLever','roofTwig','roofBoard']) {
+   const a=new ActionTrack(1000,{effect,origin:{x:950,y:773},ladder:1170,from:769,to:1170});
+   for(let i=0;i<=100;i++) {
+     const actor=Motion.actor({x:950,y:773},a),cast=Motion.cast(s,a);
+     for(const p of [[actor.x,actor.y],...Object.values(cast)])assert.ok(p.every(Number.isFinite),effect);
+     a.advance(10);
+   }
+ }
+});
+
+test('Roof beam is drawn behind rescuers so the lifted plank cannot cover their faces',()=>{
+ const s=State.fresh();s.scene=9;s.f={roofAnchor:true,davidSafe:true,roofBrace:true,fridaSafe:true};
+ const svg=H.use('scene/9/art')(s);
+ assert.ok(svg.indexOf('id="roofBeam"')<svg.indexOf('id="roofDavid"'));
+ assert.ok(svg.indexOf('id="roofBeam"')<svg.indexOf('id="roofFrida"'));
+});

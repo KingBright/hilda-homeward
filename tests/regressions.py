@@ -63,7 +63,7 @@ def run_regressions(browser,completed,storage):
     before=state(p)['danger'];p.wait_for_timeout(1200)
     check('Relaxed mode removes pressure without changing chapter',state(p)['settings']['relaxed'] and abs(state(p)['danger']-before)<.001 and state(p)['scene']==9)
     use(p,'line','anchor');act(p,'david');p.evaluate('HildaTest.resetRoof()');settle(p)
-    check('Safe checkpoint restores rope and rescued companion sequence',state(p)['failures']==1 and 'line' in state(p)['inventory'] and not flags(p,'roofAnchor') and not flags(p,'davidSafe'))
+    check('Safe checkpoint retains secured line and completed rescue',state(p)['failures']==1 and 'line' not in state(p)['inventory'] and flags(p,'roofAnchor','davidSafe'))
     check('Safe checkpoint preserves previous chapters and items',flags(p,'heart','towerGate','pump','calm') and 'crank' in state(p)['inventory'])
     p.locator('#menuBtn').click();p.locator('#motionSetting').click();p.locator('#resumePlay').click();settle(p)
     check('Reduced motion mode updates game class and preference',state(p)['settings']['reduced'] and 'reduced' in p.locator('#game').get_attribute('class'))
@@ -84,7 +84,7 @@ def run_regressions(browser,completed,storage):
         load(m,n)
         check('Mobile landscape scene '+str(n)+' viewport containment',m.evaluate('document.documentElement.scrollWidth<=innerWidth && document.documentElement.scrollHeight<=innerHeight'))
     load(m,9);m.locator('#menuBtn').tap();m.locator('#relaxSetting').tap();m.locator('#resumePlay').tap()
-    use(m,'line','anchor',touch=True);act(m,'david',touch=True);use(m,'pole','frida',touch=True)
+    use(m,'line','anchor',touch=True);act(m,'david',touch=True);act(m,'david',touch=True);use(m,'pole','frida',touch=True)
     for _ in range(3):act(m,'beacon',touch=True)
     check('Beacon has touch-friendly click alternative to rotation drag',flags(m,'beacon'))
     act(m,'twig',touch=True);shot(m,'mobile-landscape-roof');act(m,'board',touch=True)
@@ -114,7 +114,7 @@ def run_regressions(browser,completed,storage):
     for _ in range(8):
         if abs(state(k)['f'].get('ladderX',769)-1170)<75:break
         act(k,'ladder',keyboard=True)
-    act(k,'book',keyboard=True)
+    act(k,'ladderBrake',keyboard=True);act(k,'book',keyboard=True)
     check('Archive ladder and high shelf can be solved without dragging',flags(k,'planTaken'))
 
     # At canonical aspect ratio every active object's centre must be clickable.
@@ -129,5 +129,5 @@ def run_regressions(browser,completed,storage):
     while state(timer)['failures']==0 and time.monotonic()<until:
         timer.wait_for_timeout(1000)
     check('Actual storm deadline triggers automatic safe checkpoint',state(timer)['failures']==1 and ui(timer)['dialogue'] is not None)
-    check('Timed checkpoint restores rope, preserves heart and prevents loss',not flags(timer,'roofAnchor') and not flags(timer,'davidSafe') and flags(timer,'heart') and 'line' in state(timer)['inventory'])
+    check('Timed checkpoint preserves the anchored line, rescued David and completed heart',flags(timer,'roofAnchor','davidSafe','heart') and 'line' not in state(timer)['inventory'])
     timer.close()

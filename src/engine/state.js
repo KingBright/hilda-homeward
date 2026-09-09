@@ -1,5 +1,5 @@
 Homeward.define("engine/state", ["story"], (Story) => {
-const boolFlags=new Set(('letter promise lampTaken awning crankTaken crankMounted gateOpen ropeTaken hookTaken grappleSet bridge archiveTalk planTaken filter pump lineTaken lift shadePlaced calm towerGate feltTaken bypassMounted bypass damped fridaHold davidHold heart roofAnchor davidSafe fridaSafe beacon twigSafe roofDone reunited hug ended gearSTaken gearMTaken gearLTaken gearSSet gearMSet gearLSet trail0 trail1 trail2 hood0 hood1 hood2 tea0 tea1 tea2 branchBent poleTaken pumpPrimed gearAligned bridgeBrace intakeClosed').split(' '));
+const boolFlags=new Set(('letter promise lampTaken awning crankTaken crankMounted gateOpen ropeTaken hookTaken grappleSet bridge archiveTalk planTaken filter pump lineTaken lift shadePlaced calm towerGate feltTaken bypassMounted bypass damped fridaHold davidHold heart roofAnchor davidSafe fridaSafe beacon twigSafe roofDone reunited hug ended gearSTaken gearMTaken gearLTaken gearSSet gearMSet gearLSet trail0 trail1 trail2 hood0 hood1 hood2 tea0 tea1 tea2 branchBent poleTaken pumpPrimed gearAligned bridgeBrace intakeClosed ladderBrake roofBrace').split(' '));
 const numericFlags={gearIndex:[0,3],gateTurns:[0,3],bypassTurns:[0,2],ladderX:[640,1260],drive:[0,100]};
 const milestones=['','promise','gateOpen','bridge','planTaken','pump','lift','calm','towerGate','heart','roofDone','reunited'];
 const sketches={mountain:['妈妈画的山','画里那条小路，最后总会回到有灯的窗前。'],city:['雨里倒着一座城','灯光在水洼里摇晃，像有人把另一座城藏到了脚下。'],elf:['精灵的雨天条款','第八十二条：未经本人同意，雨滴不得落在已批准的文件上。'],oldFriends:['门上的两个手印','一个小小的人类手印，挨着一个大大的巨魔手印。时间没有把它们分开。'],dawn:['天终于亮了','害怕没有一夜之间消失。但天亮时，我们学会了牵着它继续走。'],return:['同一扇窗','昨夜世界那么大。清晨，所有的路都回到了这扇窗。']};
@@ -31,6 +31,10 @@ function validate(v){
  for(const key of ['gateTurns','bypassTurns'])if(o.f[key]!==undefined&&!Number.isInteger(o.f[key]))throw Error('机关刻度必须是整数。');
  if(o.f.pump&&!o.f.pumpPrimed)throw Error('水泵缺少试压记录。');
  if(o.f.towerGate&&!o.f.gearAligned)throw Error('钟楼缺少对位记录。');
+ // Completed checkpoints predate the new prerequisite, and must remain completed.
+ if(o.f.planTaken&&o.f.ladderBrake===undefined)o.f.ladderBrake=true;
+ if(o.f.fridaSafe&&o.f.roofBrace===undefined)o.f.roofBrace=true;
+ if(o.f.roofBrace&&!o.f.davidSafe)throw Error('横梁协作缺少大卫的安全记录。');
  o.savedAt=typeof v.savedAt==='string'?v.savedAt:null;return o;
 }
 
