@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  actions: read
 concurrency:
   group: publish-v33
   cancel-in-progress: true
@@ -13,7 +14,7 @@ jobs:
   publish:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,49 +30,66 @@ jobs:
         if: steps.source.outputs.ready == 'true'
         with:
           python-version: '3.12'
-      - name: Verify source preimages, apply refinement and rebuild
+      - name: Verify every source preimage, rebuild and rerun unit tests
         if: steps.source.outputs.ready == 'true'
         run: |
           python tools/apply-v33.py
           npm run check
           sha256sum -c .v33-expected.sha256
           git diff --check
-      - name: Install pinned browser test tools
+      - name: Fetch evidence from the completed browser and persistence tests
+        if: steps.source.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/KingBright/hilda-homeward/actions/artifacts/10096341718/zip -o verified-v33.zip
+          echo 'a1acefbac4634c0bb7cd9d7ed4bef938c01cc1ce0c1957a5638d0637f945b1f9  verified-v33.zip' | sha256sum -c -
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/KingBright/hilda-homeward/actions/runs/34331740679/jobs -o verified-jobs.json
+      - name: Bind publication to the exact artifact that passed all four test suites
         if: steps.source.outputs.ready == 'true'
         run: |
-          python -m pip install -r tests/requirements.txt
-          python -m playwright install --with-deps chromium
-          python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print("CHROMIUM_PATH="+p.chromium.executable_path); p.stop()' >> "$GITHUB_ENV"
-      - name: Complete all chapters and interaction regressions
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, zipfile
+          expected = '7be982b885240d1d403dbff8cad9680274a824c3c0578b71463e25eb3850c285'
+          digest = lambda data: hashlib.sha256(data).hexdigest()
+          jobs = json.loads(Path('verified-jobs.json').read_text())['jobs']
+          job = next(j for j in jobs if j['id'] == 102401667279)
+          assert job['head_sha'] == '76c1e1ce3519de527df14028afdb186336ea0835'
+          steps = {s['name']: s for s in job['steps']}
+          required = ['Verify source preimages, apply refinement and rebuild', 'Complete all chapters and interaction regressions', 'Cast rendering and real Web Audio checks', 'Native HTTP and file-origin storage']
+          for name in required:
+              assert steps[name]['conclusion'] == 'success', name
+          out = Path('verified-v33'); out.mkdir()
+          with zipfile.ZipFile('verified-v33.zip') as archive:
+              assert digest(archive.read('index.html')) == expected
+              assert digest(Path('index.html').read_bytes()) == expected
+              for name, count in [('test-report.json',159), ('art-audio-report.json',25), ('native-storage-report.json',6)]:
+                  raw = archive.read(name); report = json.loads(raw)
+                  assert report['passed'] is True and report['artifact_sha256'] == expected
+                  assert len(report['checks']) == count
+                  assert all(c['passed'] is True for c in report['checks'])
+                  (out/name).write_bytes(raw)
+          (out/'publication-provenance.json').write_text(json.dumps({'source_test_run':34331740679,'source_test_job':102401667279,'artifact_id':10096341718,'artifact_sha256':expected,'unit_tests_rerun':True,'browser_tests_reused_by_exact_byte_identity':True,'original_publish_failure':'Actions token cannot write workflow files; the workflow update is submitted separately through the authorized connector.'},indent=2))
+          print('Matched all passed CI reports and rebuilt artifact byte for byte.')
+          PY
+      - name: Commit verified game source, leaving workflow changes to the authorized connector
         if: steps.source.outputs.ready == 'true'
         run: |
-          mkdir -p previews
-          python tests/playthrough.py
-      - name: Cast rendering and real Web Audio checks
-        if: steps.source.outputs.ready == 'true'
-        run: python tests/art-audio.py
-      - name: Native HTTP and file-origin storage
-        if: steps.source.outputs.ready == 'true'
-        run: python tests/native-storage.py
-      - name: Commit only verified source and build to main
-        if: steps.source.outputs.ready == 'true'
-        run: |
+          git restore --source=HEAD -- .github/workflows/quality.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src tests docs README.md package.json .github/workflows/quality.yml index.html hilda-homeward-v2.html dev.html build-manifest.json
+          git add src tests docs README.md package.json index.html hilda-homeward-v2.html dev.html build-manifest.json
           git rm tools/apply-v33.py
+          git diff --cached --check
           git commit -m 'feat: refine the full cast and add authored adaptive music with persistent mixing'
           git push origin HEAD:main
       - uses: actions/upload-artifact@v4
         if: always() && steps.source.outputs.ready == 'true'
         with:
-          name: v33-quality-evidence
+          name: v33-publication-provenance
           path: |
-            test-report.json
-            art-audio-report.json
-            native-storage-report.json
-            tests/failure-state.json
-            previews/
+            verified-v33/
             index.html
             build-manifest.json
           retention-days: 14
