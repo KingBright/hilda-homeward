@@ -1,7 +1,8 @@
 /** Distance-driven companion gait. No simulation state or puzzle flags are written. */
 Homeward.define('art/cast-motion', [], () => {
  const tracks=new WeakMap();
- function animate(root,time,reduced=false,action=null){
+ function animate(root,time,reduced=false,action=null,paused=false){
+  if(paused)return;
   for(const id of ['davidFollow','fridaFollow','roofDavid','roofFrida']){
    const actor=root.querySelector('#'+id);if(!actor)continue;
    const value=actor.getAttribute('transform')||'',match=/translate\(([-\d.]+)/.exec(value),x=Number(match?.[1]||0);

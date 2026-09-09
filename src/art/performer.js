@@ -27,7 +27,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     root.setAttribute('transform',`scale(${scale})`);root.dataset.scale=scale;
     attr('rigUpper','transform',`translate(${pose.offset.map(fixed).join(' ')})`);
     attr('rigHead','transform',`rotate(${fixed(pose.headTilt)} 0 -87)`);
-    attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
+    // Shared cast acting owns eye timing so a paused blink is not overwritten.
     const mood=Cast.expression(scene,flags,'希尔达');
     attr('rigBrows','d',score||mood==='resolve'?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
     const wind=reduced?0:Math.sin(time*3)*1.4+(moving?3:0);

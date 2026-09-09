@@ -1,5 +1,5 @@
 {
-  "version": "3.5.0",
+  "version": "3.6.0",
   "modules": [
     "src/engine/modules.js",
     "src/art/cast-acting.js",
@@ -7,6 +7,7 @@
     "src/art/cast-motion.js",
     "src/art/chapter-life.js",
     "src/art/characters.js",
+    "src/art/creature-life.js",
     "src/art/finishing.js",
     "src/art/index.js",
     "src/art/items.js",
@@ -14,6 +15,7 @@
     "src/art/performer.js",
     "src/art/props.js",
     "src/art/setpiece-life.js",
+    "src/art/twig-design.js",
     "src/content/catalog.js",
     "src/content/choreography.js",
     "src/content/details.js",
@@ -24,11 +26,13 @@
     "src/content/staging.js",
     "src/content/walkways.js",
     "src/engine/action-track.js",
+    "src/engine/animal-life.js",
     "src/engine/audio.js",
     "src/engine/body-motion.js",
     "src/engine/camera.js",
     "src/engine/dom.js",
     "src/engine/hydraulics.js",
+    "src/engine/idle-life.js",
     "src/engine/kinematics.js",
     "src/engine/runtime.js",
     "src/engine/score-player.js",
@@ -63,6 +67,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 285634,
-  "sha256": "7acbc23c255dd0db0fa4fc6bf79b19535a67f40a03e88feaa8f9fd6d2254f772"
+  "bytes": 303731,
+  "sha256": "e75e25b94c8f92a2def91551cba3f1a7c7612421ec69d9eaec863f6bc790147f"
 }

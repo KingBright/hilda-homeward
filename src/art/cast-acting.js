@@ -2,7 +2,7 @@
  * Text cadence drives stylized mouths; this is not phoneme-aligned lip sync.
  * Contact choreography owns the inner head/limbs; acting uses an outer neck pivot.
  */
-Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
+Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine/kinematics'], (Cast,Idle,{solve}) => {
   const caches = new WeakMap();
   const clamp = n => Math.max(-1, Math.min(1, Number.isFinite(n) ? n : 0));
   const punctuation = /^[\s，。！？、…—·：；“”‘’「」.,!?;:]+$/u;
@@ -39,7 +39,11 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
       return {actor, who: actor.dataset.cast, head,
         pivot: head?.closest('.cast-attention'),
         pupils: head?.querySelector('.cast-pupils'),
-        mouth: head?.querySelector('.cast-mouth')};
+        mouth: head?.querySelector('.cast-mouth'),
+        blink: head?.querySelector('.cast-blink,#rigEyes'),
+        upper: actor.querySelector('.cast-rest-upper'),
+        slot: actor.closest('#davidFollow,#fridaFollow,#roofDavid,#roofFrida'),
+        arms: [...actor.querySelectorAll('[data-rest-arm]')].map(n=>({node:n,name:n.dataset.restArm,paths:[...n.querySelectorAll(':scope > path')],hand:n.querySelector('.rest-hand')}))};
     });
     caches.set(root, entries);
   }
@@ -52,7 +56,7 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
 
   function paint(root, time, {scene = 0, flags = {}, speaker = '', listener = '',
     typing = false, character = '', reduced = false, paused = false,
-    portrait = false, working = false} = {}) {
+    portrait = false, working = false, moving = false} = {}) {
     if (!root || paused) return;
     if (!caches.has(root)) refresh(root);
     const entries = caches.get(root);
@@ -75,7 +79,31 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
       const gaze = !portrait && target !== entry && from && to
         ? clamp((to.x - from.x) / (from.unit * 140)) * from.face : 0;
       const mood = working && entry === hero ? 'resolve' : Cast.expression(scene, flags, entry.who);
+      const walking=entry.slot?.dataset.gait==='walking'||entry===hero&&moving;
+      const reserved=!!entry.slot?.classList.contains('bracing')
+        ||entry.slot?.id==='roofDavid'&&flags.roofBrace&&!flags.roofDone
+        ||scene===8&&((entry.who==='大卫'&&flags.leverFriend)||(entry.who==='芙丽达'&&flags.brakeFriend))
+        ||working&&(entry===hero||scene===8||scene===9);
+      const idle=Idle.sample({who:entry.who,time,scene,reduced,reserved,moving:walking,speaker:role==='speaker'});
       const pose = sample({who: entry.who, time, role, mood, gaze, typing, character, reduced});
+      if(!speaker&&!reserved){pose.gazeX=clamp(pose.gazeX*.8+idle.look);pose.tilt+=idle.head;}
+      put(entry.actor,'data-idle',idle.beat);
+      if(entry.upper){
+        put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
+        for(const arm of entry.arms){
+          const front=arm.name==='front',origin=[front?17:-19,-79],target=front?idle.front:idle.back;
+          const j=solve(origin,target,25,27,-1);
+          const fmt=a=>a.map(n=>n.toFixed(3));
+          const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
+          arm.paths.forEach(n=>put(n,'d',d));
+          const angle=Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])*180/Math.PI-90;
+          put(arm.hand,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${angle.toFixed(3)})`);
+        }
+      }
+      if(entry.blink){
+        entry.blink.style.animation='none';
+        put(entry.blink,'transform',`translate(0 -111) scale(1 ${idle.blink.toFixed(3)}) translate(0 111)`);
+      }
       put(entry.actor, 'data-role', role);
       put(entry.head, 'data-mood', mood);
       put(entry.actor, 'data-gaze', pose.gazeX.toFixed(3));

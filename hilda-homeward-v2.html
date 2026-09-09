@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 伸手可及 V3.5。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 同行的呼吸 V3.6。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -89,7 +89,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.5</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.5 伸手可及 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.6</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.6 同行的呼吸 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -123,7 +123,7 @@
  * Text cadence drives stylized mouths; this is not phoneme-aligned lip sync.
  * Contact choreography owns the inner head/limbs; acting uses an outer neck pivot.
  */
-Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
+Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine/kinematics'], (Cast,Idle,{solve}) => {
   const caches = new WeakMap();
   const clamp = n => Math.max(-1, Math.min(1, Number.isFinite(n) ? n : 0));
   const punctuation = /^[\s，。！？、…—·：；“”‘’「」.,!?;:]+$/u;
@@ -160,7 +160,11 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
       return {actor, who: actor.dataset.cast, head,
         pivot: head?.closest('.cast-attention'),
         pupils: head?.querySelector('.cast-pupils'),
-        mouth: head?.querySelector('.cast-mouth')};
+        mouth: head?.querySelector('.cast-mouth'),
+        blink: head?.querySelector('.cast-blink,#rigEyes'),
+        upper: actor.querySelector('.cast-rest-upper'),
+        slot: actor.closest('#davidFollow,#fridaFollow,#roofDavid,#roofFrida'),
+        arms: [...actor.querySelectorAll('[data-rest-arm]')].map(n=>({node:n,name:n.dataset.restArm,paths:[...n.querySelectorAll(':scope > path')],hand:n.querySelector('.rest-hand')}))};
     });
     caches.set(root, entries);
   }
@@ -173,7 +177,7 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
 
   function paint(root, time, {scene = 0, flags = {}, speaker = '', listener = '',
     typing = false, character = '', reduced = false, paused = false,
-    portrait = false, working = false} = {}) {
+    portrait = false, working = false, moving = false} = {}) {
     if (!root || paused) return;
     if (!caches.has(root)) refresh(root);
     const entries = caches.get(root);
@@ -196,7 +200,31 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
       const gaze = !portrait && target !== entry && from && to
         ? clamp((to.x - from.x) / (from.unit * 140)) * from.face : 0;
       const mood = working && entry === hero ? 'resolve' : Cast.expression(scene, flags, entry.who);
+      const walking=entry.slot?.dataset.gait==='walking'||entry===hero&&moving;
+      const reserved=!!entry.slot?.classList.contains('bracing')
+        ||entry.slot?.id==='roofDavid'&&flags.roofBrace&&!flags.roofDone
+        ||scene===8&&((entry.who==='大卫'&&flags.leverFriend)||(entry.who==='芙丽达'&&flags.brakeFriend))
+        ||working&&(entry===hero||scene===8||scene===9);
+      const idle=Idle.sample({who:entry.who,time,scene,reduced,reserved,moving:walking,speaker:role==='speaker'});
       const pose = sample({who: entry.who, time, role, mood, gaze, typing, character, reduced});
+      if(!speaker&&!reserved){pose.gazeX=clamp(pose.gazeX*.8+idle.look);pose.tilt+=idle.head;}
+      put(entry.actor,'data-idle',idle.beat);
+      if(entry.upper){
+        put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
+        for(const arm of entry.arms){
+          const front=arm.name==='front',origin=[front?17:-19,-79],target=front?idle.front:idle.back;
+          const j=solve(origin,target,25,27,-1);
+          const fmt=a=>a.map(n=>n.toFixed(3));
+          const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
+          arm.paths.forEach(n=>put(n,'d',d));
+          const angle=Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])*180/Math.PI-90;
+          put(arm.hand,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${angle.toFixed(3)})`);
+        }
+      }
+      if(entry.blink){
+        entry.blink.style.animation='none';
+        put(entry.blink,'transform',`translate(0 -111) scale(1 ${idle.blink.toFixed(3)}) translate(0 111)`);
+      }
       put(entry.actor, 'data-role', role);
       put(entry.head, 'data-mood', mood);
       put(entry.actor, 'data-gaze', pose.gazeX.toFixed(3));
@@ -213,7 +241,7 @@ Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
 /* src/art/cast-design.js */
 /** Shared production drawings: the stage actor and dialogue portraits use the
  * same head/costume layers. No independent portrait-only redesigns or bitmaps. */
-Homeward.define('art/cast-design', [], () => {
+Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  const ink='#263c48';
  const p=(d,f='none',s=ink,w=1.55,extra='')=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
  const e=(x,y,rx,ry,f,s='none',w=1)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" stroke="${s}" stroke-width="${w}"/>`;
@@ -262,12 +290,21 @@ Homeward.define('art/cast-design', [], () => {
   return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">${hairBack(who,c)}${p('M-20-82q-18 0-16 18l3 19 17 4 6-26Z','#64594c')}${p('M-32-66l15 3-2 11-12-2Z','#a27e55')}${p('M-26-73l4 1v8l-5-1Z','#d6b77c')}${hilda?p('M-21-53H20L29-29Q1-25-28-29Z','#334552')+p('M-15-51l-4 20m18-21v22m14-21 7 19','none','#536574',1.2):''}${mom?p('M-20-61L-32-23Q2-16 32-25L19-64Z',c.coatDark):''}${torso}${p('M-13-85Q-17-68-13-46','none','#544b40',4.2)}${p('M-13-81v21','none','#bc9764',1.4)}${p('M-15-62h5v7h-5Z','#d9bd83',ink,.8)}${who==='芙丽达'?p('M16-67l7 3-3 8-8-3Z','#d2c49c',ink,1)+p('M16-61l2-3 2 4','none','#55756c',1):''}${head(who,mood,rig)}${p('M-22-91Q-3-86 22-93L24-83Q6-77-22-82Z',c.scarf)}${p('M-18-86q19 6 37-2','none',hilda?'#ed9b77':'#a4beb0',1.4)}${p('M17-84Q32-86 45-74L41-63 32-64 33-71 18-75Z',c.scarf,ink,1.4,rig?'id="rigScarf"':'class="cast-scarf"')}${p('M-21-48H21','none','#e2be8a',.7)}</g>`;
  }
  function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
+ function restingArm(name,c){
+  const x=name==='back'?-19:17,hx=name==='back'?-28:29;
+  return `<g data-rest-arm="${name}">${p(`M${x} -79L${hx} -60L${hx} -39`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${hx} -60L${hx} -39" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -39)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+ }
  function standing(who,mood='curious'){
   const c=profiles[who]||profiles['妈妈'];
-  return `<g data-cast="${who}">${e(0,3,30,5,'#0d293945')}<g class="cast-breathe"><g class="cast-leg-back">${p('M-18-45l2 37h10l6-36',c.trousers)}${p('M-12-33l2 20','none','#7c8990',1)}${boot(-12,-2,true)}</g><g class="cast-leg-front">${p('M6-44l3 36h10l1-36',c.trousers)}${p('M13-32l1 18','none','#7c8990',1)}${boot(14,-2)}</g><g class="person-arms">${p('M-20-81Q-30-74-29-55l-3 13 8 2 6-20 6-15',c.coat)}${p('M19-81q13 8 11 24l3 12-8 3-8-19Z',c.coat)}${p('M-31-47l9 2m4-25-5 13m49 10 8-1','none',c.coatLight,2)}${p('M-32-42q-3 8 2 10 6 1 7-6l-1-5Z',c.skin)}${p('M26-44q-2 8 3 10 7-2 5-10Z',c.skin)}</g>${upper(who,false,mood)}</g></g>`;
+  return `<g data-cast="${who}">${e(0,3,30,5,'#0d293945')}
+    <g class="cast-leg-back">${p('M-18-45l2 37h10l6-36',c.trousers)}${p('M-12-33l2 20','none','#7c8990',1)}${boot(-12,-2,true)}</g>
+    <g class="cast-leg-front">${p('M6-44l3 36h10l1-36',c.trousers)}${p('M13-32l1 18','none','#7c8990',1)}${boot(14,-2)}</g>
+    <g class="cast-rest-upper">${upper(who,false,mood)}<g class="person-arms">${restingArm('back',c)}${restingArm('front',c)}</g></g>
+  </g>`;
  }
  function elf(){return `<g data-cast="阿尔弗" class="cast-breathe">${e(0,3,17,3,'#0d29393d')}${p('M-7-16v14m12-15 2 16','none','#405253',4)}${boot(-6,0,true)}${boot(8,0)}${p('M-11-35q11-7 22 0l4 19-26 1Z','#849078')}${p('M-13-32l-5 12 6 3m22-17 9 11-5 6','none','#aaaf88',4)}${p('M-14-43l-10-7 3 10 7 4m28-7 10-7-4 10-7 3','#edc69f')}${e(0,-46,16,19,'#f4d6b0',ink,1.4)}${p('M-19-55Q-13-74 1-87L-1-72Q14-68 20-53Z','#b95444')}${p('M-9-69l9-12-3 13 13 6','none','#e09772',1.3)}${p('M-18-54q18-8 37 0','none','#6f3939',3)}${e(-6,-46,2,2.5,ink)}${e(7,-46,2,2.5,ink)}${p('M-15-50h13v10h-13Zm18 0h13v10H3Zm-5 4h5','none','#6b5b45',1.2)}${p('M-3-34q4 3 8-1','none','#815546',1)}${p('M-6-30l18 1 4 20-19 2Z','#e3d4a8')}${p('M-2-24h9m-8 4h10m-9 4h7','none','#8f9475',.8)}${e(10,-12,2,2,'#b46551')}</g>`;}
- function twig(){return `<g data-cast="枝枝"><g class="cast-tail">${p('M14-26Q31-55 49-55L44-47 58-45 52-39 59-38Q53-14 23-17Z','url(#cast-fur)')}${p('M28-26q17-3 23-17','none','#faf6df',3)}</g>${p('M-15-25l-3 23 8 2 5-19m18-6 0 23 7 1 4-24','#bed0cc')}${p('M-29-39Q-7-54 22-37l1 17q-19 12-39-3l-9 24h-8l4-26Z','url(#cast-fur)')}${p('M11-27l-1 25 9 2 4-25','url(#cast-fur)')}${p('M-31-24l-7-3-10-12 1-10-7-15 14 6 9-14 4 19q15-3 17 10l-5 15Z','url(#cast-fur)')}${p('M-43-56l-4-6 2 12m13-6 1-10 3 9','#aabfc2','none')}${p('M-31-59l-6-17 2-13m-2 11-10-8m20 27 6-20 0-11m0 12 11-9','none','#758d8c',2.6)}${p('M-32-59l-5-17m11 15 6-19','none','#d7dcc4',1)}${e(-31,-42,2.1,3.3,ink)}${e(-30.4,-43,0.65,1,'#fff9ea')}${p('M-48-41l6 2-2 4Z',ink)}${p('M-45-32q5 3 9 0m11 8 6 1-4 4','none','#6d9193',1)}${p('M-32 1h8m14 0h7m16 0h9','none','#455e68',1.5)}</g>`;}
+ function twig(){return Twig.markup();}
+
  function troll(big=false,calm=true){return `<g data-cast="${big?'巨魔妈妈':'小巨魔'}">${e(0,4,66,9,'#0b273747')}<g class="cast-breathe">${p('M-60-7Q-75-33-60-69L-55-99Q-51-131-28-138L-11-149 14-143 34-140Q56-130 57-99l10 25q15 22 10 53L58-13 50-4 21-6 11-20-4-18-16-4-39-3-47-12Z','url(#cast-rock)',ink,2.2)}${p('M-56-62l13-17 12 12-8 35-15 8m77-54 24 9 12 32-18 9-11-28','#67837e','none')}${p('M-31-135l17-8 22 3 10 7-22 3-17 15-18-2Z','#b5beb0','none')}${p('M-41-112l-13-5-4 12 10 10m92-17 12-6 6 12-10 12','#8fa399')}${e(-24,-96,10,12,'#c5cbb8')}${e(27,-96,10,12,'#c5cbb8')}${e(-21,-95,4.4,6,ink)}${e(25,-95,4.4,6,ink)}${e(-20,-97,1.3,1.7,'#f6ecd4')}${e(26,-97,1.3,1.7,'#f6ecd4')}${p('M-5-99l-9 28 25 2-8-25Z','#8fa6a0')}${p(calm?'M-20-57q21 15 42-1':'M-17-54q16-8 33-1','none','#324f56',2.1)}${p('M-46-46l9 5-4 14m76-22-9 9 3 12M-32-17l2 8m57-10 3 9m9-111-5 8 5 9','none','#b1bdb0',1.3)}${[-29,-18,16,31].map((x,i)=>e(x,-76+i%2*3,2.5,1.8,'#607c78')).join('')}${p('M-40-132l-1-8 10 3 4-9 8 6 8-6 7 7-6 8Z','#78936e')}${p('M-36-140l3 9m6-14 1 10m10-9-2 8','none','#bcc69b',1)}${big?p('M12-140q-3-13 6-20m-5 9-8-5m8 2 10-2','none','#93af8a',2):p('M-50-69q46 17 96 1l-5 10q-41 16-84-1Z','#b77959')}${p('M-40-63q16 6 28 6','none','#e0b58a',1.2)}</g></g>`;}
  function woff(){return `<g data-cast="沃夫" class="float">${p('M-80-16Q-101-27-86-47-68-62-49-43Q-3-70 49-43 67-65 84-48 101-29 81-14 99 14 73 36 40 61-16 54-60 53-80 31-92 13-80-16Z','url(#cast-woff)',ink,2)}${p('M-46-36q12-8 25-8m-19 3 6-7m9 3 6-7m-45 32-6 7m125-3 6 9','none','#f3e5c3',1.8)}${p('M-79-29q-2-16 17-14m127 0q20-3 17 16','none','#8e9b94',2)}${e(-28,5,10,12,'#f0e6cc')}${e(26,5,10,12,'#f0e6cc')}${e(-25,6,3.7,6.2,ink)}${e(25,6,3.7,6.2,ink)}${e(-24,3,1,1.8,'#fff2dc')}${e(26,3,1,1.8,'#fff2dc')}${p('M-8 21q8 8 17-2','none','#576d70',1.5)}${p('M-37 49l-4 12 17-8m39-1 18 10-3-14','#8da2a0')}${e(-42,22,8,3,'#bc9f87')}${e(41,22,8,3,'#bc9f87')}</g>`;}
  return {profiles,defs,expression,head,upper,boot,standing,elf,twig,troll,woff};
@@ -277,7 +314,8 @@ Homeward.define('art/cast-design', [], () => {
 /** Distance-driven companion gait. No simulation state or puzzle flags are written. */
 Homeward.define('art/cast-motion', [], () => {
  const tracks=new WeakMap();
- function animate(root,time,reduced=false,action=null){
+ function animate(root,time,reduced=false,action=null,paused=false){
+  if(paused)return;
   for(const id of ['davidFollow','fridaFollow','roofDavid','roofFrida']){
    const actor=root.querySelector('#'+id);if(!actor)continue;
    const value=actor.getAttribute('transform')||'',match=/translate\(([-\d.]+)/.exec(value),x=Number(match?.[1]||0);
@@ -389,6 +427,67 @@ Homeward.define('art/characters', ['art/kit','art/cast-design','content/staging'
  const troll=(x,y,s=1,big=false)=>kit.group(x,y,s,Cast.troll(big,big||!!kit.getVisualState().f.calm));
  const woff=(x,y,s=1)=>kit.group(x,y,s,Cast.woff());
  return {hilda,twig,person,troll,woff};
+});
+
+/* src/art/creature-life.js */
+/** Apply animal life to the live game, shared portraits and isolated workbenches. */
+Homeward.define('art/creature-life', ['engine/animal-life'], Animal => {
+  const roots=new WeakMap(),tracks=new WeakMap();
+  const fixed=x=>x.toFixed(3);
+  const put=(n,k,v)=>{if(n&&n.getAttribute(k)!==String(v))n.setAttribute(k,String(v));};
+  function refresh(root){
+    if(!root)return;
+    roots.set(root,[...root.querySelectorAll('[data-animal-rig="twig"]')].map(actor=>{
+      const parts=Object.fromEntries(['heading','torso','head','tail','ear-a','ear-b','eye','shadow'].map(k=>[k,actor.querySelector('.twig-'+k)]));
+      const legs=[0,1,2,3].map(i=>{const group=actor.querySelector(`[data-twig-leg="${i}"]`);return {group,paths:[...group.querySelectorAll(':scope > path')],hoof:group.querySelector('.twig-hoof')};});
+      return {actor,parts,legs};
+    }));
+  }
+  function paint(root,time,{paused=false,reduced=false,scene=0,flags={},pet=null,heroX=null,ground=null,portrait=false,speaking=false}={}){
+    if(!root||paused)return;if(!roots.has(root))refresh(root);
+    const svg=root.tagName?.toLowerCase()==='svg'?root:root.querySelector('svg');
+    const base=svg?.getCTM();if(!base)return;
+    const inverse=base.inverse();
+    const entries=roots.get(root).map(e=>({...e,m:inverse.multiply(e.actor.getCTM())}));
+    for(const {actor,parts,legs,m} of entries){
+      const x=m.e,y=m.f,scale=Math.max(.01,Math.hypot(m.a,m.b));
+      const followed=!portrait&&!!actor.closest('#twigPosition');
+      let track=tracks.get(actor);
+      if(!track||track.scene!==scene||followed&&track.revision!==pet?.revision){track={x,time,scene,revision:pet?.revision,idle:0,face:pet?.face??1,feet:new Animal.Feet()};tracks.set(actor,track);}
+      const dt=Math.max(0,Math.min(.1,time-track.time)),dx=x-track.x;
+      const airborne=scene===9&&(!!flags.roofDone||!!pet?.boarding);
+      let speed=portrait||airborne?0:followed&&pet?pet.speed:dt>0&&Math.abs(dx)<100?dx/dt:0;
+      if(Math.abs(speed)>4)track.face=speed<0?-1:1;
+      if(followed&&pet)track.face=pet.face;
+      if(portrait)track.face=-1;
+      track.idle=Math.abs(speed)<3?track.idle+dt:0;
+      const face=track.face;
+      const floor=portrait||airborne||!ground?()=>y:px=>ground(px)+(y-ground(x));
+      const feet=track.feet.update({x,y,scale,face,dt,speed,reduced,airborne,ground:floor});
+      const attentive=speaking||(!portrait&&Number.isFinite(heroX)&&Math.abs(heroX-x)<80);
+      const secondary=Animal.secondary({time,idle:track.idle,speed,turn:followed?pet?.turn??0:0,attentive,airborne,reduced,seed:portrait?2.4:0});
+      const pose=Animal.pose(feet,{x,y,scale,face,secondary,airborne,ground:floor});
+      const slope=airborne?0:-face*Animal.terrain(x,scale,floor)*180/Math.PI;
+      // Width changes affect the torso only, so planted hooves do not slide during a turn.
+      put(parts.heading,'transform',`scale(${-face} 1)`);
+      put(parts.torso,'transform',`translate(0 ${fixed(secondary.bodyY)}) rotate(${fixed(slope)}) scale(${fixed(secondary.turnWidth)} 1)`);
+      put(parts.head,'transform',`translate(0 ${fixed(secondary.headY)}) rotate(${fixed(secondary.head)} -22 -28)`);
+      put(parts.tail,'transform',`rotate(${fixed(secondary.tail)} 20 -26)`);
+      put(parts['ear-a'],'transform',`rotate(${fixed(secondary.earA)} -42 -51)`);
+      put(parts['ear-b'],'transform',`rotate(${fixed(secondary.earB)} -29 -53)`);
+      put(parts.eye,'transform',`translate(0 -42) scale(1 ${fixed(secondary.blink)}) translate(0 42)`);
+      put(parts.shadow,'opacity',airborne?.15:1);
+      for(let i=0;i<4;i++){
+        const leg=pose[i],node=legs[i];
+        const d=`M${leg.origin.map(fixed)}L${leg.elbow.map(fixed)}L${leg.end.map(fixed)}`;
+        node.paths.forEach(p=>put(p,'d',d));put(node.hoof,'transform',`translate(${leg.end.map(fixed).join(' ')})`);
+        put(node.group,'data-planted',leg.planted);put(node.group,'data-contact',feet[i].contact);
+      }
+      put(actor,'data-life',secondary.mode);put(actor,'data-speed',fixed(speed));put(actor,'data-facing',face);
+      track.x=x;track.time=time;
+    }
+  }
+  return {refresh,paint};
 });
 
 /* src/art/finishing.js */
@@ -593,7 +692,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     root.setAttribute('transform',`scale(${scale})`);root.dataset.scale=scale;
     attr('rigUpper','transform',`translate(${pose.offset.map(fixed).join(' ')})`);
     attr('rigHead','transform',`rotate(${fixed(pose.headTilt)} 0 -87)`);
-    attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
+    // Shared cast acting owns eye timing so a paused blink is not overwritten.
     const mood=Cast.expression(scene,flags,'希尔达');
     attr('rigBrows','d',score||mood==='resolve'?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
     const wind=reduced?0:Math.sin(time*3)*1.4+(moving?3:0);
@@ -728,6 +827,30 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
     const layer=node('setpieceFX');if(layer&&layer.innerHTML!==fx)layer.innerHTML=fx;
   }
   return {scenery,animate};
+});
+
+/* src/art/twig-design.js */
+/** A real layered quadruped: four limbs and independent torso, head, ears and tail. */
+Homeward.define('art/twig-design', [], () => {
+  const p=(d,f='none',s='#344c54',w=1.5)=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const limb=(i,x,far)=>`<g data-twig-leg="${i}">${p(`M${x} -28L${x+3} -14L${x} 0`,'none','#354d56',far?7:8)}<path class="twig-leg-fill" d="M${x} -28L${x+3} -14L${x} 0" fill="none" stroke="${far?'#a8c1be':'#e8eddf'}" stroke-width="${far?4.5:5.5}" stroke-linecap="round" stroke-linejoin="round"/><g class="twig-hoof" transform="translate(${x} 0)">${p('M-3-2L-4 1H4L3-2Z',far?'#91aaa9':'#cbd8cc','#526f73',.7)}</g></g>`;
+  function markup(){return `<g data-cast="枝枝" data-animal-rig="twig">
+    <ellipse class="twig-shadow" cy="3" rx="39" ry="5" fill="#13394235"/>
+    <g class="twig-heading">
+      ${limb(0,-22,true)}${limb(2,12,true)}
+      <g class="twig-torso"><g class="twig-tail">${p('M14-26Q31-55 49-55L44-47 58-45 52-39 59-38Q53-14 23-17Z','url(#cast-fur)')}${p('M28-26q17-3 23-17','none','#faf6df',3)}</g>
+      ${p('M-29-39Q-7-54 22-37L25-25Q10-16-9-23L-24-25Z','url(#cast-fur)')}${p('M-15-41Q1-45 13-39','none','#fff9e7',2)}
+      <g class="twig-head">
+        ${p('M-30-24l-8-3-10-12 1-10q9-12 20-5 15-2 18 11l-6 16Z','url(#cast-fur)')}
+        <g class="twig-ear-a">${p('M-44-49l-10-16 15 6 2 14Z','url(#cast-fur)')}${p('M-44-53l-4-7 3 10','#afbec2','none')}</g>
+        <g class="twig-ear-b">${p('M-36-54l7-18 5 20-3 6Z','url(#cast-fur)')}${p('M-31-55l2-10 2 10','#afbec2','none')}</g>
+        ${p('M-31-59l-6-17 2-13m-2 11-10-8m20 27 6-20 0-11m0 12 11-9','none','#758d8c',2.6)}${p('M-32-59l-5-17m11 15 6-19','none','#d7dcc4',1)}
+        <g class="twig-eye"><ellipse cx="-31" cy="-42" rx="2.5" ry="3.6" fill="#263c48"/><ellipse cx="-30.3" cy="-43" rx=".7" ry="1" fill="#fff9ea"/></g>
+        ${p('M-48-41l6 2-2 4Z','#263c48')}${p('M-45-32q5 3 9 0','none','#6d9193',1)}
+      </g></g>
+      ${limb(1,-29,false)}${limb(3,20,false)}
+    </g></g>`;}
+  return {markup};
 });
 
 /* src/content/catalog.js */
@@ -976,6 +1099,116 @@ Homeward.define('engine/action-track', [], () => {
   return {ActionTrack, smooth};
 });
 
+/* src/engine/animal-life.js */
+/** Presentation-only companion steering and planted-foot quadruped motion.
+ * No timers, random calls, inventory or story mutations. Time advances only explicitly.
+ */
+Homeward.define('engine/animal-life', ['engine/kinematics'], ({solve}) => {
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const mix=(a,b,t)=>a+(b-a)*t;
+  const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+  const pulse=(t,a,b,c,d)=>smooth((t-a)/(b-a))*(1-smooth((t-c)/(d-c)));
+  const hips=Object.freeze([[-22,-28],[-29,-29],[12,-27],[20,-28]].map(Object.freeze));
+  const terrain=(x,scale,ground)=>Math.atan2(ground(x+12*scale)-ground(x-12*scale),24*scale);
+  class Follower {
+    constructor(x=0,face=1){this.reset(x,face);}
+    reset(x,face=1){if(!Number.isFinite(x))throw new TypeError('Invalid companion position');this.revision=(this.revision??0)+1;this.x=x;this.v=0;this.face=face<0?-1:1;this.side=this.face;this.turn=0;this.toFace=this.face;this.idle=0;this.distance=0;this.target=x;return this;}
+    update(target,dt,{paused=false,reduced=false}={}){
+      if(!Number.isFinite(target)||!Number.isFinite(dt)||dt<0)throw new TypeError('Invalid follow input');
+      if(paused||dt===0)return this;
+      this.target=target;
+      // Small integration steps make acceleration and braking insensitive to frame rate.
+      let remaining=Math.min(dt,.1);
+      while(remaining>1e-8){const h=Math.min(remaining,1/120);remaining-=h;
+        const error=target-this.x,desiredFace=error<0?-1:1;
+        if(this.turn>0){this.turn=Math.max(0,this.turn-h);this.v=0;if(this.turn===0)this.face=this.toFace;continue;}
+        if(Math.abs(error)>7&&desiredFace!==this.face&&Math.abs(this.v)<8){this.toFace=desiredFace;if(reduced)this.face=desiredFace;else {this.turn=.24;this.v=0;continue;}}
+        const desired=Math.abs(error)<2?0:Math.sign(error)*Math.min(410,Math.abs(error)*4,Math.sqrt(2*800*Math.max(0,Math.abs(error)-1)));
+        const limit=Math.abs(desired)<Math.abs(this.v)||desired*this.v<0?1000:780;
+        this.v+=clamp(desired-this.v,-limit*h,limit*h);
+        const step=this.v*h;
+        if(Math.abs(error)<2&&Math.abs(this.v)<5){this.v=0;}
+        else {this.x+=step;this.distance+=Math.abs(step);}
+      }
+      this.idle=Math.abs(this.v)<3&&this.turn===0?this.idle+Math.min(dt,.1):0;
+      return this;
+    }
+    snapshot(){return {revision:this.revision,x:this.x,speed:this.v,face:this.face,turn:this.turn,idle:this.idle,distance:this.distance,target:this.target};}
+  }
+  class Feet {
+    constructor(){this.ready=false;}
+    reset(x,y,scale,face,ground){
+      this.x=x;this.y=y;this.scale=scale;this.face=face;this.cooldown=0;this.next=0;
+      const width=Math.cos(terrain(x,scale,ground));
+      this.feet=hips.map(([hx])=>{const px=x-hx*width*scale*face;return {x:px,y:ground(px),from:px,to:px,phase:1,duration:.18,contact:0};});this.ready=true;
+    }
+    update(input){
+      const {x,y,scale=1,face=1,dt=0,ground=()=>y}=input;
+      if(![x,y,scale,face,dt].every(Number.isFinite)||scale<=0||dt<0)throw new TypeError('Invalid animal pose');
+      if(!this.ready||Math.abs(x-this.x)>150||Math.abs(y-this.y)>110||Math.abs(scale-this.scale)>.001)this.reset(x,y,scale,face,ground);
+      // The two sides exchange fore/hind silhouettes during the stopped side turn.
+      // Keep the existing world contacts rather than teleporting four hooves.
+      if(face!==this.face){this.feet=[this.feet[2],this.feet[3],this.feet[0],this.feet[1]];this.face=face;this.next=0;}
+      const oldX=this.x,oldY=this.y,n=Math.max(1,Math.ceil(Math.min(dt,.1)*120));
+      for(let i=1;i<=n;i++)this.advance({...input,x:mix(oldX,x,i/n),y:mix(oldY,y,i/n),dt:Math.min(dt,.1)/n});
+      return this.feet;
+    }
+    advance({x,y,scale=1,face=1,dt=0,speed=0,reduced=false,airborne=false,ground=()=>y}){
+      if(![x,y,scale,face,dt,speed].every(Number.isFinite)||scale<=0||dt<0)throw new TypeError('Invalid animal pose');
+      if(!this.ready||Math.abs(x-this.x)>150||Math.abs(y-this.y)>110||Math.abs(scale-this.scale)>.001)this.reset(x,y,scale,face,ground);
+      this.x=x;this.y=y;this.scale=scale;this.face=face;
+      const h=Math.min(dt,.1);this.cooldown=Math.max(0,this.cooldown-h);
+      if(reduced||airborne){this.reset(x,y,scale,face,ground);return this.feet;}
+      for(const f of this.feet)if(f.phase<1){f.phase=Math.min(1,f.phase+h/f.duration);f.x=mix(f.from,f.to,smooth(f.phase));f.y=ground(f.x)-Math.sin(f.phase*Math.PI)*8*scale;}
+      const moving=Math.abs(speed)>5,active=this.feet.filter(f=>f.phase<1).length;
+      if(this.cooldown===0&&active===0&&h>0){
+        const width=Math.cos(terrain(x,scale,ground));
+        const lag=i=>(x-hips[i][0]*width*scale*face-this.feet[i].x)*(moving?Math.sign(speed):1);
+        const trot=Math.abs(speed)/scale>55;
+        const threshold=moving?(trot?6:4.5)*scale*width:1.6*scale;
+        const candidates=this.feet.map((_,i)=>i).filter(i=>moving?lag(i)>threshold:Math.abs(lag(i))>threshold);
+        if(candidates.length){
+          const groups=trot?[[0,3],[1,2]]:[[2],[0],[3],[1]];
+          let group=groups[this.next%groups.length];
+          if(!group.some(i=>candidates.includes(i)))group=groups.find(g=>g.some(i=>candidates.includes(i)));
+          this.next=groups.indexOf(group)+1;
+          const duration=moving?clamp((trot?11:5)*scale*width/Math.max(20,Math.abs(speed)),.016,.17):.18;
+          for(const i of group){const f=this.feet[i];f.from=f.x;f.to=x-hips[i][0]*width*scale*face+speed*duration*.88;f.phase=0;f.duration=duration;f.contact++;}
+          this.cooldown=duration*.4;
+        }
+      }
+      return this.feet;
+    }
+  }
+  function secondary({time=0,idle=0,speed=0,turn=0,attentive=false,airborne=false,reduced=false,seed=0}={}){
+    if(![time,idle,speed,turn,seed].every(Number.isFinite))throw new TypeError('Invalid animal clock');
+    if(reduced)return {head:0,headY:0,bodyY:0,bodyAngle:0,earA:0,earB:0,tail:0,blink:1,mode:'still',turnWidth:1};
+    const t=Math.max(0,time)+seed,cycle=(t%17.3+17.3)%17.3;
+    const quiet=idle>1.4&&!attentive&&!airborne,sniff=quiet?pulse(cycle,3,4,5.2,6):0;
+    const listen=quiet?pulse(cycle,10,10.4,11.5,12.5):0;
+    const fidget=pulse((t+2.3)%7.7,3.1,3.18,3.22,3.36);
+    const running=Math.min(1,Math.abs(speed)/260);
+    const blinkTime=t%5.7,blink=1-.93*pulse(blinkTime,5.22,5.28,5.34,5.42);
+    return {head:-sniff*25+listen*9+(attentive?-6:0)+Math.sin(t*2.2)*.65,
+      headY:sniff*8,bodyY:sniff*1.2+Math.sin(t*2.1)*.45-running*Math.abs(Math.sin(t*8))*.8,
+      bodyAngle:clamp(speed/160,-2,2),earA:fidget*15-listen*12+Math.sin(t*2.8)*1.4,
+      earB:-fidget*9+listen*15+Math.sin(t*2.2+1.7)*1.2,
+      tail:Math.sin(t*(2.3+running*2.2))*(2+running*6)+(attentive?7:0)-sniff*4,
+      blink,mode:airborne?'carried':turn>0?'turning':running>.35?'trot':Math.abs(speed)>5?'walk':sniff>.1?'sniff':listen>.1?'listen':attentive?'attend':'rest',
+      turnWidth:turn>0?1-.35*Math.sin((1-turn/.24)*Math.PI):1};
+  }
+  function pose(feet,{x,y,scale,face,secondary:s,airborne=false,ground=()=>y}){
+    const angle=airborne?0:-face*terrain(x,scale,ground),cos=Math.cos(angle),sin=Math.sin(angle);
+    return hips.map(([hx,hy],i)=>{
+      const origin=[hx*cos-hy*sin,hx*sin+hy*cos+s.bodyY];
+      const end=airborne?[hx+(i<2?-6:4),-12]:[(feet[i].x-x)/(-face*scale),(feet[i].y-y)/scale];
+      const result=solve(origin,end,19,20,i<2?-1:1);
+      return {origin,...result,planted:!airborne&&feet[i].phase===1};
+    });
+  }
+  return {Follower,Feet,secondary,pose,hips,terrain};
+});
+
 /* src/engine/audio.js */
 /** Original synthesized score and procedural ambience. User gesture opt-in only.
  * Music, environment, effects and dialogue each have an independent gain bus. */
@@ -1218,6 +1451,38 @@ Homeward.define('engine/hydraulics', [], () => {
   return Object.freeze({ports,trace});
 });
 
+/* src/engine/idle-life.js */
+/** Authored, asynchronous idle beats. Feet stay put; pauses are real pauses between gestures. */
+Homeward.define('engine/idle-life', [], () => {
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+  const pulse=(t,a,b,c,d)=>smooth((t-a)/(b-a))*(1-smooth((t-c)/(d-c)));
+  const profiles=Object.freeze({
+    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[-14,-68],label:'check-satchel'}),
+    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[-12,-71],label:'hold-strap'}),
+    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[8,-86],label:'adjust-scarf'}),
+    '妈妈':Object.freeze({period:19.1,phase:2.7,breath:1.4,hand:[35,-67],label:'open-palm'})
+  });
+  function sample({who='妈妈',time=0,reduced=false,moving=false,reserved=false,speaker=false,scene=0}={}){
+    const p=Object.hasOwn(profiles,who)?profiles[who]:profiles['妈妈'];
+    const t=(Number.isFinite(time)?Math.max(0,time):0)+p.phase+scene*.37;
+    const q=t%p.period,gesture=reserved||moving||reduced?0:pulse(q,2.3,3.2,4.1,5.5);
+    const look=reserved||moving||reduced?0:pulse(q,7,7.5,8.4,9.2)*(Math.floor(t/p.period)%2?-.55:.55);
+    const shift=reserved||moving||reduced?0:Math.sin(t*.47)*1.35;
+    const blinkPhase=t%(5.1+p.phase*.11),blink=reduced?1:1-.94*pulse(blinkPhase,.18,.235,.285,.36);
+    const talk=reserved||moving||reduced||!speaker?0:(.5+.5*Math.sin(t*3))*0.28;
+    const reach=Math.max(gesture,talk);
+    const target=speaker&&gesture<.1?[36,-66]:p.hand;
+    return {gesture:reach,front:[29+(target[0]-29)*reach,-39+(target[1]+39)*reach],
+      back:[-28-gesture*2,-40-gesture*5],shift,
+      breath:reserved||reduced?0:Math.sin(t*p.breath)*.65,
+      lean:reserved||moving||reduced?0:Math.sin(t*.41)*.7,
+      look,head:reduced||reserved?0:look*4,blink,
+      beat:reserved?'occupied':moving?'walking':gesture>.1?p.label:Math.abs(look)>.1?'look-around':'rest'};
+  }
+  return {profiles,sample};
+});
+
 /* src/engine/kinematics.js */
 /** Reach a target with two rigid segments. Unreachable targets are clamped, never stretched. */
 Homeward.define('engine/kinematics', [], () => {
@@ -1236,7 +1501,7 @@ Homeward.define('engine/kinematics', [], () => {
 });
 
 /* src/engine/runtime.js */
-Homeward.define("engine/runtime", ["content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -1249,6 +1514,7 @@ let inspection=false,renderQueued=false,rainNodes=[],currentInteraction=null,wal
 
 let started=false,titleMode=true,selected=null,bagOpen=false,modal=false,dialogue=null,activeHotspots=[],pendingMove=null,activeWork=null,sequenceActive=false,locked=false;
 let hero={x:790,y:822,face:1},petX=714,saveTimer,toastTimer,labelTimer,revealTimer,chapterTimer,transitionTimer,saveIndicatorTimer;
+const pet=new Animal.Follower(petX,1);
 let camera={x:0,y:0,w:1600,h:900,manual:false},input=null,inventoryDrag=null,frameTime=0,elapsed=0,sceneClock=0,lastRenderTime=0,focusBeforePanel=null;
 let panelReturn='',pauseRestoreFocus=null,sceneRequest=0;
 const ui={game:$('game'),world:$('world'),viewport:$('viewport')};
@@ -1325,7 +1591,7 @@ function render(){
  const dog=!(s.scene===9&&!s.f.twigSafe)&&!titleMode;
  let followers='';if(!titleMode&&[2,3,4,7].includes(s.scene))followers+=`<g id="davidFollow">${Art.person('大卫',0,0,1.34)}</g>`;if(!titleMode&&s.scene===4)followers+=`<g id="fridaFollow">${Art.person('芙丽达',0,0,1.38)}</g>`;
  patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
- CastActing.refresh(ui.world);
+ CastActing.refresh(ui.world);CreatureLife.refresh(ui.world);
  activeHotspots=titleMode?[]:Story.scenes[s.scene].hotspots(s);
  patchSvg($('hotspotLayer'),activeHotspots.map(h=>`<g class="hotspot ${h.kind==='exit'?'isExit':''}" data-hotspot="${h.id}" data-kind="${h.kind||'interact'}" role="button" tabindex="0" aria-label="${esc(h.label)}"><rect class="hit" x="${h.x-h.w/2}" y="${h.y-h.h/2}" width="${h.w}" height="${h.h}"/><g class="hotmark" transform="translate(${h.x} ${h.y})"><circle r="${h.kind==='exit'?16:10}" fill="#173841d9" stroke="#e3d29a" stroke-width="1.2"/>${h.kind==='exit'?Art.path(h.id==='back'?'M7 0H-7m5-5-5 5 5 5':'M-7 0H7m-5-5 5 5-5 5','none','#f0dbab',1.5):Art.circle(0,0,2,'#e8d7ab')}</g></g>`).join(''));
  document.querySelectorAll('.hotspot').forEach(el=>{el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(dialogue||modal)return;e.preventDefault();e.stopPropagation();interact(el.dataset.hotspot);}};el.onfocus=()=>{const h=activeHotspots.find(h=>h.id===el.dataset.hotspot);if(h&&camera.w<1550){camera.manual=true;camera.x=clamp(h.x-camera.w*.5,0,1600-camera.w);setView();}else if(h&&camera.h<850){camera.manual=true;camera.y=clamp(h.y-camera.h*.5,0,900-camera.h);setView();}};});
@@ -1347,7 +1613,7 @@ function updateActors(){
   const aboard=index===9&&s.f.roofDone,boarding=activeWork?.score.effect==='roofBoard'&&!s.settings.reduced;
   const k=aboard?1:boarding?SetpieceMotion.segment(activeWork.sample().progress,.14,.78):0;
   const px=petX+(1345-petX)*k,py=ground(petX,s)+1+(590-ground(petX,s)-1)*k;
-  t.setAttribute('transform',`translate(${px.toFixed(1)} ${py.toFixed(1)}) scale(${hero.face} 1)`);
+  t.setAttribute('transform',`translate(${px.toFixed(3)} ${py.toFixed(3)})`);
  }
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
@@ -1355,7 +1621,8 @@ function updateActors(){
  Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
  ChapterLife.animate(ui.world,activeWork,s);
  SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
- CastMotion.animate(ui.world,elapsed,s.settings.reduced||isPaused(),activeWork);
+ CastMotion.animate(ui.world,elapsed,s.settings.reduced,activeWork,isPaused());
+ CreatureLife.paint(ui.world,elapsed,{scene:index,flags:s.f,paused:isPaused(),reduced:s.settings.reduced,pet:{...pet.snapshot(),boarding:activeWork?.score.effect==='roofBoard'},heroX:hero.x,ground:x=>ground(x,s),speaking:!!dialogue});
  const held=activeWork?.score,heldProgress=activeWork?.sample().progress??0;
  for(const id of ['homeLamp','homeBird','northCrank','forestRope','vineHook','gondolaLine','pickup-gearS','pickup-gearM','pickup-gearL','clockFelt']){
   const source=$(id);if(source)source.style.visibility=held?.pickup&&held.source===id&&heldProgress>=.45?'hidden':'';
@@ -1363,9 +1630,9 @@ function updateActors(){
  const teapot=$('homeTeapot');if(teapot)teapot.style.visibility=held?.kind==='pour'&&heldProgress>.08&&heldProgress<.95?'hidden':'';
  const speaker=dialogue?.lines[dialogue.index]?.[0]||'';
  const listener=[dialogue?.lines[dialogue.index+1]?.[0],dialogue?.lines[dialogue.index-1]?.[0]].find(who=>who&&who!==speaker)||'';
- const acting={scene:index,flags:s.f,speaker,listener,typing:typewriter.busy,character:typewriter.fullText[typewriter.index-1]||'',reduced:s.settings.reduced,paused:isPaused(),working:!!activeWork};
+ const acting={scene:index,flags:s.f,speaker,listener,typing:typewriter.busy,character:typewriter.fullText[typewriter.index-1]||'',reduced:s.settings.reduced,paused:isPaused(),working:!!activeWork,moving:!!pendingMove};
  CastActing.paint(ui.world,elapsed,acting);
- if(dialogue)CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false});
+ if(dialogue){CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false,moving:false});CreatureLife.paint($('portrait'),elapsed,{...acting,portrait:true,speaking:true});}
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
 }
 
@@ -1414,7 +1681,7 @@ function showLine(){
  const [who,line]=dialogue.lines[dialogue.index];
  $('speaker').textContent=who;
  $('portrait').innerHTML=Art.portrait(who);
- CastActing.refresh($('portrait'));
+ CastActing.refresh($('portrait'));CreatureLife.refresh($('portrait'));
  $('nextLine').innerHTML=dialogue.index===dialogue.lines.length-1?'继续 <span>›</span>':'继续 <span>›</span>';
  updateActors();
  if(typewriter.timer){clearTimeout(typewriter.timer);typewriter.timer=null;}
@@ -1482,10 +1749,10 @@ function work(ms,label,after,override={}){
 function effect(kind){if(s.settings.reduced)return;if(kind==='shake'||kind==='water'){ui.viewport.animate?.([{transform:'translate(0,0)'},{transform:'translate(-4px,2px)'},{transform:'translate(4px,-2px)'},{transform:'translate(-2px,1px)'},{transform:'translate(0,0)'}],{duration:620});}if(kind==='water'&&s.scene!==0){$('flash').classList.remove('lightning');void $('flash').offsetWidth;$('flash').classList.add('lightning');} }
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
-function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
-function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);if(first&&Story.scenes[index].chapter)chapter(Story.scenes[index].chapter);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);else actionLabel(Story.scenes[index].objective(s));save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
+function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
+function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);if(first&&Story.scenes[index].chapter)chapter(Story.scenes[index].chapter);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);else actionLabel(Story.scenes[index].objective(s));save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
 function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
@@ -1527,16 +1794,19 @@ function tick(now){if(!document.hidden&&audio&&s.settings.sound&&now-audioTick>1
  const task=activeWork,frame=task.advance(dt*1000),progress=frame.progress;
  $('workRing')?.setAttribute('opacity','1');$('workProgress')?.setAttribute('stroke-dashoffset',String(100.53*(1-progress)));
  if(task.claim()){
-  if(task.score.effect==='roofTwig')petX=hero.x+45;
+  if(task.score.effect==='roofTwig'){petX=hero.x+45;pet.reset(petX,hero.face);}
   if(Number.isFinite(task.score.destinationX))hero.x=walkLimit(task.score.destinationX);
   activeWork=null;ui.game.classList.remove('performing');$('workRing')?.setAttribute('opacity','0');$('actionLabel').classList.remove('show');
   if(task.request===sceneRequest){try{task.after?.();}catch(e){console.error('Action completion failed:',e);toast('动作未能完成。请重试或导出进度。');}}
   render();
  }
-}if(s.scene===9&&!s.f.roofDone&&!s.settings.relaxed&&!dialogue&&!locked&&!sequenceActive&&!bagOpen&&!activeWork&&!inventoryDrag&&!input){s.danger=Math.min(1,s.danger+dt/110);$('hazard').querySelector('b').style.width=s.danger*100+'%';$('hazard').setAttribute('aria-valuenow',String(Math.round(s.danger*100)));if(s.danger>=1)resetRoof();}if(sceneClock>14)$('sceneLabel').classList.add('quiet');if(s.scene===9&&!s.settings.reduced&&Math.floor(sceneClock/13)!==Math.floor((sceneClock-dt)/13))effect('water');}if(!isPaused()&&!s.settings.reduced){rainNodes.forEach((el,i)=>{let y=((elapsed*(s.scene===9?530:315)+i*43)%1120)-160;el.setAttribute('transform',`translate(${s.scene===9?-y*.16:-y*.08} ${y})`);});}if(!isPaused())petX+=(clamp(hero.x-hero.face*Staging.petDistance(s.scene),60,1540)-petX)*Math.min(1,dt*3.5);updateActors();}requestAnimationFrame(tick);}
+}if(s.scene===9&&!s.f.roofDone&&!s.settings.relaxed&&!dialogue&&!locked&&!sequenceActive&&!bagOpen&&!activeWork&&!inventoryDrag&&!input){s.danger=Math.min(1,s.danger+dt/110);$('hazard').querySelector('b').style.width=s.danger*100+'%';$('hazard').setAttribute('aria-valuenow',String(Math.round(s.danger*100)));if(s.danger>=1)resetRoof();}if(sceneClock>14)$('sceneLabel').classList.add('quiet');if(s.scene===9&&!s.settings.reduced&&Math.floor(sceneClock/13)!==Math.floor((sceneClock-dt)/13))effect('water');}if(!isPaused()&&!s.settings.reduced){rainNodes.forEach((el,i)=>{let y=((elapsed*(s.scene===9?530:315)+i*43)%1120)-160;el.setAttribute('transform',`translate(${s.scene===9?-y*.16:-y*.08} ${y})`);});}if(!isPaused()&&!locked&&activeWork?.score.effect!=='roofBoard'&&!(s.scene===9&&s.f.roofDone)){
+ if(pendingMove&&!dialogue&&!activeWork)pet.side=hero.face;
+ pet.update(clamp(hero.x-pet.side*Staging.petDistance(s.scene),60,1540),dt,{reduced:s.settings.reduced});petX=pet.x;
+}updateActors();}requestAnimationFrame(tick);}
 const G={get s(){return s;},set:setFlag,commit,take,consume,toast,sound,say,go,work,effect,note:addNote,sketch,pulse,playSequence,finish,openEnding};
 updateTools();if(saved){$('continueBtn').classList.remove('hidden');$('continueBtn').innerHTML='继续旅程 <span>→</span>';}render();calcCamera(true);requestAnimationFrame(tick);
-if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,audio:()=>audio?.debug()||null,flush:()=>save(true)};
+if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),pet:pet.snapshot(),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,audio:()=>audio?.debug()||null,flush:()=>save(true)};
 
 return G;
 });

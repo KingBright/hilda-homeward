@@ -4,7 +4,8 @@ import hashlib,json,os,traceback
 from playwright.sync_api import sync_playwright
 from playthrough import settle,state
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'previews/v3.5'
+VERSION=json.loads((ROOT/'package.json').read_text())['version']
+OUT=ROOT/('previews/v'+'.'.join(VERSION.split('.')[:2]))
 URL='https://games.hackerlife.fun:8443/hilda/'
 CHECKS=[]
 def check(name,ok):
@@ -17,9 +18,14 @@ def main(browser):
     page=context.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
     response=page.goto(URL+'?test&v='+manifest['version'],wait_until='load',timeout=40000)
     check('Public NAS serves the byte-identical tested build',response.status==200 and hashlib.sha256(response.body()).hexdigest()==expected)
-    check('Published title footer shows the new version','V3.5' in page.locator('.titleFooter').inner_text())
+    check('Published title footer shows the new version',('V'+'.'.join(manifest['version'].split('.')[:2])) in page.locator('.titleFooter').inner_text())
     page.locator('#startBtn').click();settle(page)
     check('Native HTTPS game starts with the enlarged home actor',page.locator('#performer').get_attribute('data-scale')=='1.92')
+    check('Published Twig has four articulated legs and NPCs have independent hands',page.locator('#twigPosition [data-twig-leg]').count()==4 and page.locator('#world [data-cast="妈妈"] [data-rest-arm]').count()==2)
+    page.locator('#world').click(position={'x':1140,'y':810})
+    page.wait_for_function('Math.abs(HildaTest.ui().pet.speed)>40')
+    check('Native NAS interaction starts the independent companion follow',True)
+    settle(page)
     page.screenshot(path=str(OUT/'nas-home.png'))
     page.locator('[data-hotspot="lamp"] .hit').click();settle(page)
     check('Real NAS pointer input completes the new lamp pickup',state(page)['inventory'].count('lamp')==1 and page.locator('#homeLamp').count()==0)
