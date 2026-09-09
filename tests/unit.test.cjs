@@ -284,3 +284,48 @@ test('Roof beam is drawn behind rescuers so the lifted plank cannot cover their 
  assert.ok(svg.indexOf('id="roofBeam"')<svg.indexOf('id="roofDavid"'));
  assert.ok(svg.indexOf('id="roofBeam"')<svg.indexOf('id="roofFrida"'));
 });
+
+// V3.3 cast and deterministic music acceptance.
+const Cast=H.use('art/cast-design'),Score=H.use('content/score');
+test('Playable and static Hilda share the same head and costume drawings',()=>{
+ assert.ok(H.use('art/performer').markup().includes(Cast.upper('希尔达',true)));
+ assert.ok(Cast.standing('希尔达').includes(Cast.upper('希尔达')));
+});
+test('Every human costume and head has a distinct palette and stable markup',()=>{
+ const names=['希尔达','大卫','芙丽达','妈妈'];
+ assert.equal(new Set(names.map(n=>Cast.profiles[n].coat)).size,4);
+ for(const name of names){const art=Cast.standing(name);assert.ok(art.includes('data-cast="'+name+'"'));assert.equal(art,Cast.standing(name));assert.ok(!/NaN|undefined/.test(art));}
+});
+test('Full cast has explicit stage renderers rather than a fallback human for creatures',()=>{
+ for(const [name,svg] of [['枝枝',Cast.twig()],['阿尔弗',Cast.elf()],['小巨魔',Cast.troll()],['沃夫',Cast.woff()]])assert.ok(svg.includes('data-cast="'+name+'"'));
+});
+test('Expressions acknowledge peril, successful rescue and homecoming',()=>{
+ assert.equal(Cast.expression(9,{},'大卫'),'worried');assert.equal(Cast.expression(9,{davidSafe:true},'大卫'),'resolve');
+ assert.equal(Cast.expression(11,{},'希尔达'),'relieved');assert.equal(Cast.expression(6,{calm:false}),'gentle');
+});
+test('All scenes map to an authored eight-bar score with bounded finite events',()=>{
+ for(let scene=0;scene<12;scene++)for(let bar=0;bar<8;bar++){
+  const cue=Score.cueFor(scene),events=Score.eventsForBar(cue,bar,.8);
+  assert.ok(events.length>10&&events.length<40);
+  for(const e of events){assert.ok(e.beat>=0&&e.beat<4);assert.ok(e.duration>0&&e.duration<=4);assert.ok(e.pitch>=24&&e.pitch<100);assert.ok(e.velocity>0&&e.velocity<=.2);assert.ok(Number.isFinite(Score.hz(e.pitch)));}
+ }
+});
+test('Music phrase is deterministic, repeats after eight bars, and has a home motif',()=>{
+ const cue=Score.cueFor(0);assert.deepEqual(plain(Score.eventsForBar(cue,0)),plain(Score.eventsForBar(cue,8)));
+ assert.notDeepEqual(plain(Score.eventsForBar(cue,0)),plain(Score.eventsForBar(cue,1)));
+ assert.equal(Score.cueFor(0).key,Score.cueFor(11).key);
+});
+test('Roof hope cue requires both rescued companions and the beacon',()=>{
+ assert.equal(Score.cueFor(9,{beacon:true,davidSafe:true}).key,'storm');
+ assert.equal(Score.cueFor(9,{beacon:true,davidSafe:true,fridaSafe:true}).key,'dawn');
+ assert.ok(Score.eventsForBar(Score.cueFor(9),0,.9).length>Score.eventsForBar(Score.cueFor(9),0,.1).length);
+});
+test('Old saves receive safe mixer defaults while valid volumes round-trip',()=>{
+ const s=State.fresh();delete s.settings.musicVolume;delete s.settings.voiceVolume;
+ assert.equal(State.validate(s).settings.musicVolume,.72);assert.equal(State.validate(s).settings.voiceVolume,.32);
+ s.settings.musicVolume=0;s.settings.voiceVolume=.46;assert.equal(State.validate(s).settings.musicVolume,0);assert.equal(State.validate(s).settings.voiceVolume,.46);
+});
+test('Malformed mixer values are rejected without overwriting progress',()=>{
+ for(const v of [-.1,1.1,NaN,Infinity,'0.5',null]){const s=State.fresh();s.settings.musicVolume=v;assert.throws(()=>State.validate(s),/音量设置无效/);}
+});
+test('Invalid score positions are rejected',()=>{assert.throws(()=>Score.eventsForBar(null,0));assert.throws(()=>Score.eventsForBar(Score.cueFor(0),-1));});

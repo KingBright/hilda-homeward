@@ -1,37 +1,20 @@
 /** The playable actor: anchored feet, articulated arms and contact-driven tools. */
-Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
+Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solve},Cast) => {
   const path=(id,d,fill,stroke='#24434a',width=2)=>`<path id="${id}" d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
   const limb=(id,color,width)=>path(id,'M0 0L0 1','none','#203c45',width+3)+path(id+'Fill','M0 0L0 1','none',color,width);
-  function markup(){return `<g id="performer" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
-    ${limb('rigLegBack','#293e48',9)}${path('rigBootBack','M0 0','none')}
-    ${limb('rigLegFront','#30434a',10)}${path('rigBootFront','M0 0','none')}
-    <g id="rigUpper">
-      <path d="M-18-121Q-40-106-33-65L-16-58 17-63 26-80Q35-110 16-124Z" fill="#438fa2" stroke="#24424c" stroke-width="2.3"/>
-      <path d="M-24-80Q-32-65-26-46H24L16-84Z" fill="#35484b" stroke="#203f47" stroke-width="2"/>
-      <path d="M-20-83Q-29-68-24-53H21L15-83Z" fill="#bc7054" stroke="#28414a" stroke-width="2"/>
-      <path d="M-15-75L-17-57M8-76L12-56M-23-60H18" fill="none" stroke="#df9c71" stroke-width="1.4"/>
-      <path d="M-23-77Q-36-76-32-56L-26-54" fill="#45616a" stroke="#203f47" stroke-width="2"/>
-      <g id="rigHead">
-        <path d="M-13-123Q8-133 22-119L26-103Q24-85 6-84-12-86-14-104Z" fill="#f0d2af" stroke="#28464c" stroke-width="2"/>
-        <path d="M-16-122Q-4-137 15-127L27-118 18-110 1-118-12-105-17-88-23-94Z" fill="#70c0ca" stroke="#24464f" stroke-width="2"/>
-        <path d="M-23-125Q-34-139-15-144 0-155 19-143 36-139 29-126 3-130-23-125Z" fill="#28434e" stroke="#193743" stroke-width="2.4"/>
-        <path d="M1-148V-155" stroke="#243d46" stroke-width="3" stroke-linecap="round"/>
-        <g id="rigEyes"><circle cx="3" cy="-106" r="2.1" fill="#24434b"/><circle cx="18" cy="-105" r="2.1" fill="#24434b"/></g>
-        <path d="M12-102L14-99 11-98M5-93Q10-90 16-94" fill="none" stroke="#65554d" stroke-width="1.4" stroke-linecap="round"/>
-        <path d="M-9-95L-3-94" stroke="#d2957e" stroke-width="2" stroke-linecap="round" opacity=".6"/>
-      </g>
-      <path d="M-19-86Q-2-93 21-86L19-77Q0-82-18-77Z" fill="#e2b86a" stroke="#2c4445" stroke-width="2"/>
-      <path id="rigScarf" d="M16-82L40-70 35-61 18-70Z" fill="#e2b86a" stroke="#344b47" stroke-width="2"/>
-    </g>
-    ${limb('rigArmBack','#b87755',9)}<ellipse id="rigHandBack" rx="4.4" ry="5.5" fill="#f0d1aa" stroke="#35505a" stroke-width="1.4"/>
-    ${limb('rigArmFront','#c9845e',10)}<ellipse id="rigHandFront" rx="4.8" ry="5.8" fill="#f3d5b0" stroke="#35505a" stroke-width="1.4"/>
+  function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
+    ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
+    ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
+    ${Cast.upper('希尔达',true)}
+    ${limb('rigArmBack','#a95043',9)}<ellipse id="rigHandBack" rx="4.4" ry="5.5" fill="#efc49d" stroke="#35464e" stroke-width="1.3"/>
+    ${limb('rigArmFront','#c66d57',10)}<ellipse id="rigHandFront" rx="4.8" ry="5.8" fill="#f3cda8" stroke="#35464e" stroke-width="1.3"/>
     <g id="rigTool" pointer-events="none"></g>
   </g>`;}
   let cachedRoot=null,nodes={};
   const mix=(a,b,t)=>a+(b-a)*t;
   const p=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const fixed=n=>Number(n).toFixed(2);
-  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected}){
+  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={},speaking=false}){
     if(!root)return;
     if(root!==cachedRoot){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
     const attr=(id,k,v)=>nodes[id]?.setAttribute(k,v);
@@ -47,7 +30,11 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
     const bob=moving&&!reduced?-Math.abs(Math.cos(phase))*1.4:reduced?0:Math.sin(time*2.1)*.4;
     const off=[lean,crouch+bob];attr('rigUpper','transform',`translate(${fixed(off[0])} ${fixed(off[1])})`);
     attr('rigHead','transform',`rotate(${fixed(reach*(score?.kind==='tool'?-8:score?.kind==='clear'?7:0))} 0 -87)`);
-    attr('rigEyes','opacity',!reduced&&!score&&time%5.6>5.44?'.15':'1');
+    attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
+    const mood=Cast.expression(scene,flags,'希尔达'),resolve=!!score||mood==='resolve';
+    attr('rigBrows','d',resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
+    attr('rigMouth','d',speaking&&!reduced&&Math.sin(time*15)>.1?'M0-95q6-2 12 0q-5 8-12 0Z':resolve?'M1-94q5 1 10-1':mood==='relieved'?'M-1-96q7 9 14-1':'M0-95q6 5 12-1');
+    attr('rigMouth','fill',speaking&&!reduced&&Math.sin(time*15)>.1?'#8e534a':'none');
     const wind=reduced?0:Math.sin(time*3)*2+Math.abs(walk)*4;
     attr('rigScarf','d',`M16-82Q31 ${-74-wind} 44 ${-70-wind}L37 ${-61-wind} 18-70Z`);
     for(const [name,sign] of [['Back',-1],['Front',1]]){
@@ -58,10 +45,9 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
       const rung=climbing?Math.sin(frame.progress*24+sign*Math.PI/2):0;
       const foot=[sign*11+stride+(climbing?3:0),-3-lift-(climbing?Math.max(0,rung)*19:0)];
       draw('rigLeg'+name,[sign*11+off[0],-48+crouch],foot,22.5,22.5,-1);
-      attr('rigBoot'+name,'d',`M${foot[0]-6} ${foot[1]-3}L${foot[0]+6} ${foot[1]-3}L${foot[0]+14} ${foot[1]+5}H${foot[0]-7}Z`);
-      attr('rigBoot'+name,'fill',name==='Front'?'#b57a54':'#965e48');
+      const boot=nodes['rigBoot'+name];if(boot){const drawing=Cast.boot(0,0,name==='Back');if(!boot.firstChild)boot.innerHTML=drawing;boot.setAttribute('transform',`translate(${fixed(foot[0])} ${fixed(foot[1])})`);}
     }
-    let target=[28+walk*16,-26],back=[-28-walk*13,-30];
+    let target=[27+walk*12,-38],back=[-27-walk*11,-40];
     if(score?.target){
       let world=[...score.target];
       if(score.effect==='ladderSlide')world[0]+=(score.to-score.from)*effort;
@@ -78,8 +64,8 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
       else if(score.kind==='throw'){target=p(target,[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*27],reach);}
       else {target=p(target,local,reach);back=p(back,[local[0]-14,local[1]+9],reach*.85);}
     }
-    const handBack=draw('rigArmBack',[-19+off[0],-79+off[1]],back,27,28,action?-1:1);
-    const hand=draw('rigArmFront',[17+off[0],-79+off[1]],target,28,28,action?1:-1);
+    const handBack=draw('rigArmBack',[-19+off[0],-79+off[1]],back,22+reach*5,23+reach*5,action?-1:1);
+    const hand=draw('rigArmFront',[17+off[0],-79+off[1]],target,22+reach*6,23+reach*5,action?1:-1);
     for(const [name,h] of [['Back',handBack],['Front',hand]]){attr('rigHand'+name,'cx',fixed(h[0]));attr('rigHand'+name,'cy',fixed(h[1]));}
     let tool='';
     attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');

@@ -29,7 +29,7 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
       b+=path('M399 719v-61m-15 68h45','none','#526b58',9)+circle(404,684,12,'url(#chapterCopper)','#274b4b',3);
       b+=`<g id="bridgeBrake" transform="rotate(${f.bridgeBrace?35:-20} 404 684)">${path('M404 684v-41','none','#c8b98c',6)}${ell(404,640,16,6,'#9da780','#31554f',2)}</g>`;
       b+=F.plate(438,590,123,f.bridge?'棘爪已锁 · 可通行':'一人稳住 · 一人收绳');
-      if(f.bridgeBrace&&!f.bridge)b+=path('M354 664Q376 657 402 680M407 664Q419 677 405 685','none','#7e986e',12)+circle(402,680,5,'#e8cfa8','#315050',1.5)+circle(405,685,5,'#e8cfa8','#315050',1.5);
+      if(f.bridgeBrace&&!f.bridge)b+=path('M354 664Q376 657 402 680M407 664Q419 677 405 685','none','#b18545',12)+circle(402,680,5,'#efc8a1','#315050',1.5)+circle(405,685,5,'#efc8a1','#315050',1.5);
       b+=rep(10,i=>{let x=607+i*37,y=818+i%3*14;return path(`M${x} ${y}q8-8 18-1l-13 10Z`,i%2?'#a9ac7a':'#cfb881','#4d7b69',1,`class="stream-leaf ${f.pump?'downstream':'upstream'}" style="animation-delay:-${i*.51}s"`);});
       b+=ripples(2)+rep(16,i=>circle(220+i*71,571+Math.sin(i*2.3)*96,1.3,'#dfe5b6','none',0,`class="chapter-dew" style="animation-delay:-${i*.25}s"`));
       b+=path('M293 739q29-35 67 1','none','#c6c5a066',2)+text(1268,654,'水务小径',11,'#b2c0a2');

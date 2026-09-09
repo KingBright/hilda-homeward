@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 扶稳归途 V3.2。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 光与回声 V3.3。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -29,6 +29,26 @@
 @media(orientation:portrait){.pan{display:block}#fullBtn{display:none!important}#sceneMood{max-width:180px;display:block;line-height:1.8}}
 @media(max-height:560px) and (orientation:landscape){#hud{top:calc(13px + var(--safe-top));left:23px}#hud nav button{width:34px;height:34px}#sceneName{font-size:19px;margin:4px 0}#sceneMood{display:none}#actLabel{font-size:8px}#bottomBar{bottom:calc(12px + var(--safe-bottom))}.edgeBtn{height:38px;padding:8px 12px}.edgeBtn small{font-size:10px}.icon{width:18px;height:18px}#speech{bottom:calc(61px + var(--safe-bottom));width:min(660px,80vw);padding:10px 16px;gap:12px}#portrait{width:38px;height:48px}#line{font-size:11px;line-height:1.7;margin-top:4px}#speaker{font-size:9px}#pocket{bottom:calc(60px + var(--safe-bottom));max-width:72vw;padding:11px 20px 21px}.item{height:58px;width:55px;gap:5px}.item svg{height:26px;width:26px}.item span{font-size:8px}#pocketCaption{font-size:9px;margin-bottom:8px}#items{gap:8px}#toast{top:70px;font-size:10px;padding:8px 17px}#actionLabel{bottom:22px;font-size:9px}#selection{bottom:15px;font-size:10px;padding:4px 7px 4px 15px}#hazard{top:75px;width:140px}#panelLayer{padding:16px}#panel{padding:25px 30px;max-height:90dvh}.titleContent{margin:26px 0 15px 7vw;display:grid;grid-template-columns:290px 280px;column-gap:30px;width:640px;max-width:88vw}.titleContent .eyebrow{grid-column:1/3;font-size:7px}.wordmark{font-size:74px;margin-top:12px;grid-column:1;grid-row:2/4}.wordmark>span{font-size:10px;letter-spacing:11px;margin-top:10px}.titleContent h2{grid-column:1;font-size:16px;margin:24px 0 0}.titleContent p{grid-column:2;grid-row:2;font-size:10px;margin:15px 0 20px}.startActions{grid-column:2;grid-row:3/5;gap:9px}.startActions button{min-height:42px;padding:10px 16px;font-size:11px;width:235px}.titleHint{grid-column:1/3;margin-top:20px;font-size:8px}.titleFooter{bottom:12px;font-size:8px}.titleContent h2 span{font-size:9px;padding:4px 6px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}#flash{display:none}}
+
+/* Quiet secondary animation. Contact choreography remains in control of limbs. */
+.cast-breathe{animation:castBreathe 4.8s ease-in-out infinite;transform-origin:center bottom;transform-box:fill-box}
+.cast-blink{animation:castBlink 6.4s linear infinite;transform-box:fill-box;transform-origin:center}
+[data-cast="大卫"] .cast-blink{animation-delay:-1.7s}
+[data-cast="芙丽达"] .cast-blink{animation-delay:-3.1s}
+.cast-tail{animation:castTail 5.2s ease-in-out infinite;transform-origin:left bottom;transform-box:fill-box}
+.cast-scarf{animation:castScarf 4.2s ease-in-out infinite;transform-origin:left center;transform-box:fill-box}
+@keyframes castBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-.6px)}}
+@keyframes castBlink{0%,94%,98%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes castTail{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes castScarf{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+.paused .cast-breathe,.paused .cast-blink,.paused .cast-tail,.paused .cast-scarf{animation-play-state:paused}
+.reduced .cast-breathe,.reduced .cast-blink,.reduced .cast-tail,.reduced .cast-scarf{animation:none}
+#portrait{width:66px;height:78px;border:1px solid #dabf8140;border-radius:34px 34px 18px 18px;background:radial-gradient(ellipse at 35% 30%,#69807c66,#243f4b);box-shadow:inset 0 0 20px #102a3340}
+.audioMix{border:1px solid #d3bd8530;padding:8px 16px;margin:12px 0;border-radius:8px;background:#0c263229}
+.audioMix label{display:grid;grid-template-columns:78px 1fr 38px;gap:12px;align-items:center;margin:14px 0;color:#d9d7bf;font-size:11px}
+.audioMix input{width:100%;accent-color:#dfbf87;cursor:pointer}
+.audioMix output{text-align:right;font:11px monospace;color:#edcf99}
+@media(max-width:700px),(max-height:560px){#portrait{width:44px;height:56px}.audioMix label{grid-template-columns:65px 1fr 32px;gap:8px}}
 
 /* UI belongs around the world, never on top of a puzzle's important geometry. */
 #hud nav{gap:8px}#focusBtn.active{background:#b8995e!important;color:#132f38!important}
@@ -67,7 +87,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.2</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.2 扶稳归途 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.3</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.3 光与回声 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -95,6 +115,92 @@
   }
   root.Homeward = Object.freeze({ define, use, modules: () => [...definitions.keys()] });
 })(globalThis);
+
+/* src/art/cast-design.js */
+/** Shared production drawings: the stage actor and dialogue portraits use the
+ * same head/costume layers. No independent portrait-only redesigns or bitmaps. */
+Homeward.define('art/cast-design', [], () => {
+ const ink='#263c48';
+ const p=(d,f='none',s=ink,w=1.55,extra='')=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
+ const e=(x,y,rx,ry,f,s='none',w=1)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" stroke="${s}" stroke-width="${w}"/>`;
+ const profiles={
+  '希尔达':{skin:'#f3cda8',shade:'#dca17e',hair:'#398eaa',light:'#77c6d5',coat:'#b75848',coatLight:'#dd8770',coatDark:'#7f3c39',scarf:'#c64f45',trousers:'#314652'},
+  '大卫':{skin:'#efc8a1',shade:'#cc9979',hair:'#855d3e',light:'#ba8a58',coat:'#b18545',coatLight:'#d7b779',coatDark:'#7f623c',scarf:'#6b8e8b',trousers:'#3d5361'},
+  '芙丽达':{skin:'#ae7653',shade:'#80503e',hair:'#302e30',light:'#55403a',coat:'#ccaa58',coatLight:'#ead28b',coatDark:'#988044',scarf:'#638b8b',trousers:'#344952'},
+  '妈妈':{skin:'#efd0af',shade:'#d3a086',hair:'#64483e',light:'#906b53',coat:'#8d6470',coatLight:'#b99093',coatDark:'#634550',scarf:'#c6bb91',trousers:'#394950'}
+ };
+ const defs=`<defs>
+  <pattern id="cast-knit" width="6" height="5" patternUnits="userSpaceOnUse"><path d="M1 1l1 2 1-2m2 3 1 1" fill="none" stroke="#fff2d1" stroke-opacity=".2" stroke-width=".55"/></pattern>
+  <linearGradient id="cast-fur" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#fff7df"/><stop offset=".6" stop-color="#e8ead9"/><stop offset="1" stop-color="#adc6c9"/></linearGradient>
+  <linearGradient id="cast-rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9bafa7"/><stop offset=".48" stop-color="#778e8a"/><stop offset="1" stop-color="#4b6569"/></linearGradient>
+  <linearGradient id="cast-woff" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#ead9b7"/><stop offset=".6" stop-color="#c2b493"/><stop offset="1" stop-color="#8da2a0"/></linearGradient>
+ </defs>`;
+ function expression(scene=0,flags={},who='希尔达'){
+  if(scene===9&&!flags.roofDone){if(who==='大卫'&&!flags.davidSafe||who==='芙丽达'&&!flags.fridaSafe)return 'worried';return 'resolve';}
+  if(scene===8&&!flags.heart)return 'resolve';
+  if(scene===6&&!flags.calm)return 'gentle';
+  return scene>=10?'relieved':'curious';
+ }
+ function eyes(c,mood='curious',rig=false){
+  const worried=mood==='worried',resolve=mood==='resolve',happy=mood==='relieved';
+  const brows=worried?'M-13-122q5-5 10-2m12-1q6-2 11 2':resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1';
+  const mouth=worried?'M1-94q5-5 10 0':happy?'M-1-96q7 9 14-1':resolve?'M1-94q5 1 10-1':'M0-95q6 5 12-1';
+  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth"':'')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
+ }
+ function hairBack(who,c){
+  if(who==='希尔达')return p('M-22-139Q-45-127-35-106L-38-88-32-91-35-72-28-77-22-61-13-69 12-61 27-72 25-64Q43-89 28-121L22-140Z',c.hair)+p('M-27-127q-11 19-4 39m8-25q-7 31 4 43m42-44q9 22-1 39','none',c.light,1.6);
+  if(who==='芙丽达')return p('M-24-125Q-43-123-34-109-46-99-33-88-42-72-25-68-24-58-12-65 3-55 13-64 32-57 32-70 49-76 36-89 45-103 32-111 41-128 23-134Z',c.hair)+p('M-29-101q-9 5-1 12m-4 9q-3 7 5 8m60-32q10 3 1 9m0 12q9 2 2 8','none',c.light,2);
+  if(who==='妈妈')return p('M-22-134Q-38-119-28-81Q-8-69 29-81L28-128Z',c.hair)+p('M-26-115q-4 25 3 30m44-27q8 19 2 31','none',c.light,1.6);
+  return p('M-26-123q-5 23 6 33l6-8 25 7 13-17-6-19Z',c.hair);
+ }
+ function head(who,mood='curious',rig=false){
+  const c=profiles[who]||profiles['妈妈'];
+  let front='';
+  if(who==='希尔达')front=p('M-26-129q-2-19 21-18 18-8 30 10l5 17-10-5-2 6-14-11q-6 15-19 17l2-12-12 15Z',c.hair)+p('M-22-133q13-14 28-10m-11 7q-3 12-12 15m26-19 12 12','none',c.light,2)+p('M-28-141q-10-10 7-16l12-3q23-10 37 6l8 13q-23-7-44 2Z','#304757')+p('M-20-150q19-10 35-2','none','#527183',1.7)+p('M2-162l2-6','none',ink,2.3);
+  else if(who==='大卫')front=p('M-29-119q-9-17 4-22l-3-9 14 2q8-14 19-4l11-5 3 11q13-2 14 9 7 9-4 16l-9-10q-3 9-14 11l3-11q-12 11-23 9l-6 11Z',c.hair)+p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+p('M-16-103h2m3 1h1m26-1h2','none','#b8835b',1.2);
+  else if(who==='芙丽达')front=p('M-28-120q-16-10-5-22-1-16 13-16 10-13 22-7 13-9 24 3 18-2 18 14 14 11 1 20l-8 16-6-18q-10 8-14-1-11 9-16 0-7 10-18 11Z',c.hair)+p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.2)+p('M22-132l8-8','none','#d7ba71',2.8);
+  else front=p('M-28-124q-4-27 20-29 26-9 37 14l1 25-8-14q-16 6-19-9-12 17-29 23Z',c.hair)+p('M-22-134q10-15 21-14m7 5q12 1 16 10','none',c.light,1.8);
+  return `<g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g>`;
+ }
+ function upper(who,rig=false,mood='curious'){
+  const c=profiles[who]||profiles['妈妈'],hilda=who==='希尔达',mom=who==='妈妈';
+  const torso=p('M-23-82Q-8-92 18-83L27-44Q5-38-25-45Z',c.coat)+p('M-22-74l7-9 3 34 27 3 10-4 2 7q-28 7-51 0Z',c.coatDark,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z',c.coatLight,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z','url(#cast-knit)','none')+p('M-2-78V-49M-21-48H22','none',c.coatDark,1.15)+p('M-10-57h9v8h-10m15-8h10v8H5','none',c.coatLight,1.1)+[0,1,2].map(i=>e(1,-72+i*8,1.2,1.2,'#ecd5a4')).join('');
+  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">${hairBack(who,c)}${p('M-20-82q-18 0-16 18l3 19 17 4 6-26Z','#64594c')}${p('M-32-66l15 3-2 11-12-2Z','#a27e55')}${p('M-26-73l4 1v8l-5-1Z','#d6b77c')}${hilda?p('M-21-53H20L29-29Q1-25-28-29Z','#334552')+p('M-15-51l-4 20m18-21v22m14-21 7 19','none','#536574',1.2):''}${mom?p('M-20-61L-32-23Q2-16 32-25L19-64Z',c.coatDark):''}${torso}${p('M-13-85Q-17-68-13-46','none','#544b40',4.2)}${p('M-13-81v21','none','#bc9764',1.4)}${p('M-15-62h5v7h-5Z','#d9bd83',ink,.8)}${who==='芙丽达'?p('M16-67l7 3-3 8-8-3Z','#d2c49c',ink,1)+p('M16-61l2-3 2 4','none','#55756c',1):''}${head(who,mood,rig)}${p('M-22-91Q-3-86 22-93L24-83Q6-77-22-82Z',c.scarf)}${p('M-18-86q19 6 37-2','none',hilda?'#ed9b77':'#a4beb0',1.4)}${p('M17-84Q32-86 45-74L41-63 32-64 33-71 18-75Z',c.scarf,ink,1.4,rig?'id="rigScarf"':'class="cast-scarf"')}${p('M-21-48H21','none','#e2be8a',.7)}</g>`;
+ }
+ function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
+ function standing(who,mood='curious'){
+  const c=profiles[who]||profiles['妈妈'];
+  return `<g data-cast="${who}">${e(0,3,30,5,'#0d293945')}<g class="cast-breathe"><g class="cast-leg-back">${p('M-18-45l2 37h10l6-36',c.trousers)}${p('M-12-33l2 20','none','#7c8990',1)}${boot(-12,-2,true)}</g><g class="cast-leg-front">${p('M6-44l3 36h10l1-36',c.trousers)}${p('M13-32l1 18','none','#7c8990',1)}${boot(14,-2)}</g><g class="person-arms">${p('M-20-81Q-30-74-29-55l-3 13 8 2 6-20 6-15',c.coat)}${p('M19-81q13 8 11 24l3 12-8 3-8-19Z',c.coat)}${p('M-31-47l9 2m4-25-5 13m49 10 8-1','none',c.coatLight,2)}${p('M-32-42q-3 8 2 10 6 1 7-6l-1-5Z',c.skin)}${p('M26-44q-2 8 3 10 7-2 5-10Z',c.skin)}</g>${upper(who,false,mood)}</g></g>`;
+ }
+ function elf(){return `<g data-cast="阿尔弗" class="cast-breathe">${e(0,3,17,3,'#0d29393d')}${p('M-7-16v14m12-15 2 16','none','#405253',4)}${boot(-6,0,true)}${boot(8,0)}${p('M-11-35q11-7 22 0l4 19-26 1Z','#849078')}${p('M-13-32l-5 12 6 3m22-17 9 11-5 6','none','#aaaf88',4)}${p('M-14-43l-10-7 3 10 7 4m28-7 10-7-4 10-7 3','#edc69f')}${e(0,-46,16,19,'#f4d6b0',ink,1.4)}${p('M-19-55Q-13-74 1-87L-1-72Q14-68 20-53Z','#b95444')}${p('M-9-69l9-12-3 13 13 6','none','#e09772',1.3)}${p('M-18-54q18-8 37 0','none','#6f3939',3)}${e(-6,-46,2,2.5,ink)}${e(7,-46,2,2.5,ink)}${p('M-15-50h13v10h-13Zm18 0h13v10H3Zm-5 4h5','none','#6b5b45',1.2)}${p('M-3-34q4 3 8-1','none','#815546',1)}${p('M-6-30l18 1 4 20-19 2Z','#e3d4a8')}${p('M-2-24h9m-8 4h10m-9 4h7','none','#8f9475',.8)}${e(10,-12,2,2,'#b46551')}</g>`;}
+ function twig(){return `<g data-cast="枝枝"><g class="cast-tail">${p('M14-26Q31-55 49-55L44-47 58-45 52-39 59-38Q53-14 23-17Z','url(#cast-fur)')}${p('M28-26q17-3 23-17','none','#faf6df',3)}</g>${p('M-15-25l-3 23 8 2 5-19m18-6 0 23 7 1 4-24','#bed0cc')}${p('M-29-39Q-7-54 22-37l1 17q-19 12-39-3l-9 24h-8l4-26Z','url(#cast-fur)')}${p('M11-27l-1 25 9 2 4-25','url(#cast-fur)')}${p('M-31-24l-7-3-10-12 1-10-7-15 14 6 9-14 4 19q15-3 17 10l-5 15Z','url(#cast-fur)')}${p('M-43-56l-4-6 2 12m13-6 1-10 3 9','#aabfc2','none')}${p('M-31-59l-6-17 2-13m-2 11-10-8m20 27 6-20 0-11m0 12 11-9','none','#758d8c',2.6)}${p('M-32-59l-5-17m11 15 6-19','none','#d7dcc4',1)}${e(-31,-42,2.1,3.3,ink)}${e(-30.4,-43,0.65,1,'#fff9ea')}${p('M-48-41l6 2-2 4Z',ink)}${p('M-45-32q5 3 9 0m11 8 6 1-4 4','none','#6d9193',1)}${p('M-32 1h8m14 0h7m16 0h9','none','#455e68',1.5)}</g>`;}
+ function troll(big=false,calm=true){return `<g data-cast="${big?'巨魔妈妈':'小巨魔'}">${e(0,4,66,9,'#0b273747')}<g class="cast-breathe">${p('M-60-7Q-75-33-60-69L-55-99Q-51-131-28-138L-11-149 14-143 34-140Q56-130 57-99l10 25q15 22 10 53L58-13 50-4 21-6 11-20-4-18-16-4-39-3-47-12Z','url(#cast-rock)',ink,2.2)}${p('M-56-62l13-17 12 12-8 35-15 8m77-54 24 9 12 32-18 9-11-28','#67837e','none')}${p('M-31-135l17-8 22 3 10 7-22 3-17 15-18-2Z','#b5beb0','none')}${p('M-41-112l-13-5-4 12 10 10m92-17 12-6 6 12-10 12','#8fa399')}${e(-24,-96,10,12,'#c5cbb8')}${e(27,-96,10,12,'#c5cbb8')}${e(-21,-95,4.4,6,ink)}${e(25,-95,4.4,6,ink)}${e(-20,-97,1.3,1.7,'#f6ecd4')}${e(26,-97,1.3,1.7,'#f6ecd4')}${p('M-5-99l-9 28 25 2-8-25Z','#8fa6a0')}${p(calm?'M-20-57q21 15 42-1':'M-17-54q16-8 33-1','none','#324f56',2.1)}${p('M-46-46l9 5-4 14m76-22-9 9 3 12M-32-17l2 8m57-10 3 9m9-111-5 8 5 9','none','#b1bdb0',1.3)}${[-29,-18,16,31].map((x,i)=>e(x,-76+i%2*3,2.5,1.8,'#607c78')).join('')}${p('M-40-132l-1-8 10 3 4-9 8 6 8-6 7 7-6 8Z','#78936e')}${p('M-36-140l3 9m6-14 1 10m10-9-2 8','none','#bcc69b',1)}${big?p('M12-140q-3-13 6-20m-5 9-8-5m8 2 10-2','none','#93af8a',2):p('M-50-69q46 17 96 1l-5 10q-41 16-84-1Z','#b77959')}${p('M-40-63q16 6 28 6','none','#e0b58a',1.2)}</g></g>`;}
+ function woff(){return `<g data-cast="沃夫" class="float">${p('M-80-16Q-101-27-86-47-68-62-49-43Q-3-70 49-43 67-65 84-48 101-29 81-14 99 14 73 36 40 61-16 54-60 53-80 31-92 13-80-16Z','url(#cast-woff)',ink,2)}${p('M-46-36q12-8 25-8m-19 3 6-7m9 3 6-7m-45 32-6 7m125-3 6 9','none','#f3e5c3',1.8)}${p('M-79-29q-2-16 17-14m127 0q20-3 17 16','none','#8e9b94',2)}${e(-28,5,10,12,'#f0e6cc')}${e(26,5,10,12,'#f0e6cc')}${e(-25,6,3.7,6.2,ink)}${e(25,6,3.7,6.2,ink)}${e(-24,3,1,1.8,'#fff2dc')}${e(26,3,1,1.8,'#fff2dc')}${p('M-8 21q8 8 17-2','none','#576d70',1.5)}${p('M-37 49l-4 12 17-8m39-1 18 10-3-14','#8da2a0')}${e(-42,22,8,3,'#bc9f87')}${e(41,22,8,3,'#bc9f87')}</g>`;}
+ return {profiles,defs,expression,head,upper,boot,standing,elf,twig,troll,woff};
+});
+
+/* src/art/cast-motion.js */
+/** Distance-driven companion gait. No simulation state or puzzle flags are written. */
+Homeward.define('art/cast-motion', [], () => {
+ const tracks=new WeakMap();
+ function animate(root,time,reduced=false,action=null){
+  for(const id of ['davidFollow','fridaFollow','roofDavid','roofFrida']){
+   const actor=root.querySelector('#'+id);if(!actor)continue;
+   const value=actor.getAttribute('transform')||'',match=/translate\(([-\d.]+)/.exec(value),x=Number(match?.[1]||0);
+   let track=tracks.get(actor);if(!track){track={x,time,distance:0,movingUntil:0};tracks.set(actor,track);}
+   const dx=x-track.x;
+   if(Math.abs(dx)>.04&&Math.abs(dx)<55){track.distance+=Math.abs(dx);track.movingUntil=time+.075;}
+   track.x=x;track.time=time;
+   const moving=!reduced&&time<track.movingUntil&&action?.score.effect!=='roofBoard'&&!actor.classList.contains('bracing');
+   const angle=moving?Math.sin(track.distance/19)*11:0;
+   actor.dataset.gait=moving?'walking':'idle';
+   for(const [name,sign] of [['back',-1],['front',1]]){
+    const leg=actor.querySelector('.cast-leg-'+name);if(leg)leg.setAttribute('transform',`rotate(${(angle*sign).toFixed(2)} ${sign<0?-11:13} -43)`);
+   }
+  }
+ }
+ return {animate};
+});
 
 /* src/art/chapter-life.js */
 /** Three authored dioramas. Only transient presentation is animated here; state lives in scenes. */
@@ -128,7 +234,7 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
       b+=path('M399 719v-61m-15 68h45','none','#526b58',9)+circle(404,684,12,'url(#chapterCopper)','#274b4b',3);
       b+=`<g id="bridgeBrake" transform="rotate(${f.bridgeBrace?35:-20} 404 684)">${path('M404 684v-41','none','#c8b98c',6)}${ell(404,640,16,6,'#9da780','#31554f',2)}</g>`;
       b+=F.plate(438,590,123,f.bridge?'棘爪已锁 · 可通行':'一人稳住 · 一人收绳');
-      if(f.bridgeBrace&&!f.bridge)b+=path('M354 664Q376 657 402 680M407 664Q419 677 405 685','none','#7e986e',12)+circle(402,680,5,'#e8cfa8','#315050',1.5)+circle(405,685,5,'#e8cfa8','#315050',1.5);
+      if(f.bridgeBrace&&!f.bridge)b+=path('M354 664Q376 657 402 680M407 664Q419 677 405 685','none','#b18545',12)+circle(402,680,5,'#efc8a1','#315050',1.5)+circle(405,685,5,'#efc8a1','#315050',1.5);
       b+=rep(10,i=>{let x=607+i*37,y=818+i%3*14;return path(`M${x} ${y}q8-8 18-1l-13 10Z`,i%2?'#a9ac7a':'#cfb881','#4d7b69',1,`class="stream-leaf ${f.pump?'downstream':'upstream'}" style="animation-delay:-${i*.51}s"`);});
       b+=ripples(2)+rep(16,i=>circle(220+i*71,571+Math.sin(i*2.3)*96,1.3,'#dfe5b6','none',0,`class="chapter-dew" style="animation-delay:-${i*.25}s"`));
       b+=path('M293 739q29-35 67 1','none','#c6c5a066',2)+text(1268,654,'水务小径',11,'#b2c0a2');
@@ -179,14 +285,15 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
 });
 
 /* src/art/characters.js */
-Homeward.define("art/characters", ["art/kit"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}) => {
-function hilda(x,y,s=1,face=1,walking=false,working=false){return group(x,y,s,`${ell(0,2,31,7,'#092a3540')}<g transform="scale(${face} 1)" class="${walking?'walking ':''}${working?'working':''}"><g class="bodyBob"><g class="legL">${path('M-18-48-18-5-8-5-6-46','#243c45','#183640',2)}${path('M-19-10-7-10-1-2V3H-24V-2Z','#a36548','#243c43',2)}</g><g class="legR">${path('M4-47 6-5H18L18-45','#243c45','#183640',2)}${path('M6-10H18L28-1V3H4Z','#b77950','#243c43',2)}</g>${path('M-20-122Q-44-92-32-65L-15-59 9-59 26-70Q37-100 18-124Z','#4092a4','#1d3e48',2.5)}${path('M-17-122Q-41-98-27-72L-24-103Z','#76cad0')}${path('M-19-84 13-86 25-46H-26Z','#354a4c','#213d42',2)}${path('M-18-83Q-25-78-27-54H21L14-83Z','#ba6850','#24434a',2.5)}${path('M-11-77-13-57M8-76 11-57','none','#df9d71',2)}<g class="arm">${path('M-19-81Q-33-73-32-50L-25-48-18-69Z','#c67d58','#24434a',2)}${ell(-29,-47,5,7,'#f2d2ac')}</g>${path('M16-80Q26-71 25-51L18-50 12-67Z','#b87151','#24434a',2)}${ell(21,-48,5,6,'#f2d2ac')}${path('M-14-123Q7-136 23-120L27-103Q24-84 6-83-11-84-15-103Z','#f0d2af','#28464c',2)}${path('M-15-121Q-4-138 15-127L27-118 18-111 2-118-13-105Z','#69bdc9','#24464f',2)}${path('M-14-111Q-21-96-19-87L-11-94Z','#67bdc8')}${path('M-10-95Q-3-90 0-95','none','#d09279',2,'opacity=".6"')}${circle(3,-106,2.1,'#24434b')}${circle(18,-105,2.1,'#24434b')}${path('m12-103 2 4-3 1','none','#465453',1.5)}${path(getVisualState().scene===9?'M6-92q5-3 10 0':getVisualState().scene===6&&!getVisualState().f.calm?'M6-92h10':'M6-92q5 4 10-1','none','#465453',1.5)}${getVisualState().scene===8||getVisualState().scene===9?path('M0-113l6 2m9-1 6-3','none','#31505a',1.6):''}${path('M-23-125Q-34-139-15-144 0-155 19-143 36-139 29-126 3-130-23-125Z','#263f4a','#183744',2.5)}${path('m1-148 1-8','none','#233d46',3)}${path('M-19-86Q-2-93 21-86L19-77Q0-82-18-77Z','#e2b86a','#2c4445',2)}<g class="scarf">${path('M16-82 46-67 38-60 19-69Z','#e2b86a','#344b47',2)}${path('m35-68-2 5m6-3-2 5','none','#9e844f',1.5)}</g></g></g>`);}
-function twig(x,y,s=.8){return group(x,y,s,`${ell(0,3,37,6,'#0f30323d')}<g class="breathe">${path('M-17-23-19 2h7l8-22M14-23 15 2h7l1-24','#e8e0bd','#375b5a',2)}${ell(0,-29,29,16,'#f0e6c6')}${path('M18-27Q53-64 63-39 58-16 26-17Z','#eee3c2','#385b59',2,'class="scarf"')}${path('M-32-21Q-48-28-44-45L-51-62-38-56-31-72-27-52-9-51-12-30Z','#f3e8ca','#375958',2)}${path('M-33-62-40-80-36-94m-4 14-10-6M-21-55-16-82-4-94m-12 12 0-14','none','#d6c799',3)}${circle(-30,-40,2,'#284d53')}${circle(-43,-34,2,'#284d53')}</g>`);}
-function person(who,x,y,s=1){if(who==='希尔达')return hilda(x,y,s);if(who==='枝枝')return twig(x,y,s);let david=who==='大卫',frida=who==='芙丽达',mom=who==='妈妈',alf=who==='阿尔弗';if(alf)return group(x,y,s,`<g class="breathe">${path('M-6-14-7 0m10-13 5 13','none','#29444a',3)}${path('M-10-31Q0-37 11-29L14-10H-13Z','#c3654e','#24444a',2)}${ell(0,-41,14,17,'#f0d4ae')}${path('M-18-48 1-84 18-48Z','#bc6950','#294c50',2)}${path('M-14-40H-4v8h-10Zm17 0h10v8H3Zm-7 3h7','none','#324e52',1.6)}${path('m-3-22 20-4 3 20-20 3Z','#e0d4ae','#435d58',1.2)}</g>`);let skin=frida?'#a77552':'#ebcfad',shirt=david?'#66876a':frida?'#7aa9a4':'#b38160';return group(x,y,s,`${ell(0,3,30,6,'#16363b40')}<g class="breathe">${path('M-15-41-13 0h9l6-44M7-41l4 41h9l1-44','#2d4548','#1f3e44',2)}${path('M-20-4H-5l3 9h-23Zm30 0H22L31 5H9Z','#735346','#203e44',2)}<g class="person-arms">${path('M-20-84Q-33-78-35-50l9 3 10-25M20-84q13 7 16 34l-8 2-12-25',shirt,'#2b474b',2)}${circle(-30,-45,5,skin)}${circle(31,-45,5,skin)}</g>${path('M-19-87H20L27-38H-27Z',shirt,'#28474a',2)}${path('M-24-103Q-23-134 0-134 26-134 26-103V-77H-23Z',frida?'#354944':mom?'#553f39':'#8b6947','#24424a',2)}${ell(0,-105,22,26,skin)}${path(frida?'M-26-111q-8-21 3-27 11-17 22-8 21-12 29 5 18 11 5 29L8-122-8-117Z':mom?'M-24-109Q-28-141 3-137 30-139 24-106L4-120-21-106Z':'M-24-118-19-137-10-134-2-142 8-132 20-131 28-115 18-108 9-120-13-110Z',frida?'#354943':mom?'#55443e':'#9d7750','#26464a',2)}${circle(-7,-105,2,'#29454a')}${circle(10,-105,2,'#29454a')}${getVisualState().scene===9&&((david&&!getVisualState().f.davidSafe)||(frida&&!getVisualState().f.fridaSafe))?ell(2,-93,3,4,'#6f5547')+path('M-10-114l5-2m13 0 5 2','none','#425450',1.5):path(getVisualState().scene===8?'M-4-93h12':'M-4-93q6 4 12-1','none','#634f43',1.5)}${frida?path('M-10-81 0-66 13-81','none','#e9d4a6',4):''}${david?path('M-20-73H22M-22-61H24','none','#a9b692',2):''}</g>`);}
-function troll(x,y,s=1,big=false){return group(x,y,s,`${ell(0,4,66,10,'#14383e50')}<g class="breathe">${path('M-66-16-54-93-34-132 15-143 53-109 65-57 77-11 40-2 22-15 2-4-18-14-46-3Z',big?'#72897e':'#8d9c84','#244e50',3)}${path('m-34-132 22-9 37 6-17 15-30 3Z','#b0b798')}${path('m-37-102-12-13m81 9 11-14','none','#4c7167',4)}${path('m-19-83 13-18 12 34H-19Z','#7fa09a','#335f5e',2)}${path('m-35-48 5 8 10-6m20 1 5 8 10-9','none','#2b5658',2)}${path('M-47-90q9-10 18 0m46 0q9-9 17 0','none','#244d54',3)}${path('M-15-43q17 10 30-3','none','#3a6260',2)}${path('m-41-58-8 9m18-34-8 5M32-32l5 12M-9-115l5 8','none','#527568',2)}${big?fern(-22,-136,.55,'#7d9d6e'):''}</g>`);}
-function woff(x,y,s=1){return group(x,y,s,`<g class="float">${ell(0,0,87,55,'#c6bd93')}${path('M-85-11Q-89-51-43-44M75-11q20-34-10-42','#c6bd93','#426766',2)}${path('m-39 47-2 14 18-7m32-4 20 10-1-17','#b4ac87','#426766',2)}${ell(-26,9,8,9,'#f1dfb7')}${ell(26,9,8,9,'#f1dfb7')}${circle(-25,10,3,'#30535b')}${circle(27,10,3,'#30535b')}${path('M-7 19q7 7 14-1','none','#4a665f',2)}${path('m-46-33 18-9m-6-2 22-5','none','#e6d7ab',3,'opacity=".6"')}</g>`);}
-
-return {hilda,twig,person,troll,woff};
+/** Stage entry points retained for existing scenes, now sharing one cast library. */
+Homeward.define('art/characters', ['art/kit','art/cast-design'], (kit,Cast) => {
+ const mood=who=>{const s=kit.getVisualState();return Cast.expression(s.scene,s.f,who);};
+ const hilda=(x,y,s=1,face=1,walking=false,working=false)=>kit.group(x,y,s,`<g transform="scale(${face} 1)" class="${walking?'walking ':''}${working?'working':''}">${Cast.standing('希尔达',mood('希尔达'))}</g>`);
+ const twig=(x,y,s=.8)=>kit.group(x,y,s,Cast.twig());
+ const person=(who,x,y,s=1)=>who==='枝枝'?twig(x,y,s):kit.group(x,y,s,who==='阿尔弗'?Cast.elf():Cast.standing(who,mood(who)));
+ const troll=(x,y,s=1,big=false)=>kit.group(x,y,s,Cast.troll(big,big||!!kit.getVisualState().f.calm));
+ const woff=(x,y,s=1)=>kit.group(x,y,s,Cast.woff());
+ return {hilda,twig,person,troll,woff};
 });
 
 /* src/art/finishing.js */
@@ -272,13 +379,13 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
 });
 
 /* src/art/index.js */
-Homeward.define("art", ["art/setpiece-life", "art/chapter-life", "art/finishing", "art/items", "art/kit", "art/characters", "art/props", "scene/0/art", "scene/1/art", "scene/2/art", "scene/3/art", "scene/4/art", "scene/5/art", "scene/6/art", "scene/7/art", "scene/8/art", "scene/9/art", "scene/10/art", "scene/11/art"], (setpieceLife, chapterLife, finishing, detailedItems, kit, characters, props, scene0, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10, scene11) => {
+Homeward.define("art", ["art/cast-design", "art/setpiece-life", "art/chapter-life", "art/finishing", "art/items", "art/kit", "art/characters", "art/props", "scene/0/art", "scene/1/art", "scene/2/art", "scene/3/art", "scene/4/art", "scene/5/art", "scene/6/art", "scene/7/art", "scene/8/art", "scene/9/art", "scene/10/art", "scene/11/art"], (Cast, setpieceLife, chapterLife, finishing, detailedItems, kit, characters, props, scene0, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10, scene11) => {
 const {rep,path}=kit;
 function weather(S){let rain=[1,2,5,7,9].includes(S.scene);let n=S.scene===9?104:rain?57:0;return `<g id="weather" pointer-events="none">${rep(n,i=>path(`M${(i*83)%1640-20} ${(i*59)%1050-110}l${S.scene===9?-23:-9} ${S.scene===9?53:29}`,'none','#c0dad9',1.2,`class="rainStroke" data-rain="${i}"`))}</g>`;}
 
 const scenes=[scene0,scene1,scene2,scene3,scene4,scene5,scene6,scene7,scene8,scene9,scene10,scene11];
 function scene(state,title=false){const i=title?7:state.scene;kit.setVisualState(state,i);return scenes[i](state)+finishing.scenery({...state,scene:i})+chapterLife.scenery({...state,scene:i})+setpieceLife.scenery({...state,scene:i});}
-return {...kit,...characters,...props,...detailedItems,defs:kit.defs+finishing.defs+chapterLife.defs,foreground:finishing.foreground,scene,weather};
+return {...kit,...characters,...props,...detailedItems,defs:kit.defs+Cast.defs+finishing.defs+chapterLife.defs,foreground:finishing.foreground,scene,weather};
 });
 
 /* src/art/items.js */
@@ -363,39 +470,22 @@ return {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountain
 
 /* src/art/performer.js */
 /** The playable actor: anchored feet, articulated arms and contact-driven tools. */
-Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
+Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solve},Cast) => {
   const path=(id,d,fill,stroke='#24434a',width=2)=>`<path id="${id}" d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
   const limb=(id,color,width)=>path(id,'M0 0L0 1','none','#203c45',width+3)+path(id+'Fill','M0 0L0 1','none',color,width);
-  function markup(){return `<g id="performer" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
-    ${limb('rigLegBack','#293e48',9)}${path('rigBootBack','M0 0','none')}
-    ${limb('rigLegFront','#30434a',10)}${path('rigBootFront','M0 0','none')}
-    <g id="rigUpper">
-      <path d="M-18-121Q-40-106-33-65L-16-58 17-63 26-80Q35-110 16-124Z" fill="#438fa2" stroke="#24424c" stroke-width="2.3"/>
-      <path d="M-24-80Q-32-65-26-46H24L16-84Z" fill="#35484b" stroke="#203f47" stroke-width="2"/>
-      <path d="M-20-83Q-29-68-24-53H21L15-83Z" fill="#bc7054" stroke="#28414a" stroke-width="2"/>
-      <path d="M-15-75L-17-57M8-76L12-56M-23-60H18" fill="none" stroke="#df9c71" stroke-width="1.4"/>
-      <path d="M-23-77Q-36-76-32-56L-26-54" fill="#45616a" stroke="#203f47" stroke-width="2"/>
-      <g id="rigHead">
-        <path d="M-13-123Q8-133 22-119L26-103Q24-85 6-84-12-86-14-104Z" fill="#f0d2af" stroke="#28464c" stroke-width="2"/>
-        <path d="M-16-122Q-4-137 15-127L27-118 18-110 1-118-12-105-17-88-23-94Z" fill="#70c0ca" stroke="#24464f" stroke-width="2"/>
-        <path d="M-23-125Q-34-139-15-144 0-155 19-143 36-139 29-126 3-130-23-125Z" fill="#28434e" stroke="#193743" stroke-width="2.4"/>
-        <path d="M1-148V-155" stroke="#243d46" stroke-width="3" stroke-linecap="round"/>
-        <g id="rigEyes"><circle cx="3" cy="-106" r="2.1" fill="#24434b"/><circle cx="18" cy="-105" r="2.1" fill="#24434b"/></g>
-        <path d="M12-102L14-99 11-98M5-93Q10-90 16-94" fill="none" stroke="#65554d" stroke-width="1.4" stroke-linecap="round"/>
-        <path d="M-9-95L-3-94" stroke="#d2957e" stroke-width="2" stroke-linecap="round" opacity=".6"/>
-      </g>
-      <path d="M-19-86Q-2-93 21-86L19-77Q0-82-18-77Z" fill="#e2b86a" stroke="#2c4445" stroke-width="2"/>
-      <path id="rigScarf" d="M16-82L40-70 35-61 18-70Z" fill="#e2b86a" stroke="#344b47" stroke-width="2"/>
-    </g>
-    ${limb('rigArmBack','#b87755',9)}<ellipse id="rigHandBack" rx="4.4" ry="5.5" fill="#f0d1aa" stroke="#35505a" stroke-width="1.4"/>
-    ${limb('rigArmFront','#c9845e',10)}<ellipse id="rigHandFront" rx="4.8" ry="5.8" fill="#f3d5b0" stroke="#35505a" stroke-width="1.4"/>
+  function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
+    ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
+    ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
+    ${Cast.upper('希尔达',true)}
+    ${limb('rigArmBack','#a95043',9)}<ellipse id="rigHandBack" rx="4.4" ry="5.5" fill="#efc49d" stroke="#35464e" stroke-width="1.3"/>
+    ${limb('rigArmFront','#c66d57',10)}<ellipse id="rigHandFront" rx="4.8" ry="5.8" fill="#f3cda8" stroke="#35464e" stroke-width="1.3"/>
     <g id="rigTool" pointer-events="none"></g>
   </g>`;}
   let cachedRoot=null,nodes={};
   const mix=(a,b,t)=>a+(b-a)*t;
   const p=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const fixed=n=>Number(n).toFixed(2);
-  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected}){
+  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={},speaking=false}){
     if(!root)return;
     if(root!==cachedRoot){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
     const attr=(id,k,v)=>nodes[id]?.setAttribute(k,v);
@@ -411,7 +501,11 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
     const bob=moving&&!reduced?-Math.abs(Math.cos(phase))*1.4:reduced?0:Math.sin(time*2.1)*.4;
     const off=[lean,crouch+bob];attr('rigUpper','transform',`translate(${fixed(off[0])} ${fixed(off[1])})`);
     attr('rigHead','transform',`rotate(${fixed(reach*(score?.kind==='tool'?-8:score?.kind==='clear'?7:0))} 0 -87)`);
-    attr('rigEyes','opacity',!reduced&&!score&&time%5.6>5.44?'.15':'1');
+    attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
+    const mood=Cast.expression(scene,flags,'希尔达'),resolve=!!score||mood==='resolve';
+    attr('rigBrows','d',resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
+    attr('rigMouth','d',speaking&&!reduced&&Math.sin(time*15)>.1?'M0-95q6-2 12 0q-5 8-12 0Z':resolve?'M1-94q5 1 10-1':mood==='relieved'?'M-1-96q7 9 14-1':'M0-95q6 5 12-1');
+    attr('rigMouth','fill',speaking&&!reduced&&Math.sin(time*15)>.1?'#8e534a':'none');
     const wind=reduced?0:Math.sin(time*3)*2+Math.abs(walk)*4;
     attr('rigScarf','d',`M16-82Q31 ${-74-wind} 44 ${-70-wind}L37 ${-61-wind} 18-70Z`);
     for(const [name,sign] of [['Back',-1],['Front',1]]){
@@ -422,10 +516,9 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
       const rung=climbing?Math.sin(frame.progress*24+sign*Math.PI/2):0;
       const foot=[sign*11+stride+(climbing?3:0),-3-lift-(climbing?Math.max(0,rung)*19:0)];
       draw('rigLeg'+name,[sign*11+off[0],-48+crouch],foot,22.5,22.5,-1);
-      attr('rigBoot'+name,'d',`M${foot[0]-6} ${foot[1]-3}L${foot[0]+6} ${foot[1]-3}L${foot[0]+14} ${foot[1]+5}H${foot[0]-7}Z`);
-      attr('rigBoot'+name,'fill',name==='Front'?'#b57a54':'#965e48');
+      const boot=nodes['rigBoot'+name];if(boot){const drawing=Cast.boot(0,0,name==='Back');if(!boot.firstChild)boot.innerHTML=drawing;boot.setAttribute('transform',`translate(${fixed(foot[0])} ${fixed(foot[1])})`);}
     }
-    let target=[28+walk*16,-26],back=[-28-walk*13,-30];
+    let target=[27+walk*12,-38],back=[-27-walk*11,-40];
     if(score?.target){
       let world=[...score.target];
       if(score.effect==='ladderSlide')world[0]+=(score.to-score.from)*effort;
@@ -442,8 +535,8 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
       else if(score.kind==='throw'){target=p(target,[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*27],reach);}
       else {target=p(target,local,reach);back=p(back,[local[0]-14,local[1]+9],reach*.85);}
     }
-    const handBack=draw('rigArmBack',[-19+off[0],-79+off[1]],back,27,28,action?-1:1);
-    const hand=draw('rigArmFront',[17+off[0],-79+off[1]],target,28,28,action?1:-1);
+    const handBack=draw('rigArmBack',[-19+off[0],-79+off[1]],back,22+reach*5,23+reach*5,action?-1:1);
+    const hand=draw('rigArmFront',[17+off[0],-79+off[1]],target,22+reach*6,23+reach*5,action?1:-1);
     for(const [name,h] of [['Back',handBack],['Front',hand]]){attr('rigHand'+name,'cx',fixed(h[0]));attr('rigHand'+name,'cy',fixed(h[1]));}
     let tool='';
     attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
@@ -464,7 +557,7 @@ Homeward.define('art/performer', ['engine/kinematics'], ({solve}) => {
 /* src/art/props.js */
 Homeward.define("art/props", ["art/kit", "art/characters"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}) => {
 function itemArt(id){let b='';switch(id){case'lamp':case'shade':b=lamp(0,14,.65,true)+(id==='shade'?path('M-18-9H19L25 11H-23Z','#d3ab70','#445956',2):'');break;case'scarf':b=path('M-26-14Q-3-30 26-17L23-5-2-2 8 24-7 30-18-10Z','#e3b76c','#3a5153',2)+path('m-3 21-4 7m9-11-3 11','none','#b28a50',2);break;case'crank':b=path('M-26 14H-8V-13H21V1','none','#7d9e96',9)+circle(21,4,8,'#ba8c56','#3c5552',2);break;case'rope':case'line':b=rep(4,i=>`<ellipse cx="${-8+i*5}" cy="-2" rx="13" ry="25" fill="none" stroke="#c8b17e" stroke-width="4"/>`)+path('M15 18 30 27','none','#c8b17e',4);break;case'hook':b=path('M-10-29 1-16V9q0 26 20 5m-20-4q-1 26-23 5','none','#91b4b0',6);break;case'grapple':b=path('M-22 26Q-42-13-12-6T2-20','none','#c7b380',4)+path('M2-27V5q-4 20-18 8m18-8q5 20 20 4','none','#98bdb6',5);break;case'fork':b=path('M0 30V-4Q-21-2-21-18v-14m21 28q21 2 21-14v-14','none','#c2d0b0',5)+circle(0,6,3,'#e8c484');break;case'felt':b=path('M-26-22 23-27 31 22-22 29Z','#b4b392','#536c66',2)+path('m-20-13 37-5m-34 18 35-5m-31 18 33-5','none','#dcd4ad',3);break;case'gearS':b=gear(0,0,26,10);break;case'gearM':b=gear(0,0,30,12);break;case'gearL':b=gear(0,0,34,14);break;case'plan':b=paper(0,0,.85,'plan');break;case'pole':b=path('M-30 30 25-25','none','#c8b17e',6)+path('M18-32 32-18','none','#8baaa0',4)+path('M23-27 35-15','none','#dcd1a6',3);break;default:b=bird(0,0,.8);}return `<svg viewBox="-45 -45 90 90" xmlns="http://www.w3.org/2000/svg">${b}</svg>`;}
-function portrait(who){let art;if(who==='希尔达')art=hilda(0,150,1);else if(who==='枝枝')art=twig(0,70,1);else if(who==='阿尔弗')art=person(who,0,92,1);else if(who.includes('巨魔'))art=troll(0,151,1);else art=person(who,0,148,1);return `<svg viewBox="-40 0 80 85" xmlns="http://www.w3.org/2000/svg">${art}</svg>`;}
+function portrait(who){let art;if(who==='希尔达')art=hilda(0,150,1);else if(who==='枝枝')art=twig(0,70,1);else if(who==='阿尔弗')art=person(who,0,92,1);else if(who.includes('巨魔'))art=troll(0,151,1);else art=person(who,0,148,1);return `<svg viewBox="-45 -22 90 103" xmlns="http://www.w3.org/2000/svg">${art}</svg>`;}
 function waterLines(y=710,n=30){return `<g class="ripple" opacity=".55">${rep(n,()=>{let x=rnd()*1600,yy=y+rnd()*(900-y);return path(`M${x.toFixed(1)} ${yy.toFixed(1)}q${10+rnd()*35} -3 ${30+rnd()*60} 0`,'none','#99bdb0',1.4);})}</g>`;}
 function mushrooms(x,y,s=1){return group(x,y,s,rep(3,i=>group(i*25-22,-i%2*8,.6+i*.14,`${path('M-3 0-2-26H4L7 0Z','#e5d8b0')}${path('M-22-23Q-17-56 1-52 19-49 26-20Z','#b66f50','#40605a',1)}${circle(-7,-36,3,'#e7cc9f')}${circle(11,-32,2.5,'#e7cc9f')}`)));}
 function skyline(){return rep(16,i=>{let x=i*115-40,y=365+rnd()*115,w=90+rnd()*65;return `${path(`M${x} 700V${y}l${w*.5}-42 ${w*.5} 38V700Z`,'#4b7276','#315661',2)}${rep(3,j=>windowArt(x+15+j*28,y+38,14,27,rnd()>.55))}`;});}
@@ -501,7 +594,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       })+`</g>`;
       if(f.davidSafe)b+=path('M425 652Q596 675 767 644','none','#e0c89a',5)+path('M755 742V632','none','#7d998c',7);
       b+=path('M1000 752l24-47 27 49Z','#b0a980','#345458',3)+path('M1013 743l11-22 13 24Z','#46655f');
-      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#7d976c',12)}${circle(1025,716,5,'#e8cfa8','#315050',1.5)}</g>`;
+      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#b18545',12)}${circle(1025,716,5,'#efc8a1','#315050',1.5)}</g>`;
       b+=path('M1220 633V591L1250 569','none','#2c4548',12)+path('M1220 633V591L1250 569','none','#a9a87f',6);
       b+=circle(1220,657,41,'#2c4950','#849d8b',3)+`<g id="roofControlWheel" transform="rotate(${s.beaconAngle??-65} 1220 657)">${circle(1220,657,29,'#4d726b','#c4b384',6)}${path('M1191 657h58m-29-29v58','none','#b8aa7c',5)}${circle(1249,657,7,'#e6c790','#3c5850',2)}</g>`;
       b+=group(1189,617,1,path('M0-9 3-3 9-2 4 3 6 9 0 5-6 9-4 3-9-2-3-3Z','#e6d7a2','#395659',1));
@@ -534,6 +627,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       const lift=s.f.fridaSafe?1:c?.effect==='roofLever'&&!reduced?stage(.12,.47):0;
       set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
       set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
+      const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.roofDone&&c?.effect!=='roofBoard'?'hidden':'';
       const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'&&!reduced?c.from+(c.to-c.from)*e:s.beaconAngle;
       set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
       if(c?.effect==='roofAnchor'&&!reduced)fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
@@ -649,6 +743,47 @@ Homeward.define('content/mechanisms',[],()=>({
   beacon:{pivot:[1292,492],target:[1044,176],tolerance:9}
 }));
 
+/* src/content/score.js */
+/** Original Homeward score, expressed in beats and MIDI pitches.
+ * Eight-bar phrases share a returning-home motif; no random melody selection.
+ * Music is presentation only: it never supplies or validates puzzle answers. */
+Homeward.define('content/score', [], () => {
+ const cueNames=['灯还亮着','雨夜出发','纸页与暗流','风暴中的手','清晨的归途'];
+ const modes={
+  hearth:{name:cueNames[0],bpm:72,root:48,scale:[0,2,4,5,7,9,11],chords:[[0,2,4],[3,5,0],[5,0,2],[4,6,1]],color:'harp'},
+  trail:{name:cueNames[1],bpm:80,root:50,scale:[0,2,3,5,7,9,10],chords:[[0,2,4],[5,0,2],[3,5,0],[4,6,1]],color:'felt'},
+  mystery:{name:cueNames[2],bpm:66,root:45,scale:[0,2,3,5,7,8,10],chords:[[0,2,4],[5,0,2],[3,5,0],[4,6,1]],color:'glass'},
+  storm:{name:cueNames[3],bpm:92,root:50,scale:[0,2,3,5,7,9,10],chords:[[0,2,4],[3,5,0],[5,0,2],[4,6,1]],color:'felt'},
+  dawn:{name:cueNames[4],bpm:70,root:50,scale:[0,2,4,5,7,9,11],chords:[[0,2,4],[5,0,2],[3,5,0],[0,2,4]],color:'harp'}
+ };
+ const sceneKeys=['hearth','trail','trail','mystery','mystery','trail','mystery','storm','mystery','storm','dawn','hearth'];
+ // [beat, scale degree, duration] includes breathing spaces and a final cadence.
+ const motif=[[[0,2,1],[1.5,4,.5],[2.5,5,1]],[[0,4,1.5],[2,2,1],[3.5,1,.5]],[[0,0,2],[2.5,1,.5],[3,2,.75]],[[0,4,2.5]],[[0,5,1],[1.5,7,.75],[3,6,.75]],[[0,4,1.5],[2,2,1]],[[0,1,1],[1.5,2,.5],[2.5,1,1]],[[0,0,3.5]]];
+ const midi=(cue,degree,octave=0)=>cue.root+cue.scale[((degree%7)+7)%7]+12*(Math.floor(degree/7)+octave);
+ function cueFor(scene,flags={}){
+  let key=sceneKeys[scene]||'hearth';
+  if(scene===9&&flags.beacon&&flags.davidSafe&&flags.fridaSafe)key='dawn';
+  return {...modes[key],key};
+ }
+ function eventsForBar(cue,bar,intensity=0){
+  if(!cue||!modes[cue.key]||!Number.isInteger(bar)||bar<0)throw Error('Invalid score position');
+  const chord=cue.chords[Math.floor(bar/2)%cue.chords.length],out=[];
+  const add=(beat,pitch,duration,voice,velocity,pan=0)=>out.push({beat,pitch,duration,voice,velocity,pan});
+  add(0,midi(cue,chord[0],-1),3.6,'cello',.16,-.2);
+  chord.forEach((d,i)=>add(.03*i,midi(cue,d,0),3.5,'pad',.07,(i-1)*.4));
+  const arp=[0,1,2,1,0,2];
+  arp.forEach((i,j)=>add(j*.5+.5,midi(cue,chord[i],1),.8,cue.color,.11,j%2?.28:-.28));
+  motif[bar%8].forEach(([beat,d,len])=>add(beat,midi(cue,d,1),len,'woodwind',.14,.08));
+  if(cue.key==='storm'){
+   const count=intensity>.55?8:4;
+   for(let i=0;i<count;i++)add(i*4/count,midi(cue,chord[0],-1),.22,'pulse',.06+Math.max(0,Math.min(1,intensity))*.05,0);
+  }
+  return out.sort((a,b)=>a.beat-b.beat);
+ }
+ const hz=pitch=>440*2**((pitch-69)/12);
+ return {modes,motif,cueFor,eventsForBar,hz};
+});
+
 /* src/content/setpieces.js */
 /** Shared stage geometry and puzzle rules. No DOM or presentation state. */
 Homeward.define('content/setpieces', [], () => {
@@ -728,207 +863,90 @@ Homeward.define('engine/action-track', [], () => {
 });
 
 /* src/engine/audio.js */
-Homeward.define("engine/audio", [], () => {
-class Soundscape{
- constructor(settings=()=>({sound:true})){
-  this.settings=settings;
-  const AudioCtx=window.AudioContext||window.webkitAudioContext;
-  this.ctx=new AudioCtx();
-  this.master=this.ctx.createGain();
-  this.master.gain.value=0.16;
-  this.master.connect(this.ctx.destination);
-  this.ambMaster=this.ctx.createGain();
-  this.ambMaster.gain.value=0.75;
-  this.ambMaster.connect(this.master);
-  this.bgmMaster=this.ctx.createGain();
-  this.bgmMaster.gain.value=0.85;
-  this.bgmMaster.connect(this.master);
-  this.sfxMaster=this.ctx.createGain();
-  this.sfxMaster.gain.value=1.0;
-  this.sfxMaster.connect(this.master);
-  this.ambient=-1;
-  this.bgmTimer=null;
-  this.tickTimer=null;
-  this.seqIndex=0;
-  this.initNoise();
-  this.initAmbienceGraph();
- }
- async resume(){if(this.ctx.state==='suspended')await this.ctx.resume();}
- initNoise(){
-  try{
-   const len=this.ctx.sampleRate*3;
-   this.noiseBuf=this.ctx.createBuffer(1,len,this.ctx.sampleRate);
-   const d=this.noiseBuf.getChannelData(0);
-   let b0=0,b1=0,b2=0;
-   for(let i=0;i<len;i++){
-    const white=Math.random()*2-1;
-    b0=0.99886*b0+white*0.0555179;b1=0.99332*b1+white*0.0750759;b2=0.96900*b2+white*0.1538520;
-    d[i]=(b0+b1+b2+white*0.5362)*0.18;
+/** Original synthesized score and procedural ambience. User gesture opt-in only.
+ * Music, environment, effects and dialogue each have an independent gain bus. */
+Homeward.define('engine/audio', ['content/score','engine/score-player'], (Score,{ScorePlayer,createRoom}) => {
+ const volumes={musicVolume:.72,ambienceVolume:.65,effectsVolume:.8,voiceVolume:.32};
+ class Soundscape{
+  constructor(settings=()=>({sound:false})){
+   this.settings=settings;this.ambient=-1;this.contextState={};this.effectNodes=new Set();this.lastBlip=-1;this.lastMix='';this.closed=false;
+   const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)throw Error('Web Audio is unavailable');
+   this.ctx=new AudioCtx();this.master=this.ctx.createGain();this.master.gain.value=0;
+   this.limiter=this.ctx.createDynamicsCompressor();this.limiter.threshold.value=-9;this.limiter.knee.value=9;this.limiter.ratio.value=5;this.limiter.attack.value=.004;this.limiter.release.value=.22;
+   this.master.connect(this.limiter);this.limiter.connect(this.ctx.destination);
+   for(const name of ['bgmMaster','ambMaster','sfxMaster','voiceMaster']){this[name]=this.ctx.createGain();this[name].connect(this.master);}
+   this.room=createRoom(this.ctx,this.master);this.bgmMaster.connect(this.room.input);
+   this.player=new ScorePlayer(this.ctx,this.bgmMaster);
+   this.initAmbience();
+  }
+  async resume(){
+   if(this.closed||!this.settings().sound||document.hidden)return;
+   await this.ctx.resume();
+   // Re-check after the asynchronous browser permission/resume boundary.
+   if(!this.settings().sound||document.hidden){await this.ctx.suspend();return;}
+   this.lastMix='';this.update(this.contextState);this.player.resume();
+  }
+  pause(){this.player.pause();this.ctx.suspend().catch(()=>{});}
+  scene(n){this.ambient=n;this.update(this.contextState);}
+  update(state={}){
+   this.contextState=state;if(this.closed)return;
+   const settings=this.settings(),now=this.ctx.currentTime;
+   const volume=k=>Number.isFinite(settings[k])?Math.max(0,Math.min(1,settings[k])):volumes[k];
+   const key=JSON.stringify([settings.sound,...Object.keys(volumes).map(volume),!!state.dialogue,!!state.menu,this.ambient]);
+   if(key!==this.lastMix){
+    this.lastMix=key;
+    this.master.gain.setTargetAtTime(settings.sound?.32:0,now,.06);
+    this.bgmMaster.gain.setTargetAtTime(volume('musicVolume')*(state.dialogue?.4:state.menu?.55:1),now,.16);
+    this.ambMaster.gain.setTargetAtTime(volume('ambienceVolume')*(state.menu?.55:1),now,.22);
+    this.sfxMaster.gain.setTargetAtTime(volume('effectsVolume'),now,.03);this.voiceMaster.gain.setTargetAtTime(volume('voiceVolume'),now,.03);
+    const rain=[1,2,7,9].includes(this.ambient),outside=[1,2,5,6,7,9,10].includes(this.ambient),water=[2,4,8].includes(this.ambient);
+    this.rain.gain.setTargetAtTime(rain?(this.ambient===9?.16:.075):0,now,.8);
+    this.wind.gain.setTargetAtTime(outside?(this.ambient===9?.21:.07):0,now,1.1);
+    this.water.gain.setTargetAtTime(water?.13:0,now,.8);
+    this.hearth.gain.setTargetAtTime([0,11].includes(this.ambient)?.07:0,now,.8);
    }
-  }catch{this.noiseBuf=null;}
- }
- initAmbienceGraph(){
-  if(!this.noiseBuf)return;
-  try{
-   this.noiseSrc=this.ctx.createBufferSource();
-   this.noiseSrc.buffer=this.noiseBuf;
-   this.noiseSrc.loop=true;
-   this.windFilter=this.ctx.createBiquadFilter();
-   this.windFilter.type='bandpass';this.windFilter.frequency.value=320;this.windFilter.Q.value=2.2;
-   this.windLfo=this.ctx.createOscillator();this.windLfo.frequency.value=0.18;
-   this.windLfoGain=this.ctx.createGain();this.windLfoGain.gain.value=180;
-   this.windLfo.connect(this.windLfoGain);this.windLfoGain.connect(this.windFilter.frequency);
-   this.windLfo.start();
-   this.windGain=this.ctx.createGain();this.windGain.gain.value=0;
-   this.windFilter.connect(this.windGain);this.windGain.connect(this.ambMaster);
-   this.rainFilter=this.ctx.createBiquadFilter();this.rainFilter.type='highpass';this.rainFilter.frequency.value=1400;
-   this.rainGain=this.ctx.createGain();this.rainGain.gain.value=0;
-   this.rainFilter.connect(this.rainGain);this.rainGain.connect(this.ambMaster);
-   this.streamFilter=this.ctx.createBiquadFilter();this.streamFilter.type='bandpass';this.streamFilter.frequency.value=680;this.streamFilter.Q.value=3.5;
-   this.streamGain=this.ctx.createGain();this.streamGain.gain.value=0;
-   this.streamFilter.connect(this.streamGain);this.streamGain.connect(this.ambMaster);
-   this.fireFilter=this.ctx.createBiquadFilter();this.fireFilter.type='lowpass';this.fireFilter.frequency.value=260;
-   this.fireGain=this.ctx.createGain();this.fireGain.gain.value=0;
-   this.fireFilter.connect(this.fireGain);this.fireGain.connect(this.ambMaster);
-   this.noiseSrc.connect(this.windFilter);this.noiseSrc.connect(this.rainFilter);
-   this.noiseSrc.connect(this.streamFilter);this.noiseSrc.connect(this.fireFilter);
-   this.noiseSrc.start();
-  }catch(e){console.warn('Ambience init error',e);}
- }
- scene(n){
-  if(this.ambient===n)return;
-  this.ambient=n;
-  const now=this.ctx.currentTime;
-  const AMB=[
-   {wind:0,rain:0,stream:0,fire:0.16},
-   {wind:0.08,rain:0.15,stream:0,fire:0},
-   {wind:0.06,rain:0.08,stream:0.18,fire:0},
-   {wind:0.03,rain:0.02,stream:0,fire:0},
-   {wind:0,rain:0,stream:0.22,fire:0},
-   {wind:0.15,rain:0,stream:0,fire:0},
-   {wind:0.20,rain:0,stream:0.04,fire:0},
-   {wind:0.24,rain:0.26,stream:0,fire:0},
-   {wind:0,rain:0,stream:0.08,fire:0},
-   {wind:0.32,rain:0.32,stream:0,fire:0},
-   {wind:0.14,rain:0,stream:0,fire:0},
-   {wind:0,rain:0,stream:0,fire:0.16}
-  ][n]||{wind:0.05,rain:0,stream:0,fire:0};
-  if(this.windGain){
-   this.windGain.gain.setTargetAtTime(AMB.wind,now,0.8);
-   this.rainGain.gain.setTargetAtTime(AMB.rain,now,0.8);
-   this.streamGain.gain.setTargetAtTime(AMB.stream,now,0.8);
-   this.fireGain.gain.setTargetAtTime(AMB.fire,now,0.8);
+   if(settings.sound&&this.ambient>=0){this.player.intensity=Math.max(0,Math.min(1,state.danger||0));this.player.select(Score.cueFor(this.ambient,state.flags||{}));}
   }
-  clearInterval(this.tickTimer);
-  if(n===8){
-   this.tickTimer=setInterval(()=>{
-    if(this.settings().sound&&this.ctx.state==='running'&&!document.hidden)this.clockTick();
-   },1000);
+  initAmbience(){
+   const ctx=this.ctx,buf=ctx.createBuffer(1,ctx.sampleRate*4,ctx.sampleRate),d=buf.getChannelData(0);let seed=0x1234abcd,brown=0;
+   // Deterministic noise bed, independent of the musical note sequence.
+   for(let i=0;i<d.length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const white=seed/2147483648-1;brown=(brown+.025*white)/1.025;d[i]=white*.2+brown*1.8;}
+   this.noise=ctx.createBufferSource();this.noise.buffer=buf;this.noise.loop=true;
+   this.ambientNodes=[];
+   for(const [name,type,freq,q] of [['rain','highpass',1900,.7],['wind','lowpass',420,.6],['water','bandpass',840,.8],['hearth','lowpass',160,.7]]){
+    const filter=ctx.createBiquadFilter(),gain=ctx.createGain();filter.type=type;filter.frequency.value=freq;filter.Q.value=q;gain.gain.value=0;
+    this.noise.connect(filter);filter.connect(gain);gain.connect(this.ambMaster);this[name]=gain;this.ambientNodes.push(filter,gain);
+   }
+   this.noise.start();
   }
-  this.startBGM(n);
- }
- clockTick(){
-  try{
-   const now=this.ctx.currentTime;
-   const osc=this.ctx.createOscillator(),gain=this.ctx.createGain();
-   osc.type='triangle';osc.frequency.setValueAtTime(1400,now);
-   osc.frequency.exponentialRampToValueAtTime(180,now+0.018);
-   gain.gain.setValueAtTime(0.06,now);gain.gain.exponentialRampToValueAtTime(0.0001,now+0.018);
-   osc.connect(gain);gain.connect(this.ambMaster);
-   osc.start(now);osc.stop(now+0.02);
-  }catch{}
- }
- startBGM(n){
-  if(this.bgmTimer){clearTimeout(this.bgmTimer);this.bgmTimer=null;}
-  this.seqIndex=0;
-  this.scheduleNextNote(n);
- }
- scheduleNextNote(n){
-  if(this.ambient!==n||!this.settings().sound)return;
-  const N={
-   C3:130.81,D3:146.83,Eb3:155.56,E3:164.81,F3:174.61,G3:196.00,A3:220.00,Bb3:233.08,B3:246.94,
-   C4:261.63,D4:293.66,Eb4:311.13,E4:329.63,F4:349.23,Fs4:369.99,G4:392.00,Ab4:415.30,A4:440.00,Bb4:466.16,B4:493.88,
-   C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880.00,B5:987.77,C6:1046.50
-  };
-  const THEMES=[
-   {scale:[N.C4,N.E4,N.G4,N.A4,N.C5,N.E5],bass:N.C3,step:0.56,type:'triangle',vol:0.08,decay:0.7},
-   {scale:[N.D4,N.F4,N.G4,N.A4,N.C5,N.D5],bass:N.D3,step:0.68,type:'sine',vol:0.07,decay:1.0},
-   {scale:[N.F4,N.G4,N.A4,N.C5,N.D5,N.G5],bass:N.F3,step:0.48,type:'triangle',vol:0.09,decay:0.65},
-   {scale:[N.A3,N.C4,N.E4,N.G4,N.A4,N.C5],bass:N.A3,step:0.62,type:'sine',vol:0.07,decay:0.9},
-   {scale:[N.E3,N.G3,N.B3,N.D4,N.E4],bass:N.E3,step:0.46,type:'triangle',vol:0.09,decay:0.5},
-   {scale:[N.G3,N.B3,N.D4,N.G4,N.B4],bass:N.G3,step:0.72,type:'sine',vol:0.07,decay:1.2},
-   {scale:[N.C3,N.Eb3,N.G3,N.Bb3,N.Eb4],bass:N.C3,step:0.84,type:'sine',vol:0.10,decay:1.4},
-   {scale:[N.D4,N.F4,N.A4,N.C5,N.D5],bass:N.D3,step:0.42,type:'triangle',vol:0.09,decay:0.5},
-   {scale:[N.A3,N.C4,N.E4,N.A4,N.E5],bass:N.A3,step:0.38,type:'triangle',vol:0.08,decay:0.35},
-   {scale:[N.B3,N.D4,N.Fs4,N.A4,N.B4],bass:N.B3,step:0.34,type:'triangle',vol:0.10,decay:0.38},
-   {scale:[N.D4,N.Fs4,N.A4,N.B4,N.D5,N.Fs5],bass:N.D3,step:0.56,type:'sine',vol:0.09,decay:0.9},
-   {scale:[N.C4,N.E4,N.G4,N.A4,N.C5,N.E5],bass:N.C3,step:0.52,type:'triangle',vol:0.09,decay:0.75}
-  ];
-  const theme=THEMES[n]||THEMES[0];
-  if(this.seqIndex%4===0)this.playSynthNote(theme.bass,theme.decay*1.5,'sine',theme.vol*0.9);
-  if(Math.random()<0.75){
-   const idx=Math.floor(Math.random()*theme.scale.length);
-   this.playSynthNote(theme.scale[idx],theme.decay,theme.type,theme.vol);
+  note(freq,d=.34,when=0,vol=.18,bus=this.sfxMaster){
+   if(this.ctx.state!=='running'||!this.settings().sound||document.hidden||this.effectNodes.size>=32)return;
+   const t=this.ctx.currentTime+Math.max(0,when),o=this.ctx.createOscillator(),g=this.ctx.createGain();
+   o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.04,d));
+   o.connect(g);g.connect(bus);this.effectNodes.add(o);o.start(t);o.stop(t+d+.04);
+   o.onended=()=>{o.disconnect();g.disconnect();this.effectNodes.delete(o);};
   }
-  this.seqIndex++;
-  this.bgmTimer=setTimeout(()=>this.scheduleNextNote(n),theme.step*1000);
+  noiseHit(kind){
+   if(this.ctx.state!=='running'||!this.settings().sound||document.hidden||this.effectNodes.size>=32)return;
+   const now=this.ctx.currentTime,src=this.ctx.createBufferSource(),filter=this.ctx.createBiquadFilter(),gain=this.ctx.createGain();src.buffer=this.noise.buffer;
+   filter.type='bandpass';filter.frequency.value={wood:530,metal:1700,rope:950,water:2400}[kind]||750;filter.Q.value=kind==='metal'?5:.65;
+   const d=kind==='rope'?.38:kind==='water'?.45:.14;gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(.32,now+.009);gain.gain.exponentialRampToValueAtTime(.0001,now+d);
+   src.connect(filter);filter.connect(gain);gain.connect(this.sfxMaster);src.start(now);src.stop(now+d+.03);this.effectNodes.add(src);
+   src.onended=()=>{src.disconnect();filter.disconnect();gain.disconnect();this.effectNodes.delete(src);};
+  }
+  effect(kind){
+   if(kind==='warm'){[392,493.88,587.33].forEach((f,i)=>this.note(f,.55,i*.12,.13));return;}
+   this.noiseHit(kind);if(kind==='metal')this.note(680,.34,0,.08);else if(kind==='wood')this.note(180,.08,0,.09);
+  }
+  speechBlip(who){
+   const now=this.ctx.currentTime;if(now-this.lastBlip<.095)return;this.lastBlip=now;
+   const f={'希尔达':480,'大卫':330,'芙丽达':430,'妈妈':250,'阿尔弗':650,'枝枝':780}[who]||(who?.includes('巨魔')?125:380);
+   this.note(f,.035,0,.12,this.voiceMaster);
+  }
+  debug(){return {context:this.ctx.state,scene:this.ambient,mix:this.master.gain.value,musicGain:this.bgmMaster.gain.value,ambienceGain:this.ambMaster.gain.value,effectsGain:this.sfxMaster.gain.value,voiceGain:this.voiceMaster.gain.value,voices:this.effectNodes.size,score:this.player.debug()};}
+  async dispose(){if(this.closed)return;this.closed=true;this.player.dispose();this.room.dispose();for(const node of this.effectNodes){try{node.stop();}catch{}}this.noise.stop();this.noise.disconnect();this.ambientNodes.forEach(n=>n.disconnect());await this.ctx.close();}
  }
- playSynthNote(freq,dur=0.6,type='sine',vol=0.1){
-  try{
-   if(this.ctx.state!=='running')return;
-   const now=this.ctx.currentTime;
-   const osc=this.ctx.createOscillator(),gain=this.ctx.createGain();
-   osc.type=type;osc.frequency.setValueAtTime(freq,now);
-   gain.gain.setValueAtTime(0.001,now);
-   gain.gain.linearRampToValueAtTime(vol,now+0.015);
-   gain.gain.exponentialRampToValueAtTime(0.0001,now+dur);
-   osc.connect(gain);gain.connect(this.bgmMaster);
-   osc.start(now);osc.stop(now+dur+0.05);
-   osc.onended=()=>{try{osc.disconnect();gain.disconnect();}catch{}};
-  }catch{}
- }
- speechBlip(who){
-  try{
-   if(this.ctx.state!=='running')return;
-   const now=this.ctx.currentTime;
-   const osc=this.ctx.createOscillator(),gain=this.ctx.createGain();
-   let freq=560,type='triangle',dur=0.026,slide=null;
-   if(who==='希尔达'){freq=560+(Math.random()*40-20);type='triangle';}
-   else if(who==='妈妈'){freq=230+(Math.random()*20-10);type='sine';dur=0.038;}
-   else if(who==='大卫'){freq=390+(Math.random()*30-15);type='triangle';}
-   else if(who==='芙丽达'){freq=490+(Math.random()*25-12);type='sine';}
-   else if(who==='枝枝'){freq=760;slide=860;type='sine';dur=0.032;}
-   else if(who==='阿尔弗'){freq=660+(Math.random()*50);type='triangle';dur=0.022;}
-   else if(who?.includes('巨魔')){freq=120+(Math.random()*15);type='sine';dur=0.045;}
-   else{freq=440+(Math.random()*30);type='sine';}
-   osc.type=type;osc.frequency.setValueAtTime(freq,now);
-   if(slide)osc.frequency.exponentialRampToValueAtTime(slide,now+dur);
-   gain.gain.setValueAtTime(0.001,now);
-   gain.gain.linearRampToValueAtTime(0.08,now+0.005);
-   gain.gain.exponentialRampToValueAtTime(0.0001,now+dur);
-   osc.connect(gain);gain.connect(this.sfxMaster);
-   osc.start(now);osc.stop(now+dur+0.01);
-   osc.onended=()=>{try{osc.disconnect();gain.disconnect();}catch{}};
-  }catch{}
- }
- note(freq,d=.34,when=0,vol=.18){
-  try{
-   const t=this.ctx.currentTime+when,o=this.ctx.createOscillator(),g=this.ctx.createGain();
-   o.type='sine';o.frequency.value=freq;
-   g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.008);
-   g.gain.exponentialRampToValueAtTime(.001,t+d);
-   o.connect(g);g.connect(this.sfxMaster);
-   o.start(t);o.stop(t+d+.03);
-   o.onended=()=>{try{o.disconnect();g.disconnect();}catch{}};
-  }catch{}
- }
- effect(kind){
-  const table={metal:[311.13,466.16],warm:[261.63,329.63,392,523.25],rope:[146.83,196],wood:[164.81,220],water:[392,293.66,196]};
-  (table[kind]||table.wood).forEach((f,i)=>this.note(f,.3,i*.1,.21));
- }
-}
-
-return Soundscape;
+ return Soundscape;
 });
 
 /* src/engine/camera.js */
@@ -1026,7 +1044,7 @@ Homeward.define('engine/kinematics', [], () => {
 });
 
 /* src/engine/runtime.js */
-Homeward.define("engine/runtime", ["engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -1055,22 +1073,16 @@ function sound(kind){
   toast('这个浏览器暂时无法开启声音，所有谜题仍可通过画面完成。');
  }
 }
+function audioState(){return {dialogue:!!dialogue,menu:modal,danger:s.danger,flags:s.f};}
 function setSound(on){
  s.settings.sound=on;
+ const failed=()=>{s.settings.sound=false;audio?.pause();updateTools();save();toast('声音暂不可用。可以继续无声游玩。');};
  try{
   if(on){
    if(!audio)audio=new Soundscape(()=>s.settings);
-   audio.resume().then(()=>audio.scene(s.scene)).catch(()=>{});
-  }else if(audio){
-   if(audio.bgmTimer){clearTimeout(audio.bgmTimer);audio.bgmTimer=null;}
-   clearInterval(audio.tickTimer);
-   if(audio.master)audio.master.gain.setTargetAtTime(0,audio.ctx.currentTime,0.05);
-   audio.ctx.suspend().catch(()=>{});
-  }
- }catch{
-  toast('声音暂不可用。可以继续无声游玩。');
-  s.settings.sound=false;
- }
+   audio.resume().then(()=>{if(s.settings.sound&&!document.hidden){audio.scene(s.scene);audio.update(audioState());}}).catch(failed);
+  }else audio?.pause();
+ }catch{failed();}
  updateTools();save();
 }
 function save(immediate=false){if(!started)return;clearTimeout(saveTimer);const write=()=>{s.heroX=hero.x;s.savedAt=new Date().toISOString();try{store.save(s);storageOK=true;saved=clone(s);$('saveDot').classList.add('saved');clearTimeout(saveIndicatorTimer);saveIndicatorTimer=setTimeout(()=>$('saveDot').classList.remove('saved'),1000);}catch(e){storageOK=false;if(!storageWarned){storageWarned=true;toast('浏览器阻止了自动存档。可以在暂停菜单中导出进度。');}}};if(immediate)write();else saveTimer=setTimeout(write,160);}
@@ -1147,9 +1159,10 @@ function updateActors(){
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
  if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
- Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected});
+ Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f,speaking:!!dialogue&&dialogue.lines[dialogue.index]?.[0]==='希尔达'&&typewriter.busy});
  ChapterLife.animate(ui.world,activeWork,s);
  SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
+ CastMotion.animate(ui.world,elapsed,s.settings.reduced||isPaused(),activeWork);
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
 }
 
@@ -1261,11 +1274,12 @@ async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;ac
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
 function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-85;camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);if(first&&Story.scenes[index].chapter)chapter(Story.scenes[index].chapter);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);else actionLabel(Story.scenes[index].objective(s));save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-85;camera.manual=false;render();calcCamera(true);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-85;camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
-function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');if(audio&&s.settings.sound)audio.master.gain.setTargetAtTime(.035,audio.ctx.currentTime,.1);}
-function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');if(audio&&s.settings.sound)audio.master.gain.setTargetAtTime(.12,audio.ctx.currentTime,.15);if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
-function openMenu(){if(!started)return;showPanel(`<div class="eyebrow">TAKE A BREATH</div><h2>旅途中的一小会儿</h2><p>${esc(Story.scenes[s.scene].name)}<br><span class="progressText">已到访 ${s.visited.length} / 12 个场景 · 观察手记 ${s.sketches.length} / 6</span></p><div class="settingsRow"><span>环境音乐与机关音效</span><button id="soundSetting">${s.settings.sound?'已开启':'已关闭'}</button></div><div class="settingsRow"><span>舒缓模式 <small>· 屋顶风暴不计时</small></span><button id="relaxSetting">${s.settings.relaxed?'已开启':'已关闭'}</button></div><div class="settingsRow"><span>减少动态与闪光</span><button id="motionSetting">${s.settings.reduced?'已开启':'已关闭'}</button></div><div class="btnrow"><button class="panelBtn primary" id="resumePlay">回到冒险</button><button class="panelBtn" id="helpOpen">操作说明</button></div><div class="btnrow"><button class="panelBtn" id="exportBtn">导出进度</button><button class="panelBtn" id="importBtn">导入进度</button><button class="panelBtn danger" id="restartBtn">重新开始</button></div><p class="fineprint">${storageOK?'进度自动保存在当前浏览器。关闭网页不会抹去已完成的章节。':'此浏览器阻止了本地存储。请用“导出进度”保留旅程。'}<br>暂停菜单、手记、背包、对话和机关操作期间，风暴计时会暂停。</p>`,'menu');
+function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
+function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
+function openMenu(){if(!started)return;showPanel(`<div class="eyebrow">TAKE A BREATH</div><h2>旅途中的一小会儿</h2><p>${esc(Story.scenes[s.scene].name)}<br><span class="progressText">已到访 ${s.visited.length} / 12 个场景 · 观察手记 ${s.sketches.length} / 6</span></p><div class="settingsRow"><span>环境音乐与机关音效</span><button id="soundSetting">${s.settings.sound?'已开启':'已关闭'}</button></div><div class="audioMix" aria-label="声音混音">${[['musicVolume','配乐'],['ambienceVolume','环境'],['effectsVolume','机关音效'],['voiceVolume','对白提示音']].map(([key,label])=>`<label for="${key}"><span>${label}</span><input id="${key}" data-volume="${key}" type="range" min="0" max="100" step="1" value="${Math.round(s.settings[key]*100)}"><output for="${key}">${Math.round(s.settings[key]*100)}%</output></label>`).join('')}</div><div class="settingsRow"><span>舒缓模式 <small>· 屋顶风暴不计时</small></span><button id="relaxSetting">${s.settings.relaxed?'已开启':'已关闭'}</button></div><div class="settingsRow"><span>减少动态与闪光</span><button id="motionSetting">${s.settings.reduced?'已开启':'已关闭'}</button></div><div class="btnrow"><button class="panelBtn primary" id="resumePlay">回到冒险</button><button class="panelBtn" id="helpOpen">操作说明</button></div><div class="btnrow"><button class="panelBtn" id="exportBtn">导出进度</button><button class="panelBtn" id="importBtn">导入进度</button><button class="panelBtn danger" id="restartBtn">重新开始</button></div><p class="fineprint">${storageOK?'进度自动保存在当前浏览器。关闭网页不会抹去已完成的章节。':'此浏览器阻止了本地存储。请用“导出进度”保留旅程。'}<br>暂停菜单、手记、背包、对话和机关操作期间，风暴计时会暂停。</p>`,'menu');
+ $('panel').querySelectorAll('[data-volume]').forEach(el=>{el.oninput=()=>{s.settings[el.dataset.volume]=Number(el.value)/100;el.nextElementSibling.textContent=el.value+'%';audio?.update(audioState());save();};});
  $('resumePlay').onclick=closePanel;$('helpOpen').onclick=openHelp;$('soundSetting').onclick=()=>{setSound(!s.settings.sound);openMenu();};$('relaxSetting').onclick=()=>{s.settings.relaxed=!s.settings.relaxed;save();render();openMenu();};$('motionSetting').onclick=()=>{s.settings.reduced=!s.settings.reduced;save();render();openMenu();};$('exportBtn').onclick=exportSave;$('importBtn').onclick=()=>{$('importFile').value='';$('importFile').click();};$('restartBtn').onclick=confirmRestart;
 }
 function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。档案梯要先对准并锁轮；救回大卫后，请他稳住支点再撬梁。检修顺序写在现场铭牌上。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。风暴逼近时会退到安全检查点，已救回的同伴、已固定的绳索和前面章节都会保留。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
@@ -1296,8 +1310,9 @@ function panBy(dir){if(!started||modal)return;camera.manual=true;camera.x=clamp(
 $('panLeft').onclick=()=>panBy(-1);$('panRight').onclick=()=>panBy(1);
 document.addEventListener('keydown',e=>{if(e.key==='Tab'&&modal){let els=[...$('panel').querySelectorAll('button:not([disabled]),input,a')];if(!els.length)return;let first=els[0],last=els[els.length-1];if(e.shiftKey&&(document.activeElement===first||document.activeElement===$('panel'))){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}return;}if(!started)return;if(e.key==='Escape'){e.preventDefault();if(modal)closePanel();else if(inspection){closeInspection();}else if(bagOpen){toggleBag(false);selected=null;renderInventory();}else openMenu();return;}if(modal)return;if((e.key===' '||e.key==='Enter')&&dialogue){e.preventDefault();nextLine();return;}const key=e.key.toLowerCase();if(key==='e'){e.preventDefault();if(selected)inspectItem(selected);else toggleInspection();}else if(key==='h'){e.preventDefault();reveal();}else if(key==='j'){e.preventDefault();openJournal();}else if(key==='i'){e.preventDefault();toggleBag();}else if(key==='f'){e.preventDefault();fullscreen();}else if(key==='arrowleft'||key==='arrowright'||key==='a'||key==='d'){if(!canAct())return;e.preventDefault();walkTo(hero.x+((key==='arrowleft'||key==='a')?-85:85),()=>save());}});
 window.addEventListener('resize',()=>{if(inspection)Object.assign(camera,focusFrame(s.scene,innerWidth/innerHeight));calcCamera(false);});document.addEventListener('fullscreenchange',()=>calcCamera(false));window.addEventListener('pagehide',()=>save(true));
-document.addEventListener('visibilitychange',()=>{ui.game.classList.toggle('paused',document.hidden||modal);if(document.hidden){save(true);if(audio)audio.ctx.suspend().catch(()=>{});}else if(audio&&s.settings.sound)audio.resume().catch(()=>{});frameTime=performance.now();});
-function tick(now){let dt=Math.min(.055,Math.max(0,(now-frameTime)/1000));frameTime=now;if(!document.hidden){if(!isPaused())elapsed+=dt;if(!isPaused()){s.playSeconds+=dt;sceneClock+=dt;if(pendingMove&&!dialogue&&!locked&&!activeWork){let dx=pendingMove.target-hero.x,step=Math.sign(dx)*Math.min(Math.abs(dx),dt*340);hero.x+=step;walkDistance+=Math.abs(step);if(camera.w<1580&&!camera.manual&&!inspection){let target=clamp(hero.x-camera.w*.45,0,1600-camera.w);camera.x+=(target-camera.x)*Math.min(1,dt*5);setView();}if(Math.abs(dx)<3){hero.x=pendingMove.target;const cb=pendingMove.after;pendingMove=null;cb?.();}}if(activeWork&&!dialogue&&!locked){
+document.addEventListener('visibilitychange',()=>{ui.game.classList.toggle('paused',document.hidden||modal);if(document.hidden){save(true);audio?.pause();}else if(audio&&s.settings.sound)audio.resume().catch(()=>{});frameTime=performance.now();});
+let audioTick=0;
+function tick(now){if(!document.hidden&&audio&&s.settings.sound&&now-audioTick>160){audioTick=now;audio.update(audioState());}let dt=Math.min(.055,Math.max(0,(now-frameTime)/1000));frameTime=now;if(!document.hidden){if(!isPaused())elapsed+=dt;if(!isPaused()){s.playSeconds+=dt;sceneClock+=dt;if(pendingMove&&!dialogue&&!locked&&!activeWork){let dx=pendingMove.target-hero.x,step=Math.sign(dx)*Math.min(Math.abs(dx),dt*340);hero.x+=step;walkDistance+=Math.abs(step);if(camera.w<1580&&!camera.manual&&!inspection){let target=clamp(hero.x-camera.w*.45,0,1600-camera.w);camera.x+=(target-camera.x)*Math.min(1,dt*5);setView();}if(Math.abs(dx)<3){hero.x=pendingMove.target;const cb=pendingMove.after;pendingMove=null;cb?.();}}if(activeWork&&!dialogue&&!locked){
  const task=activeWork,frame=task.advance(dt*1000),progress=frame.progress;
  $('workRing')?.setAttribute('opacity','1');$('workProgress')?.setAttribute('stroke-dashoffset',String(100.53*(1-progress)));
  if(task.claim()){
@@ -1310,9 +1325,77 @@ function tick(now){let dt=Math.min(.055,Math.max(0,(now-frameTime)/1000));frameT
 }if(s.scene===9&&!s.f.roofDone&&!s.settings.relaxed&&!dialogue&&!locked&&!sequenceActive&&!bagOpen&&!activeWork&&!inventoryDrag&&!input){s.danger=Math.min(1,s.danger+dt/110);$('hazard').querySelector('b').style.width=s.danger*100+'%';$('hazard').setAttribute('aria-valuenow',String(Math.round(s.danger*100)));if(s.danger>=1)resetRoof();}if(sceneClock>14)$('sceneLabel').classList.add('quiet');if(s.scene===9&&!s.settings.reduced&&Math.floor(sceneClock/13)!==Math.floor((sceneClock-dt)/13))effect('water');}if(!isPaused()&&!s.settings.reduced){rainNodes.forEach((el,i)=>{let y=((elapsed*(s.scene===9?530:315)+i*43)%1120)-160;el.setAttribute('transform',`translate(${s.scene===9?-y*.16:-y*.08} ${y})`);});}if(!isPaused())petX+=(clamp(hero.x-hero.face*85,60,1540)-petX)*Math.min(1,dt*3.5);updateActors();}requestAnimationFrame(tick);}
 const G={get s(){return s;},set:setFlag,commit,take,consume,toast,sound,say,go,work,effect,note:addNote,sketch,pulse,playSequence,finish,openEnding};
 updateTools();if(saved){$('continueBtn').classList.remove('hidden');$('continueBtn').innerHTML='继续旅程 <span>→</span>';}render();calcCamera(true);requestAnimationFrame(tick);
-if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,flush:()=>save(true)};
+if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,audio:()=>audio?.debug()||null,flush:()=>save(true)};
 
 return G;
+});
+
+/* src/engine/score-player.js */
+/** Audio-clock scheduling, phrase-aware layering and bounded voice ownership.
+ * The renderer is also used by OfflineAudioContext acceptance tests. */
+Homeward.define('engine/score-player', ['content/score'], (Score) => {
+ const cap=(n,a,b)=>Math.max(a,Math.min(b,n));
+ function createRoom(ctx,destination){
+  const input=ctx.createConvolver(),wet=ctx.createGain(),length=Math.floor(ctx.sampleRate*1.4),buffer=ctx.createBuffer(2,length,ctx.sampleRate);
+  let seed=9173;
+  for(let channel=0;channel<2;channel++){
+   const d=buffer.getChannelData(channel);
+   for(let i=0;i<length;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const t=i/ctx.sampleRate;d[i]=t<.025?0:(seed/2147483648-1)*Math.exp(-t*5.2);}
+  }
+  input.buffer=buffer;wet.gain.value=.16;input.connect(wet);wet.connect(destination);
+  return {input,dispose(){input.disconnect();wet.disconnect();}};
+ }
+
+ function renderNote(ctx,destination,event,start,secondsPerBeat,ended=()=>{}){
+  const f=Score.hz(event.pitch),duration=event.duration*secondsPerBeat;
+  const isPad=event.voice==='pad'||event.voice==='cello',bell=event.voice==='glass',wind=event.voice==='woodwind';
+  const gain=ctx.createGain(),pan=ctx.createStereoPanner(),filter=ctx.createBiquadFilter();
+  filter.type='lowpass';filter.frequency.value=isPad?1400:wind?2600:4600;
+  pan.pan.value=cap(event.pan,-.8,.8);gain.connect(filter);filter.connect(pan);pan.connect(destination);
+  const amp=event.velocity,attack=isPad?.22:wind?.065:.009,tail=isPad?.7:bell?.9:.28,end=start+duration+tail;
+  gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(amp,start+Math.min(attack,duration*.35));
+  if(isPad||wind){gain.gain.setTargetAtTime(amp*.65,start+attack,.18);gain.gain.setTargetAtTime(.0001,start+duration,tail/4);}
+  else gain.gain.exponentialRampToValueAtTime(.0001,end);
+  const partials=isPad?[[1,.7],[2,.13],[3,.045]]:wind?[[1,.78],[2,.09]]:bell?[[1,.62],[2.01,.16],[3.99,.045]]:[[1,.67],[2,.18],[3,.055]];
+  const oscillators=partials.map(([ratio,level])=>{
+   const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f*ratio;g.gain.value=level;
+   o.connect(g);g.connect(gain);o.start(start);o.stop(end+.08);return {o,g};
+  });
+  let remaining=oscillators.length,closed=false;
+  const dispose=()=>{if(closed)return;closed=true;oscillators.forEach(({o,g})=>{o.disconnect();g.disconnect();});gain.disconnect();filter.disconnect();pan.disconnect();ended();};
+  oscillators.forEach(({o})=>o.onended=()=>{if(--remaining===0)dispose();});
+  return {end,stop(at=ctx.currentTime){if(closed)return;const t=Math.max(at,ctx.currentTime);gain.gain.cancelScheduledValues(t);gain.gain.setTargetAtTime(.0001,t,.018);oscillators.forEach(({o})=>{try{o.stop(t+.12);}catch{}});}};
+ }
+ class ScorePlayer{
+  constructor(ctx,destination){this.ctx=ctx;this.destination=destination;this.cue=null;this.bus=null;this.voices=new Set();this.bar=0;this.nextTime=0;this.timer=null;this.intensity=0;this.pending=[];this.scheduled=0;}
+  select(cue){
+   if(this.cue?.key===cue.key){this.resume();return;}
+   const old=this.bus,now=this.ctx.currentTime;
+   if(old){old.gain.cancelScheduledValues(now);old.gain.setTargetAtTime(0,now,.3);for(const voice of this.voices)voice.stop(now+.85);}
+   this.cue=cue;this.bar=0;this.pending=[];this.nextTime=now+.08;
+   this.bus=this.ctx.createGain();this.bus.gain.setValueAtTime(0,now);this.bus.gain.linearRampToValueAtTime(1,now+1.2);this.bus.connect(this.destination);
+   if(old){const timer=setTimeout(()=>{old.disconnect();this.retired?.delete(timer);},1800);(this.retired??=new Set()).add(timer);}
+   this.resume();
+  }
+  resume(){if(!this.cue||this.timer)return;if(this.nextTime<this.ctx.currentTime){this.nextTime=this.ctx.currentTime+.08;this.pending=[];}this.timer=setInterval(()=>this.schedule(),60);this.schedule();}
+  pause(){clearInterval(this.timer);this.timer=null;}
+  schedule(){
+   if(this.ctx.state!=='running'||!this.cue||!this.bus)return;
+   const now=this.ctx.currentTime,horizon=now+.18,spb=60/this.cue.bpm;
+   if(this.nextTime<now-.3&&!this.pending.length)this.nextTime=now+.05;
+   if(!this.pending.length&&this.nextTime<=horizon){
+    this.pending=Score.eventsForBar(this.cue,this.bar++,this.intensity).map(event=>({event,time:this.nextTime+event.beat*spb}));this.nextTime+=4*spb;
+   }
+   while(this.pending.length&&this.pending[0].time<=horizon){
+    const {event,time}=this.pending.shift();if(time<now-.08)continue;
+    if(this.voices.size>=72)continue;
+    let handle;handle=renderNote(this.ctx,this.bus,event,Math.max(time,now+.002),spb,()=>this.voices.delete(handle));this.voices.add(handle);this.scheduled++;
+   }
+  }
+  dispose(){this.pause();for(const voice of this.voices)voice.stop();this.pending=[];if(this.bus)this.bus.gain.setTargetAtTime(0,this.ctx.currentTime,.02);for(const timer of this.retired||[])clearTimeout(timer);this.retired?.clear();}
+  debug(){return {cue:this.cue?.key,name:this.cue?.name,bar:this.bar,voices:this.voices.size,scheduled:this.scheduled,running:!!this.timer};}
+ }
+ return {ScorePlayer,renderNote,createRoom};
 });
 
 /* src/engine/setpiece-motion.js */
@@ -1365,7 +1448,7 @@ const boolFlags=new Set(('letter promise lampTaken awning crankTaken crankMounte
 const numericFlags={gearIndex:[0,3],gateTurns:[0,3],bypassTurns:[0,2],ladderX:[640,1260],drive:[0,100]};
 const milestones=['','promise','gateOpen','bridge','planTaken','pump','lift','calm','towerGate','heart','roofDone','reunited'];
 const sketches={mountain:['妈妈画的山','画里那条小路，最后总会回到有灯的窗前。'],city:['雨里倒着一座城','灯光在水洼里摇晃，像有人把另一座城藏到了脚下。'],elf:['精灵的雨天条款','第八十二条：未经本人同意，雨滴不得落在已批准的文件上。'],oldFriends:['门上的两个手印','一个小小的人类手印，挨着一个大大的巨魔手印。时间没有把它们分开。'],dawn:['天终于亮了','害怕没有一夜之间消失。但天亮时，我们学会了牵着它继续走。'],return:['同一扇窗','昨夜世界那么大。清晨，所有的路都回到了这扇窗。']};
-function fresh(){return {version:3,scene:0,inventory:[],f:{},notes:[],sketches:[],visited:[],seen:[],valves:[0,1,0],weights:[],melody:[],beaconAngle:-65,danger:0,hints:Array(12).fill(0),failures:0,heroX:660,playSeconds:0,settings:{sound:false,relaxed:false,reduced:(globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false)},savedAt:null};}
+function fresh(){return {version:3,scene:0,inventory:[],f:{},notes:[],sketches:[],visited:[],seen:[],valves:[0,1,0],weights:[],melody:[],beaconAngle:-65,danger:0,hints:Array(12).fill(0),failures:0,heroX:660,playSeconds:0,settings:{sound:false,musicVolume:.72,ambienceVolume:.65,effectsVolume:.8,voiceVolume:.32,relaxed:false,reduced:(globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false)},savedAt:null};}
 function validate(v){
  if(!v||typeof v!=='object'||Array.isArray(v)||![2,3].includes(v.version))throw Error('这不是受支持的归途 V2 / V3 存档。原来的进度不会被覆盖。');
  const num=(x,a,b)=>typeof x==='number'&&Number.isFinite(x)&&x>=a&&x<=b;
@@ -1379,7 +1462,10 @@ function validate(v){
  if(!arr(v.valves,x=>Number.isInteger(x)&&num(x,0,3),3)||v.valves.length!==3)throw Error('管路状态损坏。');o.valves=v.valves.slice();
  if(!arr(v.hints,x=>Number.isInteger(x)&&num(x,0,3),12)||v.hints.length!==12)throw Error('提示状态损坏。');o.hints=v.hints.slice();
  for(const [k,a,b] of [['heroX',60,1540],['beaconAngle',-180,180],['danger',0,1],['playSeconds',0,1e8],['failures',0,1e6]]){if(!num(v[k],a,b))throw Error('存档中的 '+k+' 数值无效。');o[k]=v[k];}
- if(!v.settings||['sound','relaxed','reduced'].some(k=>typeof v.settings[k]!=='boolean'))throw Error('设置状态无效。');o.settings={sound:v.settings.sound,relaxed:v.settings.relaxed,reduced:v.settings.reduced};
+ if(!v.settings||['sound','relaxed','reduced'].some(k=>typeof v.settings[k]!=='boolean'))throw Error('设置状态无效。');o.settings={...o.settings,sound:v.settings.sound,relaxed:v.settings.relaxed,reduced:v.settings.reduced};
+ for(const key of ['musicVolume','ambienceVolume','effectsVolume','voiceVolume']){
+  if(v.settings[key]!==undefined){if(!num(v.settings[key],0,1))throw Error('音量设置无效：'+key);o.settings[key]=v.settings[key];}
+ }
  for(let i=1;i<=o.scene;i++){if(!o.f[milestones[i]])throw Error('存档缺少前序章节进度，无法安全继续。');}
  if(o.f.ended&&(!o.f.reunited||!o.f.hug||![0,1,2].every(i=>o.f['tea'+i])))throw Error('结局记录不完整。');
  if(v.version===2){

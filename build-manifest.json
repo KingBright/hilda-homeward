@@ -1,7 +1,9 @@
 {
-  "version": "3.2.0",
+  "version": "3.3.0",
   "modules": [
     "src/engine/modules.js",
+    "src/art/cast-design.js",
+    "src/art/cast-motion.js",
     "src/art/chapter-life.js",
     "src/art/characters.js",
     "src/art/finishing.js",
@@ -16,6 +18,7 @@
     "src/content/details.js",
     "src/content/items.js",
     "src/content/mechanisms.js",
+    "src/content/score.js",
     "src/content/setpieces.js",
     "src/content/walkways.js",
     "src/engine/action-track.js",
@@ -25,6 +28,7 @@
     "src/engine/hydraulics.js",
     "src/engine/kinematics.js",
     "src/engine/runtime.js",
+    "src/engine/score-player.js",
     "src/engine/setpiece-motion.js",
     "src/engine/state.js",
     "src/engine/storage.js",
@@ -56,6 +60,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 254142,
-  "sha256": "c32115583b688d5bea53f1cb6e583344d8f89c73ded42e2b4c5699d2b374ae6e"
+  "bytes": 269537,
+  "sha256": "7be982b885240d1d403dbff8cad9680274a824c3c0578b71463e25eb3850c285"
 }

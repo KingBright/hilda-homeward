@@ -25,7 +25,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       })+`</g>`;
       if(f.davidSafe)b+=path('M425 652Q596 675 767 644','none','#e0c89a',5)+path('M755 742V632','none','#7d998c',7);
       b+=path('M1000 752l24-47 27 49Z','#b0a980','#345458',3)+path('M1013 743l11-22 13 24Z','#46655f');
-      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#7d976c',12)}${circle(1025,716,5,'#e8cfa8','#315050',1.5)}</g>`;
+      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#b18545',12)}${circle(1025,716,5,'#efc8a1','#315050',1.5)}</g>`;
       b+=path('M1220 633V591L1250 569','none','#2c4548',12)+path('M1220 633V591L1250 569','none','#a9a87f',6);
       b+=circle(1220,657,41,'#2c4950','#849d8b',3)+`<g id="roofControlWheel" transform="rotate(${s.beaconAngle??-65} 1220 657)">${circle(1220,657,29,'#4d726b','#c4b384',6)}${path('M1191 657h58m-29-29v58','none','#b8aa7c',5)}${circle(1249,657,7,'#e6c790','#3c5850',2)}</g>`;
       b+=group(1189,617,1,path('M0-9 3-3 9-2 4 3 6 9 0 5-6 9-4 3-9-2-3-3Z','#e6d7a2','#395659',1));
@@ -58,6 +58,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       const lift=s.f.fridaSafe?1:c?.effect==='roofLever'&&!reduced?stage(.12,.47):0;
       set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
       set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
+      const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.roofDone&&c?.effect!=='roofBoard'?'hidden':'';
       const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'&&!reduced?c.from+(c.to-c.from)*e:s.beaconAngle;
       set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
       if(c?.effect==='roofAnchor'&&!reduced)fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);

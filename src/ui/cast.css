@@ -1,0 +1,19 @@
+/* Quiet secondary animation. Contact choreography remains in control of limbs. */
+.cast-breathe{animation:castBreathe 4.8s ease-in-out infinite;transform-origin:center bottom;transform-box:fill-box}
+.cast-blink{animation:castBlink 6.4s linear infinite;transform-box:fill-box;transform-origin:center}
+[data-cast="大卫"] .cast-blink{animation-delay:-1.7s}
+[data-cast="芙丽达"] .cast-blink{animation-delay:-3.1s}
+.cast-tail{animation:castTail 5.2s ease-in-out infinite;transform-origin:left bottom;transform-box:fill-box}
+.cast-scarf{animation:castScarf 4.2s ease-in-out infinite;transform-origin:left center;transform-box:fill-box}
+@keyframes castBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-.6px)}}
+@keyframes castBlink{0%,94%,98%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+@keyframes castTail{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes castScarf{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+.paused .cast-breathe,.paused .cast-blink,.paused .cast-tail,.paused .cast-scarf{animation-play-state:paused}
+.reduced .cast-breathe,.reduced .cast-blink,.reduced .cast-tail,.reduced .cast-scarf{animation:none}
+#portrait{width:66px;height:78px;border:1px solid #dabf8140;border-radius:34px 34px 18px 18px;background:radial-gradient(ellipse at 35% 30%,#69807c66,#243f4b);box-shadow:inset 0 0 20px #102a3340}
+.audioMix{border:1px solid #d3bd8530;padding:8px 16px;margin:12px 0;border-radius:8px;background:#0c263229}
+.audioMix label{display:grid;grid-template-columns:78px 1fr 38px;gap:12px;align-items:center;margin:14px 0;color:#d9d7bf;font-size:11px}
+.audioMix input{width:100%;accent-color:#dfbf87;cursor:pointer}
+.audioMix output{text-align:right;font:11px monospace;color:#edcf99}
+@media(max-width:700px),(max-height:560px){#portrait{width:44px;height:56px}.audioMix label{grid-template-columns:65px 1fr 32px;gap:8px}}

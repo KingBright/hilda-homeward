@@ -1,3 +1,16 @@
+## V3.3 光与回声 · character and score refinement
+
+The stage cast and dialogue portraits now share the same refined drawings. Music uses five authored, synthesized cue families and four independent mixer controls. Same-scene unmute and background transport handling are fixed. This update preserves the full adventure and existing saves.
+
+See [release notes](docs/RELEASE-3.3.md) for implemented changes and explicit quality boundaries. The earlier painterly concept sheets are not presented as integrated animation assets.
+
+```sh
+npm run check
+python tests/playthrough.py
+python tests/art-audio.py
+python tests/native-storage.py  # real HTTP/file-origin storage, unrestricted runner
+```
+
 # 希尔达 · 黄昏的回声：归途
 
 ### V3.2 扶稳归途 · Hilda: Homeward
