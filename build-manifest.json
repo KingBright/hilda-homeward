@@ -1,5 +1,5 @@
 {
-  "version": "3.4.0",
+  "version": "3.5.0",
   "modules": [
     "src/engine/modules.js",
     "src/art/cast-acting.js",
@@ -21,9 +21,11 @@
     "src/content/mechanisms.js",
     "src/content/score.js",
     "src/content/setpieces.js",
+    "src/content/staging.js",
     "src/content/walkways.js",
     "src/engine/action-track.js",
     "src/engine/audio.js",
+    "src/engine/body-motion.js",
     "src/engine/camera.js",
     "src/engine/dom.js",
     "src/engine/hydraulics.js",
@@ -61,6 +63,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 274779,
-  "sha256": "fb81703c613aa7cd90a1b2bad6cde722ba750f5847ab8d274bde6adc57e824af"
+  "bytes": 285634,
+  "sha256": "7acbc23c255dd0db0fa4fc6bf79b19535a67f40a03e88feaa8f9fd6d2254f772"
 }

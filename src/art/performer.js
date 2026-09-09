@@ -1,83 +1,76 @@
-/** The playable actor: anchored feet, articulated arms and contact-driven tools. */
-Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solve},Cast) => {
+/** Shared drawings driven by rigid, seekable whole-body motion. */
+Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/props','content/staging'], (Motion,Cast,Props,Staging) => {
   const path=(id,d,fill,stroke='#24434a',width=2)=>`<path id="${id}" d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
-  const limb=(id,color,width)=>path(id,'M0 0L0 1','none','#203c45',width+3)+path(id+'Fill','M0 0L0 1','none',color,width);
+  const limb=(id,color,width)=>path(id,'M0 0L0 1','none','#263c48',width+2.2)+path(id+'Fill','M0 0L0 1','none',color,width);
+  const hand=name=>`<g id="rigHand${name}">${path('rigPalm'+name,'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z','#f3cda8','#35464e',1.1)}${path('rigFingers'+name,'M0 2l1 4m-4-5 1 4','none','#c28f71',.7)}</g>`;
   function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
     ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
     ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
+    ${limb('rigArmBack','#a95043',9)}${hand('Back')}
     ${Cast.upper('希尔达',true)}
-    ${limb('rigArmBack','#a95043',9)}<ellipse id="rigHandBack" rx="4.4" ry="5.5" fill="#efc49d" stroke="#35464e" stroke-width="1.3"/>
-    ${limb('rigArmFront','#c66d57',10)}<ellipse id="rigHandFront" rx="4.8" ry="5.8" fill="#f3cda8" stroke="#35464e" stroke-width="1.3"/>
-    <g id="rigTool" pointer-events="none"></g>
+    ${limb('rigArmFront','#c66d57',10)}
+    <g id="rigTool" pointer-events="none"></g>${hand('Front')}
   </g>`;}
   let cachedRoot=null,nodes={};
-  const mix=(a,b,t)=>a+(b-a)*t;
-  const p=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
-  const fixed=n=>Number(n).toFixed(2);
+  const fixed=n=>Number(n).toFixed(3);
+  const artwork=new Map();
+  function item(id){
+    if(!artwork.has(id))artwork.set(id,Props.itemArt(id).replace(/<svg[^>]*>|<\/svg>/g,''));
+    return artwork.get(id);
+  }
   function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={}}){
     if(!root)return;
-    if(root!==cachedRoot){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
-    const attr=(id,k,v)=>nodes[id]?.setAttribute(k,v);
-    const draw=(id,origin,target,a,b,bend,color)=>{
-      const joint=solve(origin,target,a,b,bend),d=`M${origin.map(fixed)}L${joint.elbow.map(fixed)}L${joint.end.map(fixed)}`;
-      attr(id,'d',d);attr(id+'Fill','d',d);return joint.end;
-    };
-    const score=action?.score,frame=action?.sample(),reach=frame?.reach||0,effort=frame?.effort||0;
-    const phase=distance/28,walk=moving&&!reduced?Math.sin(phase):0;
-    let crouch=['crouch','clear','tie'].includes(score?.kind)?reach*15:['pull','haul','lever'].includes(score?.kind)?reach*7:0;
-    if(moving&&!reduced)crouch+=3;
-    const lean=score&&['pull','haul','throw','clear','lever'].includes(score.kind)?reach*(['pull','haul'].includes(score.kind)?-7:7):0;
-    const bob=moving&&!reduced?-Math.abs(Math.cos(phase))*1.4:reduced?0:Math.sin(time*2.1)*.4;
-    const off=[lean,crouch+bob];attr('rigUpper','transform',`translate(${fixed(off[0])} ${fixed(off[1])})`);
-    attr('rigHead','transform',`rotate(${fixed(reach*(score?.kind==='tool'?-8:score?.kind==='clear'?7:0))} 0 -87)`);
+    if(root!==cachedRoot||!nodes.rigHead?.isConnected){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
+    const attr=(id,k,v)=>{const n=nodes[id];if(n&&n.getAttribute(k)!==String(v))n.setAttribute(k,String(v));};
+    const scale=Staging.scale(scene),score=action?.score,frame=action?.sample();
+    const pose=Motion.sample({x,y,face,scale,time,distance,moving,reduced,score,frame});
+    root.setAttribute('transform',`scale(${scale})`);root.dataset.scale=scale;
+    attr('rigUpper','transform',`translate(${pose.offset.map(fixed).join(' ')})`);
+    attr('rigHead','transform',`rotate(${fixed(pose.headTilt)} 0 -87)`);
     attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
-    const mood=Cast.expression(scene,flags,'希尔达'),resolve=!!score||mood==='resolve';
-    attr('rigBrows','d',resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
-    // Dialogue mouths and gaze are owned by art/cast-acting; contact pose stays here.
-    const wind=reduced?0:Math.sin(time*3)*2+Math.abs(walk)*4;
+    const mood=Cast.expression(scene,flags,'希尔达');
+    attr('rigBrows','d',score||mood==='resolve'?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
+    const wind=reduced?0:Math.sin(time*3)*1.4+(moving?3:0);
     attr('rigScarf','d',`M16-82Q31 ${-74-wind} 44 ${-70-wind}L37 ${-61-wind} 18-70Z`);
-    for(const [name,sign] of [['Back',-1],['Front',1]]){
-      const step=(distance/(1.36*60)+(sign<0?.5:0))%1;
-      const stride=moving&&!reduced?(step<.5?15-step*60:-15+(step-.5)*60):0;
-      const lift=moving&&!reduced&&step>=.5?Math.sin((step-.5)*Math.PI*2)*9:0;
-      const climbing=score?.kind==='climb'&&!reduced;
-      const rung=climbing?Math.sin(frame.progress*24+sign*Math.PI/2):0;
-      const foot=[sign*11+stride+(climbing?3:0),-3-lift-(climbing?Math.max(0,rung)*19:0)];
-      draw('rigLeg'+name,[sign*11+off[0],-48+crouch],foot,22.5,22.5,-1);
-      const boot=nodes['rigBoot'+name];if(boot){const drawing=Cast.boot(0,0,name==='Back');if(!boot.firstChild)boot.innerHTML=drawing;boot.setAttribute('transform',`translate(${fixed(foot[0])} ${fixed(foot[1])})`);}
+    const draw=(id,j)=>{const d=`M${j.origin.map(fixed)}L${j.elbow.map(fixed)}L${j.end.map(fixed)}`;attr(id,'d',d);attr(id+'Fill','d',d);};
+    for(const name of ['Back','Front']){
+      const leg=pose.legs[name];draw('rigLeg'+name,leg);
+      const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,0,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')})`);}
+      const arm=pose['arm'+name];draw('rigArm'+name,arm);
+      attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)})`);
+      attr('rigPalm'+name,'d',pose.grip?'M-4-5Q1-7 5-3L5 3Q2 7-3 5L-6 1-7-3Q-6-5-3-1L0 0-1-4Z':'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z');
+      attr('rigFingers'+name,'d',pose.grip?'M-2 1l5 1m-5 1 4 1':'M0 2l1 4m-4-5 1 4');
     }
-    let target=[27+walk*12,-38],back=[-27-walk*11,-40];
-    if(score?.target){
-      let world=[...score.target];
-      if(score.effect==='ladderSlide')world[0]+=(score.to-score.from)*effort;
-      if(score.kind==='turn'){const angle=(1-effort)*Math.PI;world[0]+=Math.cos(angle)*(score.radius||20);world[1]+=Math.sin(angle)*(score.radius||20);}
-      if(score.kind==='pull')world[1]+=effort*(score.travel||24);
-      const local=[(world[0]-x)/1.36*face,(world[1]-y)/1.36];
-      if(score.kind==='climb'&&!reduced){
-        const reaching=frame.progress>.43&&frame.progress<.69;
-        target=reaching?p(target,local,reach):[22,-98-Math.sin(frame.progress*24)*16];
-        back=[-16,-97+Math.sin(frame.progress*24)*16];
+    const h=pose.armFront.end;let tool='';
+    if((score?.pickup||score?.place)&&pose.propVisible){
+      const prop=score.prop||score.item;
+      if(prop){
+        const size={gearS:.89,gearM:1.10,gearL:1.31,scarf:.62,fork:.65,letter:.58}[prop]??.64;
+        tool=`<g data-held-item="${prop}" opacity="${fixed(pose.propOpacity)}" transform="translate(${fixed(h[0])} ${fixed(h[1]+14)}) scale(${size})">${prop==='letter'?item('plan'):item(prop)}</g>`;
       }
-      else if(score.kind==='lever'){target=p(target,[34,-70-effort*17],reach);back=p(back,[15,-67-effort*17],reach);}
-      else if(score.kind==='tool'){target=p(target,[28,-97],reach);back=p(back,[3,-75],reach);}
-      else if(score.kind==='throw'){target=p(target,[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*27],reach);}
-      else {target=p(target,local,reach);back=p(back,[local[0]-14,local[1]+9],reach*.85);}
+    }else if(score?.kind==='pour'&&frame.reach>.2){
+      const tilt=Math.sin(frame.effort*Math.PI)*28,tx=(score.target[0]-x)/scale*face,ty=(score.target[1]-y)/scale;
+      tool=`<g data-held-item="teapot" transform="translate(${h[0]} ${h[1]}) rotate(${tilt})"><path d="M-15-8Q-19-21 0-22Q20-20 18-6L14 11H-13Z" fill="#739b97" stroke="#355952" stroke-width="1.5"/><path d="M15-10l15-10-8 20M-15-12q-21-9-14 9l13 7" fill="none" stroke="#88aaa1" stroke-width="4"/><path d="M-10-22h20" stroke="#31534f" stroke-width="3"/></g>`;
+      if(frame.effort>.15&&frame.effort<.83)tool+=`<path d="M${h[0]+24} ${h[1]-3}Q${tx} ${h[1]+12} ${tx} ${ty}" fill="none" stroke="#dbb36d" stroke-width="1.3" opacity=".8"/>`;
+    }else if(score?.kind==='climb'&&score.effect==='archiveBook'&&frame.progress>.57&&frame.progress<.98){
+      tool=`<g transform="translate(${h[0]-13} ${h[1]-9})"><rect width="27" height="36" rx="2" fill="#d0bb81" stroke="#365751" stroke-width="2"/><path d="M7 9h13M7 15h13M7 21h9" stroke="#607e6a" stroke-width="1.5"/></g>`;
+    }else if(['tool','lever'].includes(score?.kind)&&frame.reach>.1){
+      let tip=[...score.target];
+      if(score.kind==='lever'){
+        const t=Math.max(0,Math.min(1,(frame.progress-.12)/.35)),a=t*t*(3-2*t)*24*Math.PI/180,dx=tip[0]-1225,dy=tip[1]-720;
+        tip=[1225+dx*Math.cos(a)-dy*Math.sin(a),720+dx*Math.sin(a)+dy*Math.cos(a)];
+      }
+      const tx=(tip[0]-x)/scale*face,ty=(tip[1]-y)/scale;
+      tool=`<path d="M${h[0]-6} ${h[1]+18}L${tx} ${ty+4}q5-12 10-5" fill="none" stroke="#253d43" stroke-width="5" stroke-linecap="round"/><path d="M${h}L${tx} ${ty+4}" stroke="#ccb384" stroke-width="3"/>`;
+    }else if(score?.prop==='rope'&&frame.reach>.1){
+      tool=`<ellipse cx="${h[0]}" cy="${h[1]+12}" rx="12" ry="15" fill="none" stroke="#c4ad7d" stroke-width="3"/>`;
+    }else if(!action&&['lamp','shade'].includes(selected)){
+      tool=`<g transform="translate(${h[0]} ${h[1]+13})"><circle r="23" fill="#e5ba5830"/><path d="M-6-5V-12Q0-22 6-12V-5" fill="none" stroke="#b49767" stroke-width="2"/><rect x="-9" y="-5" width="18" height="23" rx="4" fill="#dab779" stroke="#635444" stroke-width="2"/><path d="M0 14Q-8 5 0 0Q6 8 0 14" fill="#fff0b0"/></g>`;
     }
-    const handBack=draw('rigArmBack',[-19+off[0],-79+off[1]],back,22+reach*5,23+reach*5,action?-1:1);
-    const hand=draw('rigArmFront',[17+off[0],-79+off[1]],target,22+reach*6,23+reach*5,action?1:-1);
-    for(const [name,h] of [['Back',handBack],['Front',hand]]){attr('rigHand'+name,'cx',fixed(h[0]));attr('rigHand'+name,'cy',fixed(h[1]));}
-    let tool='';
-    attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
-    if(score?.kind==='climb'&&frame.progress>.57&&frame.progress<.98){tool=`<g transform="translate(${hand[0]-13} ${hand[1]-9})"><rect width="27" height="36" rx="2" fill="#d0bb81" stroke="#365751" stroke-width="2"/><path d="M7 9h13M7 15h13M7 21h9" stroke="#607e6a" stroke-width="1.5"/></g>`;}
-    else if(['tool','lever'].includes(score?.kind)&&reach>.1){let tip=[...score.target];
-      if(score.kind==='lever'){const t=Math.max(0,Math.min(1,(frame.progress-.12)/.35)),a=t*t*(3-2*t)*24*Math.PI/180,dx=tip[0]-1225,dy=tip[1]-720;tip=[1225+dx*Math.cos(a)-dy*Math.sin(a),720+dx*Math.sin(a)+dy*Math.cos(a)];}
-      const tx=(tip[0]-x)/1.36*face,ty=(tip[1]-y)/1.36;
-      tool=`<path d="M${hand[0]-6} ${hand[1]+18}L${tx} ${ty+4}q5-12 10-5" fill="none" stroke="#253d43" stroke-width="5" stroke-linecap="round"/><path d="M${hand}L${tx} ${ty+4}" stroke="#ccb384" stroke-width="3"/>`;
-    }else if(score?.prop==='rope'&&reach>.1){tool=`<ellipse cx="${hand[0]}" cy="${hand[1]+12}" rx="12" ry="15" fill="none" stroke="#c4ad7d" stroke-width="3"/>`;}
-    else if(!action&&['lamp','shade'].includes(selected)){tool=`<g transform="translate(${hand[0]} ${hand[1]+13})"><circle r="23" fill="#e5ba5830"/><path d="M-6-5V-12Q0-22 6-12V-5" fill="none" stroke="#b49767" stroke-width="2"/><rect x="-9" y="-5" width="18" height="23" rx="4" fill="#dab779" stroke="#635444" stroke-width="2"/><path d="M0 14Q-8 5 0 0Q6 8 0 14" fill="#fff0b0"/></g>`;}
     if(nodes.rigTool&&nodes.rigTool.innerHTML!==tool)nodes.rigTool.innerHTML=tool;
-    root.dataset.pose=score?.kind||(moving?'walk':'idle');
-    root.dataset.phase=frame?.phase||'idle';
+    attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
+    root.dataset.pose=score?.kind||(moving?'walk':'idle');root.dataset.phase=frame?.phase||'idle';
+    root.dataset.grip=pose.grip?'closed':'open';root.dataset.pickup=score?.pickup?frame.progress<.45?'approach':frame.progress<.87?'carrying':'stowing':'none';
   }
   return {markup,paint};
 });

@@ -42,6 +42,9 @@ jobs:
         run: |
           mkdir -p previews
           python tests/playthrough.py
+      - name: Physical pickup and scene scale regressions
+        if: steps.source.outputs.ready == 'true'
+        run: python tests/body-motion.py
       - name: Dialogue acting and mirrored attention regression checks
         if: steps.source.outputs.ready == 'true'
         run: |

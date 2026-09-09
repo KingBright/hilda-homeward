@@ -6,6 +6,7 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
     if(!action)return {...base};
     const c=action.score,p=action.sample().progress,e=action.sample().effort;
     if(reduced)return {...base};
+    if(c.effect==='clockPad')return {...base,y:mix(base.y,c.accessY,segment(p,.10,.43)*(1-segment(p,.70,.97)))};
     if(c.effect==='ladderSlide')return {...base,x:c.origin.x+(c.to-c.from)*e};
     if(c.effect==='archiveBook') {
       const climb=segment(p,.10,.43)*(1-segment(p,.69,.95));

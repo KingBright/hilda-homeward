@@ -9,7 +9,10 @@ Homeward.define('content/walkways', [], () => {
     }
     return points.at(-1)[1];
   }
+  const tower=Object.freeze([[60,824],[800,824],[900,718],[982,654],[1040,607],[1130,542],[1230,542],[1370,828],[1540,828]].map(Object.freeze));
+  const towerGround=x=>height(tower,x);
+  const towerPath=(offset=0)=>tower.map(([x,y],i)=>(i?'L':'M')+x+' '+(y+offset)).join('');
   const waterworksGround=x=>height(waterworks,x);
   const waterworksPath=(offset=0)=>waterworks.map(([x,y],i)=>(i?'L':'M')+x+' '+(y+offset)).join('');
-  return {waterworks,height,waterworksGround,waterworksPath};
+  return {waterworks,height,waterworksGround,waterworksPath,tower,towerGround,towerPath};
 });
