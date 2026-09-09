@@ -1,11 +1,13 @@
 {
   "name": "hilda-homeward",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "private": true,
   "description": "Offline point-and-click adventure. No runtime dependencies.",
   "scripts": {
     "build": "node tools/build.mjs",
-    "test": "node --test tests/unit.test.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "dev": "python3 -m http.server 8080 --bind 127.0.0.1",
+    "test:acting": "python3 tests/acting.py",
     "test:browser": "python3 tests/playthrough.py",
     "check": "npm run build && npm test"
   },

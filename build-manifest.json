@@ -1,7 +1,8 @@
 {
-  "version": "3.3.0",
+  "version": "3.4.0",
   "modules": [
     "src/engine/modules.js",
+    "src/art/cast-acting.js",
     "src/art/cast-design.js",
     "src/art/cast-motion.js",
     "src/art/chapter-life.js",
@@ -60,6 +61,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 269537,
-  "sha256": "7be982b885240d1d403dbff8cad9680274a824c3c0578b71463e25eb3850c285"
+  "bytes": 274779,
+  "sha256": "fb81703c613aa7cd90a1b2bad6cde722ba750f5847ab8d274bde6adc57e824af"
 }

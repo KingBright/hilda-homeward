@@ -1,10 +1,10 @@
-"""Native Chromium origin/storage checks, intended for an unrestricted CI runner.
+"""Native Chromium origin/storage checks for local or CI runners.
 Unlike playthrough.py this deliberately does not install a Storage adapter.
 """
 from pathlib import Path
 from functools import partial
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
-import json, os, threading, hashlib
+import json, os, threading, hashlib, platform
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
 checks=[]
@@ -46,7 +46,7 @@ try:
         run_origin(browser,f'http://127.0.0.1:{server.server_port}/index.html?test','HTTP')
         run_origin(browser,(ROOT/'index.html').as_uri()+'?test','file://')
         browser.close()
-    result={'passed':True,'checks':checks,'artifact_sha256':hashlib.sha256((ROOT/'index.html').read_bytes()).hexdigest(),'environment':'Native Chromium HTTP and file origins, no storage shim; CI runner, not physical phones.'}
+    result={'passed':True,'checks':checks,'artifact_sha256':hashlib.sha256((ROOT/'index.html').read_bytes()).hexdigest(),'environment':'Native Chromium HTTP and file origins, no storage shim; desktop browser, not physical phones.','host':platform.platform()}
     (ROOT/'native-storage-report.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
     print(json.dumps(result,ensure_ascii=False,indent=2))
 finally:

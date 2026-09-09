@@ -14,7 +14,7 @@ Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solv
   const mix=(a,b,t)=>a+(b-a)*t;
   const p=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const fixed=n=>Number(n).toFixed(2);
-  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={},speaking=false}){
+  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={}}){
     if(!root)return;
     if(root!==cachedRoot){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
     const attr=(id,k,v)=>nodes[id]?.setAttribute(k,v);
@@ -33,8 +33,7 @@ Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solv
     attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
     const mood=Cast.expression(scene,flags,'希尔达'),resolve=!!score||mood==='resolve';
     attr('rigBrows','d',resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
-    attr('rigMouth','d',speaking&&!reduced&&Math.sin(time*15)>.1?'M0-95q6-2 12 0q-5 8-12 0Z':resolve?'M1-94q5 1 10-1':mood==='relieved'?'M-1-96q7 9 14-1':'M0-95q6 5 12-1');
-    attr('rigMouth','fill',speaking&&!reduced&&Math.sin(time*15)>.1?'#8e534a':'none');
+    // Dialogue mouths and gaze are owned by art/cast-acting; contact pose stays here.
     const wind=reduced?0:Math.sin(time*3)*2+Math.abs(walk)*4;
     attr('rigScarf','d',`M16-82Q31 ${-74-wind} 44 ${-70-wind}L37 ${-61-wind} 18-70Z`);
     for(const [name,sign] of [['Back',-1],['Front',1]]){

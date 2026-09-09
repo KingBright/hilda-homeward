@@ -1,3 +1,29 @@
+# V3.4 彼此倾听 · dialogue and attention
+
+希尔达、大卫、芙丽达和妈妈现在共用舞台 / 头像口型表演；听者会看向说话者，说话者有独立节奏的轻微点头。标点、整句显示、暂停和减少动态模式有明确的停顿规则。机关接触动作仍由原来的骨架控制，存档协议和谜题前置条件没有改变。口型由文字节奏驱动，不是录音音素同步，也不代表已经完成发行级美术。
+
+本地开发与验收说明见 [V3.4 说明](docs/RELEASE-3.4.md)。源码已支持直接在 Mac 上构建、启动和运行浏览器测试：
+
+```sh
+npm run check
+npm run dev  # 仅监听本机 127.0.0.1:8080；打开 /dev.html 调试源码
+```
+
+直接打开 `tools/cast-studio.html` 可进入角色表演工作台，切换说话者、剧情情绪、镜像、暂停和减少动态；也可在开发服务器访问 `/tools/cast-studio.html`。它直接加载 `src/art` 的同一份模块，修改人物画面后刷新即可比较舞台和头像。
+
+测试用 Python 虚拟环境与报告不进入 Git。已创建 `.venv` 的机器可直接运行：
+
+```sh
+export CHROMIUM_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+.venv/bin/python tests/playthrough.py
+.venv/bin/python tests/acting.py
+.venv/bin/python tests/cast-studio.py
+.venv/bin/python tests/art-audio.py
+.venv/bin/python tests/native-storage.py
+```
+
+完整通关生成后两项所需的 `tests/fixtures.json`。实际报告、截图和声音采样在本机生成，不将预期结果写成已经通过的测试。运行开发服务器不会自动部署 GitHub Pages 或 NAS。
+
 ## V3.3 光与回声 · character and score refinement
 
 The stage cast and dialogue portraits now share the same refined drawings. Music uses five authored, synthesized cue families and four independent mixer controls. Same-scene unmute and background transport handling are fixed. This update preserves the full adventure and existing saves.

@@ -26,7 +26,7 @@ Homeward.define('art/cast-design', [], () => {
   const worried=mood==='worried',resolve=mood==='resolve',happy=mood==='relieved';
   const brows=worried?'M-13-122q5-5 10-2m12-1q6-2 11 2':resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1';
   const mouth=worried?'M1-94q5-5 10 0':happy?'M-1-96q7 9 14-1':resolve?'M1-94q5 1 10-1':'M0-95q6 5 12-1';
-  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth"':'')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
+  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}<g class="cast-pupils">${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}</g>${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth" class="cast-mouth"':'class="cast-mouth"')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
  }
  function hairBack(who,c){
   if(who==='希尔达')return p('M-22-139Q-45-127-35-106L-38-88-32-91-35-72-28-77-22-61-13-69 12-61 27-72 25-64Q43-89 28-121L22-140Z',c.hair)+p('M-27-127q-11 19-4 39m8-25q-7 31 4 43m42-44q9 22-1 39','none',c.light,1.6);
@@ -41,7 +41,7 @@ Homeward.define('art/cast-design', [], () => {
   else if(who==='大卫')front=p('M-29-119q-9-17 4-22l-3-9 14 2q8-14 19-4l11-5 3 11q13-2 14 9 7 9-4 16l-9-10q-3 9-14 11l3-11q-12 11-23 9l-6 11Z',c.hair)+p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+p('M-16-103h2m3 1h1m26-1h2','none','#b8835b',1.2);
   else if(who==='芙丽达')front=p('M-28-120q-16-10-5-22-1-16 13-16 10-13 22-7 13-9 24 3 18-2 18 14 14 11 1 20l-8 16-6-18q-10 8-14-1-11 9-16 0-7 10-18 11Z',c.hair)+p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.2)+p('M22-132l8-8','none','#d7ba71',2.8);
   else front=p('M-28-124q-4-27 20-29 26-9 37 14l1 25-8-14q-16 6-19-9-12 17-29 23Z',c.hair)+p('M-22-134q10-15 21-14m7 5q12 1 16 10','none',c.light,1.8);
-  return `<g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g>`;
+  return `<g class="cast-attention"><g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g></g>`;
  }
  function upper(who,rig=false,mood='curious'){
   const c=profiles[who]||profiles['妈妈'],hilda=who==='希尔达',mom=who==='妈妈';

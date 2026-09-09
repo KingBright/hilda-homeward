@@ -1,4 +1,7 @@
 .DS_Store
+.venv/
+art-audio-report.json
+acting-report.json
 node_modules/
 __pycache__/
 previews/

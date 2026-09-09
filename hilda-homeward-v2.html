@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 光与回声 V3.3。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 彼此倾听 V3.4。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -44,6 +44,8 @@
 .paused .cast-breathe,.paused .cast-blink,.paused .cast-tail,.paused .cast-scarf{animation-play-state:paused}
 .reduced .cast-breathe,.reduced .cast-blink,.reduced .cast-tail,.reduced .cast-scarf{animation:none}
 #portrait{width:66px;height:78px;border:1px solid #dabf8140;border-radius:34px 34px 18px 18px;background:radial-gradient(ellipse at 35% 30%,#69807c66,#243f4b);box-shadow:inset 0 0 20px #102a3340}
+/* Speaker emphasis is static: no flashing or competing face animation. */
+#portrait[data-role="speaker"]{border-color:#ddbe83a6;box-shadow:inset 0 0 20px #102a3340,0 0 0 2px #ddbe8318}
 .audioMix{border:1px solid #d3bd8530;padding:8px 16px;margin:12px 0;border-radius:8px;background:#0c263229}
 .audioMix label{display:grid;grid-template-columns:78px 1fr 38px;gap:12px;align-items:center;margin:14px 0;color:#d9d7bf;font-size:11px}
 .audioMix input{width:100%;accent-color:#dfbf87;cursor:pointer}
@@ -87,7 +89,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.3</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.3 光与回声 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.4</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.4 彼此倾听 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -115,6 +117,98 @@
   }
   root.Homeward = Object.freeze({ define, use, modules: () => [...definitions.keys()] });
 })(globalThis);
+
+/* src/art/cast-acting.js */
+/** Presentation-only attention and dialogue acting. Never writes game/save state.
+ * Text cadence drives stylized mouths; this is not phoneme-aligned lip sync.
+ * Contact choreography owns the inner head/limbs; acting uses an outer neck pivot.
+ */
+Homeward.define('art/cast-acting', ['art/cast-design'], Cast => {
+  const caches = new WeakMap();
+  const clamp = n => Math.max(-1, Math.min(1, Number.isFinite(n) ? n : 0));
+  const punctuation = /^[\s，。！？、…—·：；“”‘’「」.,!?;:]+$/u;
+  const rhythms = {'希尔达': [8.8, .4], '大卫': [10.2, 1.7], '芙丽达': [8, 3.1], '妈妈': [6.8, 4.6]};
+  const closedMouth = mood => mood === 'worried' ? 'M1-94q5-5 10 0'
+    : mood === 'resolve' ? 'M1-94q5 1 10-1'
+    : mood === 'relieved' ? 'M-1-96q7 9 14-1'
+    : mood === 'gentle' ? 'M1-95q5 3 10-1' : 'M0-95q6 5 12-1';
+
+  function sample({who = '希尔达', time = 0, role = 'idle', mood = 'curious', gaze = 0,
+    typing = false, character = '', reduced = false} = {}) {
+    const t = Number.isFinite(time) ? Math.max(0, time) % 3600 : 0;
+    const [rate, offset] = Object.hasOwn(rhythms, who) ? rhythms[who] : [8, 0];
+    const direction = clamp(gaze);
+    const talking = role === 'speaker' && typing && !reduced && character.length > 0 && !punctuation.test(character);
+    const syllable = Math.floor(t * rate + offset) % 4;
+    const open = talking && syllable !== 3;
+    const mouths = ['M0-95q6-2 12 0q-5 8-12 0Z', 'M3-95q3-3 6 0v3q-3 4-6 0Z', 'M0-95q6 1 12-1q-5 5-12 1Z'];
+    const nod = role === 'speaker' ? Math.sin(t * 3.1 + offset) * 1.3
+      : role === 'listener' ? Math.sin(t * 1.7 + offset) * .55 : 0;
+    return {
+      gazeX: direction,
+      tilt: reduced ? 0 : -direction * 1.4 + nod,
+      mouth: open ? mouths[syllable] : closedMouth(mood),
+      fill: open ? '#825047' : 'none',
+      open
+    };
+  }
+
+  function refresh(root) {
+    if (!root) return;
+    const entries = [...root.querySelectorAll('[data-cast]')].map(actor => {
+      const head = actor.querySelector('[data-cast-head]');
+      return {actor, who: actor.dataset.cast, head,
+        pivot: head?.closest('.cast-attention'),
+        pupils: head?.querySelector('.cast-pupils'),
+        mouth: head?.querySelector('.cast-mouth')};
+    });
+    caches.set(root, entries);
+  }
+
+  function put(node, key, value) {
+    if (!node) return;
+    const text = String(value);
+    if (node.getAttribute(key) !== text) node.setAttribute(key, text);
+  }
+
+  function paint(root, time, {scene = 0, flags = {}, speaker = '', listener = '',
+    typing = false, character = '', reduced = false, paused = false,
+    portrait = false, working = false} = {}) {
+    if (!root || paused) return;
+    if (!caches.has(root)) refresh(root);
+    const entries = caches.get(root);
+    // Read all transforms before writes. No bounding-box reads or per-frame selectors.
+    const positions = new Map();
+    if (!portrait) for (const entry of entries) {
+      const m = entry.actor.getCTM();
+      if (m) positions.set(entry, {x: m.e - m.c * 110, unit: Math.max(.01, Math.hypot(m.a, m.b)), face: m.a < 0 ? -1 : 1});
+    }
+    const hero = entries.find(e => e.who === '希尔达');
+    const source = entries.find(e => e.who === speaker);
+    const addressee = entries.find(e => e.who === listener && e !== source)
+      || (source !== hero ? hero : entries.find(e => e !== source && e.head));
+    if (portrait) put(root, 'data-role', speaker ? 'speaker' : 'idle');
+    for (const entry of entries) {
+      if (!entry.head) continue;
+      const role = speaker ? entry.who === speaker ? 'speaker' : 'listener' : 'idle';
+      const target = entry === source ? addressee : source || hero;
+      const from = positions.get(entry), to = positions.get(target);
+      const gaze = !portrait && target !== entry && from && to
+        ? clamp((to.x - from.x) / (from.unit * 140)) * from.face : 0;
+      const mood = working && entry === hero ? 'resolve' : Cast.expression(scene, flags, entry.who);
+      const pose = sample({who: entry.who, time, role, mood, gaze, typing, character, reduced});
+      put(entry.actor, 'data-role', role);
+      put(entry.head, 'data-mood', mood);
+      put(entry.actor, 'data-gaze', pose.gazeX.toFixed(3));
+      put(entry.pupils, 'transform', `translate(${pose.gazeX.toFixed(3)} 0)`);
+      put(entry.pivot, 'transform', `rotate(${(working && entry === hero ? 0 : pose.tilt).toFixed(3)} 0 -87)`);
+      put(entry.mouth, 'd', pose.mouth);
+      put(entry.mouth, 'fill', pose.fill);
+      put(entry.mouth, 'data-open', pose.open);
+    }
+  }
+  return {sample, refresh, paint};
+});
 
 /* src/art/cast-design.js */
 /** Shared production drawings: the stage actor and dialogue portraits use the
@@ -145,7 +239,7 @@ Homeward.define('art/cast-design', [], () => {
   const worried=mood==='worried',resolve=mood==='resolve',happy=mood==='relieved';
   const brows=worried?'M-13-122q5-5 10-2m12-1q6-2 11 2':resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1';
   const mouth=worried?'M1-94q5-5 10 0':happy?'M-1-96q7 9 14-1':resolve?'M1-94q5 1 10-1':'M0-95q6 5 12-1';
-  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth"':'')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
+  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}<g class="cast-pupils">${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}</g>${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth" class="cast-mouth"':'class="cast-mouth"')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
  }
  function hairBack(who,c){
   if(who==='希尔达')return p('M-22-139Q-45-127-35-106L-38-88-32-91-35-72-28-77-22-61-13-69 12-61 27-72 25-64Q43-89 28-121L22-140Z',c.hair)+p('M-27-127q-11 19-4 39m8-25q-7 31 4 43m42-44q9 22-1 39','none',c.light,1.6);
@@ -160,7 +254,7 @@ Homeward.define('art/cast-design', [], () => {
   else if(who==='大卫')front=p('M-29-119q-9-17 4-22l-3-9 14 2q8-14 19-4l11-5 3 11q13-2 14 9 7 9-4 16l-9-10q-3 9-14 11l3-11q-12 11-23 9l-6 11Z',c.hair)+p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+p('M-16-103h2m3 1h1m26-1h2','none','#b8835b',1.2);
   else if(who==='芙丽达')front=p('M-28-120q-16-10-5-22-1-16 13-16 10-13 22-7 13-9 24 3 18-2 18 14 14 11 1 20l-8 16-6-18q-10 8-14-1-11 9-16 0-7 10-18 11Z',c.hair)+p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.2)+p('M22-132l8-8','none','#d7ba71',2.8);
   else front=p('M-28-124q-4-27 20-29 26-9 37 14l1 25-8-14q-16 6-19-9-12 17-29 23Z',c.hair)+p('M-22-134q10-15 21-14m7 5q12 1 16 10','none',c.light,1.8);
-  return `<g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g>`;
+  return `<g class="cast-attention"><g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g></g>`;
  }
  function upper(who,rig=false,mood='curious'){
   const c=profiles[who]||profiles['妈妈'],hilda=who==='希尔达',mom=who==='妈妈';
@@ -485,7 +579,7 @@ Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solv
   const mix=(a,b,t)=>a+(b-a)*t;
   const p=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const fixed=n=>Number(n).toFixed(2);
-  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={},speaking=false}){
+  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={}}){
     if(!root)return;
     if(root!==cachedRoot){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
     const attr=(id,k,v)=>nodes[id]?.setAttribute(k,v);
@@ -504,8 +598,7 @@ Homeward.define('art/performer', ['engine/kinematics','art/cast-design'], ({solv
     attr('rigEyes','transform',!reduced&&!score&&time%5.6>5.44?'translate(0 -103) scale(1 .12) translate(0 103)':'');
     const mood=Cast.expression(scene,flags,'希尔达'),resolve=!!score||mood==='resolve';
     attr('rigBrows','d',resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
-    attr('rigMouth','d',speaking&&!reduced&&Math.sin(time*15)>.1?'M0-95q6-2 12 0q-5 8-12 0Z':resolve?'M1-94q5 1 10-1':mood==='relieved'?'M-1-96q7 9 14-1':'M0-95q6 5 12-1');
-    attr('rigMouth','fill',speaking&&!reduced&&Math.sin(time*15)>.1?'#8e534a':'none');
+    // Dialogue mouths and gaze are owned by art/cast-acting; contact pose stays here.
     const wind=reduced?0:Math.sin(time*3)*2+Math.abs(walk)*4;
     attr('rigScarf','d',`M16-82Q31 ${-74-wind} 44 ${-70-wind}L37 ${-61-wind} 18-70Z`);
     for(const [name,sign] of [['Back',-1],['Front',1]]){
@@ -1044,7 +1137,7 @@ Homeward.define('engine/kinematics', [], () => {
 });
 
 /* src/engine/runtime.js */
-Homeward.define("engine/runtime", ["art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -1133,6 +1226,7 @@ function render(){
  const dog=!(s.scene===9&&!s.f.twigSafe)&&!titleMode;
  let followers='';if(!titleMode&&[2,3,4,7].includes(s.scene))followers+=`<g id="davidFollow">${Art.person('大卫',0,0,1.34)}</g>`;if(!titleMode&&s.scene===4)followers+=`<g id="fridaFollow">${Art.person('芙丽达',0,0,1.38)}</g>`;
  patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
+ CastActing.refresh(ui.world);
  activeHotspots=titleMode?[]:Story.scenes[s.scene].hotspots(s);
  patchSvg($('hotspotLayer'),activeHotspots.map(h=>`<g class="hotspot ${h.kind==='exit'?'isExit':''}" data-hotspot="${h.id}" data-kind="${h.kind||'interact'}" role="button" tabindex="0" aria-label="${esc(h.label)}"><rect class="hit" x="${h.x-h.w/2}" y="${h.y-h.h/2}" width="${h.w}" height="${h.h}"/><g class="hotmark" transform="translate(${h.x} ${h.y})"><circle r="${h.kind==='exit'?16:10}" fill="#173841d9" stroke="#e3d29a" stroke-width="1.2"/>${h.kind==='exit'?Art.path(h.id==='back'?'M7 0H-7m5-5-5 5 5 5':'M-7 0H7m-5-5 5 5-5 5','none','#f0dbab',1.5):Art.circle(0,0,2,'#e8d7ab')}</g></g>`).join(''));
  document.querySelectorAll('.hotspot').forEach(el=>{el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(dialogue||modal)return;e.preventDefault();e.stopPropagation();interact(el.dataset.hotspot);}};el.onfocus=()=>{const h=activeHotspots.find(h=>h.id===el.dataset.hotspot);if(h&&camera.w<1550){camera.manual=true;camera.x=clamp(h.x-camera.w*.5,0,1600-camera.w);setView();}else if(h&&camera.h<850){camera.manual=true;camera.y=clamp(h.y-camera.h*.5,0,900-camera.h);setView();}};});
@@ -1159,10 +1253,15 @@ function updateActors(){
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
  if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
- Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f,speaking:!!dialogue&&dialogue.lines[dialogue.index]?.[0]==='希尔达'&&typewriter.busy});
+ Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
  ChapterLife.animate(ui.world,activeWork,s);
  SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  CastMotion.animate(ui.world,elapsed,s.settings.reduced||isPaused(),activeWork);
+ const speaker=dialogue?.lines[dialogue.index]?.[0]||'';
+ const listener=[dialogue?.lines[dialogue.index+1]?.[0],dialogue?.lines[dialogue.index-1]?.[0]].find(who=>who&&who!==speaker)||'';
+ const acting={scene:index,flags:s.f,speaker,listener,typing:typewriter.busy,character:typewriter.fullText[typewriter.index-1]||'',reduced:s.settings.reduced,paused:isPaused(),working:!!activeWork};
+ CastActing.paint(ui.world,elapsed,acting);
+ if(dialogue)CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false});
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
 }
 
@@ -1210,6 +1309,7 @@ function showLine(){
  const [who,line]=dialogue.lines[dialogue.index];
  $('speaker').textContent=who;
  $('portrait').innerHTML=Art.portrait(who);
+ CastActing.refresh($('portrait'));
  $('nextLine').innerHTML=dialogue.index===dialogue.lines.length-1?'继续 <span>›</span>':'继续 <span>›</span>';
  updateActors();
  if(typewriter.timer){clearTimeout(typewriter.timer);typewriter.timer=null;}

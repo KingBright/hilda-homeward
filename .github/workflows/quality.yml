@@ -2,7 +2,7 @@ name: Game quality gate
 on:
   push:
     branches: [main]
-    paths: ['src/**', 'tests/**', 'tools/build.mjs', 'package.json', 'index.html', '.github/workflows/quality.yml']
+    paths: ['src/**', 'tests/**', 'tools/**', 'package.json', 'index.html', '.github/workflows/quality.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -42,6 +42,11 @@ jobs:
         run: |
           mkdir -p previews
           python tests/playthrough.py
+      - name: Dialogue acting and mirrored attention regression checks
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          python tests/acting.py
+          python tests/cast-studio.py
       - name: Cast rendering and Web Audio regression checks
         if: steps.source.outputs.ready == 'true'
         run: python tests/art-audio.py
@@ -56,6 +61,7 @@ jobs:
             test-report.json
             native-storage-report.json
             art-audio-report.json
+            acting-report.json
             tests/failure-state.json
             previews/
             index.html

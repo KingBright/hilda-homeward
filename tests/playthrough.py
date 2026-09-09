@@ -1,9 +1,9 @@
-"""UI playthrough plus isolated regression checks. HTML is loaded into Chromium
-with set_content: this environment's navigation policy blocks file/http URLs.
-The storage adapter is explicitly simulated, never presented as real persistence.
+"""UI playthrough plus isolated regression checks, on local or CI hosts.
+HTML uses set_content and an explicit save adapter for reproducible fixtures.
+Native HTTP/file persistence is tested separately by native-storage.py.
 """
 from pathlib import Path
-import json,time,traceback,os,copy,hashlib
+import json,time,traceback,os,copy,hashlib,platform
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
 CHECKS=[]; ERRORS=[]; REQUESTS=[]; FIXTURES={}; PAGES=[]
@@ -237,7 +237,7 @@ if __name__=='__main__':
                     (ROOT/'tests/failure-state.json').write_text(json.dumps({'state':state(active_pages[-1]),'ui':ui(active_pages[-1])},ensure_ascii=False,indent=2))
                 except Exception:pass
         finally:
-            report={'artifact_sha256':HTML_SHA,'passed':error is None,'checks_passed':len(CHECKS),'checks':CHECKS,'uncaught_errors':ERRORS,'network_requests':REQUESTS,'failure':error,'duration_seconds':round(time.monotonic()-START,2),'environment':{'browser':browser.version,'html_loading':'Playwright set_content of complete generated HTML','storage':'Explicit in-memory Storage adapter. Real file-origin/browser persistence is not verified.','navigation':'Container administration policy blocks file:// and HTTP navigation; no policy bypass attempted.','mobile':'Browser touch/layout emulation only, not physical devices.'}}
+            report={'artifact_sha256':HTML_SHA,'passed':error is None,'checks_passed':len(CHECKS),'checks':CHECKS,'uncaught_errors':ERRORS,'network_requests':REQUESTS,'failure':error,'duration_seconds':round(time.monotonic()-START,2),'environment':{'browser':browser.version,'html_loading':'Playwright set_content of complete generated HTML','storage':'Explicit in-memory Storage adapter. Real file-origin/browser persistence is not verified.','navigation':'This suite deliberately uses set_content; native HTTP/file persistence is tested separately.','host':platform.platform(),'mobile':'Browser touch/layout emulation only, not physical devices.'}}
             (ROOT/'test-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
             browser.close()
     raise SystemExit(1 if error else 0)

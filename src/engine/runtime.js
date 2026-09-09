@@ -1,4 +1,4 @@
-Homeward.define("engine/runtime", ["art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -87,6 +87,7 @@ function render(){
  const dog=!(s.scene===9&&!s.f.twigSafe)&&!titleMode;
  let followers='';if(!titleMode&&[2,3,4,7].includes(s.scene))followers+=`<g id="davidFollow">${Art.person('大卫',0,0,1.34)}</g>`;if(!titleMode&&s.scene===4)followers+=`<g id="fridaFollow">${Art.person('芙丽达',0,0,1.38)}</g>`;
  patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
+ CastActing.refresh(ui.world);
  activeHotspots=titleMode?[]:Story.scenes[s.scene].hotspots(s);
  patchSvg($('hotspotLayer'),activeHotspots.map(h=>`<g class="hotspot ${h.kind==='exit'?'isExit':''}" data-hotspot="${h.id}" data-kind="${h.kind||'interact'}" role="button" tabindex="0" aria-label="${esc(h.label)}"><rect class="hit" x="${h.x-h.w/2}" y="${h.y-h.h/2}" width="${h.w}" height="${h.h}"/><g class="hotmark" transform="translate(${h.x} ${h.y})"><circle r="${h.kind==='exit'?16:10}" fill="#173841d9" stroke="#e3d29a" stroke-width="1.2"/>${h.kind==='exit'?Art.path(h.id==='back'?'M7 0H-7m5-5-5 5 5 5':'M-7 0H7m-5-5 5 5-5 5','none','#f0dbab',1.5):Art.circle(0,0,2,'#e8d7ab')}</g></g>`).join(''));
  document.querySelectorAll('.hotspot').forEach(el=>{el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(dialogue||modal)return;e.preventDefault();e.stopPropagation();interact(el.dataset.hotspot);}};el.onfocus=()=>{const h=activeHotspots.find(h=>h.id===el.dataset.hotspot);if(h&&camera.w<1550){camera.manual=true;camera.x=clamp(h.x-camera.w*.5,0,1600-camera.w);setView();}else if(h&&camera.h<850){camera.manual=true;camera.y=clamp(h.y-camera.h*.5,0,900-camera.h);setView();}};});
@@ -113,10 +114,15 @@ function updateActors(){
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
  if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
- Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f,speaking:!!dialogue&&dialogue.lines[dialogue.index]?.[0]==='希尔达'&&typewriter.busy});
+ Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
  ChapterLife.animate(ui.world,activeWork,s);
  SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  CastMotion.animate(ui.world,elapsed,s.settings.reduced||isPaused(),activeWork);
+ const speaker=dialogue?.lines[dialogue.index]?.[0]||'';
+ const listener=[dialogue?.lines[dialogue.index+1]?.[0],dialogue?.lines[dialogue.index-1]?.[0]].find(who=>who&&who!==speaker)||'';
+ const acting={scene:index,flags:s.f,speaker,listener,typing:typewriter.busy,character:typewriter.fullText[typewriter.index-1]||'',reduced:s.settings.reduced,paused:isPaused(),working:!!activeWork};
+ CastActing.paint(ui.world,elapsed,acting);
+ if(dialogue)CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false});
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
 }
 
@@ -164,6 +170,7 @@ function showLine(){
  const [who,line]=dialogue.lines[dialogue.index];
  $('speaker').textContent=who;
  $('portrait').innerHTML=Art.portrait(who);
+ CastActing.refresh($('portrait'));
  $('nextLine').innerHTML=dialogue.index===dialogue.lines.length-1?'继续 <span>›</span>':'继续 <span>›</span>';
  updateActors();
  if(typewriter.timer){clearTimeout(typewriter.timer);typewriter.timer=null;}
