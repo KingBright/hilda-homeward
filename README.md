@@ -22,7 +22,7 @@ export CHROMIUM_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 .venv/bin/python tests/native-storage.py
 ```
 
-完整通关生成后两项所需的 `tests/fixtures.json`。实际报告、截图和声音采样在本机生成，不将预期结果写成已经通过的测试。运行开发服务器不会自动部署 GitHub Pages 或 NAS。
+完整通关生成后两项所需的 `tests/fixtures.json`。已有这份检查点时，可用 `.venv/bin/python tests/setpiece-check.py` 单独复跑攀梯和屋顶演出回归，结果写入 `previews/setpiece-report.json`，不会覆盖首次完整测试报告。实际报告、截图和声音采样在本机生成，不将预期结果写成已经通过的测试。运行开发服务器不会自动部署 GitHub Pages 或 NAS。
 
 ## V3.3 光与回声 · character and score refinement
 

@@ -55,6 +55,12 @@ npm run check
 
 先跑完整通关，生成 UI 驱动的有效章节样本 `tests/fixtures.json`；音频与原生持久化套件依赖该文件。表演专项可独立运行。输出包括 `test-report.json`、`acting-report.json`、`art-audio-report.json`、`native-storage-report.json` 和 `previews/` 中的截图与音乐样本。报告包含被测 HTML 的 SHA-256，必须与当前 `build-manifest.json` 对照；旧报告不能当成本轮验收结果。
 
+## 修复回归脚本的截图竞态
+
+旧攀梯检查先在中途截图，再点菜单暂停。在本次 Mac 本机运行中，截图期间动作正常完成、书已入包，脚本随后读取空的 `performance` 而失败。现在于浏览器观察到目标动作阶段的同一任务中触发实际菜单按钮，先暂停再采样和截图；集体登船的暂停检查也采用相同方式。不修改游戏时钟、动作时长或存档来迁就测试。
+
+已有完整主线生成的 `tests/fixtures.json` 时，可运行 `.venv/bin/python tests/setpiece-check.py` 独立复测全部攀梯 / 屋顶回归。专项结果为 `previews/setpiece-report.json`，记录当前构建及测试源码指纹；它不覆盖 `test-report.json`，也不冒充又一次完整通关。首次完整测试失败与后续专项成功应分别报告。
+
 ## 验收边界
 
 纯逻辑测试覆盖确定性、异常时间 / 视线的有限值、说话者选择、标点停顿、减少动态、角色节奏差异和共享图层。

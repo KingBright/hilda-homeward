@@ -1,5 +1,17 @@
 """Archive and rooftop transactions, staging, recovery and accessible inputs."""
 def run_setpiece_regressions(browser):
+    def pause_at(page, threshold):
+        # Pause through the real menu handler in the same browser task that
+        # observes the target phase. Screenshot encoding / driver round trips
+        # must not consume the remaining duration of the action under test.
+        return page.wait_for_function('''threshold => {
+            const frame=HildaTest.ui().performance;
+            if(!frame || frame.progress<=threshold)return false;
+            document.getElementById('menuBtn').click();
+            const paused=HildaTest.ui();
+            return paused.modal && paused.performance;
+        }''',arg=threshold).json_value()
+
     p=newpage(browser);load(p,3)
     start=state(p)['f'].get('ladderX',769)
     a=p.locator('[data-hotspot="ladder"]').bounding_box()
@@ -13,12 +25,12 @@ def run_setpiece_regressions(browser):
     act(p,'ladder');act(p,'ladder');act(p,'ladderBrake')
     before=state(p)['f']['ladderX'];drag_object(p,'ladder',target=(700,643))
     check('Locked ladder cannot be moved with a scene drag',state(p)['f']['ladderX']==before)
-    p.locator('[data-hotspot="book"]').click();p.wait_for_function('HildaTest.ui().working');p.wait_for_function('HildaTest.ui().performance.progress>.46')
+    p.locator('[data-hotspot="book"]').click();p.wait_for_function('HildaTest.ui().working');frame=pause_at(p,.46)
     transform=p.locator('#heroPosition').get_attribute('transform')
     foot=float(transform.split()[1].rstrip(')'))
     check('Climbing actor reaches the upper shelf while saved feet remain grounded',foot<560 and ui(p)['hero']['y']==819 and not flags(p,'planTaken'))
     p.screenshot(path=str(ROOT/'previews/v32-archive-climb.png'))
-    p.locator('#menuBtn').click();progress=ui(p)['performance']['progress'];paused=p.locator('#heroPosition').get_attribute('transform');p.wait_for_timeout(350)
+    progress=frame['progress'];paused=p.locator('#heroPosition').get_attribute('transform');p.wait_for_timeout(350)
     check('Climb pauses mid-rung without drifting',ui(p)['performance']['progress']==progress and p.locator('#heroPosition').get_attribute('transform')==paused)
     p.evaluate('HildaTest.flush()');storage=p.evaluate('storageSnapshot()')
     q=newpage(browser,storage=storage);q.locator('#continueBtn').click();settle(q)
@@ -52,10 +64,10 @@ def run_setpiece_regressions(browser):
     while not ui(p)['working'] and time.monotonic()<until:
         if ui(p)['dialogue']:p.keyboard.press('Space')
         p.wait_for_timeout(65)
-    p.wait_for_function('HildaTest.ui().performance?.progress>.81')
+    frame=pause_at(p,.81)
     aboard={name:p.locator('#'+name).get_attribute('transform') for name in ['heroPosition','roofDavid','roofFrida','twigPosition']}
     check('All four visible companions board the same Woff before departure',all(float(v.split()[1].split(')')[0])<620 for v in aboard.values()) and not flags(p,'roofDone'))
-    p.locator('#menuBtn').click();before=ui(p)['performance']['progress'];p.wait_for_timeout(150)
+    before=frame['progress'];p.wait_for_timeout(150)
     check('Group departure can pause without committing the next chapter',ui(p)['performance']['progress']==before and state(p)['scene']==9)
     p.screenshot(path=str(ROOT/'previews/v32-boarding-paused.png'))
     p.locator('#resumePlay').click();settle(p)
