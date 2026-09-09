@@ -42,6 +42,9 @@ jobs:
         run: |
           mkdir -p previews
           python tests/playthrough.py
+      - name: Cast rendering and Web Audio regression checks
+        if: steps.source.outputs.ready == 'true'
+        run: python tests/art-audio.py
       - name: Native HTTP and file-origin persistence
         if: steps.source.outputs.ready == 'true'
         run: python tests/native-storage.py
@@ -52,6 +55,7 @@ jobs:
           path: |
             test-report.json
             native-storage-report.json
+            art-audio-report.json
             tests/failure-state.json
             previews/
             index.html
