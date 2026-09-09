@@ -2,7 +2,7 @@ name: Publish verified V3.2 setpiece refinement
 on:
   push:
     branches: [main]
-    paths: ['tools/apply-v32.py', '.github/workflows/refine-v32.yml']
+    paths: ['tools/apply-v32.py', 'tools/v32-layer-order.py', '.github/workflows/refine-v32.yml']
   workflow_dispatch:
 permissions:
   contents: write
@@ -33,6 +33,7 @@ jobs:
         if: steps.source.outputs.ready == 'true'
         run: |
           python tools/apply-v32.py
+          python tools/v32-layer-order.py
           npm run check
           sha256sum -c .v32-expected.sha256
           git diff --check
@@ -56,7 +57,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src tests docs README.md package.json index.html hilda-homeward-v2.html dev.html build-manifest.json
-          git rm tools/apply-v32.py
+          git rm tools/apply-v32.py tools/v32-layer-order.py
           git commit -m 'feat: stage archive climbing and cooperative rooftop rescue with durable checkpoints'
           git push origin HEAD:main
       - uses: actions/upload-artifact@v4
