@@ -26,6 +26,7 @@ def main(browser):
         page.locator('#castSelect').select_option(label=who)
         page.wait_for_function('(who)=>document.querySelector(\'#castStage [data-role="speaker"]\')?.dataset.cast===who',arg=who)
         check('Workbench switches stage and portrait together: '+who,page.locator('#portrait [data-cast]').get_attribute('data-cast')==who)
+        check('Portrait leaves headroom for hats and hair: '+who,page.evaluate("(()=>{const box=document.querySelector('#portrait svg').viewBox.baseVal,head=document.querySelector('#portrait [data-cast-head]').getBBox();return head.y>=box.y+2 && head.y+head.height<box.y+box.height})()"))
     page.locator('#sceneSelect').select_option('9')
     check('Peril preview uses the game character-specific expressions',page.locator('#castStage [data-cast-head="大卫"]').get_attribute('data-mood')=='worried' and page.locator('#castStage [data-cast-head="妈妈"]').get_attribute('data-mood')=='resolve')
     page.locator('#sceneSelect').select_option('10')

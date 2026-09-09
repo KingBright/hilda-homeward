@@ -45,7 +45,7 @@ function redraw(){
  const scene=Number($('sceneSelect').value),face=Number($('facingSelect').value),who=$('castSelect').value;
  stage.innerHTML=Cast.defs+'<path d="M25 366H1055" stroke="#81988c" stroke-opacity=".25"/>'+names.map((name,i)=>
   `<g transform="translate(${145+i*265} 355) scale(${face*1.65} 1.65)">${Cast.standing(name,Cast.expression(scene,{},name))}</g><text x="${145+i*265}" y="402" text-anchor="middle" fill="#dbcca9" font-size="16">${name}</text>`).join('');
- portrait.innerHTML=`<svg viewBox="-45 -164 90 103" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${who}的对白头像">${Cast.standing(who,Cast.expression(scene,{},who))}</svg>`;
+ portrait.innerHTML=`<svg viewBox="-45 -174 90 113" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${who}的对白头像">${Cast.standing(who,Cast.expression(scene,{},who))}</svg>`;
  $('speaker').textContent=who;
  Acting.refresh(stage);Acting.refresh(portrait);
  paint();
