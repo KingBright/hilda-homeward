@@ -1,6 +1,6 @@
 /** Deterministic material detail. Geometry is decorative; puzzle hit regions stay in scene logic. */
 Homeward.define('art/finishing', ['art/kit','content/details','content/mechanisms'], (K,details,Mechanisms) => {
-  const {path,rect,circle,ell,group,rep,text,fern}=K;
+  const {path,rect,circle,ell,group,rep,sceneText:text,fern}=K;
   const defs=`<defs>
     <linearGradient id="v3Brass" x2=".2" y2="1"><stop stop-color="#fae5b2"/><stop offset=".25" stop-color="#bc9764"/><stop offset=".62" stop-color="#806849"/><stop offset="1" stop-color="#d3b377"/></linearGradient>
     <radialGradient id="v3Amber"><stop stop-color="#ffe2a3" stop-opacity=".45"/><stop offset=".35" stop-color="#e9b67b" stop-opacity=".15"/><stop offset="1" stop-color="#e9b67b" stop-opacity="0"/></radialGradient>
@@ -10,7 +10,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     <pattern id="v3Fabric" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0h6M0 3h6M1 0v6M4 0v6" fill="none" stroke="#e2d5ac" stroke-opacity=".18" stroke-width=".5"/></pattern>
   </defs>`;
   const bolt=(x,y,r=4)=>circle(x,y,r,'#b4ad85','#213e43',1.5)+path(`M${x-r*.55} ${y+r*.55}l${r*1.1}-${r*1.1}`,'none','#54645a',1.3);
-  function plate(x,y,w,label){return group(x,y,1,rect(-w/2,-17,w,34,'#2d4b4a',5,'#8b9977',1.2)+rect(-w/2+3,-14,w-6,28,'none',3,'#b9af8255',.8)+bolt(-w/2+8,0,2.5)+bolt(w/2-8,0,2.5)+text(0,4,label,10,'#d0c39c'));}
+  function plate(){return '';}
   function vine(x,y,scale=1,flip=1){return group(x,y,scale,`<g transform="scale(${flip} 1)">${path('M0 0Q67 1 59 71t36 98','none','#2b5148',4)}${rep(10,i=>{let xx=36+Math.sin(i*.75)*24,yy=i*16;return path(`M${xx} ${yy}q${i%2?28:-29} -25 ${i%2?26:-28} 3q${i%2?-12:13} 15 ${i%2?-26:28} -3`,'#4c7460','#234843',.8);})}</g>`);}
   function motes(scene){return `<g class="v3-motes" pointer-events="none">${rep(20,i=>{let x=(i*317+scene*79)%1560+20,y=(i*117)%700+70;return circle(x,y,i%4===0?2:1,'#ecd39b','none',0,`style="animation-delay:-${i*.73}s" class="v3-mote"`);})}</g>`;}
   function observation(state){let d=details[state.scene],x=d.x,y=d.y,s='';
@@ -22,7 +22,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     else if(state.scene===10){s=path(`M${x-30} ${y+12}q45-12 70 4`,'none','#547662',4)+group(x,y,.7,path('M-15 0Q-13-20 3-13Q14-19 18-10L31-6 17-3Q7 18-15 0Z','#b78354','#36564e',2)+circle(12,-10,1.5,'#243f43')+path('M-4 7l-3 8m9-6v8','none','#355d55',2));}
     else if(state.scene===9){s=path(`M${x-22} ${y+30}v-55l22-17 22 17v55Z`,'#2c4c52','#8f9475',3)+rect(x-13,y-18,26,31,'#e9cb8b',2)+path(`M${x} ${y-18}v31`,'none','#465b52',3)+ell(x,y-2,83,101,'url(#v3Amber)');}
     else if(state.scene===1){s=path(`M${x-20} ${y+38}v-85h36v85`,'none','#a1ad8b',2)+rep(7,i=>path(`M${x-18} ${y+30-i*12}h${i%3?12:22}`,'none','#d1c99e',1.5))+path(`M${x-35} ${y+17}h68`,'none','#b59b69',2);}
-    else{s=plate(x,y,Math.min(d.w,128),['','','','待送信件','旧城水务','最后一个','', '守钟人','夜班交接'][state.scene]||'归途');}
+    else{s=group(x,y,1,rect(-28,-20,56,40,'#b9ab7c',3,'#486352',1.5)+path('M-25-16L0 3 25-16M-25 16-7 1m32 15L7 1','none','#e1d1a2',1.2));}
     return `<g id="scene-observation" class="v3-observation" opacity="${state.notes.includes(d.note)?'.66':'1'}">${s}</g>`;
   }
   function scenery(state){const i=state.scene,f=state.f;let b='';

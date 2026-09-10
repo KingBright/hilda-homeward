@@ -5,6 +5,7 @@ const rect=(x,y,w,h,f,r=0,s='none',sw=2)=>`<rect x="${x}" y="${y}" width="${w}" 
 const circle=(x,y,r,f,s='none',sw=2,more='')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" stroke="${s}" stroke-width="${sw}" ${more}/>`;
 const ell=(x,y,rx,ry,f,more='',sw=2)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${/^(#|url\(|none$)/.test(more)?`stroke="${more}" stroke-width="${sw}"`:more}/>`;
 const text=(x,y,t,size=16,color=P.cream,extra='')=>`<text x="${x}" y="${y}" fill="${color}" font-size="${size}" font-family="Noto Sans CJK SC, sans-serif" text-anchor="middle" ${extra}>${t}</text>`;
+const sceneText=(x,y,t,...args)=>/^[0-9ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ\s.]+$/u.test(String(t))?text(x,y,t,...args):'';
 const group=(x,y,s,body,extra='')=>`<g transform="translate(${x} ${y}) scale(${s})" ${extra}>${body}</g>`;
 const rep=(n,fn)=>Array.from({length:n},(_,i)=>fn(i)).join('');
 let visualState={scene:0,f:{}};let seed=123;function rnd(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;}
@@ -50,5 +51,5 @@ function bird(x,y,s=1){return group(x,y,s,`<g class="float">${path('M-38 1-10-14
 function setVisualState(state,index) { visualState=state; seed=8103+index*9361; }
 function getVisualState(){return visualState;}
 
-return {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState};
+return {P,path,rect,circle,ell,text,sceneText,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState};
 });

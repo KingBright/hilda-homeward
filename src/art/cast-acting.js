@@ -91,17 +91,20 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
       if(entry.upper){
         put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
         for(const arm of entry.arms){
-          const front=arm.name==='front',origin=[front?17:-19,-79],target=front?idle.front:idle.back;
-          const j=solve(origin,target,25,27,-1);
+          const front=arm.name==='front',origin=[front?19:-19,-79],target=front?idle.front:idle.back;
+          const j=solve(origin,target,25,27,front?-1:1);
           const fmt=a=>a.map(n=>n.toFixed(3));
           const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
           arm.paths.forEach(n=>put(n,'d',d));
           const angle=Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])*180/Math.PI-90;
-          put(arm.hand,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${angle.toFixed(3)})`);
+          put(arm.hand,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${angle.toFixed(3)}) scale(${front?1:-1} 1)`);
         }
       }
       if(entry.blink){
         entry.blink.style.animation='none';
+        entry.blink.style.transformBox='view-box';
+        entry.blink.style.transformOrigin='0px 0px';
+        entry.blink.setAttribute('data-scripted-eye','true');
         put(entry.blink,'transform',`translate(0 -111) scale(1 ${idle.blink.toFixed(3)}) translate(0 111)`);
       }
       put(entry.actor, 'data-role', role);

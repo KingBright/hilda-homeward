@@ -6,11 +6,11 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
   hotspots:s=>[
     ...(!s.f.ropeTaken?[I('rope','检查并收起旧绳圈',331,725,72,65,{walkX:296})]:[]),
     ...(!s.f.hookTaken?[H('hook',s.f.branchBent?'取下树枝上的铁钩':'观察高处的铁钩',541,s.f.branchBent?642:496,75,95,{walkX:495})]:[]),
-    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:350,642,76,114,{walkX:440})]:[]),
+    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:425,642,76,114,{walkX:440})]:[]),
     H('anchor','对岸的固定铁环',1095,556,85,122,{walkX:s.f.bridge?1042:516}),
     H('winch','转动桥边绞盘',481,651,107,116,{walkX:446}),
     H('stream','观察逆流的溪水',790,776,193,82,{walkX:s.f.bridge?774:492}),
-    exit('next','沿根下的路标前进',1351,699,{walkX:1352}),exit('back','回北门',95,738,{walkX:157})
+    exit('next','沿树根间的小径前进',1351,699,{walkX:1352}),exit('back','回北门',95,738,{walkX:157})
   ],
   act(g,id,item){
     if(id==='rope'){
@@ -28,7 +28,7 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
     if(id==='anchor'){
       if(f(g,'grappleSet'))return g.toast('铁钩已经扣住对岸的固定环。');
       if(!need(g,'grapple',item,'距离太远。绳子需要一只能够抓住铁环的钩。'))return;
-      return g.work(1200,'试过绳结，对准铁环抛出飞钩',()=>{g.consume('grapple');set(g,'grappleSet');g.sound('rope');g.toast('铁钩扣住了。绞盘旁的铭牌写着：一人稳住，一人收绳。');});
+      return g.work(1200,'试过绳结，对准铁环抛出飞钩',()=>{g.consume('grapple');set(g,'grappleSet');g.sound('rope');g.toast('铁钩扣住了。转绞盘时制动会松开，得请大卫帮我扶稳。');});
     }
     if(id==='david'){
       if(!f(g,'grappleSet'))return one(g,'大卫','我看着绞盘。先把绳子固定在对岸，我们再一起使劲。');
@@ -45,9 +45,9 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
     if(id==='next'){if(f(g,'bridge'))book(g,'water');return advance(g,f(g,'bridge'),3,'先固定断桥。我们要一起过去，也要能一起回来。');}
     if(id==='back')return g.go(1);wrong(g);
   },
-  objective:s=>!s.f.hookTaken?(s.f.branchBent?'取下压低树枝上的铁钩。':'用绳圈把高处的铁钩取下来。'):!s.f.grappleSet?'组合带钩绳索，固定对岸铁环。':!s.f.bridge?(!s.f.bridgeBrace?'请大卫稳住制动，再转绞盘。':'大卫已稳住制动，转动绞盘拉起断桥。'):'一起过桥，沿路标寻找档案室。',
+  objective:s=>!s.f.hookTaken?(s.f.branchBent?'取下压低树枝上的铁钩。':'用绳圈把高处的铁钩取下来。'):!s.f.grappleSet?'组合带钩绳索，固定对岸铁环。':!s.f.bridge?(!s.f.bridgeBrace?'请大卫稳住制动，再转绞盘。':'大卫已稳住制动，转动绞盘拉起断桥。'):'一起过桥，看看大树根下的通道。',
   hints:s=>[
-    !s.f.hookTaken?'用地上的旧绳圈套住高处树藤，拉低后再取铁钩。':!s.f.grappleSet?'绳子负责连接，铁钩负责抓住。打开背包把它们组合。':'铭牌上的“一人稳住，一人收绳”，说的是两个人的分工。',
+    !s.f.hookTaken?'用地上的旧绳圈套住高处树藤，拉低后再取铁钩。':!s.f.grappleSet?'绳子负责连接，铁钩负责抓住。打开背包把它们组合。':'绞盘和制动相互牵动，需要一人稳住制动，另一人收绳。',
     '把带钩绳索放到对岸铁环。不要直接拉断桥。',
     '固定对岸后，点击大卫让他稳住制动，然后操作绞盘。'
   ]

@@ -1,5 +1,5 @@
 /** Seekable whole-body posing. Rigid bones; joint-space reach arcs; no accumulated state. */
-Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'], ({solve},{smooth}) => {
+Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track','engine/idle-life'], ({solve},{smooth},Idle) => {
   const mix=(a,b,t)=>a+(b-a)*t;
   const point=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const limit=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -8,7 +8,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
   const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
   function articulated(origin,rest,target,bend,reach){
     const a=bones.upperArm,b=bones.forearm;
-    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,1);
+    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,bend);
     const angle=j=>Math.atan2(j.elbow[1]-origin[1],j.elbow[0]-origin[0]);
     const elbowAngle=j=>wrap(Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])-angle(j));
     const upper=angle(neutral)+wrap(angle(contact)-angle(neutral))*reach;
@@ -53,9 +53,10 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       front=atShelf?local:[22,-97-Math.sin(p*24)*14];
       back=[-16,-94+Math.sin(p*24)*14];
     }
-    const armFront=articulated([17+lean,-79+crouch+bob],[29+wave*11,-39],front,-1,envelope);
+    const idle=!score&&!moving?Idle.sample({who:'希尔达',time,reduced}):null;
+    const armFront=articulated([19+lean,-79+crouch+bob],[26+lean+wave*7,-29+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
     const backReach=pickup&&!score.twoHands?envelope*.3:envelope*.9;
-    const armBack=articulated([-19+lean,-79+crouch+bob],[-28-wave*10,-40],back,-1,backReach);
+    const armBack=articulated([-19+lean,-79+crouch+bob],[-26+lean-wave*7,-29+crouch+bob],back,1,backReach);
     const legs={};
     for(const [name,sign] of [['Back',-1],['Front',1]]){
       const step=(gait+(sign<0?.5:0))%1;

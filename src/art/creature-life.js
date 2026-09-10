@@ -8,6 +8,7 @@ Homeward.define('art/creature-life', ['engine/animal-life'], Animal => {
     roots.set(root,[...root.querySelectorAll('[data-animal-rig="twig"]')].map(actor=>{
       const parts=Object.fromEntries(['heading','torso','head','tail','ear-a','ear-b','eye','shadow'].map(k=>[k,actor.querySelector('.twig-'+k)]));
       const legs=[0,1,2,3].map(i=>{const group=actor.querySelector(`[data-twig-leg="${i}"]`);return {group,paths:[...group.querySelectorAll(':scope > path')],hoof:group.querySelector('.twig-hoof')};});
+      if(parts.eye){parts.eye.setAttribute('data-scripted-eye','true');parts.eye.style.transformOrigin='0px 0px';parts.eye.style.transformBox='view-box';}
       return {actor,parts,legs};
     }));
   }

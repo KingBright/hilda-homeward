@@ -29,7 +29,7 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
     return {...(entries[scene]?.[id]??{kind:'reach',target:null}),scene,id,item};
   }
   function companion(scene,state,heroX) {
-    if(scene===2&&!state.f.bridge) return {david:state.f.bridgeBrace?380:350,bracing:!!state.f.bridgeBrace};
+    if(scene===2&&!state.f.bridge) return {david:state.f.bridgeBrace?380:425,bracing:!!state.f.bridgeBrace};
     return {david:Math.max(85,Math.min(1490,heroX-175)),frida:Math.max(65,Math.min(1490,heroX-270))};
   }
   return {score,companion};

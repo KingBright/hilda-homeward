@@ -1,13 +1,11 @@
 /** Archive and rooftop presentation. Puzzle decisions belong to the scene modules. */
 Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpieces','engine/setpiece-motion'], (K,F,Stage,Motion) => {
-  const {path,rect,circle,ell,text,group,rep}=K;
+  const {path,rect,circle,ell,sceneText:text,group,rep}=K;
   function scenery(s) {
     let b='';const f=s.f;
     if(s.scene===3) {
       b+=rep(3,i=>group(Stage.archive.docks[i],849,1,
-        path('M-34-41H34M0-46v11','none','#d8c38f',2)+text(0,0,['风 · 旧城','叶 · 山林','水 · 钟楼'][i],12,'#d7cea4')));
-      b+=group(1170,236,1,rect(-85,-22,170,38,'#344f46',4,'#b7b48a',2)+text(0,3,'水务卷宗 · 第七架',13,'#e1d1a0'));
-      b+=group(765,200,1,rect(-155,-38,310,56,'#b5ac80',4,'#354e42',3)+text(0,-12,'先对准 · 再锁轮 · 扶稳取书',14,'#345349')+text(0,8,'借书的人，也要好好回来。',10,'#5a6e55'));
+        path('M-34-41H34M0-46v11','none','#d8c38f',2)+path(['M-12-12q16-14 26 0m-19 8q15-8 20 0','M0-20q-18 10-7 23Q16 0 0-20Zm0 3L-3 0','M0-22Q-18-3-8 6Q10 18 13 2Q12-7 0-22Z'][i],'none','#d7cea4',2)));
       b+=`<g id="archiveBrakeShift">`+group(Stage.ladderX(s)+82,777,1,
         path('M-19 20H10L17 1H-9Z','#586b50','#253f3c',3)+circle(-6,5,7,'#cdb780','#314b40',2)+
         `<g id="archiveBrakePedal" transform="rotate(${f.ladderBrake?26:-25} -6 5)">${path('M-6 5L19-8','none','#c1a971',7)}${rect(8,-14,28,11,'#cbb98d',3,'#385347',2)}</g>`+

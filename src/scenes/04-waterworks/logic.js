@@ -2,7 +2,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
   name:'沉睡的回流水泵',english:'THE SLEEPING WATERWORKS',actLabel:'第二幕 · 山里藏着什么',
   mood:'旧水道 / 修好一处机关，才看见下一层真相',start:561,
   ground:Walkways.waterworksGround,
-  intro:[['芙丽达','我从升降站顺着水声找下来的。你们也听到了？'],['希尔达','是的。城门、溪流，似乎都在受同一台机器影响。'],['芙丽达','先看右上角的检修牌。水安静，不代表它没有力气。']],
+  intro:[['芙丽达','我从升降站顺着水声找下来的。你们也听到了？'],['希尔达','是的。城门、溪流，似乎都在受同一台机器影响。'],['芙丽达','先看看压力表。水安静，不代表它没有力气。']],
   hotspots:s=>[
     H('intake',s.f.intakeClosed?'打开进水闸':'关闭进水闸',350,682,86,94,{walkX:307}),
     H('filter','检查并清理进水滤网',453,640,111,147,{walkX:409}),
@@ -10,7 +10,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
     H('pipe1','旋转左下弯管',640,570,109,109,{walkX:617}),
     H('pipe2','旋转右下弯管',940,570,109,109,{walkX:911}),
     H('prime','缓缓拉下试压柄',1128,668,110,90,{walkX:1095}),
-    H('gauge','查看压力表和检修牌',1128,473,158,183,{walkX:1110}),
+    H('gauge','查看压力表，和芙丽达讨论水路',1128,473,158,183,{walkX:1110}),
     exit('next','上到升降站',1474,611,{walkX:1396}),exit('back','回档案室',142,588,{walkX:246})
   ],
   act(g,id,item){
@@ -44,7 +44,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
         if(Hydraulics.trace(g.s.valves,true).connected)g.toast(f(g,'intakeClosed')?'管路形状已经接通。打开进水闸，实际试水。':'水已到达出口。再拉试压柄，把机器慢慢唤醒。');
       });
     }
-    if(id==='gauge')return one(g,'芙丽达',f(g,'pump')?'回流水压稳定了。但泄洪支路还在升压。这里的表，告诉不了我们整座山发生的事。':'检修牌上写着：关闸、清网、接管、开闸试压。低压试水能帮你找漏点；正式加压后接头会自动锁住。');
+    if(id==='gauge')return one(g,'芙丽达',f(g,'pump')?'回流水压稳定了。但泄洪支路还在升压。这里的表，告诉不了我们整座山发生的事。':'水正顶着滤网。先关进水闸，清掉落叶，再把弯管接好。重新开闸时沿着水流找漏点，最后缓缓试压。正式加压后，接头会自动锁住。');
     if(id==='next')return advance(g,f(g,'pump'),5,'升降机还没有水力。让水到达出口，再缓缓试压。');
     if(id==='back')return g.go(3);wrong(g);
   },

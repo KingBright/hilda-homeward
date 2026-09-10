@@ -1,6 +1,6 @@
 /** Three authored dioramas. Only transient presentation is animated here; state lives in scenes. */
 Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
-  const {path,rect,circle,ell,text,group,rep,fern,gear}=K;
+  const {path,rect,circle,ell,sceneText:text,group,rep,fern,gear}=K;
   const defs=`<defs>
     <clipPath id="northGateArch"><path d="M1240 784V464Q1249 327 1381 327T1516 464V784Z"/></clipPath>
     <linearGradient id="chapterCopper" x2=".2" y2="1"><stop stop-color="#d3be89"/><stop offset=".34" stop-color="#9e8b60"/><stop offset=".6" stop-color="#567d70"/><stop offset="1" stop-color="#b49c6d"/></linearGradient>
@@ -39,8 +39,6 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
       b+=path('M350 654V422L329 399','none','#203e43',12)+path('M350 654V422L329 399','none','url(#chapterCopper)',7)+rect(335,545,31,58,'#526e60',4,'#93a48b',2)+F.bolt(350,558)+F.bolt(350,589);
       b+=`<g id="intakeRotor" transform="rotate(${f.intakeClosed?90:0} 350 682)">${circle(350,682,31,'#2d4b4a','#bcb486',6)}${path('M350 651v62m-31-31h62','none','#a79f75',6)}${circle(350,682,10,'#d1b783','#365953',3)}</g>`;
       b+=F.plate(349,755,111,f.intakeClosed?'进水闸 · 已关闭':'进水闸 · 已开启');
-      b+=group(1164,247,1,rect(-131,-35,262,71,'#486457',7,'#a1ab83',2)+F.bolt(-119,-22,3)+F.bolt(119,22,3)+text(0,-11,'夜 班 检 修',12,'#dcc897')+text(0,14,'关闸 → 清网 → 接管 → 开闸试压',10,'#c1c9a9'));
-      b+=group(738,672,1,rect(-95,-20,190,31,'#40594f',3,'#7c9277',1)+text(0,0,'检修台 · 扶稳再操作',10,'#bec7a6'));
       b+=rep(12,i=>{let x=133+i*109;return path(`M${x} 125q-5 16 0 33t0 28`,'none','#a3b995',1,'opacity=".21"');});
       b+=rep(8,i=>circle(1337+i%2*22,581+i*18,3,'#94b39d','none',0,'class="chapter-dew"'));
       if(f.filter&&!f.intakeClosed)b+=path('M446 596v83','none','#c7e2bb',2,'stroke-dasharray="8 11" class="flowline"');

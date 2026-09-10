@@ -1,0 +1,7 @@
+/* The world is not a task board. Menus and voluntary inspection retain text. */
+#sceneLabel,#chapterCard,#actionLabel{display:none!important}
+#hud nav{margin-left:auto}
+#toast.thought{border-radius:16px 16px 16px 4px;text-align:left;max-width:min(520px,calc(100vw - 40px));padding:13px 20px;line-height:1.65}
+#toast.thought::before{content:'希尔达 · 心想';display:block;font-size:10px;letter-spacing:.08em;opacity:.7;margin-bottom:4px}
+[data-scripted-eye],.cast-attention,.cast-pupils,.cast-rest-upper,[data-life-body],[data-life-head],[data-life-gaze],[data-life-gesture]{transform-origin:0px 0px;transform-box:view-box}
+#interactionObjects{pointer-events:none}

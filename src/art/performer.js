@@ -37,7 +37,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
       const leg=pose.legs[name];draw('rigLeg'+name,leg);
       const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,0,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')})`);}
       const arm=pose['arm'+name];draw('rigArm'+name,arm);
-      attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)})`);
+      attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)}) scale(${name==='Front'?1:-1} 1)`);
       attr('rigPalm'+name,'d',pose.grip?'M-4-5Q1-7 5-3L5 3Q2 7-3 5L-6 1-7-3Q-6-5-3-1L0 0-1-4Z':'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z');
       attr('rigFingers'+name,'d',pose.grip?'M-2 1l5 1m-5 1 4 1':'M0 2l1 4m-4-5 1 4');
     }

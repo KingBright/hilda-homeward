@@ -1,12 +1,10 @@
 /* Quiet secondary animation. Contact choreography remains in control of limbs. */
 .cast-breathe{animation:castBreathe 4.8s ease-in-out infinite;transform-origin:center bottom;transform-box:fill-box}
-.cast-blink{animation:castBlink 6.4s linear infinite;transform-box:fill-box;transform-origin:center}
-[data-cast="大卫"] .cast-blink{animation-delay:-1.7s}
-[data-cast="芙丽达"] .cast-blink{animation-delay:-3.1s}
+/* Script supplies the complete SVG pivot. A fill-box CSS origin applies it twice. */
+.cast-blink,#rigEyes,[data-scripted-eye]{animation:none;transform-box:view-box;transform-origin:0px 0px}
 .cast-tail{animation:castTail 5.2s ease-in-out infinite;transform-origin:left bottom;transform-box:fill-box}
 .cast-scarf{animation:castScarf 4.2s ease-in-out infinite;transform-origin:left center;transform-box:fill-box}
 @keyframes castBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-.6px)}}
-@keyframes castBlink{0%,94%,98%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 @keyframes castTail{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
 @keyframes castScarf{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
 .paused .cast-breathe,.paused .cast-blink,.paused .cast-tail,.paused .cast-scarf{animation-play-state:paused}

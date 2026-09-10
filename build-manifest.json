@@ -1,5 +1,5 @@
 {
-  "version": "3.6.0",
+  "version": "3.7.0",
   "modules": [
     "src/engine/modules.js",
     "src/art/cast-acting.js",
@@ -15,6 +15,7 @@
     "src/art/performer.js",
     "src/art/props.js",
     "src/art/setpiece-life.js",
+    "src/art/species-life.js",
     "src/art/twig-design.js",
     "src/content/catalog.js",
     "src/content/choreography.js",
@@ -34,6 +35,7 @@
     "src/engine/hydraulics.js",
     "src/engine/idle-life.js",
     "src/engine/kinematics.js",
+    "src/engine/readability.js",
     "src/engine/runtime.js",
     "src/engine/score-player.js",
     "src/engine/setpiece-motion.js",
@@ -67,6 +69,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 303731,
-  "sha256": "e75e25b94c8f92a2def91551cba3f1a7c7612421ec69d9eaec863f6bc790147f"
+  "bytes": 310771,
+  "sha256": "40b660fe7b34e396acbd4b7c1c50886cffe2a36fd6d0f1916fec0f298920f7af"
 }

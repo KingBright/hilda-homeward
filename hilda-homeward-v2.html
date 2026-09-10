@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 同行的呼吸 V3.6。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 让世界说话 V3.7。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -32,13 +32,11 @@
 
 /* Quiet secondary animation. Contact choreography remains in control of limbs. */
 .cast-breathe{animation:castBreathe 4.8s ease-in-out infinite;transform-origin:center bottom;transform-box:fill-box}
-.cast-blink{animation:castBlink 6.4s linear infinite;transform-box:fill-box;transform-origin:center}
-[data-cast="大卫"] .cast-blink{animation-delay:-1.7s}
-[data-cast="芙丽达"] .cast-blink{animation-delay:-3.1s}
+/* Script supplies the complete SVG pivot. A fill-box CSS origin applies it twice. */
+.cast-blink,#rigEyes,[data-scripted-eye]{animation:none;transform-box:view-box;transform-origin:0px 0px}
 .cast-tail{animation:castTail 5.2s ease-in-out infinite;transform-origin:left bottom;transform-box:fill-box}
 .cast-scarf{animation:castScarf 4.2s ease-in-out infinite;transform-origin:left center;transform-box:fill-box}
 @keyframes castBreathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-.6px)}}
-@keyframes castBlink{0%,94%,98%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 @keyframes castTail{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
 @keyframes castScarf{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
 .paused .cast-breathe,.paused .cast-blink,.paused .cast-tail,.paused .cast-scarf{animation-play-state:paused}
@@ -51,6 +49,14 @@
 .audioMix input{width:100%;accent-color:#dfbf87;cursor:pointer}
 .audioMix output{text-align:right;font:11px monospace;color:#edcf99}
 @media(max-width:700px),(max-height:560px){#portrait{width:44px;height:56px}.audioMix label{grid-template-columns:65px 1fr 32px;gap:8px}}
+
+/* The world is not a task board. Menus and voluntary inspection retain text. */
+#sceneLabel,#chapterCard,#actionLabel{display:none!important}
+#hud nav{margin-left:auto}
+#toast.thought{border-radius:16px 16px 16px 4px;text-align:left;max-width:min(520px,calc(100vw - 40px));padding:13px 20px;line-height:1.65}
+#toast.thought::before{content:'希尔达 · 心想';display:block;font-size:10px;letter-spacing:.08em;opacity:.7;margin-bottom:4px}
+[data-scripted-eye],.cast-attention,.cast-pupils,.cast-rest-upper,[data-life-body],[data-life-head],[data-life-gaze],[data-life-gesture]{transform-origin:0px 0px;transform-box:view-box}
+#interactionObjects{pointer-events:none}
 
 /* UI belongs around the world, never on top of a puzzle's important geometry. */
 #hud nav{gap:8px}#focusBtn.active{background:#b8995e!important;color:#132f38!important}
@@ -89,7 +95,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.6</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.6 同行的呼吸 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.7</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.7 让世界说话 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -212,17 +218,20 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
       if(entry.upper){
         put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
         for(const arm of entry.arms){
-          const front=arm.name==='front',origin=[front?17:-19,-79],target=front?idle.front:idle.back;
-          const j=solve(origin,target,25,27,-1);
+          const front=arm.name==='front',origin=[front?19:-19,-79],target=front?idle.front:idle.back;
+          const j=solve(origin,target,25,27,front?-1:1);
           const fmt=a=>a.map(n=>n.toFixed(3));
           const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
           arm.paths.forEach(n=>put(n,'d',d));
           const angle=Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])*180/Math.PI-90;
-          put(arm.hand,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${angle.toFixed(3)})`);
+          put(arm.hand,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${angle.toFixed(3)}) scale(${front?1:-1} 1)`);
         }
       }
       if(entry.blink){
         entry.blink.style.animation='none';
+        entry.blink.style.transformBox='view-box';
+        entry.blink.style.transformOrigin='0px 0px';
+        entry.blink.setAttribute('data-scripted-eye','true');
         put(entry.blink,'transform',`translate(0 -111) scale(1 ${idle.blink.toFixed(3)}) translate(0 111)`);
       }
       put(entry.actor, 'data-role', role);
@@ -291,8 +300,8 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  }
  function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
  function restingArm(name,c){
-  const x=name==='back'?-19:17,hx=name==='back'?-28:29;
-  return `<g data-rest-arm="${name}">${p(`M${x} -79L${hx} -60L${hx} -39`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${hx} -60L${hx} -39" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -39)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+  const x=name==='back'?-19:19,hx=name==='back'?-26:26;
+  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-27:27} -54L${hx} -29`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-27:27} -54L${hx} -29" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -29) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
  }
  function standing(who,mood='curious'){
   const c=profiles[who]||profiles['妈妈'];
@@ -302,11 +311,11 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
     <g class="cast-rest-upper">${upper(who,false,mood)}<g class="person-arms">${restingArm('back',c)}${restingArm('front',c)}</g></g>
   </g>`;
  }
- function elf(){return `<g data-cast="阿尔弗" class="cast-breathe">${e(0,3,17,3,'#0d29393d')}${p('M-7-16v14m12-15 2 16','none','#405253',4)}${boot(-6,0,true)}${boot(8,0)}${p('M-11-35q11-7 22 0l4 19-26 1Z','#849078')}${p('M-13-32l-5 12 6 3m22-17 9 11-5 6','none','#aaaf88',4)}${p('M-14-43l-10-7 3 10 7 4m28-7 10-7-4 10-7 3','#edc69f')}${e(0,-46,16,19,'#f4d6b0',ink,1.4)}${p('M-19-55Q-13-74 1-87L-1-72Q14-68 20-53Z','#b95444')}${p('M-9-69l9-12-3 13 13 6','none','#e09772',1.3)}${p('M-18-54q18-8 37 0','none','#6f3939',3)}${e(-6,-46,2,2.5,ink)}${e(7,-46,2,2.5,ink)}${p('M-15-50h13v10h-13Zm18 0h13v10H3Zm-5 4h5','none','#6b5b45',1.2)}${p('M-3-34q4 3 8-1','none','#815546',1)}${p('M-6-30l18 1 4 20-19 2Z','#e3d4a8')}${p('M-2-24h9m-8 4h10m-9 4h7','none','#8f9475',.8)}${e(10,-12,2,2,'#b46551')}</g>`;}
+ function elf(){return `<g data-cast="阿尔弗" data-other-life="elf">${e(0,3,17,3,'#0d29393d')}${p('M-7-16v14m12-15 2 16','none','#405253',4)}${boot(-6,0,true)}${boot(8,0)}<g data-life-body data-life-pivot="0 -16">${p('M-11-35q11-7 22 0l4 19-26 1Z','#849078')}${p('M-13-32l-5 12 6 3m22-17 9 11-5 6','none','#aaaf88',4)}<g data-life-head data-life-pivot="0 -28">${p('M-14-43l-10-7 3 10 7 4m28-7 10-7-4 10-7 3','#edc69f')}${e(0,-46,16,19,'#f4d6b0',ink,1.4)}${p('M-19-55Q-13-74 1-87L-1-72Q14-68 20-53Z','#b95444')}${p('M-9-69l9-12-3 13 13 6','none','#e09772',1.3)}${p('M-18-54q18-8 37 0','none','#6f3939',3)}<g data-life-eye data-eye-y="-46"><g data-life-gaze>${e(-6,-46,2,2.5,ink)}${e(7,-46,2,2.5,ink)}</g></g>${p('M-15-50h13v10h-13Zm18 0h13v10H3Zm-5 4h5','none','#6b5b45',1.2)}${p('M-3-34q4 3 8-1','none','#815546',1,'data-life-mouth')}</g><g data-life-gesture>${p('M-6-30l18 1 4 20-19 2Z','#e3d4a8')}${p('M-2-24h9m-8 4h10m-9 4h7','none','#8f9475',.8)}${e(10,-12,2,2,'#b46551')}</g></g></g>`;}
  function twig(){return Twig.markup();}
 
- function troll(big=false,calm=true){return `<g data-cast="${big?'巨魔妈妈':'小巨魔'}">${e(0,4,66,9,'#0b273747')}<g class="cast-breathe">${p('M-60-7Q-75-33-60-69L-55-99Q-51-131-28-138L-11-149 14-143 34-140Q56-130 57-99l10 25q15 22 10 53L58-13 50-4 21-6 11-20-4-18-16-4-39-3-47-12Z','url(#cast-rock)',ink,2.2)}${p('M-56-62l13-17 12 12-8 35-15 8m77-54 24 9 12 32-18 9-11-28','#67837e','none')}${p('M-31-135l17-8 22 3 10 7-22 3-17 15-18-2Z','#b5beb0','none')}${p('M-41-112l-13-5-4 12 10 10m92-17 12-6 6 12-10 12','#8fa399')}${e(-24,-96,10,12,'#c5cbb8')}${e(27,-96,10,12,'#c5cbb8')}${e(-21,-95,4.4,6,ink)}${e(25,-95,4.4,6,ink)}${e(-20,-97,1.3,1.7,'#f6ecd4')}${e(26,-97,1.3,1.7,'#f6ecd4')}${p('M-5-99l-9 28 25 2-8-25Z','#8fa6a0')}${p(calm?'M-20-57q21 15 42-1':'M-17-54q16-8 33-1','none','#324f56',2.1)}${p('M-46-46l9 5-4 14m76-22-9 9 3 12M-32-17l2 8m57-10 3 9m9-111-5 8 5 9','none','#b1bdb0',1.3)}${[-29,-18,16,31].map((x,i)=>e(x,-76+i%2*3,2.5,1.8,'#607c78')).join('')}${p('M-40-132l-1-8 10 3 4-9 8 6 8-6 7 7-6 8Z','#78936e')}${p('M-36-140l3 9m6-14 1 10m10-9-2 8','none','#bcc69b',1)}${big?p('M12-140q-3-13 6-20m-5 9-8-5m8 2 10-2','none','#93af8a',2):p('M-50-69q46 17 96 1l-5 10q-41 16-84-1Z','#b77959')}${p('M-40-63q16 6 28 6','none','#e0b58a',1.2)}</g></g>`;}
- function woff(){return `<g data-cast="沃夫" class="float">${p('M-80-16Q-101-27-86-47-68-62-49-43Q-3-70 49-43 67-65 84-48 101-29 81-14 99 14 73 36 40 61-16 54-60 53-80 31-92 13-80-16Z','url(#cast-woff)',ink,2)}${p('M-46-36q12-8 25-8m-19 3 6-7m9 3 6-7m-45 32-6 7m125-3 6 9','none','#f3e5c3',1.8)}${p('M-79-29q-2-16 17-14m127 0q20-3 17 16','none','#8e9b94',2)}${e(-28,5,10,12,'#f0e6cc')}${e(26,5,10,12,'#f0e6cc')}${e(-25,6,3.7,6.2,ink)}${e(25,6,3.7,6.2,ink)}${e(-24,3,1,1.8,'#fff2dc')}${e(26,3,1,1.8,'#fff2dc')}${p('M-8 21q8 8 17-2','none','#576d70',1.5)}${p('M-37 49l-4 12 17-8m39-1 18 10-3-14','#8da2a0')}${e(-42,22,8,3,'#bc9f87')}${e(41,22,8,3,'#bc9f87')}</g>`;}
+ function troll(big=false,calm=true){return `<g data-cast="${big?'巨魔妈妈':'小巨魔'}" data-other-life="${big?'mother':'troll'}">${e(0,4,66,9,'#0b273747')}<g data-life-body data-life-pivot="0 -5">${p('M-60-7Q-75-33-60-69L-55-99Q-51-131-28-138L-11-149 14-143 34-140Q56-130 57-99l10 25q15 22 10 53L58-13 50-4 21-6 11-20-4-18-16-4-39-3-47-12Z','url(#cast-rock)',ink,2.2)}${p('M-56-62l13-17 12 12-8 35-15 8m77-54 24 9 12 32-18 9-11-28','#67837e','none')}${p('M-31-135l17-8 22 3 10 7-22 3-17 15-18-2Z','#b5beb0','none')}<g data-life-head data-life-pivot="0 -75">${p('M-41-112l-13-5-4 12 10 10m92-17 12-6 6 12-10 12','#8fa399')}<g data-life-eye data-eye-y="-96">${e(-24,-96,10,12,'#c5cbb8')}${e(27,-96,10,12,'#c5cbb8')}<g data-life-gaze>${e(-21,-95,4.4,6,ink)}${e(25,-95,4.4,6,ink)}${e(-20,-97,1.3,1.7,'#f6ecd4')}${e(26,-97,1.3,1.7,'#f6ecd4')}</g></g>${p('M-5-99l-9 28 25 2-8-25Z','#8fa6a0')}${p(calm?'M-20-57q21 15 42-1':'M-17-54q16-8 33-1','none','#324f56',2.1,'data-life-mouth')}</g>${p('M-46-46l9 5-4 14m76-22-9 9 3 12M-32-17l2 8m57-10 3 9m9-111-5 8 5 9','none','#b1bdb0',1.3)}${[-29,-18,16,31].map((x,i)=>e(x,-76+i%2*3,2.5,1.8,'#607c78')).join('')}${p('M-40-132l-1-8 10 3 4-9 8 6 8-6 7 7-6 8Z','#78936e')}${p('M-36-140l3 9m6-14 1 10m10-9-2 8','none','#bcc69b',1)}${big?p('M12-140q-3-13 6-20m-5 9-8-5m8 2 10-2','none','#93af8a',2):p('M-50-69q46 17 96 1l-5 10q-41 16-84-1Z','#b77959')}${p('M-40-63q16 6 28 6','none','#e0b58a',1.2)}</g></g>`;}
+ function woff(){return `<g data-cast="沃夫" data-other-life="woff"><g data-life-body data-life-pivot="0 52">${p('M-80-16Q-101-27-86-47-68-62-49-43Q-3-70 49-43 67-65 84-48 101-29 81-14 99 14 73 36 40 61-16 54-60 53-80 31-92 13-80-16Z','url(#cast-woff)',ink,2)}${p('M-46-36q12-8 25-8m-19 3 6-7m9 3 6-7m-45 32-6 7m125-3 6 9','none','#f3e5c3',1.8)}${p('M-79-29q-2-16 17-14m127 0q20-3 17 16','none','#8e9b94',2)}<g data-life-head data-life-pivot="0 12"><g data-life-eye data-eye-y="5">${e(-28,5,10,12,'#f0e6cc')}${e(26,5,10,12,'#f0e6cc')}<g data-life-gaze>${e(-25,6,3.7,6.2,ink)}${e(25,6,3.7,6.2,ink)}${e(-24,3,1,1.8,'#fff2dc')}${e(26,3,1,1.8,'#fff2dc')}</g></g>${p('M-8 21q8 8 17-2','none','#576d70',1.5,'data-life-mouth')}</g>${p('M-37 49l-4 12 17-8m39-1 18 10-3-14','#8da2a0')}${e(-42,22,8,3,'#bc9f87')}${e(41,22,8,3,'#bc9f87')}</g></g>`;}
  return {profiles,defs,expression,head,upper,boot,standing,elf,twig,troll,woff};
 });
 
@@ -337,7 +346,7 @@ Homeward.define('art/cast-motion', [], () => {
 /* src/art/chapter-life.js */
 /** Three authored dioramas. Only transient presentation is animated here; state lives in scenes. */
 Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
-  const {path,rect,circle,ell,text,group,rep,fern,gear}=K;
+  const {path,rect,circle,ell,sceneText:text,group,rep,fern,gear}=K;
   const defs=`<defs>
     <clipPath id="northGateArch"><path d="M1240 784V464Q1249 327 1381 327T1516 464V784Z"/></clipPath>
     <linearGradient id="chapterCopper" x2=".2" y2="1"><stop stop-color="#d3be89"/><stop offset=".34" stop-color="#9e8b60"/><stop offset=".6" stop-color="#567d70"/><stop offset="1" stop-color="#b49c6d"/></linearGradient>
@@ -376,8 +385,6 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
       b+=path('M350 654V422L329 399','none','#203e43',12)+path('M350 654V422L329 399','none','url(#chapterCopper)',7)+rect(335,545,31,58,'#526e60',4,'#93a48b',2)+F.bolt(350,558)+F.bolt(350,589);
       b+=`<g id="intakeRotor" transform="rotate(${f.intakeClosed?90:0} 350 682)">${circle(350,682,31,'#2d4b4a','#bcb486',6)}${path('M350 651v62m-31-31h62','none','#a79f75',6)}${circle(350,682,10,'#d1b783','#365953',3)}</g>`;
       b+=F.plate(349,755,111,f.intakeClosed?'进水闸 · 已关闭':'进水闸 · 已开启');
-      b+=group(1164,247,1,rect(-131,-35,262,71,'#486457',7,'#a1ab83',2)+F.bolt(-119,-22,3)+F.bolt(119,22,3)+text(0,-11,'夜 班 检 修',12,'#dcc897')+text(0,14,'关闸 → 清网 → 接管 → 开闸试压',10,'#c1c9a9'));
-      b+=group(738,672,1,rect(-95,-20,190,31,'#40594f',3,'#7c9277',1)+text(0,0,'检修台 · 扶稳再操作',10,'#bec7a6'));
       b+=rep(12,i=>{let x=133+i*109;return path(`M${x} 125q-5 16 0 33t0 28`,'none','#a3b995',1,'opacity=".21"');});
       b+=rep(8,i=>circle(1337+i%2*22,581+i*18,3,'#94b39d','none',0,'class="chapter-dew"'));
       if(f.filter&&!f.intakeClosed)b+=path('M446 596v83','none','#c7e2bb',2,'stroke-dasharray="8 11" class="flowline"');
@@ -440,6 +447,7 @@ Homeward.define('art/creature-life', ['engine/animal-life'], Animal => {
     roots.set(root,[...root.querySelectorAll('[data-animal-rig="twig"]')].map(actor=>{
       const parts=Object.fromEntries(['heading','torso','head','tail','ear-a','ear-b','eye','shadow'].map(k=>[k,actor.querySelector('.twig-'+k)]));
       const legs=[0,1,2,3].map(i=>{const group=actor.querySelector(`[data-twig-leg="${i}"]`);return {group,paths:[...group.querySelectorAll(':scope > path')],hoof:group.querySelector('.twig-hoof')};});
+      if(parts.eye){parts.eye.setAttribute('data-scripted-eye','true');parts.eye.style.transformOrigin='0px 0px';parts.eye.style.transformBox='view-box';}
       return {actor,parts,legs};
     }));
   }
@@ -493,7 +501,7 @@ Homeward.define('art/creature-life', ['engine/animal-life'], Animal => {
 /* src/art/finishing.js */
 /** Deterministic material detail. Geometry is decorative; puzzle hit regions stay in scene logic. */
 Homeward.define('art/finishing', ['art/kit','content/details','content/mechanisms'], (K,details,Mechanisms) => {
-  const {path,rect,circle,ell,group,rep,text,fern}=K;
+  const {path,rect,circle,ell,group,rep,sceneText:text,fern}=K;
   const defs=`<defs>
     <linearGradient id="v3Brass" x2=".2" y2="1"><stop stop-color="#fae5b2"/><stop offset=".25" stop-color="#bc9764"/><stop offset=".62" stop-color="#806849"/><stop offset="1" stop-color="#d3b377"/></linearGradient>
     <radialGradient id="v3Amber"><stop stop-color="#ffe2a3" stop-opacity=".45"/><stop offset=".35" stop-color="#e9b67b" stop-opacity=".15"/><stop offset="1" stop-color="#e9b67b" stop-opacity="0"/></radialGradient>
@@ -503,7 +511,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     <pattern id="v3Fabric" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0h6M0 3h6M1 0v6M4 0v6" fill="none" stroke="#e2d5ac" stroke-opacity=".18" stroke-width=".5"/></pattern>
   </defs>`;
   const bolt=(x,y,r=4)=>circle(x,y,r,'#b4ad85','#213e43',1.5)+path(`M${x-r*.55} ${y+r*.55}l${r*1.1}-${r*1.1}`,'none','#54645a',1.3);
-  function plate(x,y,w,label){return group(x,y,1,rect(-w/2,-17,w,34,'#2d4b4a',5,'#8b9977',1.2)+rect(-w/2+3,-14,w-6,28,'none',3,'#b9af8255',.8)+bolt(-w/2+8,0,2.5)+bolt(w/2-8,0,2.5)+text(0,4,label,10,'#d0c39c'));}
+  function plate(){return '';}
   function vine(x,y,scale=1,flip=1){return group(x,y,scale,`<g transform="scale(${flip} 1)">${path('M0 0Q67 1 59 71t36 98','none','#2b5148',4)}${rep(10,i=>{let xx=36+Math.sin(i*.75)*24,yy=i*16;return path(`M${xx} ${yy}q${i%2?28:-29} -25 ${i%2?26:-28} 3q${i%2?-12:13} 15 ${i%2?-26:28} -3`,'#4c7460','#234843',.8);})}</g>`);}
   function motes(scene){return `<g class="v3-motes" pointer-events="none">${rep(20,i=>{let x=(i*317+scene*79)%1560+20,y=(i*117)%700+70;return circle(x,y,i%4===0?2:1,'#ecd39b','none',0,`style="animation-delay:-${i*.73}s" class="v3-mote"`);})}</g>`;}
   function observation(state){let d=details[state.scene],x=d.x,y=d.y,s='';
@@ -515,7 +523,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     else if(state.scene===10){s=path(`M${x-30} ${y+12}q45-12 70 4`,'none','#547662',4)+group(x,y,.7,path('M-15 0Q-13-20 3-13Q14-19 18-10L31-6 17-3Q7 18-15 0Z','#b78354','#36564e',2)+circle(12,-10,1.5,'#243f43')+path('M-4 7l-3 8m9-6v8','none','#355d55',2));}
     else if(state.scene===9){s=path(`M${x-22} ${y+30}v-55l22-17 22 17v55Z`,'#2c4c52','#8f9475',3)+rect(x-13,y-18,26,31,'#e9cb8b',2)+path(`M${x} ${y-18}v31`,'none','#465b52',3)+ell(x,y-2,83,101,'url(#v3Amber)');}
     else if(state.scene===1){s=path(`M${x-20} ${y+38}v-85h36v85`,'none','#a1ad8b',2)+rep(7,i=>path(`M${x-18} ${y+30-i*12}h${i%3?12:22}`,'none','#d1c99e',1.5))+path(`M${x-35} ${y+17}h68`,'none','#b59b69',2);}
-    else{s=plate(x,y,Math.min(d.w,128),['','','','待送信件','旧城水务','最后一个','', '守钟人','夜班交接'][state.scene]||'归途');}
+    else{s=group(x,y,1,rect(-28,-20,56,40,'#b9ab7c',3,'#486352',1.5)+path('M-25-16L0 3 25-16M-25 16-7 1m32 15L7 1','none','#e1d1a2',1.2));}
     return `<g id="scene-observation" class="v3-observation" opacity="${state.notes.includes(d.note)?'.66':'1'}">${s}</g>`;
   }
   function scenery(state){const i=state.scene,f=state.f;let b='';
@@ -614,6 +622,7 @@ const rect=(x,y,w,h,f,r=0,s='none',sw=2)=>`<rect x="${x}" y="${y}" width="${w}" 
 const circle=(x,y,r,f,s='none',sw=2,more='')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" stroke="${s}" stroke-width="${sw}" ${more}/>`;
 const ell=(x,y,rx,ry,f,more='',sw=2)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${/^(#|url\(|none$)/.test(more)?`stroke="${more}" stroke-width="${sw}"`:more}/>`;
 const text=(x,y,t,size=16,color=P.cream,extra='')=>`<text x="${x}" y="${y}" fill="${color}" font-size="${size}" font-family="Noto Sans CJK SC, sans-serif" text-anchor="middle" ${extra}>${t}</text>`;
+const sceneText=(x,y,t,...args)=>/^[0-9ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ\s.]+$/u.test(String(t))?text(x,y,t,...args):'';
 const group=(x,y,s,body,extra='')=>`<g transform="translate(${x} ${y}) scale(${s})" ${extra}>${body}</g>`;
 const rep=(n,fn)=>Array.from({length:n},(_,i)=>fn(i)).join('');
 let visualState={scene:0,f:{}};let seed=123;function rnd(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;}
@@ -659,7 +668,7 @@ function bird(x,y,s=1){return group(x,y,s,`<g class="float">${path('M-38 1-10-14
 function setVisualState(state,index) { visualState=state; seed=8103+index*9361; }
 function getVisualState(){return visualState;}
 
-return {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState};
+return {P,path,rect,circle,ell,text,sceneText,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState};
 });
 
 /* src/art/performer.js */
@@ -702,7 +711,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
       const leg=pose.legs[name];draw('rigLeg'+name,leg);
       const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,0,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')})`);}
       const arm=pose['arm'+name];draw('rigArm'+name,arm);
-      attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)})`);
+      attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)}) scale(${name==='Front'?1:-1} 1)`);
       attr('rigPalm'+name,'d',pose.grip?'M-4-5Q1-7 5-3L5 3Q2 7-3 5L-6 1-7-3Q-6-5-3-1L0 0-1-4Z':'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z');
       attr('rigFingers'+name,'d',pose.grip?'M-2 1l5 1m-5 1 4 1':'M0 2l1 4m-4-5 1 4');
     }
@@ -743,7 +752,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
 /* src/art/props.js */
 Homeward.define("art/props", ["art/kit", "art/characters"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}) => {
 function itemArt(id){let b='';switch(id){case'lamp':case'shade':b=lamp(0,14,.65,true)+(id==='shade'?path('M-18-9H19L25 11H-23Z','#d3ab70','#445956',2):'');break;case'scarf':b=path('M-26-14Q-3-30 26-17L23-5-2-2 8 24-7 30-18-10Z','#e3b76c','#3a5153',2)+path('m-3 21-4 7m9-11-3 11','none','#b28a50',2);break;case'crank':b=path('M-26 14H-8V-13H21V1','none','#7d9e96',9)+circle(21,4,8,'#ba8c56','#3c5552',2);break;case'rope':case'line':b=rep(4,i=>`<ellipse cx="${-8+i*5}" cy="-2" rx="13" ry="25" fill="none" stroke="#c8b17e" stroke-width="4"/>`)+path('M15 18 30 27','none','#c8b17e',4);break;case'hook':b=path('M-10-29 1-16V9q0 26 20 5m-20-4q-1 26-23 5','none','#91b4b0',6);break;case'grapple':b=path('M-22 26Q-42-13-12-6T2-20','none','#c7b380',4)+path('M2-27V5q-4 20-18 8m18-8q5 20 20 4','none','#98bdb6',5);break;case'fork':b=path('M0 30V-4Q-21-2-21-18v-14m21 28q21 2 21-14v-14','none','#c2d0b0',5)+circle(0,6,3,'#e8c484');break;case'felt':b=path('M-26-22 23-27 31 22-22 29Z','#b4b392','#536c66',2)+path('m-20-13 37-5m-34 18 35-5m-31 18 33-5','none','#dcd4ad',3);break;case'gearS':b=gear(0,0,26,10);break;case'gearM':b=gear(0,0,30,12);break;case'gearL':b=gear(0,0,34,14);break;case'plan':b=paper(0,0,.85,'plan');break;case'pole':b=path('M-30 30 25-25','none','#c8b17e',6)+path('M18-32 32-18','none','#8baaa0',4)+path('M23-27 35-15','none','#dcd1a6',3);break;default:b=bird(0,0,.8);}return `<svg viewBox="-45 -45 90 90" xmlns="http://www.w3.org/2000/svg">${b}</svg>`;}
-function portrait(who){let art;if(who==='希尔达')art=hilda(0,150,1,1,false,false,false);else if(who==='枝枝')art=twig(0,70,1,false);else if(who==='阿尔弗')art=person(who,0,92,1,false);else if(who.includes('巨魔'))art=troll(0,151,1);else art=person(who,0,148,1,false);return `<svg viewBox="-45 -22 90 103" xmlns="http://www.w3.org/2000/svg">${art}</svg>`;}
+function portrait(who){let art;if(who==='希尔达')art=hilda(0,150,1,1,false,false,false);else if(who==='枝枝')art=twig(0,70,1,false);else if(who==='阿尔弗')art=person(who,0,92,1,false);else if(who.includes('巨魔'))art=troll(0,151,1,who==='巨魔妈妈');else if(who==='沃夫')art=woff(0,27,.48);else art=person(who,0,148,1,false);return `<svg viewBox="-45 -22 90 103" xmlns="http://www.w3.org/2000/svg">${art}</svg>`;}
 function waterLines(y=710,n=30){return `<g class="ripple" opacity=".55">${rep(n,()=>{let x=rnd()*1600,yy=y+rnd()*(900-y);return path(`M${x.toFixed(1)} ${yy.toFixed(1)}q${10+rnd()*35} -3 ${30+rnd()*60} 0`,'none','#99bdb0',1.4);})}</g>`;}
 function mushrooms(x,y,s=1){return group(x,y,s,rep(3,i=>group(i*25-22,-i%2*8,.6+i*.14,`${path('M-3 0-2-26H4L7 0Z','#e5d8b0')}${path('M-22-23Q-17-56 1-52 19-49 26-20Z','#b66f50','#40605a',1)}${circle(-7,-36,3,'#e7cc9f')}${circle(11,-32,2.5,'#e7cc9f')}`)));}
 function skyline(){return rep(16,i=>{let x=i*115-40,y=365+rnd()*115,w=90+rnd()*65;return `${path(`M${x} 700V${y}l${w*.5}-42 ${w*.5} 38V700Z`,'#4b7276','#315661',2)}${rep(3,j=>windowArt(x+15+j*28,y+38,14,27,rnd()>.55))}`;});}
@@ -755,14 +764,12 @@ return {itemArt,portrait,waterLines,mushrooms,skyline,particles};
 /* src/art/setpiece-life.js */
 /** Archive and rooftop presentation. Puzzle decisions belong to the scene modules. */
 Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpieces','engine/setpiece-motion'], (K,F,Stage,Motion) => {
-  const {path,rect,circle,ell,text,group,rep}=K;
+  const {path,rect,circle,ell,sceneText:text,group,rep}=K;
   function scenery(s) {
     let b='';const f=s.f;
     if(s.scene===3) {
       b+=rep(3,i=>group(Stage.archive.docks[i],849,1,
-        path('M-34-41H34M0-46v11','none','#d8c38f',2)+text(0,0,['风 · 旧城','叶 · 山林','水 · 钟楼'][i],12,'#d7cea4')));
-      b+=group(1170,236,1,rect(-85,-22,170,38,'#344f46',4,'#b7b48a',2)+text(0,3,'水务卷宗 · 第七架',13,'#e1d1a0'));
-      b+=group(765,200,1,rect(-155,-38,310,56,'#b5ac80',4,'#354e42',3)+text(0,-12,'先对准 · 再锁轮 · 扶稳取书',14,'#345349')+text(0,8,'借书的人，也要好好回来。',10,'#5a6e55'));
+        path('M-34-41H34M0-46v11','none','#d8c38f',2)+path(['M-12-12q16-14 26 0m-19 8q15-8 20 0','M0-20q-18 10-7 23Q16 0 0-20Zm0 3L-3 0','M0-22Q-18-3-8 6Q10 18 13 2Q12-7 0-22Z'][i],'none','#d7cea4',2)));
       b+=`<g id="archiveBrakeShift">`+group(Stage.ladderX(s)+82,777,1,
         path('M-19 20H10L17 1H-9Z','#586b50','#253f3c',3)+circle(-6,5,7,'#cdb780','#314b40',2)+
         `<g id="archiveBrakePedal" transform="rotate(${f.ladderBrake?26:-25} -6 5)">${path('M-6 5L19-8','none','#c1a971',7)}${rect(8,-14,28,11,'#cbb98d',3,'#385347',2)}</g>`+
@@ -827,6 +834,60 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
     const layer=node('setpieceFX');if(layer&&layer.innerHTML!==fx)layer.innerHTML=fx;
   }
   return {scenery,animate};
+});
+
+/* src/art/species-life.js */
+/** Shared expressive life for Alfur, both trolls and Woff. Stage and portraits use the same clock.
+ * Limb, body and eye pivots are local SVG coordinates, never CSS fill-box offsets.
+ */
+Homeward.define('art/species-life', [], () => {
+  const caches=new WeakMap();
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x);};
+  const pulse=(t,a,b,c,d)=>smooth((t-a)/(b-a))*(1-smooth((t-c)/(d-c)));
+  const profiles=Object.freeze({elf:{period:7.1,phase:1.3,breath:.002,head:.7},troll:{period:8.9,phase:3.7,breath:.0015,head:.15},mother:{period:9.7,phase:6.4,breath:.0012,head:.12},woff:{period:6.3,phase:2.9,breath:.005,head:0}});
+  function sample({kind='elf',time=0,gaze=0,reduced=false,reserved=false,speaking=false}={}){
+    const p=profiles[kind]||profiles.elf,t=(Number.isFinite(time)?Math.max(0,time):0)+p.phase;
+    const blink=reduced?1:1-.94*pulse(t%p.period,.2,.27,.34,.44);
+    const gesture=reduced||reserved?0:pulse(t%19,7,7.9,8.2,9.8);
+    return {blink,gaze:clamp(Number.isFinite(gaze)?gaze:0,-1,1),
+      breath:reduced||reserved?1:1+Math.sin(t*1.35)*p.breath,
+      tilt:reduced||reserved?0:Math.sin(t*.65)*p.head,
+      bob:reduced||reserved||kind!=='woff'?0:Math.sin(t*1.4)*1.6,
+      gesture,open:!reduced&&speaking&&Math.sin(t*(kind==='elf'?10:6))>.15};
+  }
+  function refresh(root){
+    if(!root)return;
+    caches.set(root,[...root.querySelectorAll('[data-other-life]')].map(actor=>{
+      const body=actor.querySelector('[data-life-body]'),head=actor.querySelector('[data-life-head]'),eye=actor.querySelector('[data-life-eye]'),mouth=actor.querySelector('[data-life-mouth]');
+      if(eye){eye.style.animation='none';eye.style.transformOrigin='0px 0px';eye.style.transformBox='view-box';eye.setAttribute('data-scripted-eye','true');}
+      return {actor,body,head,eye,mouth,gaze:actor.querySelector('[data-life-gaze]'),gesture:actor.querySelector('[data-life-gesture]'),closed:mouth?.getAttribute('d'),fill:mouth?.getAttribute('fill')||'none'};
+    }));
+  }
+  const put=(n,k,v)=>{if(n&&n.getAttribute(k)!==String(v))n.setAttribute(k,String(v));};
+  function paint(root,time,{reduced=false,paused=false,portrait=false,scene=0,working=false,speaker='',typing=false,character=''}={}){
+    if(!root||paused)return;if(!caches.has(root))refresh(root);
+    const source=root.querySelector(`[data-cast="${speaker||'希尔达'}"]`),target=source?.getCTM();
+    for(const n of caches.get(root)){
+      const m=n.actor.getCTM(),kind=n.actor.dataset.otherLife,who=n.actor.dataset.cast;
+      const gaze=!portrait&&m&&target&&source!==n.actor?(target.e-m.e)/(Math.max(.01,Math.abs(m.a))*160):0;
+      const speaking=who===speaker&&typing&&character&&!/^[\s，。！？、….,!?]+$/u.test(character);
+      const pose=sample({kind,time,gaze,reduced,reserved:working&&scene===9,speaking});
+      const y=Number(n.eye?.dataset.eyeY||0),pivot=n.body?.dataset.lifePivot||'0 0',headPivot=n.head?.dataset.lifePivot||'0 0';
+      put(n.eye,'transform',`translate(0 ${y}) scale(1 ${pose.blink.toFixed(3)}) translate(0 ${-y})`);
+      put(n.gaze,'transform',`translate(${(pose.gaze*.7).toFixed(3)} 0)`);
+      const [px,py]=pivot.split(' ').map(Number);
+      put(n.body,'transform',`translate(${px} ${py+pose.bob}) scale(1 ${pose.breath.toFixed(5)}) translate(${-px} ${-py})`);
+      put(n.head,'transform',`rotate(${pose.tilt.toFixed(3)} ${headPivot})`);
+      put(n.gesture,'transform',`rotate(${(pose.gesture*(kind==='elf'?-4:2)).toFixed(3)} 2 -29)`);
+      if(n.mouth){const cy=kind==='elf'?-34:kind==='woff'?23:-56,cx=kind==='elf'?1:kind==='woff'?0:2;
+        put(n.mouth,'d',pose.open?`M${cx-4} ${cy}q4-2 8 0q-4 6-8 0Z`:n.closed);
+        put(n.mouth,'fill',pose.open?'#3a4c4d':n.fill);}
+      put(n.actor,'data-role',speaker?who===speaker?'speaker':'listener':'idle');
+      put(n.actor,'data-life',pose.gesture>.1?kind==='elf'?'check-notes':'settle':'rest');
+    }
+  }
+  return {profiles,sample,refresh,paint};
 });
 
 /* src/art/twig-design.js */
@@ -894,7 +955,7 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
     return {...(entries[scene]?.[id]??{kind:'reach',target:null}),scene,id,item};
   }
   function companion(scene,state,heroX) {
-    if(scene===2&&!state.f.bridge) return {david:state.f.bridgeBrace?380:350,bracing:!!state.f.bridgeBrace};
+    if(scene===2&&!state.f.bridge) return {david:state.f.bridgeBrace?380:425,bracing:!!state.f.bridgeBrace};
     return {david:Math.max(85,Math.min(1490,heroX-175)),frida:Math.max(65,Math.min(1490,heroX-270))};
   }
   return {score,companion};
@@ -1298,7 +1359,7 @@ Homeward.define('engine/audio', ['content/score','engine/score-player'], (Score,
 
 /* src/engine/body-motion.js */
 /** Seekable whole-body posing. Rigid bones; joint-space reach arcs; no accumulated state. */
-Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'], ({solve},{smooth}) => {
+Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track','engine/idle-life'], ({solve},{smooth},Idle) => {
   const mix=(a,b,t)=>a+(b-a)*t;
   const point=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const limit=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -1307,7 +1368,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
   const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
   function articulated(origin,rest,target,bend,reach){
     const a=bones.upperArm,b=bones.forearm;
-    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,1);
+    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,bend);
     const angle=j=>Math.atan2(j.elbow[1]-origin[1],j.elbow[0]-origin[0]);
     const elbowAngle=j=>wrap(Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])-angle(j));
     const upper=angle(neutral)+wrap(angle(contact)-angle(neutral))*reach;
@@ -1352,9 +1413,10 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       front=atShelf?local:[22,-97-Math.sin(p*24)*14];
       back=[-16,-94+Math.sin(p*24)*14];
     }
-    const armFront=articulated([17+lean,-79+crouch+bob],[29+wave*11,-39],front,-1,envelope);
+    const idle=!score&&!moving?Idle.sample({who:'希尔达',time,reduced}):null;
+    const armFront=articulated([19+lean,-79+crouch+bob],[26+lean+wave*7,-29+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
     const backReach=pickup&&!score.twoHands?envelope*.3:envelope*.9;
-    const armBack=articulated([-19+lean,-79+crouch+bob],[-28-wave*10,-40],back,-1,backReach);
+    const armBack=articulated([-19+lean,-79+crouch+bob],[-26+lean-wave*7,-29+crouch+bob],back,1,backReach);
     const legs={};
     for(const [name,sign] of [['Back',-1],['Front',1]]){
       const step=(gait+(sign<0?.5:0))%1;
@@ -1458,25 +1520,25 @@ Homeward.define('engine/idle-life', [], () => {
   const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
   const pulse=(t,a,b,c,d)=>smooth((t-a)/(b-a))*(1-smooth((t-c)/(d-c)));
   const profiles=Object.freeze({
-    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[-14,-68],label:'check-satchel'}),
-    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[-12,-71],label:'hold-strap'}),
-    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[8,-86],label:'adjust-scarf'}),
-    '妈妈':Object.freeze({period:19.1,phase:2.7,breath:1.4,hand:[35,-67],label:'open-palm'})
+    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[-8,-58],label:'check-satchel'}),
+    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[-8,-61],label:'hold-strap'}),
+    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[12,-77],label:'adjust-scarf'}),
+    '妈妈':Object.freeze({period:19.1,phase:2.7,breath:1.4,hand:[33,-44],label:'open-palm'})
   });
   function sample({who='妈妈',time=0,reduced=false,moving=false,reserved=false,speaker=false,scene=0}={}){
     const p=Object.hasOwn(profiles,who)?profiles[who]:profiles['妈妈'];
     const t=(Number.isFinite(time)?Math.max(0,time):0)+p.phase+scene*.37;
-    const q=t%p.period,gesture=reserved||moving||reduced?0:pulse(q,2.3,3.2,4.1,5.5);
+    const q=t%p.period,gesture=reserved||moving||reduced?0:pulse(q,3.2,4.6,5.1,6.8);
     const look=reserved||moving||reduced?0:pulse(q,7,7.5,8.4,9.2)*(Math.floor(t/p.period)%2?-.55:.55);
-    const shift=reserved||moving||reduced?0:Math.sin(t*.47)*1.35;
+    const shift=reserved||moving||reduced?0:Math.sin(t*.37)*.35;
     const blinkPhase=t%(5.1+p.phase*.11),blink=reduced?1:1-.94*pulse(blinkPhase,.18,.235,.285,.36);
-    const talk=reserved||moving||reduced||!speaker?0:(.5+.5*Math.sin(t*3))*0.28;
+    const talk=reserved||moving||reduced||!speaker?0:pulse(q,1.2,1.8,2.1,2.9)*.14;
     const reach=Math.max(gesture,talk);
     const target=speaker&&gesture<.1?[36,-66]:p.hand;
-    return {gesture:reach,front:[29+(target[0]-29)*reach,-39+(target[1]+39)*reach],
-      back:[-28-gesture*2,-40-gesture*5],shift,
-      breath:reserved||reduced?0:Math.sin(t*p.breath)*.65,
-      lean:reserved||moving||reduced?0:Math.sin(t*.41)*.7,
+    return {gesture:reach,front:[26+(target[0]-26)*reach,-29+(target[1]+29)*reach],
+      back:[-26,-29],shift,
+      breath:reserved||reduced?0:Math.sin(t*p.breath)*.28,
+      lean:reserved||moving||reduced?0:Math.sin(t*.31)*.22,
       look,head:reduced||reserved?0:look*4,blink,
       beat:reserved?'occupied':moving?'walking':gesture>.1?p.label:Math.abs(look)>.1?'look-around':'rest'};
   }
@@ -1500,8 +1562,32 @@ Homeward.define('engine/kinematics', [], () => {
   return {solve};
 });
 
+/* src/engine/readability.js */
+/** Small tangible objects remain visible and selectable in front of nearby characters.
+ * Reparent the original drawing, not a duplicate. Retain its animation-local transform.
+ */
+Homeward.define('engine/readability', [], () => {
+  const sources=['homeLamp','homeBird','northCrank','forestRope','vineHook','gondolaLine','pickup-gearS','pickup-gearM','pickup-gearL','clockFelt','forestWinch','bridgeBrake','intakeRotor','primeHandle','roofControlWheel'];
+  const people=new Set(['mom','david','frida','alfur','troll','child','twig','woff','friends']);
+  const priority=h=>h.kind==='take'?3:people.has(h.id)?0:h.kind==='exit'?1:2;
+  function pick(hotspots,p){return hotspots.filter(h=>Math.abs(p.x-h.x)<=h.w/2&&Math.abs(p.y-h.y)<=h.h/2).sort((a,b)=>priority(b)-priority(a)||a.w*a.h-b.w*b.h)[0];}
+  function order(hotspots){return [...hotspots].sort((a,b)=>priority(a)-priority(b)||b.w*b.h-a.w*a.h);}
+  function promote(root){
+    const layer=root?.querySelector('#interactionObjects');if(!layer)return;
+    const matrix=layer.getCTM();if(!matrix)return;
+    const inverse=matrix.inverse();
+    for(const id of sources){const source=root.querySelector('#'+id);if(!source||layer.contains(source))continue;
+      const parent=source.parentNode.getCTM();if(!parent)continue;
+      const m=inverse.multiply(parent),wrapper=document.createElementNS('http://www.w3.org/2000/svg','g');
+      wrapper.dataset.objectLayer=id;wrapper.setAttribute('transform',`matrix(${[m.a,m.b,m.c,m.d,m.e,m.f].map(v=>v.toFixed(7)).join(' ')})`);
+      layer.append(wrapper);wrapper.append(source);
+    }
+  }
+  return {sources,priority,pick,order,promote};
+});
+
 /* src/engine/runtime.js */
-Homeward.define("engine/runtime", ["engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["art/species-life", "engine/readability", "engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (SpeciesLife, Readability, Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -1544,16 +1630,17 @@ function setSound(on){
  updateTools();save();
 }
 function save(immediate=false){if(!started)return;clearTimeout(saveTimer);const write=()=>{s.heroX=hero.x;s.savedAt=new Date().toISOString();try{store.save(s);storageOK=true;saved=clone(s);$('saveDot').classList.add('saved');clearTimeout(saveIndicatorTimer);saveIndicatorTimer=setTimeout(()=>$('saveDot').classList.remove('saved'),1000);}catch(e){storageOK=false;if(!storageWarned){storageWarned=true;toast('浏览器阻止了自动存档。可以在暂停菜单中导出进度。');}}};if(immediate)write();else saveTimer=setTimeout(write,160);}
-function toast(t,time=3300){$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),time);}
+function toast(t,time=3300){$('toast').classList.remove('thought');$('toast').textContent=t;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),time);}
+function think(t,time=3300){toast(t,time);$('toast').classList.add('thought');}
 function actionLabel(t,sticky=false){$('actionLabel').textContent=t;$('actionLabel').classList.add('show');clearTimeout(labelTimer);if(!sticky)labelTimer=setTimeout(()=>$('actionLabel').classList.remove('show'),3800);}
 function setFlag(k,v=true){if(!boolFlags.has(k)&&!numericFlags[k])throw Error('Unknown state key '+k);s.f[k]=v;commit();}
 function commit(){if(!renderQueued){renderQueued=true;requestAnimationFrame(()=>{renderQueued=false;render();});}save();}
-function take(k,announce=true){if(!Object.hasOwn(Story.items,k))throw Error('Unknown item '+k);if(!s.inventory.includes(k))s.inventory.push(k);renderInventory();save();if(announce){toast('收入背包 · '+Story.items[k]);sound('warm');} $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});}
+function take(k,announce=true){if(!Object.hasOwn(Story.items,k))throw Error('Unknown item '+k);if(!s.inventory.includes(k))s.inventory.push(k);renderInventory();save();if(announce){think(Story.items[k]+'收好了。');sound('warm');} $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});}
 function consume(k){s.inventory=s.inventory.filter(v=>v!==k);if(selected===k)selected=null;renderInventory();save();}
 function addNote(k){if(!s.notes.includes(k)){s.notes.push(k);save();} }
 function sketch(k,title,body){if(!Object.hasOwn(sketches,k))return;if(!s.sketches.includes(k)){s.sketches.push(k);save();toast('观察手记 '+s.sketches.length+' / 6 · '+title);}say([['希尔达',body]]);}
 function combo(a,b){const output=Items.recipeFor(a,b);if(!output)return false;consume(a);consume(b);take(output,false);selected=output;renderInventory();toast(output==='shade'?'组合完成 · 把围巾叠在提灯一侧做成遮光屏风，光线柔和了':'组合完成 · '+Story.items[output]);sound('wood');return true;}
-function selectItem(id){if(!s.inventory.includes(id))return;if(selected===id){selected=null;}else if(selected&&!combo(selected,id)){selected=id;}else if(!selected)selected=id;renderInventory();if(selected){toggleBag(false);actionLabel('选择了「'+Story.items[selected]+'」：点目标使用，或再开背包组合。');}}
+function selectItem(id){if(!s.inventory.includes(id))return;if(selected===id){selected=null;}else if(selected&&!combo(selected,id)){selected=id;}else if(!selected)selected=id;renderInventory();if(selected){toggleBag(false);think('先把'+Story.items[selected]+'拿在手里。');}}
 function toggleBag(force){if(activeWork&&force!==false)return;if(force!==false&&!bagOpen&&pendingMove?.after)pendingMove=null;bagOpen=typeof force==='boolean'?force:!bagOpen;$('pocket').classList.toggle('hidden',!bagOpen);$('bagBtn').setAttribute('aria-expanded',String(bagOpen));renderInventory();}
 function renderInventory(){
  $('bagCount').textContent=s.inventory.length;
@@ -1583,16 +1670,17 @@ function calcCamera(reset=false){if(inspection&&!reset){setView();return;}let ww
 function setView(){ui.world.setAttribute('viewBox',`${camera.x.toFixed(2)} ${camera.y.toFixed(2)} ${camera.w.toFixed(2)} ${camera.h.toFixed(2)}`);$('panLeft').style.opacity=camera.x<1?'.25':'.85';$('panRight').style.opacity=camera.x+camera.w>1599?'.25':'.85';}
 function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
 function worldPoint(x,y){const r=ui.world.getBoundingClientRect();return {x:camera.x+(x-r.left)/r.width*camera.w,y:camera.y+(y-r.top)/r.height*camera.h};}
-function atPoint(p){return [...activeHotspots].reverse().find(h=>Math.abs(p.x-h.x)<=h.w/2&&Math.abs(p.y-h.y)<=h.h/2);}
+function atPoint(p){return Readability.pick(activeHotspots,p);}
 function render(){
  const index=titleMode?7:s.scene,artState=titleMode?{...s,scene:7}:s,scene=Story.scenes[index];
  const visualState=dragPreview?.kind==='ladder'?{...artState,f:{...artState.f,ladderX:dragPreview.x}}:dragPreview?.kind==='beacon'?{...artState,beaconAngle:dragPreview.angle}:artState;
  let layers=Art.scene(visualState,titleMode);
  const dog=!(s.scene===9&&!s.f.twigSafe)&&!titleMode;
  let followers='';if(!titleMode&&[2,3,4,7].includes(s.scene))followers+=`<g id="davidFollow">${Art.person('大卫',0,0,1.34)}</g>`;if(!titleMode&&s.scene===4)followers+=`<g id="fridaFollow">${Art.person('芙丽达',0,0,1.38)}</g>`;
- patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
- CastActing.refresh(ui.world);CreatureLife.refresh(ui.world);
- activeHotspots=titleMode?[]:Story.scenes[s.scene].hotspots(s);
+ patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><g id="interactionObjects" pointer-events="none"></g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
+ Readability.promote(ui.world);
+ CastActing.refresh(ui.world);CreatureLife.refresh(ui.world);SpeciesLife.refresh(ui.world);
+ activeHotspots=titleMode?[]:Readability.order(Story.scenes[s.scene].hotspots(s));
  patchSvg($('hotspotLayer'),activeHotspots.map(h=>`<g class="hotspot ${h.kind==='exit'?'isExit':''}" data-hotspot="${h.id}" data-kind="${h.kind||'interact'}" role="button" tabindex="0" aria-label="${esc(h.label)}"><rect class="hit" x="${h.x-h.w/2}" y="${h.y-h.h/2}" width="${h.w}" height="${h.h}"/><g class="hotmark" transform="translate(${h.x} ${h.y})"><circle r="${h.kind==='exit'?16:10}" fill="#173841d9" stroke="#e3d29a" stroke-width="1.2"/>${h.kind==='exit'?Art.path(h.id==='back'?'M7 0H-7m5-5-5 5 5 5':'M-7 0H7m-5-5 5 5-5 5','none','#f0dbab',1.5):Art.circle(0,0,2,'#e8d7ab')}</g></g>`).join(''));
  document.querySelectorAll('.hotspot').forEach(el=>{el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){if(dialogue||modal)return;e.preventDefault();e.stopPropagation();interact(el.dataset.hotspot);}};el.onfocus=()=>{const h=activeHotspots.find(h=>h.id===el.dataset.hotspot);if(h&&camera.w<1550){camera.manual=true;camera.x=clamp(h.x-camera.w*.5,0,1600-camera.w);setView();}else if(h&&camera.h<850){camera.manual=true;camera.y=clamp(h.y-camera.h*.5,0,900-camera.h);setView();}};});
  rainNodes=[...ui.world.querySelectorAll('[data-rain]')];
@@ -1631,8 +1719,8 @@ function updateActors(){
  const speaker=dialogue?.lines[dialogue.index]?.[0]||'';
  const listener=[dialogue?.lines[dialogue.index+1]?.[0],dialogue?.lines[dialogue.index-1]?.[0]].find(who=>who&&who!==speaker)||'';
  const acting={scene:index,flags:s.f,speaker,listener,typing:typewriter.busy,character:typewriter.fullText[typewriter.index-1]||'',reduced:s.settings.reduced,paused:isPaused(),working:!!activeWork,moving:!!pendingMove};
- CastActing.paint(ui.world,elapsed,acting);
- if(dialogue){CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false,moving:false});CreatureLife.paint($('portrait'),elapsed,{...acting,portrait:true,speaking:true});}
+ CastActing.paint(ui.world,elapsed,acting);SpeciesLife.paint(ui.world,elapsed,acting);
+ if(dialogue){CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false,moving:false});CreatureLife.paint($('portrait'),elapsed,{...acting,portrait:true,speaking:true});SpeciesLife.paint($('portrait'),elapsed,{...acting,portrait:true,working:false});}
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
 }
 
@@ -1660,7 +1748,7 @@ function interact(id,itemOverride){
  const h=activeHotspots.find(v=>v.id===id);if(!h)return;
  const item=itemOverride??selected;
  if(item&&!s.inventory.includes(item))return;
- if(item&&!Items.canUse(s.scene,id,item)){sound('wood');toast('「'+Story.items[item]+'」不适合这个位置。先取消选中，再观察「'+h.label+'」。');return;}
+ if(item&&!Items.canUse(s.scene,id,item)){sound('wood');think('「'+Story.items[item]+'」不适合这个位置。先取消选中，再观察「'+h.label+'」。');return;}
  toggleBag(false);$('hoverLabel').classList.remove('show');
  arriveAndAct(h,item,()=>Story.scenes[s.scene].act(G,id,item));
 }
@@ -1681,7 +1769,7 @@ function showLine(){
  const [who,line]=dialogue.lines[dialogue.index];
  $('speaker').textContent=who;
  $('portrait').innerHTML=Art.portrait(who);
- CastActing.refresh($('portrait'));CreatureLife.refresh($('portrait'));
+ CastActing.refresh($('portrait'));CreatureLife.refresh($('portrait'));SpeciesLife.refresh($('portrait'));
  $('nextLine').innerHTML=dialogue.index===dialogue.lines.length-1?'继续 <span>›</span>':'继续 <span>›</span>';
  updateActors();
  if(typewriter.timer){clearTimeout(typewriter.timer);typewriter.timer=null;}
@@ -1750,9 +1838,9 @@ function effect(kind){if(s.settings.reduced)return;if(kind==='shake'||kind==='wa
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
-function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);if(first&&Story.scenes[index].chapter)chapter(Story.scenes[index].chapter);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);else actionLabel(Story.scenes[index].objective(s));save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
+function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);toast('旅程已继续 · '+Story.scenes[s.scene].name);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
 function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
@@ -1760,7 +1848,7 @@ function openMenu(){if(!started)return;showPanel(`<div class="eyebrow">TAKE A BR
  $('panel').querySelectorAll('[data-volume]').forEach(el=>{el.oninput=()=>{s.settings[el.dataset.volume]=Number(el.value)/100;el.nextElementSibling.textContent=el.value+'%';audio?.update(audioState());save();};});
  $('resumePlay').onclick=closePanel;$('helpOpen').onclick=openHelp;$('soundSetting').onclick=()=>{setSound(!s.settings.sound);openMenu();};$('relaxSetting').onclick=()=>{s.settings.relaxed=!s.settings.relaxed;save();render();openMenu();};$('motionSetting').onclick=()=>{s.settings.reduced=!s.settings.reduced;save();render();openMenu();};$('exportBtn').onclick=exportSave;$('importBtn').onclick=()=>{$('importFile').value='';$('importFile').click();};$('restartBtn').onclick=confirmRestart;
 }
-function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。档案梯要先对准并锁轮；救回大卫后，请他稳住支点再撬梁。检修顺序写在现场铭牌上。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。风暴逼近时会退到安全检查点，已救回的同伴、已固定的绳索和前面章节都会保留。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
+function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。档案梯要先对准并锁轮；救回大卫后，请他稳住支点再撬梁。操作机关时，希尔达和同伴会交流发现；需要时也可打开手记。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。风暴逼近时会退到安全检查点，已救回的同伴、已固定的绳索和前面章节都会保留。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
 function openJournal(){if(!started)return;const count=s.hints[s.scene];const hints=Story.scenes[s.scene].hints(s);const hint=hints[Math.min(hints.length-1,Math.max(0,count-1))];showPanel(`<div class="eyebrow">FIELD NOTES · ${String(s.scene+1).padStart(2,'0')}</div><h2>这次冒险的手记</h2><h3>眼前的一步</h3><p>${esc(Story.scenes[s.scene].objective(s))}</p>${count?`<p class="spoiler-hint">提示 ${count} / 3<br>${esc(hint)}</p>`:''}<div class="btnrow"><button class="panelBtn" id="hintBtn">${count<3?'给我一点'+(count?'更明确的':'')+'提示':'查看明确提示'}</button><button class="panelBtn primary" id="backFromNotes">收好手记</button></div><h3>已经发现的事</h3>${s.notes.length?s.notes.map(k=>`<div class="journalNote"><h3>${esc(Story.notes[k][0])}</h3><p>${esc(Story.notes[k][1])}</p></div>`).join(''):'<p>第一页还空着。故事会随着你的脚步慢慢展开。</p>'}<h3>路边的小小发现 ${s.sketches.length} / 6</h3>${s.sketches.map(k=>`<div class="journalNote"><h3>${esc(sketches[k][0])}</h3><p>${esc(sketches[k][1])}</p></div>`).join('')}<p class="fineprint">提示不扣分，也不会改变结局。尚未发生的剧情不会提前写在这里。</p>`,'journal');$('hintBtn').onclick=()=>{s.hints[s.scene]=Math.min(3,s.hints[s.scene]+1);save();openJournal();};$('backFromNotes').onclick=closePanel;}
 function openEnding(){showPanel(`<div class="eyebrow">EVERYONE MADE IT HOME</div><h2>所有人，平安归来。</h2><p>希尔达把围巾留给了一个害怕黑夜的孩子。<br>山里的灯照见了一对母子。<br>城里的窗，等回了一群朋友。</p><div class="journalNote"><h3>本次夜行 · 安全记录</h3><p>希尔达、芙丽达、大卫、枝枝、阿尔弗：全部平安。<br>小巨魔：已与妈妈团聚。<br>妈妈：不用再守着那盏灯等了。</p></div><p class="progressText">十二幕旅程 · ${s.sketches.length} / 6 幅观察手记 · 完整归家结局</p><p>窗外的钟声再一次响起。很轻，很准。<br>这次，它只是在提醒大家：早饭时间到了。</p><div class="btnrow"><button class="panelBtn primary" id="stayHome">留在客厅里</button><button class="panelBtn" id="endingExport">保存这次旅程</button></div><p class="fineprint">《黄昏的回声：归途》 · 非官方同人作品<br>没有必须马上开始的下一次冒险。你可以和朋友继续说说话。</p>`,'ending');$('stayHome').onclick=closePanel;$('endingExport').onclick=exportSave;}
 function confirmRestart(){showPanel(`<div class="eyebrow">A NEW FIRST PAGE</div><h2>重新翻开第一页？</h2><p>新旅程会替换这个浏览器中的 V3 当前进度。第一版《黄昏的回声》的存档不受影响。先导出一份存档，就能保留这次冒险。</p><div class="btnrow"><button class="panelBtn" id="cancelRestart">继续现在的旅程</button><button class="panelBtn danger" id="confirmRestart">确认重新开始</button></div><div class="btnrow"><button class="panelBtn" id="beforeRestartExport">先导出当前进度</button></div>`,'confirm');$('cancelRestart').onclick=closePanel;$('confirmRestart').onclick=()=>{closePanel();start(false);};$('beforeRestartExport').onclick=exportSave;}
@@ -1804,7 +1892,7 @@ function tick(now){if(!document.hidden&&audio&&s.settings.sound&&now-audioTick>1
  if(pendingMove&&!dialogue&&!activeWork)pet.side=hero.face;
  pet.update(clamp(hero.x-pet.side*Staging.petDistance(s.scene),60,1540),dt,{reduced:s.settings.reduced});petX=pet.x;
 }updateActors();}requestAnimationFrame(tick);}
-const G={get s(){return s;},set:setFlag,commit,take,consume,toast,sound,say,go,work,effect,note:addNote,sketch,pulse,playSequence,finish,openEnding};
+const G={get s(){return s;},set:setFlag,commit,take,consume,toast:think,sound,say,go,work,effect,note:addNote,sketch,pulse,playSequence,finish,openEnding};
 updateTools();if(saved){$('continueBtn').classList.remove('hidden');$('continueBtn').innerHTML='继续旅程 <span>→</span>';}render();calcCamera(true);requestAnimationFrame(tick);
 if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),pet:pet.snapshot(),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,audio:()=>audio?.debug()||null,flush:()=>save(true)};
 
@@ -2001,7 +2089,7 @@ Homeward.define('engine/storage', [], () => {
 });
 
 /* src/scenes/00-home/art.js */
-Homeward.define("scene/0/art", ["content/staging", "art/kit", "art/characters", "art/props"], (Staging, {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/0/art", ["content/staging", "art/kit", "art/characters", "art/props"], (Staging, {P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function home(S,ending=false){let f=S.f;let b=rect(0,0,1600,900,'url(#warmWall)')+rect(0,0,1600,740,'url(#plaster)');
 b+=path('M0 0H1600V77L0 89Z','#2b4245')+rep(6,i=>path(`M${i*295-12} 0l-5 740h20l12-740Z`,'#354c4b'));
 b+=`<g id="homeWindow" transform="translate(0 ${Staging.home.windowOffset})">`+rect(860,155,378,370,'#30484a',120)+rect(879,174,340,336,ending?'url(#dawn)':'url(#skyD)',100)+path('M880 442 944 316 1032 390 1115 284 1219 395V511H880Z',ending?'#a3afa0':'#466e76')+pine(969,529,.34,'#355d62')+pine(1165,536,.42,'#305a5e');
@@ -2039,7 +2127,7 @@ hints:s=>['先观察窗户、炉火和门边。','纸鸟带着求助信；妈妈
 });
 
 /* src/scenes/01-north-gate/art.js */
-Homeward.define("scene/1/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/1/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function street(S){let f=S.f;let b=mountains(false)+skyline()+rect(0,550,1600,350,'#466b70');
 b+=path('M0 73 148 45 277 82V707H0Z','#465f5e','#243f49',4)+path('M0 81 148 22 293 83 279 108 0 101Z','#29444c','#193844',3)+rect(0,113,279,557,'url(#brick)')+windowArt(54,168,99,150)+windowArt(56,391,98,125,false)+path('M230 109v477q0 32-27 32H184','none','#283f45',12);
 b+=path('M263 237 396 203 602 254 599 730H267Z','#839388','#385956',4)+path('M243 242 399 169 622 244 610 266 263 259Z','#526a66','#244951',4)+rect(277,272,314,468,'url(#plaster)')+windowArt(317,310,79,128)+windowArt(443,309,101,129)+rect(362,537,139,199,'#284b52',70)+path('M385 738V609q52-104 92 0v129Z','#345b60','#678074',2);
@@ -2050,7 +2138,6 @@ b+=rect(664,627,240,122,'#4a5c4e',8)+rep(6,i=>rect(670+i*38,631,33,110,'#6d7760'
 b+=path('M1064 84 1243 40 1574 70 1610 772H1033Z','url(#wall)','#23484e',4)+rect(1076,117,524,637,'url(#brick)')+path('M1215 778V459Q1222 295 1380 299 1526 301 1539 459V778Z','#254b55','#a2aa8a',17)+path('M1240 784V464Q1249 327 1381 327T1516 464V784Z','#152f40');
 b+=`<g clip-path="url(#northGateArch)"><g id="gateBars" transform="translate(0 ${-Math.min(3,f.gateTurns||0)*335/3})">${rep(9,i=>path(`M${1254+i*30} 336V799`,'none','#496c68',10))}${path('M1245 452h268M1245 605h268M1245 744h268','none','#557871',10)}</g></g>`;
 b+=`<g id="gateRotor">`+wheel(1169,653,55,(f.gateTurns||0)*65)+(!f.crankMounted?circle(1169,653,13,'#203f47'):path('M1169 653h38v-25','none','#dec493',8))+`</g>`;
-b+=rect(1111,185,167,66,'#2b4d51',4,'#7f9580',3)+text(1195,212,'特 洛 尔 堡',14,'#cfccb0')+text(1195,236,'北　门',10,'#bac4b1');
 b+=path('M100 70Q544 201 1146 139T1620 201','none','#263e47',3)+rep(8,i=>lamp(217+i*169,126+Math.sin(i*.56)*25,.32,true));
 b+=ground(776,'#597975')+rep(95,()=>{let x=rnd()*1600,y=782+rnd()*130;return path(`M${x} ${y}q17-8 35 0v10h-32Z`,'none','#213f4926',2);})+ell(926,825,196,22,'#749991')+ell(251,828,109,15,'#73988d')+waterLines(842,12)+person('大卫',735,775,1.34)+lamp(1110,379,.7,true);
 b+=fern(43,871,1.8,'#294c4a')+grass(1521,813,1.4,'#254c4d')+particles(18);return b;}
@@ -2105,7 +2192,7 @@ Homeward.define('scene/1/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
 }));
 
 /* src/scenes/02-forest/art.js */
-Homeward.define("scene/2/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/2/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function forest(S){let f=S.f;let b=mountains(true);b+=rep(16,i=>pine(i*119-50,709+rnd()*31,.7+rnd()*.3,i%2?'#285a60':'#2f6566'));
 b+=path('M-30 648Q277 589 560 665L595 728 699 757 481 920H-30Z','#557b6c','#2b5653',3)+path('M1089 624Q1360 570 1645 674V923H961L958 798 1083 746Z','#577b68','#2b5653',3);
 b+=path('M729 570Q860 658 772 721T457 924H1104Q875 797 924 730T955 590Z','url(#river)')+waterLines(668,53)+path('M737 645q87 8 108 21m-121 23q58 18 116 5m-153 48q75 19 134 2','none','#c9d4b6',3,'opacity=".5"');
@@ -2118,7 +2205,7 @@ b+=`<g id="bridgeDeck">`+rep(16,i=>{let x=551+i*32,y=706+Math.sin(i/15*Math.PI)*
 b+=group(481,651,1,`${path('M-26 87-15-30H20L34 87Z','#6f7960','#31544f',3)}<g id="forestWinch">${wheel(0,0,43,0)}</g>`)+path('M1095 611v-72q-9-28-21-2','none','#a6b4a0',9)+(!f.ropeTaken?`<g id="forestRope">${group(330,728,.85,itemArt('rope').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'');
 b+=`<g id="vineAssembly">`+path(f.branchBent?'M220 520Q370 560 541 615':'M220 520Q370 430 541 460','none','#284f47',7,'id="bentBranch"')+path(f.branchBent?'M541 615v25':'M541 460v36','none','#598572',3)+(f.branchBent?path('M541 640L495 765','none','#c8b17e',3):'')+(!f.hookTaken?`<g id="vineHook">`+group(541,f.branchBent?642:496,.83,itemArt('hook').replace(/<svg[^>]*>|<\/svg>/g,''))+`</g>`:'')+`</g>`;
 b+=rock(294,759,1,'#7b8f77')+rock(1255,737,1.2,'#768b76')+fern(1234,742,1.2)+mushrooms(399,737,1.1)+mushrooms(1390,753,1.2)+fern(1537,889,2.4,'#2a5553')+fern(91,891,2.3,'#234c4b')+grass(527,754,1.1)+grass(1124,731,1.2);
-b+=path('M1316 683 1384 665 1377 713 1325 723Z','#998b64','#3a5c51',3)+text(1350,699,'根 下',15,'#293f40')+path('M1339 719v64','none','#526552',7)+rect(-30,628,1680,260,'url(#fog)',0)+particles(46,'firefly');return b;}
+b+=path('M1282 778Q1293 647 1392 650Q1459 670 1443 785','none','#34574e',20)+path('M1334 787Q1361 721 1398 713','none','#a0a280',9)+rect(-30,628,1680,260,'url(#fog)',0)+particles(46,'firefly');return b;}
 
 return forest;
 });
@@ -2132,11 +2219,11 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
   hotspots:s=>[
     ...(!s.f.ropeTaken?[I('rope','检查并收起旧绳圈',331,725,72,65,{walkX:296})]:[]),
     ...(!s.f.hookTaken?[H('hook',s.f.branchBent?'取下树枝上的铁钩':'观察高处的铁钩',541,s.f.branchBent?642:496,75,95,{walkX:495})]:[]),
-    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:350,642,76,114,{walkX:440})]:[]),
+    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:425,642,76,114,{walkX:440})]:[]),
     H('anchor','对岸的固定铁环',1095,556,85,122,{walkX:s.f.bridge?1042:516}),
     H('winch','转动桥边绞盘',481,651,107,116,{walkX:446}),
     H('stream','观察逆流的溪水',790,776,193,82,{walkX:s.f.bridge?774:492}),
-    exit('next','沿根下的路标前进',1351,699,{walkX:1352}),exit('back','回北门',95,738,{walkX:157})
+    exit('next','沿树根间的小径前进',1351,699,{walkX:1352}),exit('back','回北门',95,738,{walkX:157})
   ],
   act(g,id,item){
     if(id==='rope'){
@@ -2154,7 +2241,7 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
     if(id==='anchor'){
       if(f(g,'grappleSet'))return g.toast('铁钩已经扣住对岸的固定环。');
       if(!need(g,'grapple',item,'距离太远。绳子需要一只能够抓住铁环的钩。'))return;
-      return g.work(1200,'试过绳结，对准铁环抛出飞钩',()=>{g.consume('grapple');set(g,'grappleSet');g.sound('rope');g.toast('铁钩扣住了。绞盘旁的铭牌写着：一人稳住，一人收绳。');});
+      return g.work(1200,'试过绳结，对准铁环抛出飞钩',()=>{g.consume('grapple');set(g,'grappleSet');g.sound('rope');g.toast('铁钩扣住了。转绞盘时制动会松开，得请大卫帮我扶稳。');});
     }
     if(id==='david'){
       if(!f(g,'grappleSet'))return one(g,'大卫','我看着绞盘。先把绳子固定在对岸，我们再一起使劲。');
@@ -2171,20 +2258,20 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
     if(id==='next'){if(f(g,'bridge'))book(g,'water');return advance(g,f(g,'bridge'),3,'先固定断桥。我们要一起过去，也要能一起回来。');}
     if(id==='back')return g.go(1);wrong(g);
   },
-  objective:s=>!s.f.hookTaken?(s.f.branchBent?'取下压低树枝上的铁钩。':'用绳圈把高处的铁钩取下来。'):!s.f.grappleSet?'组合带钩绳索，固定对岸铁环。':!s.f.bridge?(!s.f.bridgeBrace?'请大卫稳住制动，再转绞盘。':'大卫已稳住制动，转动绞盘拉起断桥。'):'一起过桥，沿路标寻找档案室。',
+  objective:s=>!s.f.hookTaken?(s.f.branchBent?'取下压低树枝上的铁钩。':'用绳圈把高处的铁钩取下来。'):!s.f.grappleSet?'组合带钩绳索，固定对岸铁环。':!s.f.bridge?(!s.f.bridgeBrace?'请大卫稳住制动，再转绞盘。':'大卫已稳住制动，转动绞盘拉起断桥。'):'一起过桥，看看大树根下的通道。',
   hints:s=>[
-    !s.f.hookTaken?'用地上的旧绳圈套住高处树藤，拉低后再取铁钩。':!s.f.grappleSet?'绳子负责连接，铁钩负责抓住。打开背包把它们组合。':'铭牌上的“一人稳住，一人收绳”，说的是两个人的分工。',
+    !s.f.hookTaken?'用地上的旧绳圈套住高处树藤，拉低后再取铁钩。':!s.f.grappleSet?'绳子负责连接，铁钩负责抓住。打开背包把它们组合。':'绞盘和制动相互牵动，需要一人稳住制动，另一人收绳。',
     '把带钩绳索放到对岸铁环。不要直接拉断桥。',
     '固定对岸后，点击大卫让他稳住制动，然后操作绞盘。'
   ]
 }));
 
 /* src/scenes/03-archive/art.js */
-Homeward.define("scene/3/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/3/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function archive(S){let f=S.f;let b=rect(0,0,1600,900,'url(#cave)')+path('M90 781Q20 243 309 113L696 41 1272 118Q1578 260 1530 799Z','#4e685b','#254b4b',8)+rect(150,137,1300,640,'url(#plaster)');
 b+=rep(8,i=>path(`M${90+i*204} 840Q${330+i*109} 524 ${270+i*171} -32`,'none',i%2?'#3b574d':'#48624f',31))+path('M12 24Q258 190 300 417t-84 472M1590-17q-290 275-239 471t151 451','none','#1d4244',74)+path('M-17 56q236 150 259 384T104 892M1613 27q-214 255-205 402t161 467','none','#738068',10,'opacity=".55"');
 b+=group(955,369,1,`${path('M-328-178 302-191 312 298-328 308Z','#2b4543','#7e8867',8)}${rep(4,j=>`${rect(-318,-67+j*113,625,14,'#859070',3,'#34514a',2)}${rep(20,i=>{let xx=-306+i*30,hh=45+rnd()*53;return rect(xx,-68+j*113-hh,23,hh,['#919775','#bcad79','#739587','#b58664','#708a81'][Math.floor(rnd()*5)],2,'#294943',1.5)+path(`M${xx+4} ${-78+j*113}h14`,'none','#d5c99a',2,'opacity=".5"');})}`)}`);
-b+=!f.planTaken?`<g id="archiveBook">`+group(1170,342,1,`${rect(-23,-51,46,98,'#d0bb81',3,'#365751',2)}${path('M-14-25H13M-14-17H13M0-10v37','none','#607e6a',2)}${circle(0,5,9,'none','#607e6a',2)}`)+`</g>`:rect(1147,291,46,98,'#182f33',3);
+b+=!f.planTaken?`<g id="archiveBook">`+group(1170,342,1,`${rect(-23,-51,46,98,'#d0bb81',3,'#365751',2)}${path('M-14-30H13M-14-23H13','none','#607e6a',2)}${path('M0-16Q-18 3-8 12Q10 24 13 8Q12-1 0-16Z','none','#607e6a',2,'data-clue="water"')}`)+`</g>`:rect(1147,291,46,98,'#182f33',3);
 b+=ground(790,'#5e6e55')+path('M495 795H1336','none','#bdb68a',6)+path('M505 808H1327','none','#2f4e43',4);
 b+=`<g id="archiveLadderShift">`+group(f.ladderX??769,798,1,`${path('M-65 0-24-456M63 0 23-456','none','#b2a778',13)}${path('M-69-7-61-44M59-44 66-7','none','#324d45',8)}${rep(11,i=>{let yy=-29-i*38;let w=62-i*3.5;return path(`M${-w} ${yy}h${w*2}`,'none','#c2b88b',9);})}${circle(-63,1,12,'#32544d','#a6a77d',3)}${circle(65,1,12,'#32544d','#a6a77d',3)}`)+`</g>`;
 b+=group(380,670,1,`${path('M-184-90H157L187-62H-195Z','#b0a577','#3b5447',4)}${path('M-178-57v176h28l29-176m209 0 29 176h27V-57','#6e7757','#294b43',4)}${rect(-151,-38,262,98,'#506d54',3,'#274d48',3)}${rep(4,i=>rect(-143+i*64,-28,55,34,'#8b946b',2,'#34584c',2)+circle(-116+i*64,-11,4,'#d8c285'))}${paper(-22,-95,1.15,'plan')}${lamp(-121,-98,.53,true)}`)+person('阿尔弗',406,566,1.22);
@@ -2238,7 +2325,7 @@ Homeward.define('scene/3/logic', ['story/helpers','content/setpieces'], ({H,I,ex
 });
 
 /* src/scenes/04-waterworks/art.js */
-Homeward.define("scene/4/art", ["content/walkways", "engine/hydraulics", "art/kit", "art/characters", "art/props"], (Walkways, Hydraulics, {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/4/art", ["content/walkways", "engine/hydraulics", "art/kit", "art/characters", "art/props"], (Walkways, Hydraulics, {P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function pump(S){let f=S.f,vs=S.valves||[0,1,0];let b=rect(0,0,1600,900,'url(#cave)')+rect(95,90,1403,663,'url(#wall)',35)+rect(95,90,1403,663,'url(#brick)',35)+path('M-10 801V161Q801-115 1613 169V802','none','#24474b',72)+path('M44 773V204Q800-69 1555 209V777','none','#778e7c',7);
 b+=rep(5,i=>group(i*325,260,1,`${path('M-28 541V45Q0-8 31 40V541Z','#3f645e','#244a4c',5)}${rect(-37,515,79,33,'#526d60',4)}`));
 b+=path('M-20 782q438-78 699 15t988-13V910H-20Z','url(#river)')+waterLines(796,45);
@@ -2272,7 +2359,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
   name:'沉睡的回流水泵',english:'THE SLEEPING WATERWORKS',actLabel:'第二幕 · 山里藏着什么',
   mood:'旧水道 / 修好一处机关，才看见下一层真相',start:561,
   ground:Walkways.waterworksGround,
-  intro:[['芙丽达','我从升降站顺着水声找下来的。你们也听到了？'],['希尔达','是的。城门、溪流，似乎都在受同一台机器影响。'],['芙丽达','先看右上角的检修牌。水安静，不代表它没有力气。']],
+  intro:[['芙丽达','我从升降站顺着水声找下来的。你们也听到了？'],['希尔达','是的。城门、溪流，似乎都在受同一台机器影响。'],['芙丽达','先看看压力表。水安静，不代表它没有力气。']],
   hotspots:s=>[
     H('intake',s.f.intakeClosed?'打开进水闸':'关闭进水闸',350,682,86,94,{walkX:307}),
     H('filter','检查并清理进水滤网',453,640,111,147,{walkX:409}),
@@ -2280,7 +2367,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
     H('pipe1','旋转左下弯管',640,570,109,109,{walkX:617}),
     H('pipe2','旋转右下弯管',940,570,109,109,{walkX:911}),
     H('prime','缓缓拉下试压柄',1128,668,110,90,{walkX:1095}),
-    H('gauge','查看压力表和检修牌',1128,473,158,183,{walkX:1110}),
+    H('gauge','查看压力表，和芙丽达讨论水路',1128,473,158,183,{walkX:1110}),
     exit('next','上到升降站',1474,611,{walkX:1396}),exit('back','回档案室',142,588,{walkX:246})
   ],
   act(g,id,item){
@@ -2314,7 +2401,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
         if(Hydraulics.trace(g.s.valves,true).connected)g.toast(f(g,'intakeClosed')?'管路形状已经接通。打开进水闸，实际试水。':'水已到达出口。再拉试压柄，把机器慢慢唤醒。');
       });
     }
-    if(id==='gauge')return one(g,'芙丽达',f(g,'pump')?'回流水压稳定了。但泄洪支路还在升压。这里的表，告诉不了我们整座山发生的事。':'检修牌上写着：关闸、清网、接管、开闸试压。低压试水能帮你找漏点；正式加压后接头会自动锁住。');
+    if(id==='gauge')return one(g,'芙丽达',f(g,'pump')?'回流水压稳定了。但泄洪支路还在升压。这里的表，告诉不了我们整座山发生的事。':'水正顶着滤网。先关进水闸，清掉落叶，再把弯管接好。重新开闸时沿着水流找漏点，最后缓缓试压。正式加压后，接头会自动锁住。');
     if(id==='next')return advance(g,f(g,'pump'),5,'升降机还没有水力。让水到达出口，再缓缓试压。');
     if(id==='back')return g.go(3);wrong(g);
   },
@@ -2327,7 +2414,7 @@ Homeward.define('scene/4/logic', ['story/helpers','engine/hydraulics','content/w
 }));
 
 /* src/scenes/05-gondola/art.js */
-Homeward.define("scene/5/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/5/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function lift(S){let f=S.f;let sum=(S.weights||[]).reduce((a,v)=>a+v,0);let tilt=(sum-4)*3;let b=mountains(true)+skyline()+path('M0 646Q346 665 593 852H-15Z','#3c5f5c')+path('M995 837 1357 654 1634 682V937H1009Z','#315556');
 b+=path('M-20 690 279 610 1049 663 1260 734 1229 811H-20Z','#5d7769','#274e4d',4)+path('M0 799 443 778 793 824 1212 807V919H-10Z','#31534f')+path('M18 686 988 672 1247 729','none','#a6a885',8);
 b+=path('M204 673 249 134 425 137 473 685M262 143 323 664M409 140 354 667','none','#28494c',27)+path('M220 668 263 154 411 154 452 669','none','#81957b',5)+gear(337,188,104,15,'url(#bronze)',0,true)+path('M273 96 1119-30M389 126 1658 107','none','#c5c4a0',4)+path('M259 85 1119-40M400 115 1650 94','none','#21424b',8);
@@ -2335,7 +2422,7 @@ b+=group(1194,551,1,`${path('M-82-112 0-292 71-112','none','#78958d',7)}${path('
 b+=group(810,487,1,`${path('M-22 225V-76h41v301Z','#516b5b','#274b46',4)}${path('M-91 225H85','none','#a2a480',17)}<g transform="rotate(${tilt})">${path('M-157-36H157','none','#b6b185',14)}${path('M-144-27v146m288-146v146','none','#b3b18a',3)}${path('M-202 119q59 55 117 0ZM83 119q61 55 118 0Z','#8c9c7b','#345e4e',3)}${text(-144,142,'Ⅳ',25,'#314c44')}${(S.weights||[]).map((v,i)=>group(121+i*21,102-i%2*20,.65,weight(v,0,0))).join('')}</g>${circle(0,-36,18,'#d1bf83','#31594c',3)}${text(1,-90,'平 衡 后 通 行',12,'#d4d0a9')}`);
 b+=[1,2,3].map((v,i)=>(S.weights||[]).includes(v)?'':weight(v,425+i*113,691)).join('');
 b+=!f.lineTaken?`<g id="gondolaLine">${group(336,737,1,itemArt('line').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'';
-b+=rect(979,589,100,112,'#395c58',12,'#9aac89',4)+wheel(1029,633,30,f.lift?160:0)+rect(974,564,113,24,'#d0bd85',3)+text(1030,580,'松开制动',11,'#355349');
+b+=rect(979,589,100,112,'#395c58',12,'#9aac89',4)+wheel(1029,633,30,f.lift?160:0);
 b+=person('大卫',554,769,1.34)+person('芙丽达',951,765,1.38)+fern(31,858,1.9,'#274f48')+grass(1294,809,1.7)+particles(30);return b;}
 function weight(v,x,y){return group(x,y,1,`${path('M-13-44q-9-18 13-18t13 18','none','#8ba28a',5)}${path('M-27-44H27L38 9H-38Z',v===1?'#b9b288':v===2?'#859a81':'#6b8c7d','#274c48',3)}${rep(v,i=>path(`M${(i-(v-1)/2)*11} -24v19`,'none','#e4d5a5',3))}`);}
 
@@ -2356,7 +2443,7 @@ hints:s=>['横梁左边的符号是四。右边不能太轻，也不能太重。
 });
 
 /* src/scenes/06-shelter/art.js */
-Homeward.define("scene/6/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/6/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function glen(S){let f=S.f;let b=mountains(true)+rep(11,i=>pine(i*157,688+rnd()*35,.7+rnd()*.5,i%2?'#305f60':'#234e57'));
 b+=path('M-20 793Q-33 500 136 385 331 302 472 345 579 180 727 172 925 150 1012 327 1251 389 1374 753Z','#4d7467','#264e4c',5)+path('M-14 718 186 477 386 445 532 289 736 224 909 367 1047 405 1163 643Z','#6d8b76')+path('M351 410 476 345 579 180 727 172 854 199 778 256 670 237 594 337 467 452Z','#829777')+path('M888 367Q1091 301 1339 528L1501 755H926Z','#325957','#21494b',5)+path('M1077 745Q1038 464 1200 450 1358 440 1392 749Z','#133946');
 b+=path('M274 492q87 19 147-8m288-97q55 45 120 15','none','#345b58',9)+path('M376 467q-37 40 20 89m320-202q-28 25 16 63','none','#466e62',6)+path('M642 403 596 519 692 510Z','#638471','#395f57',4)+path('M457 580q133 62 277-6','none','#335952',7);
@@ -2383,7 +2470,7 @@ hints:s=>['孩子怕强光，也怕突如其来的声音。','把围巾和提灯
 });
 
 /* src/scenes/07-tower-door/art.js */
-Homeward.define("scene/7/art", ["content/walkways", "content/mechanisms", "art/kit", "art/characters", "art/props"], (Walkways, Mechanisms, {P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/7/art", ["content/walkways", "content/mechanisms", "art/kit", "art/characters", "art/props"], (Walkways, Mechanisms, {P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function gate(S){let f=S.f;let b=mountains(true)+path('M832 55 1611 84V900H778Z','#43676a','#244b54',6)+rect(828,81,772,744,'url(#brick)');
 b+=path('M1137 829V286Q1188 116 1391 150 1552 158 1568 321V829Z','#1c424e','#8b9f87',17)+path('M1168 828V303q32-126 191-126t178 126v525Z','#152f3f');
 b+=`<g transform="translate(0 ${f.towerGate?-472:0})">${path('M1177 810V312q20-126 182-127t167 129v496Z','#526f67','#254c4d',4)}${rep(10,i=>path(`M${1190+i*34} 193v620`,'none','#354f4d',8))}${path('M1179 353H1535M1179 626H1535','none','#96a285',15)}${circle(1348,447,84,'none','#aab18e',6)}${path('M1348 365v164m-82-82h164','none','#aab18e',4)}</g>`;
@@ -2415,7 +2502,7 @@ hints:s=>['地上的齿轮并没有丢失，只是离开了轴承。','轮子有
 });
 
 /* src/scenes/08-water-clock/art.js */
-Homeward.define("scene/8/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/8/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function heart(S){let f=S.f;let b=rect(0,0,1600,900,'url(#cave)')+rect(90,36,1430,780,'#486a65',20)+rect(90,36,1430,780,'url(#brick)',20)+path('M145 830V190Q250-2 802 0 1380-11 1496 181V831','none','#25484b',61)+path('M180 810V200Q300 27 802 34T1462 209V810','none','#80927b',8);
 b+=rep(3,i=>windowArt(255+i*477,90,102,246,false))+path('M327 115 615 786H946L354 105Z','#dbe5bf','none',0,'opacity=".035"')+path('M790 95 1122 808H1337L815 94Z','#dbe5bf','none',0,'opacity=".045"');
 b+=path('M162 831V481H450V206h293M1170 236h231v539H964V625','none','#183c44',48)+path('M162 831V481H450V206h293M1170 236h231v539H964V625','none','#859578',30)+path('M162 831V481H450V206h293M1170 236h231v539H964V625','none','#b9b68a',3);
@@ -2448,7 +2535,7 @@ hints:s=>['直接停钟会锁住泄洪。先看左下的维护图。','曲柄用
 });
 
 /* src/scenes/09-storm-roof/art.js */
-Homeward.define("scene/9/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/9/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function roof(S){let f=S.f;let b=mountains(true)+rect(0,0,1600,900,'#142b481f')+skyline()+path('M-12 729 230 540 469 715 1524 640 1620 737V920H-12Z','#415f67','#173c4a',5);
 b+=path('M-50 713 222 535 467 695 584 930H-50Z','#466a6e','#163d49',5)+rep(16,i=>path(`M-44 ${661+i*23}q215-9 499 30`,'none','#9aa893',2,'opacity=".42"'))+rep(13,i=>path(`M${-42+i*43} 852 220 535`,'none','#284c57',3));
 b+=path('M761 722 965 510 1251 551 1620 736V930H762Z','#385b62','#183e49',5)+rep(13,i=>path(`M${776+i*66} 904 981 522`,'none','#234955',3))+rep(11,i=>path(`M790 ${710+i*20}q364-27 814 30`,'none','#72958b',2,'opacity=".35"'));
@@ -2527,7 +2614,7 @@ Homeward.define('scene/9/logic', ['story/helpers','content/setpieces'], ({checkB
 });
 
 /* src/scenes/10-dawn-ridge/art.js */
-Homeward.define("scene/10/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/10/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function ridge(S){let f=S.f;let b=mountains(false,true)+rep(15,i=>pine(i*129-50,740-rnd()*65,.58+rnd()*.54,i%2?'#648a7f':'#5b817a'));
 b+=path('M-40 780 63 701 190 735 367 673 460 708 646 646 726 684 901 628 1072 676 1311 621 1630 723V940H-40Z','#75907a','#42695c',3)+path('M972 745 1111 705 1227 871 1208 919H953Z','#2d595c')+path('M-40 847Q369 803 609 758T949 754','none','#bec0a0',36)+path('M-40 853Q369 809 609 764T949 760','none','#8a9d7e',4);
 b+=group(1340,823,2.36,`${troll(0,0,1,true)}${f.reunited?path('M-58-43Q-114-81-174-55L-179-33Q-115-52-65-19Z','#829580','#3e675c',3):path('M-58-73Q-107-50-73-9L-51-17Z','#829580','#3e675c',3)}`);
