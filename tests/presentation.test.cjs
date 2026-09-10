@@ -25,6 +25,13 @@ test('Ground objects outrank an overlapping NPC for both hit testing and visual 
  for(const input of [[actor,rope],[rope,actor]]){assert.equal(R.pick(input,{x:331,y:725}).id,'rope');assert.equal(R.order(input).at(-1).id,'rope');}
  assert.equal(R.pick([actor,rope],{x:331,y:655}).id,'david');
 });
+test('The rescued rooftop companion and secured anchor remain separately clickable',()=>{
+ const state=H.use('engine/state').fresh();state.scene=9;state.f.roofAnchor=true;state.f.davidSafe=true;
+ const hotspots=H.use('story').scenes[9].hotspots(state),stage=H.use('content/setpieces');
+ for(const id of ['anchor','david']){const h=hotspots.find(h=>h.id===id);assert.equal(R.pick(hotspots,{x:h.x,y:h.y}).id,id);}
+ assert.equal(hotspots.find(h=>h.id==='david').x,stage.roof.safe[0]);
+ assert.equal(stage.roofGround(stage.roof.safe[0]),stage.roof.safe[1]);
+});
 test('All twelve worlds omit prose labels without removing number-based puzzle markings',()=>{
  const art=H.use('art'),State=H.use('engine/state');
  for(let scene=0;scene<12;scene++){const s=State.fresh();s.scene=scene;const labels=[...art.scene(s).matchAll(/<text\b[^>]*>(.*?)<\/text>/g)].map(m=>m[1]);assert.ok(labels.every(t=>!/[\u3400-\u9fff]/u.test(t)),scene+': '+labels.join(','));}

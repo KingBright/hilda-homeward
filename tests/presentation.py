@@ -4,7 +4,7 @@ Uses recorded scene fixtures for regression, not a substitute for the full playt
 from pathlib import Path
 import copy,hashlib,json,os,traceback
 from playwright.sync_api import sync_playwright
-from playthrough import newpage,settle,state,ERRORS,REQUESTS
+from playthrough import newpage,settle,state,act,use,ERRORS,REQUESTS
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'previews/v3.7';OUT.mkdir(parents=True,exist_ok=True)
 CHECKS=[]
@@ -68,6 +68,11 @@ def main(browser):
     p.locator('[data-hotspot="hook"] .hit').click();p.wait_for_function('!!HildaTest.ui().dialogue');
     check('Investigation expresses the missing tool through character dialogue',p.locator('#speech').is_visible() and p.locator('#speaker').inner_text()=='希尔达')
     settle(p);p.close()
+    roof=copy.deepcopy(fixtures['9']);roof['settings']['relaxed']=True;roof['settings']['sound']=False
+    p=newpage(browser);p.evaluate('s=>HildaTest.loadFixture(s)',roof);settle(p)
+    use(p,'line','anchor');act(p,'david');act(p,'anchor');act(p,'david')
+    check('Secured rooftop anchor and rescued David both accept real pointer clicks',state(p)['f'].get('roofAnchor') and state(p)['f'].get('davidSafe') and state(p)['f'].get('roofBrace'))
+    p.close()
     q=newpage(browser,844,390,True);f=copy.deepcopy(fixtures['2']);f['settings']['reduced']=True
     q.evaluate('s=>HildaTest.loadFixture(s)',f);settle(q);q.locator('[data-hotspot="rope"] .hit').tap();settle(q)
     check('Touch and reduced motion use the same protected rope hit target',state(q)['inventory'].count('rope')==1);q.close()

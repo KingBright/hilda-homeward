@@ -1,7 +1,7 @@
 /** Shared stage geometry and puzzle rules. No DOM or presentation state. */
 Homeward.define('content/setpieces', [], () => {
   const archive = Object.freeze({min:640,max:1260,initial:769,docks:[700,925,1170],book:[1170,342],baseY:798,gripY:707,climb:290});
-  const roof = Object.freeze({wheel:[1220,657],lens:[1292,490],star:[1044,176],anchor:[426,652],david:[670,710],safe:[466,767],brace:[1069,773]});
+  const roof = Object.freeze({wheel:[1220,657],lens:[1292,490],star:[1044,176],anchor:[426,652],david:[670,710],safe:[478,767],brace:[1069,773]});
   const ladderX = s => s.f.ladderX ?? archive.initial;
   function snapLadder(x) {
     if(!Number.isFinite(x)) throw new TypeError('Ladder destination must be finite');

@@ -21,10 +21,10 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
     let david=f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
     let frida=f.fridaSafe?[842,759]:[1160,773],twig=[929,723];
     if(!reduced&&c?.effect==='roofRescue') {
-      const t=segment(p,.34,.90);david=[mix(670,466,t),mix(710,767,t)-Math.sin(t*Math.PI)*58];
+      const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*58];
     }
     if(!reduced&&c?.effect==='roofBrace') {
-      const t=segment(p,.12,.88),x=mix(466,1069,t);david=[x,Stage.roofGround(x)];
+      const t=segment(p,.12,.88),x=mix(Stage.roof.safe[0],1069,t);david=[x,Stage.roofGround(x)];
     }
     if(!reduced&&c?.effect==='roofLever') {
       const t=segment(p,.43,.84);frida=[mix(1160,842,t),mix(773,759,t)];
