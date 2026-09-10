@@ -48,7 +48,24 @@ def main(browser):
     check('Pause and reduced motion freeze human and nonhuman face layers',result['paused'] and result['reduced'])
     p.locator('#presentationGallery').screenshot(path=str(OUT/'cast-corrected.png'))
     p.evaluate("document.querySelector('#presentationGallery').remove();document.querySelector('#panelLayer').style.visibility='hidden'")
-    p.screenshot(path=str(OUT/'home-quiet.png'));p.close()
+    p.screenshot(path=str(OUT/'home-quiet.png'))
+    portraits=p.evaluate('''()=>{
+      const art=Homeward.use('art'),N=Homeward.use('art/cast-acting'),A=Homeward.use('art/creature-life'),S=Homeward.use('art/species-life');
+      const mount=document.createElement('div');mount.style.cssText='position:fixed;top:10px;left:10px;width:180px;height:206px';document.body.append(mount);const results=[];
+      for(const who of ['希尔达','大卫','芙丽达','妈妈','阿尔弗','枝枝','小巨魔','巨魔妈妈','沃夫']){
+        mount.innerHTML=art.portrait(who);N.refresh(mount);A.refresh(mount);S.refresh(mount);let drift=0,low=1,count=0;
+        for(let i=0;i<1000;i++){
+          const o={portrait:true,speaker:who,typing:true,character:'你'};N.paint(mount,i/100,o);A.paint(mount,i/100,o);S.paint(mount,i/100,o);
+          for(const eye of mount.querySelectorAll('[data-scripted-eye]')){
+            const y=eye.dataset.eyeY!==undefined?Number(eye.dataset.eyeY):eye.classList.contains('twig-eye')?-42:-111;
+            const m=eye.parentNode.getCTM().inverse().multiply(eye.getCTM()),v=new DOMPoint(0,y).matrixTransform(m);
+            drift=Math.max(drift,Math.hypot(v.x,v.y-y));low=Math.min(low,Math.abs(m.d));count++;
+          }
+        }results.push({who,drift,low,count});
+      }mount.remove();return results;
+    }''')
+    check('All nine dialogue portraits preserve eye anchors in their own SVG viewBoxes',len(portraits)==9 and all(r['count']==1000 and r['drift']<.01 and r['low']<.1 for r in portraits))
+    p.close()
     fixtures=json.loads((ROOT/'tests/fixtures.json').read_text())
     p=newpage(browser)
     for scene in range(12):
