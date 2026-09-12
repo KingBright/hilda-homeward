@@ -49,7 +49,7 @@ def main(browser):
     forest=json.loads((ROOT/'tests/fixtures.json').read_text())['2']
     forest['settings']['sound']=False
     page.evaluate('s=>HildaTest.loadFixture(s)',forest);settle(page)
-    check('Published forest keeps the rope visible above characters',page.locator('#interactionObjects #forestRope').count()==1)
+    check('Published forest keeps one reachable rope with protected ground-object depth',page.locator('#forestRope').count()==1 and page.locator('#forestRope').get_attribute('data-scene-depth')=='ground')
     page.locator('[data-hotspot="rope"] .hit').click();settle(page)
     check('Published forest rope can be taken with a real mouse click',state(page)['inventory'].count('rope')==1)
     check('Published game has no uncaught runtime errors',not errors)
