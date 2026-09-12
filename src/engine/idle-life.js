@@ -19,8 +19,8 @@ Homeward.define('engine/idle-life', [], () => {
     const talk=reserved||moving||reduced||!speaker?0:pulse(q,1.2,1.8,2.1,2.9)*.14;
     const reach=Math.max(gesture,talk);
     const target=speaker&&gesture<.1?[36,-66]:p.hand;
-    return {gesture:reach,front:[26+(target[0]-26)*reach,-29+(target[1]+29)*reach],
-      back:[-26,-29],shift,
+    return {gesture:reach,front:[31.5+(target[0]-31.5)*reach,-28.3+(target[1]+28.3)*reach],
+      back:[-31.5,-28.3],shift,
       breath:reserved||reduced?0:Math.sin(t*p.breath)*.28,
       lean:reserved||moving||reduced?0:Math.sin(t*.31)*.22,
       look,head:reduced||reserved?0:look*4,blink,

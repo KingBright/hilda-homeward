@@ -50,14 +50,17 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  }
  function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
  function restingArm(name,c){
-  const x=name==='back'?-19:19,hx=name==='back'?-26:26;
-  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-27:27} -54L${hx} -29`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-27:27} -54L${hx} -29" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -29) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+  const x=name==='back'?-22:22,hx=name==='back'?-31.5:31.5;
+  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -28.3) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+ }
+ function restingLeg(name,c){
+  const x=name==='back'?-11:11,d=`M${x} -50.7L${x+2.67} -26.85L${x} -3`;
+  return `<g class="cast-leg-${name}" data-rest-leg="${name}">${p(d,'none',ink,11)}${p(d,'none',c.trousers,8.5)}<g class="cast-foot" transform="translate(${x} -3)">${boot(0,-5,name==='back')}</g></g>`;
  }
  function standing(who,mood='curious'){
   const c=profiles[who]||profiles['妈妈'];
   return `<g data-cast="${who}">${e(0,3,30,5,'#0d293945')}
-    <g class="cast-leg-back">${p('M-18-45l2 37h10l6-36',c.trousers)}${p('M-12-33l2 20','none','#7c8990',1)}${boot(-12,-2,true)}</g>
-    <g class="cast-leg-front">${p('M6-44l3 36h10l1-36',c.trousers)}${p('M13-32l1 18','none','#7c8990',1)}${boot(14,-2)}</g>
+    ${restingLeg('back',c)}${restingLeg('front',c)}
     <g class="cast-rest-upper">${upper(who,false,mood)}<g class="person-arms">${restingArm('back',c)}${restingArm('front',c)}</g></g>
   </g>`;
  }

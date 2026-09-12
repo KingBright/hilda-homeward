@@ -76,7 +76,7 @@ def main(browser):
         check(f'Chapter {scene} retains unique SVG IDs after foreground-object promotion',quiet['ids'])
     f=copy.deepcopy(fixtures['2']);f['settings']['sound']=False
     p.evaluate('s=>HildaTest.loadFixture(s)',f);settle(p)
-    check('Forest rope and winch drawings sit above the companion layer without being duplicated',p.locator('#interactionObjects #forestRope').count()==1 and p.locator('#interactionObjects #forestWinch').count()==1 and p.locator('#forestRope').count()==1)
+    check('Forest rope and winch retain authored depth metadata without duplicate drawings',p.locator('#forestRope').count()==1 and p.locator('#forestWinch').count()==1 and p.locator('#forestRope').get_attribute('data-scene-depth')=='ground' and p.locator('#forestWinch').get_attribute('data-scene-depth')=='fixture')
     separation=p.evaluate('''() => {const rope=document.querySelector('#forestRope').getBoundingClientRect(),d=document.querySelector('#davidFollow').getBoundingClientRect();return d.left-rope.right;}''')
     check('Waiting David no longer stands on the ground rope',separation>=0)
     p.screenshot(path=str(OUT/'forest-rope-clear.png'))

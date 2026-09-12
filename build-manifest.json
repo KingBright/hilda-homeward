@@ -41,6 +41,7 @@
     "src/engine/setpiece-motion.js",
     "src/engine/state.js",
     "src/engine/storage.js",
+    "src/engine/walk-cycle.js",
     "src/scenes/00-home/art.js",
     "src/scenes/00-home/logic.js",
     "src/scenes/01-north-gate/art.js",
@@ -69,6 +70,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 310831,
-  "sha256": "44abd03f194174adb300f2ea181c90106ba2e84f064718ff97a343ef34dceb86"
+  "bytes": 315583,
+  "sha256": "39b5e33a8548bee14d6cfcc799d3d217c4a6ba528625837830e4b780e7218254"
 }

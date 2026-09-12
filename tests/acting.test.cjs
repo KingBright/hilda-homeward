@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const context = vm.createContext({console});
-for (const name of ['engine/modules', 'engine/kinematics', 'engine/idle-life', 'art/twig-design', 'art/cast-design', 'art/cast-acting']) {
+for (const name of ['engine/modules', 'engine/kinematics', 'engine/walk-cycle', 'engine/idle-life', 'art/twig-design', 'art/cast-design', 'art/cast-acting']) {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../src', name + '.js'), 'utf8'), context);
 }
 const Acting = context.Homeward.use('art/cast-acting');

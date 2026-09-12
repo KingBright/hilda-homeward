@@ -1,5 +1,5 @@
 /** Seekable whole-body posing. Rigid bones; joint-space reach arcs; no accumulated state. */
-Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track','engine/idle-life'], ({solve},{smooth},Idle) => {
+Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track','engine/idle-life','engine/walk-cycle'], ({solve},{smooth},Idle,Walk) => {
   const mix=(a,b,t)=>a+(b-a)*t;
   const point=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const limit=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -17,8 +17,18 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     const elbow=[origin[0]+a*Math.cos(upper),origin[1]+a*Math.sin(upper)];
     return {origin,elbow,end:[elbow[0]+b*Math.cos(lower),elbow[1]+b*Math.sin(lower)],wrist:lower*180/Math.PI-90,requested:target};
   }
-  function sample({x=0,y=0,face=1,scale=1.36,time=0,distance=0,moving=false,reduced=false,score=null,frame=null}={}){
+  function sample({x=0,y=0,face=1,scale=1.36,time=0,distance=0,moving=false,walkAmount=moving?1:0,reduced=false,score=null,frame=null}={}){
     if(![x,y,face,scale,time,distance].every(Number.isFinite)||scale<=0)throw new TypeError('Invalid actor coordinates');
+    if(!score){
+      const gait=Walk.sample({distance,scale,amount:walkAmount,reduced});
+      // Locomotion owns the whole body; rare idle gestures never alter walking elbows.
+      const idle=gait.amount===0?Idle.sample({who:'希尔达',time,reduced}):null;
+      let front=gait.armFront;
+      if(idle?.gesture>0){const target=[idle.front[0],idle.front[1]+gait.bodyY];front=articulated(front.origin,front.end,target,-1,idle.gesture*.3);}
+      return {offset:[0,gait.bodyY],armFront:front,armBack:gait.armBack,legs:gait.legs,
+        gaitPhase:gait.phase,walkAmount:gait.amount,contact:null,pickup:false,acquired:false,transfer:0,
+        grip:false,propVisible:false,propOpacity:0,headTilt:0};
+    }
     const p=frame?.progress??0,effort=frame?.effort??0;
     const pickup=!!score?.pickup,place=!!score?.place;
     const envelope=pickup?segment(p,.05,.40)*(1-segment(p,.88,1)):frame?.reach??0;
@@ -36,7 +46,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     if(score?.kind==='pour'){world[0]-=face*40;world[1]-=42;}
     const local=[(world[0]-x)/scale*face,(world[1]-y)/scale];
     const low=limit((local[1]+43)*.85,0,34);
-    const crouch=(score?low:0)*envelope*(1-transfer*.7)+(moving&&!reduced?2:0);
+    const crouch=low*envelope*(1-transfer*.7)-2.7*(1-envelope);
     const anticipation=score&&!reduced?Math.sin(segment(p,0,.18)*Math.PI)*-1.4:0;
     const lean=score?limit((local[0]-27)*.13,-7,10)*envelope+anticipation:wave*.6;
     const bob=moving&&!reduced?-Math.abs(Math.cos(gait*Math.PI*2))*1.1:breathe;
@@ -54,9 +64,9 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       back=[-16,-94+Math.sin(p*24)*14];
     }
     const idle=!score&&!moving?Idle.sample({who:'希尔达',time,reduced}):null;
-    const armFront=articulated([19+lean,-79+crouch+bob],[26+lean+wave*7,-29+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
+    const armFront=articulated([22+lean,-79+crouch+bob],[31.5+lean,-28.3+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
     const backReach=pickup&&!score.twoHands?envelope*.3:envelope*.9;
-    const armBack=articulated([-19+lean,-79+crouch+bob],[-26+lean-wave*7,-29+crouch+bob],back,1,backReach);
+    const armBack=articulated([-22+lean,-79+crouch+bob],[-31.5+lean,-28.3+crouch+bob],back,1,backReach);
     const legs={};
     for(const [name,sign] of [['Back',-1],['Front',1]]){
       const step=(gait+(sign<0?.5:0))%1;

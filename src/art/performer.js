@@ -6,8 +6,8 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
   function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
     ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
     ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
-    ${limb('rigArmBack','#a95043',9)}${hand('Back')}
     ${Cast.upper('希尔达',true)}
+    <g id="rigRearArm">${limb('rigArmBack','#a95043',9)}${hand('Back')}</g>
     ${limb('rigArmFront','#c66d57',10)}
     <g id="rigTool" pointer-events="none"></g>${hand('Front')}
   </g>`;}
@@ -18,12 +18,12 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     if(!artwork.has(id))artwork.set(id,Props.itemArt(id).replace(/<svg[^>]*>|<\/svg>/g,''));
     return artwork.get(id);
   }
-  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={}}){
+  function paint(root,{x,y,face,time,distance,moving,walkAmount,reduced,action,selected,scene=0,flags={}}){
     if(!root)return;
     if(root!==cachedRoot||!nodes.rigHead?.isConnected){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
     const attr=(id,k,v)=>{const n=nodes[id];if(n&&n.getAttribute(k)!==String(v))n.setAttribute(k,String(v));};
     const scale=Staging.scale(scene),score=action?.score,frame=action?.sample();
-    const pose=Motion.sample({x,y,face,scale,time,distance,moving,reduced,score,frame});
+    const pose=Motion.sample({x,y,face,scale,time,distance,moving,walkAmount,reduced,score,frame});
     root.setAttribute('transform',`scale(${scale})`);root.dataset.scale=scale;
     attr('rigUpper','transform',`translate(${pose.offset.map(fixed).join(' ')})`);
     attr('rigHead','transform',`rotate(${fixed(pose.headTilt)} 0 -87)`);
@@ -35,7 +35,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     const draw=(id,j)=>{const d=`M${j.origin.map(fixed)}L${j.elbow.map(fixed)}L${j.end.map(fixed)}`;attr(id,'d',d);attr(id+'Fill','d',d);};
     for(const name of ['Back','Front']){
       const leg=pose.legs[name];draw('rigLeg'+name,leg);
-      const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,0,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')})`);}
+      const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,-5,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')}) rotate(${fixed(leg.roll||0)} 0 3)`);}
       const arm=pose['arm'+name];draw('rigArm'+name,arm);
       attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)}) scale(${name==='Front'?1:-1} 1)`);
       attr('rigPalm'+name,'d',pose.grip?'M-4-5Q1-7 5-3L5 3Q2 7-3 5L-6 1-7-3Q-6-5-3-1L0 0-1-4Z':'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z');
@@ -69,6 +69,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     }
     if(nodes.rigTool&&nodes.rigTool.innerHTML!==tool)nodes.rigTool.innerHTML=tool;
     attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
+    root.dataset.gaitPhase=String(pose.gaitPhase??0);root.dataset.walkAmount=String(pose.walkAmount??0);
     root.dataset.pose=score?.kind||(moving?'walk':'idle');root.dataset.phase=frame?.phase||'idle';
     root.dataset.grip=pose.grip?'closed':'open';root.dataset.pickup=score?.pickup?frame.progress<.45?'approach':frame.progress<.87?'carrying':'stowing':'none';
   }

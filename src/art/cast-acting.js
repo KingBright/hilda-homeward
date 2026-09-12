@@ -2,7 +2,7 @@
  * Text cadence drives stylized mouths; this is not phoneme-aligned lip sync.
  * Contact choreography owns the inner head/limbs; acting uses an outer neck pivot.
  */
-Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine/kinematics'], (Cast,Idle,{solve}) => {
+Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine/kinematics','engine/walk-cycle'], (Cast,Idle,{solve},Walk) => {
   const caches = new WeakMap();
   const clamp = n => Math.max(-1, Math.min(1, Number.isFinite(n) ? n : 0));
   const punctuation = /^[\s，。！？、…—·：；“”‘’「」.,!?;:]+$/u;
@@ -43,6 +43,7 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
         blink: head?.querySelector('.cast-blink,#rigEyes'),
         upper: actor.querySelector('.cast-rest-upper'),
         slot: actor.closest('#davidFollow,#fridaFollow,#roofDavid,#roofFrida'),
+        legs: [...actor.querySelectorAll('[data-rest-leg]')].map(n=>({node:n,name:n.dataset.restLeg,paths:[...n.querySelectorAll(':scope > path')],foot:n.querySelector('.cast-foot')})),
         arms: [...actor.querySelectorAll('[data-rest-arm]')].map(n=>({node:n,name:n.dataset.restArm,paths:[...n.querySelectorAll(':scope > path')],hand:n.querySelector('.rest-hand')}))};
     });
     caches.set(root, entries);
@@ -89,10 +90,17 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
       if(!speaker&&!reserved){pose.gazeX=clamp(pose.gazeX*.8+idle.look);pose.tilt+=idle.head;}
       put(entry.actor,'data-idle',idle.beat);
       if(entry.upper){
-        put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
+        const gait=Walk.sample({distance:Number(entry.slot?.dataset.walkDistance||0),amount:reserved?0:Number(entry.slot?.dataset.walkAmount||0),reduced});
+        put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(gait.bodyY-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
+        for(const leg of entry.legs){
+          const j=gait.legs[leg.name==='front'?'Front':'Back'],fmt=a=>a.map(n=>n.toFixed(3));
+          put(leg.node,'transform','');leg.paths.forEach(n=>put(n,'d',`M${fmt(j.origin)}L${fmt(j.elbow)}L${fmt(j.end)}`));
+          put(leg.foot,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${j.roll.toFixed(3)} 0 3)`);
+        }
         for(const arm of entry.arms){
-          const front=arm.name==='front',origin=[front?19:-19,-79],target=front?idle.front:idle.back;
-          const j=solve(origin,target,25,27,front?-1:1);
+          const front=arm.name==='front',origin=[front?22:-22,-79],target=front?idle.front:idle.back;
+          const strideArm=gait.amount>0?Walk.arm(front?1:-1,0,(front?1:-1)*Math.sin(gait.phase*Math.PI*2)*.11*gait.amount):null;
+          const j=strideArm||solve(origin,target,25,27,front?-1:1);
           const fmt=a=>a.map(n=>n.toFixed(3));
           const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
           arm.paths.forEach(n=>put(n,'d',d));

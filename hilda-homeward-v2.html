@@ -56,7 +56,7 @@
 #toast.thought{border-radius:16px 16px 16px 4px;text-align:left;max-width:min(520px,calc(100vw - 40px));padding:13px 20px;line-height:1.65}
 #toast.thought::before{content:'希尔达 · 心想';display:block;font-size:10px;letter-spacing:.08em;opacity:.7;margin-bottom:4px}
 [data-scripted-eye],.cast-attention,.cast-pupils,.cast-rest-upper,[data-life-body],[data-life-head],[data-life-gaze],[data-life-gesture]{transform-origin:0px 0px;transform-box:view-box}
-#interactionObjects{pointer-events:none}
+/* Props retain scene depth. The invisible hotspot layer owns selection only. */
 
 /* UI belongs around the world, never on top of a puzzle's important geometry. */
 #hud nav{gap:8px}#focusBtn.active{background:#b8995e!important;color:#132f38!important}
@@ -129,7 +129,7 @@
  * Text cadence drives stylized mouths; this is not phoneme-aligned lip sync.
  * Contact choreography owns the inner head/limbs; acting uses an outer neck pivot.
  */
-Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine/kinematics'], (Cast,Idle,{solve}) => {
+Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine/kinematics','engine/walk-cycle'], (Cast,Idle,{solve},Walk) => {
   const caches = new WeakMap();
   const clamp = n => Math.max(-1, Math.min(1, Number.isFinite(n) ? n : 0));
   const punctuation = /^[\s，。！？、…—·：；“”‘’「」.,!?;:]+$/u;
@@ -170,6 +170,7 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
         blink: head?.querySelector('.cast-blink,#rigEyes'),
         upper: actor.querySelector('.cast-rest-upper'),
         slot: actor.closest('#davidFollow,#fridaFollow,#roofDavid,#roofFrida'),
+        legs: [...actor.querySelectorAll('[data-rest-leg]')].map(n=>({node:n,name:n.dataset.restLeg,paths:[...n.querySelectorAll(':scope > path')],foot:n.querySelector('.cast-foot')})),
         arms: [...actor.querySelectorAll('[data-rest-arm]')].map(n=>({node:n,name:n.dataset.restArm,paths:[...n.querySelectorAll(':scope > path')],hand:n.querySelector('.rest-hand')}))};
     });
     caches.set(root, entries);
@@ -216,10 +217,17 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
       if(!speaker&&!reserved){pose.gazeX=clamp(pose.gazeX*.8+idle.look);pose.tilt+=idle.head;}
       put(entry.actor,'data-idle',idle.beat);
       if(entry.upper){
-        put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
+        const gait=Walk.sample({distance:Number(entry.slot?.dataset.walkDistance||0),amount:reserved?0:Number(entry.slot?.dataset.walkAmount||0),reduced});
+        put(entry.upper,'transform',`translate(${idle.shift.toFixed(3)} ${(gait.bodyY-idle.breath).toFixed(3)}) rotate(${idle.lean.toFixed(3)} 0 -44)`);
+        for(const leg of entry.legs){
+          const j=gait.legs[leg.name==='front'?'Front':'Back'],fmt=a=>a.map(n=>n.toFixed(3));
+          put(leg.node,'transform','');leg.paths.forEach(n=>put(n,'d',`M${fmt(j.origin)}L${fmt(j.elbow)}L${fmt(j.end)}`));
+          put(leg.foot,'transform',`translate(${fmt(j.end).join(' ')}) rotate(${j.roll.toFixed(3)} 0 3)`);
+        }
         for(const arm of entry.arms){
-          const front=arm.name==='front',origin=[front?19:-19,-79],target=front?idle.front:idle.back;
-          const j=solve(origin,target,25,27,front?-1:1);
+          const front=arm.name==='front',origin=[front?22:-22,-79],target=front?idle.front:idle.back;
+          const strideArm=gait.amount>0?Walk.arm(front?1:-1,0,(front?1:-1)*Math.sin(gait.phase*Math.PI*2)*.11*gait.amount):null;
+          const j=strideArm||solve(origin,target,25,27,front?-1:1);
           const fmt=a=>a.map(n=>n.toFixed(3));
           const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
           arm.paths.forEach(n=>put(n,'d',d));
@@ -300,14 +308,17 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  }
  function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
  function restingArm(name,c){
-  const x=name==='back'?-19:19,hx=name==='back'?-26:26;
-  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-27:27} -54L${hx} -29`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-27:27} -54L${hx} -29" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -29) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+  const x=name==='back'?-22:22,hx=name==='back'?-31.5:31.5;
+  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -28.3) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+ }
+ function restingLeg(name,c){
+  const x=name==='back'?-11:11,d=`M${x} -50.7L${x+2.67} -26.85L${x} -3`;
+  return `<g class="cast-leg-${name}" data-rest-leg="${name}">${p(d,'none',ink,11)}${p(d,'none',c.trousers,8.5)}<g class="cast-foot" transform="translate(${x} -3)">${boot(0,-5,name==='back')}</g></g>`;
  }
  function standing(who,mood='curious'){
   const c=profiles[who]||profiles['妈妈'];
   return `<g data-cast="${who}">${e(0,3,30,5,'#0d293945')}
-    <g class="cast-leg-back">${p('M-18-45l2 37h10l6-36',c.trousers)}${p('M-12-33l2 20','none','#7c8990',1)}${boot(-12,-2,true)}</g>
-    <g class="cast-leg-front">${p('M6-44l3 36h10l1-36',c.trousers)}${p('M13-32l1 18','none','#7c8990',1)}${boot(14,-2)}</g>
+    ${restingLeg('back',c)}${restingLeg('front',c)}
     <g class="cast-rest-upper">${upper(who,false,mood)}<g class="person-arms">${restingArm('back',c)}${restingArm('front',c)}</g></g>
   </g>`;
  }
@@ -328,16 +339,16 @@ Homeward.define('art/cast-motion', [], () => {
   for(const id of ['davidFollow','fridaFollow','roofDavid','roofFrida']){
    const actor=root.querySelector('#'+id);if(!actor)continue;
    const value=actor.getAttribute('transform')||'',match=/translate\(([-\d.]+)/.exec(value),x=Number(match?.[1]||0);
-   let track=tracks.get(actor);if(!track){track={x,time,distance:0,movingUntil:0};tracks.set(actor,track);}
+   let track=tracks.get(actor);if(!track){track={x,time,distance:0,movingUntil:0,amount:0};tracks.set(actor,track);}
    const dx=x-track.x;
    if(Math.abs(dx)>.04&&Math.abs(dx)<55){track.distance+=Math.abs(dx);track.movingUntil=time+.075;}
-   track.x=x;track.time=time;
+   const dt=Math.max(0,Math.min(.06,time-track.time));track.x=x;track.time=time;
    const moving=!reduced&&time<track.movingUntil&&action?.score.effect!=='roofBoard'&&!actor.classList.contains('bracing');
-   const angle=moving?Math.sin(track.distance/19)*11:0;
+   track.amount=reduced?0:Math.max(0,Math.min(1,track.amount+(moving?1:-1)*dt*8));
+   const drawing=actor.querySelector('[data-cast]'),m=drawing?.getCTM(),base=root.getCTM();
+   const scale=m&&base?Math.hypot(m.a,m.b)/Math.max(.01,Math.hypot(base.a,base.b)):1;
    actor.dataset.gait=moving?'walking':'idle';
-   for(const [name,sign] of [['back',-1],['front',1]]){
-    const leg=actor.querySelector('.cast-leg-'+name);if(leg)leg.setAttribute('transform',`rotate(${(angle*sign).toFixed(2)} ${sign<0?-11:13} -43)`);
-   }
+   actor.dataset.walkDistance=(track.distance/scale).toFixed(5);actor.dataset.walkAmount=track.amount.toFixed(5);
   }
  }
  return {animate};
@@ -680,8 +691,8 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
   function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
     ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
     ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
-    ${limb('rigArmBack','#a95043',9)}${hand('Back')}
     ${Cast.upper('希尔达',true)}
+    <g id="rigRearArm">${limb('rigArmBack','#a95043',9)}${hand('Back')}</g>
     ${limb('rigArmFront','#c66d57',10)}
     <g id="rigTool" pointer-events="none"></g>${hand('Front')}
   </g>`;}
@@ -692,12 +703,12 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     if(!artwork.has(id))artwork.set(id,Props.itemArt(id).replace(/<svg[^>]*>|<\/svg>/g,''));
     return artwork.get(id);
   }
-  function paint(root,{x,y,face,time,distance,moving,reduced,action,selected,scene=0,flags={}}){
+  function paint(root,{x,y,face,time,distance,moving,walkAmount,reduced,action,selected,scene=0,flags={}}){
     if(!root)return;
     if(root!==cachedRoot||!nodes.rigHead?.isConnected){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
     const attr=(id,k,v)=>{const n=nodes[id];if(n&&n.getAttribute(k)!==String(v))n.setAttribute(k,String(v));};
     const scale=Staging.scale(scene),score=action?.score,frame=action?.sample();
-    const pose=Motion.sample({x,y,face,scale,time,distance,moving,reduced,score,frame});
+    const pose=Motion.sample({x,y,face,scale,time,distance,moving,walkAmount,reduced,score,frame});
     root.setAttribute('transform',`scale(${scale})`);root.dataset.scale=scale;
     attr('rigUpper','transform',`translate(${pose.offset.map(fixed).join(' ')})`);
     attr('rigHead','transform',`rotate(${fixed(pose.headTilt)} 0 -87)`);
@@ -709,7 +720,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     const draw=(id,j)=>{const d=`M${j.origin.map(fixed)}L${j.elbow.map(fixed)}L${j.end.map(fixed)}`;attr(id,'d',d);attr(id+'Fill','d',d);};
     for(const name of ['Back','Front']){
       const leg=pose.legs[name];draw('rigLeg'+name,leg);
-      const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,0,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')})`);}
+      const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,-5,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')}) rotate(${fixed(leg.roll||0)} 0 3)`);}
       const arm=pose['arm'+name];draw('rigArm'+name,arm);
       attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)}) scale(${name==='Front'?1:-1} 1)`);
       attr('rigPalm'+name,'d',pose.grip?'M-4-5Q1-7 5-3L5 3Q2 7-3 5L-6 1-7-3Q-6-5-3-1L0 0-1-4Z':'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z');
@@ -743,6 +754,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     }
     if(nodes.rigTool&&nodes.rigTool.innerHTML!==tool)nodes.rigTool.innerHTML=tool;
     attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
+    root.dataset.gaitPhase=String(pose.gaitPhase??0);root.dataset.walkAmount=String(pose.walkAmount??0);
     root.dataset.pose=score?.kind||(moving?'walk':'idle');root.dataset.phase=frame?.phase||'idle';
     root.dataset.grip=pose.grip?'closed':'open';root.dataset.pickup=score?.pickup?frame.progress<.45?'approach':frame.progress<.87?'carrying':'stowing':'none';
   }
@@ -1359,7 +1371,7 @@ Homeward.define('engine/audio', ['content/score','engine/score-player'], (Score,
 
 /* src/engine/body-motion.js */
 /** Seekable whole-body posing. Rigid bones; joint-space reach arcs; no accumulated state. */
-Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track','engine/idle-life'], ({solve},{smooth},Idle) => {
+Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track','engine/idle-life','engine/walk-cycle'], ({solve},{smooth},Idle,Walk) => {
   const mix=(a,b,t)=>a+(b-a)*t;
   const point=(a,b,t)=>[mix(a[0],b[0],t),mix(a[1],b[1],t)];
   const limit=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -1377,8 +1389,18 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     const elbow=[origin[0]+a*Math.cos(upper),origin[1]+a*Math.sin(upper)];
     return {origin,elbow,end:[elbow[0]+b*Math.cos(lower),elbow[1]+b*Math.sin(lower)],wrist:lower*180/Math.PI-90,requested:target};
   }
-  function sample({x=0,y=0,face=1,scale=1.36,time=0,distance=0,moving=false,reduced=false,score=null,frame=null}={}){
+  function sample({x=0,y=0,face=1,scale=1.36,time=0,distance=0,moving=false,walkAmount=moving?1:0,reduced=false,score=null,frame=null}={}){
     if(![x,y,face,scale,time,distance].every(Number.isFinite)||scale<=0)throw new TypeError('Invalid actor coordinates');
+    if(!score){
+      const gait=Walk.sample({distance,scale,amount:walkAmount,reduced});
+      // Locomotion owns the whole body; rare idle gestures never alter walking elbows.
+      const idle=gait.amount===0?Idle.sample({who:'希尔达',time,reduced}):null;
+      let front=gait.armFront;
+      if(idle?.gesture>0){const target=[idle.front[0],idle.front[1]+gait.bodyY];front=articulated(front.origin,front.end,target,-1,idle.gesture*.3);}
+      return {offset:[0,gait.bodyY],armFront:front,armBack:gait.armBack,legs:gait.legs,
+        gaitPhase:gait.phase,walkAmount:gait.amount,contact:null,pickup:false,acquired:false,transfer:0,
+        grip:false,propVisible:false,propOpacity:0,headTilt:0};
+    }
     const p=frame?.progress??0,effort=frame?.effort??0;
     const pickup=!!score?.pickup,place=!!score?.place;
     const envelope=pickup?segment(p,.05,.40)*(1-segment(p,.88,1)):frame?.reach??0;
@@ -1396,7 +1418,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     if(score?.kind==='pour'){world[0]-=face*40;world[1]-=42;}
     const local=[(world[0]-x)/scale*face,(world[1]-y)/scale];
     const low=limit((local[1]+43)*.85,0,34);
-    const crouch=(score?low:0)*envelope*(1-transfer*.7)+(moving&&!reduced?2:0);
+    const crouch=low*envelope*(1-transfer*.7)-2.7*(1-envelope);
     const anticipation=score&&!reduced?Math.sin(segment(p,0,.18)*Math.PI)*-1.4:0;
     const lean=score?limit((local[0]-27)*.13,-7,10)*envelope+anticipation:wave*.6;
     const bob=moving&&!reduced?-Math.abs(Math.cos(gait*Math.PI*2))*1.1:breathe;
@@ -1414,9 +1436,9 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       back=[-16,-94+Math.sin(p*24)*14];
     }
     const idle=!score&&!moving?Idle.sample({who:'希尔达',time,reduced}):null;
-    const armFront=articulated([19+lean,-79+crouch+bob],[26+lean+wave*7,-29+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
+    const armFront=articulated([22+lean,-79+crouch+bob],[31.5+lean,-28.3+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
     const backReach=pickup&&!score.twoHands?envelope*.3:envelope*.9;
-    const armBack=articulated([-19+lean,-79+crouch+bob],[-26+lean-wave*7,-29+crouch+bob],back,1,backReach);
+    const armBack=articulated([-22+lean,-79+crouch+bob],[-31.5+lean,-28.3+crouch+bob],back,1,backReach);
     const legs={};
     for(const [name,sign] of [['Back',-1],['Front',1]]){
       const step=(gait+(sign<0?.5:0))%1;
@@ -1535,8 +1557,8 @@ Homeward.define('engine/idle-life', [], () => {
     const talk=reserved||moving||reduced||!speaker?0:pulse(q,1.2,1.8,2.1,2.9)*.14;
     const reach=Math.max(gesture,talk);
     const target=speaker&&gesture<.1?[36,-66]:p.hand;
-    return {gesture:reach,front:[26+(target[0]-26)*reach,-29+(target[1]+29)*reach],
-      back:[-26,-29],shift,
+    return {gesture:reach,front:[31.5+(target[0]-31.5)*reach,-28.3+(target[1]+28.3)*reach],
+      back:[-31.5,-28.3],shift,
       breath:reserved||reduced?0:Math.sin(t*p.breath)*.28,
       lean:reserved||moving||reduced?0:Math.sin(t*.31)*.22,
       look,head:reduced||reserved?0:look*4,blink,
@@ -1563,8 +1585,8 @@ Homeward.define('engine/kinematics', [], () => {
 });
 
 /* src/engine/readability.js */
-/** Small tangible objects remain visible and selectable in front of nearby characters.
- * Reparent the original drawing, not a duplicate. Retain its animation-local transform.
+/** Selection priority is not painting order. Scene objects stay in their authored
+ * scenery hierarchy; only a held item belongs in an actor's hand layer.
  */
 Homeward.define('engine/readability', [], () => {
   const sources=['homeLamp','homeBird','northCrank','forestRope','vineHook','gondolaLine','pickup-gearS','pickup-gearM','pickup-gearL','clockFelt','forestWinch','bridgeBrake','intakeRotor','primeHandle','roofControlWheel'];
@@ -1572,18 +1594,12 @@ Homeward.define('engine/readability', [], () => {
   const priority=h=>h.kind==='take'?3:people.has(h.id)?0:h.kind==='exit'?1:2;
   function pick(hotspots,p){return hotspots.filter(h=>Math.abs(p.x-h.x)<=h.w/2&&Math.abs(p.y-h.y)<=h.h/2).sort((a,b)=>priority(b)-priority(a)||a.w*a.h-b.w*b.h)[0];}
   function order(hotspots){return [...hotspots].sort((a,b)=>priority(a)-priority(b)||b.w*b.h-a.w*a.h);}
-  function promote(root){
-    const layer=root?.querySelector('#interactionObjects');if(!layer)return;
-    const matrix=layer.getCTM();if(!matrix)return;
-    const inverse=matrix.inverse();
-    for(const id of sources){const source=root.querySelector('#'+id);if(!source||layer.contains(source))continue;
-      const parent=source.parentNode.getCTM();if(!parent)continue;
-      const m=inverse.multiply(parent),wrapper=document.createElementNS('http://www.w3.org/2000/svg','g');
-      wrapper.dataset.objectLayer=id;wrapper.setAttribute('transform',`matrix(${[m.a,m.b,m.c,m.d,m.e,m.f].map(v=>v.toFixed(7)).join(' ')})`);
-      layer.append(wrapper);wrapper.append(source);
-    }
+  const groundObjects=new Set(['forestRope','gondolaLine','pickup-gearS','pickup-gearM','pickup-gearL','clockFelt']);
+  function prepare(root){
+    if(!root)return;
+    for(const id of sources){const source=root.querySelector('#'+id);if(source)source.dataset.sceneDepth=groundObjects.has(id)?'ground':'fixture';}
   }
-  return {sources,priority,pick,order,promote};
+  return {sources,priority,pick,order,prepare};
 });
 
 /* src/engine/runtime.js */
@@ -1596,7 +1612,7 @@ let store;
 try{store=new SaveStore(localStorage,validate,KEY);saved=store.load();}
 catch{storageOK=false;store=new SaveStore({getItem(){return null;},setItem(){throw Error('Storage unavailable');}},validate,KEY);}
 let dragPreview=null;
-let inspection=false,renderQueued=false,rainNodes=[],currentInteraction=null,walkDistance=0;
+let inspection=false,renderQueued=false,rainNodes=[],currentInteraction=null,walkDistance=0,walkAmount=0;
 
 let started=false,titleMode=true,selected=null,bagOpen=false,modal=false,dialogue=null,activeHotspots=[],pendingMove=null,activeWork=null,sequenceActive=false,locked=false;
 let hero={x:790,y:822,face:1},petX=714,saveTimer,toastTimer,labelTimer,revealTimer,chapterTimer,transitionTimer,saveIndicatorTimer;
@@ -1677,8 +1693,8 @@ function render(){
  let layers=Art.scene(visualState,titleMode);
  const dog=!(s.scene===9&&!s.f.twigSafe)&&!titleMode;
  let followers='';if(!titleMode&&[2,3,4,7].includes(s.scene))followers+=`<g id="davidFollow">${Art.person('大卫',0,0,1.34)}</g>`;if(!titleMode&&s.scene===4)followers+=`<g id="fridaFollow">${Art.person('芙丽达',0,0,1.38)}</g>`;
- patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><g id="interactionObjects" pointer-events="none"></g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
- Readability.promote(ui.world);
+ patchSvg(ui.world,Art.defs+`<g clip-path="url(#worldClip)"><g id="scenery">${layers}</g><g id="actors">${followers}<g id="heroPosition"><g id="heroFacing">${Performer.markup()}</g></g>${dog?`<g id="twigPosition">${Art.twig(0,0,.98)}</g>`:''}</g><rect width="1600" height="900" fill="url(#grain)" opacity=".15" style="mix-blend-mode:soft-light" pointer-events="none"/><g id="actionFX" pointer-events="none"></g>${Art.foreground(artState)}${Art.weather(artState)}<g id="workRing" pointer-events="none" opacity="0"><circle r="16" fill="#14333c99" stroke="#e1d3a53a" stroke-width="2"/><circle id="workProgress" r="16" fill="none" stroke="#f2d79d" stroke-width="2" stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90)"/></g></g><g id="hotspotLayer"></g>`);
+ Readability.prepare(ui.world);
  CastActing.refresh(ui.world);CreatureLife.refresh(ui.world);SpeciesLife.refresh(ui.world);
  activeHotspots=titleMode?[]:Readability.order(Story.scenes[s.scene].hotspots(s));
  patchSvg($('hotspotLayer'),activeHotspots.map(h=>`<g class="hotspot ${h.kind==='exit'?'isExit':''}" data-hotspot="${h.id}" data-kind="${h.kind||'interact'}" role="button" tabindex="0" aria-label="${esc(h.label)}"><rect class="hit" x="${h.x-h.w/2}" y="${h.y-h.h/2}" width="${h.w}" height="${h.h}"/><g class="hotmark" transform="translate(${h.x} ${h.y})"><circle r="${h.kind==='exit'?16:10}" fill="#173841d9" stroke="#e3d29a" stroke-width="1.2"/>${h.kind==='exit'?Art.path(h.id==='back'?'M7 0H-7m5-5-5 5 5 5':'M-7 0H7m-5-5 5 5-5 5','none','#f0dbab',1.5):Art.circle(0,0,2,'#e8d7ab')}</g></g>`).join(''));
@@ -1706,7 +1722,7 @@ function updateActors(){
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
  if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
- Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
+ Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,walkAmount,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
  ChapterLife.animate(ui.world,activeWork,s);
  SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  CastMotion.animate(ui.world,elapsed,s.settings.reduced,activeWork,isPaused());
@@ -1727,7 +1743,7 @@ function updateActors(){
 function isPaused(){return modal||document.hidden||titleMode;}
 function canAct(){return started&&!isPaused()&&!dialogue&&!locked&&!activeWork&&!sequenceActive;}
 function walkLimit(x){if(s.scene===2&&!s.f.bridge)return clamp(x,135,545);if(s.scene===9&&!s.f.davidSafe)return clamp(x,200,466);if(s.scene===10&&!s.f.reunited)return clamp(x,145,1036);return clamp(x,90,1510);}
-function walkTo(x,after){x=walkLimit(x);if(!inspection)camera.manual=false;hero.face=x<hero.x?-1:1;if(Math.abs(x-hero.x)<8){after?.();return;}pendingMove={target:x,after};$('hoverLabel').classList.remove('show');}
+function walkTo(x,after){x=walkLimit(x);if(!inspection)camera.manual=false;hero.face=x<hero.x?-1:1;if(Math.abs(x-hero.x)<8){after?.();return;}pendingMove={target:x,after,speed:0};$('hoverLabel').classList.remove('show');}
 /** Pointer, keyboard, inventory drops and scene drags use the same arrival boundary. */
 function arriveAndAct(h,item,invoke){
  const scene=s.scene,request=sceneRequest;
@@ -1840,7 +1856,7 @@ async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;ac
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
 function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){walkAmount=0;dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
 function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
@@ -1878,7 +1894,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Tab'&&modal){let els=[...$('
 window.addEventListener('resize',()=>{if(inspection)Object.assign(camera,focusFrame(s.scene,innerWidth/innerHeight));calcCamera(false);});document.addEventListener('fullscreenchange',()=>calcCamera(false));window.addEventListener('pagehide',()=>save(true));
 document.addEventListener('visibilitychange',()=>{ui.game.classList.toggle('paused',document.hidden||modal);if(document.hidden){save(true);audio?.pause();}else if(audio&&s.settings.sound)audio.resume().catch(()=>{});frameTime=performance.now();});
 let audioTick=0;
-function tick(now){if(!document.hidden&&audio&&s.settings.sound&&now-audioTick>160){audioTick=now;audio.update(audioState());}let dt=Math.min(.055,Math.max(0,(now-frameTime)/1000));frameTime=now;if(!document.hidden){if(!isPaused())elapsed+=dt;if(!isPaused()){s.playSeconds+=dt;sceneClock+=dt;if(pendingMove&&!dialogue&&!locked&&!activeWork){let dx=pendingMove.target-hero.x,step=Math.sign(dx)*Math.min(Math.abs(dx),dt*340);hero.x+=step;walkDistance+=Math.abs(step);if(camera.w<1580&&!camera.manual&&!inspection){let target=clamp(hero.x-camera.w*.45,0,1600-camera.w);camera.x+=(target-camera.x)*Math.min(1,dt*5);setView();}if(Math.abs(dx)<3){hero.x=pendingMove.target;const cb=pendingMove.after;pendingMove=null;cb?.();}}if(activeWork&&!dialogue&&!locked){
+function tick(now){if(!document.hidden&&audio&&s.settings.sound&&now-audioTick>160){audioTick=now;audio.update(audioState());}let dt=Math.min(.055,Math.max(0,(now-frameTime)/1000));frameTime=now;if(!document.hidden){if(!isPaused())elapsed+=dt;if(!isPaused()){s.playSeconds+=dt;sceneClock+=dt;
+ const walking=!!pendingMove&&!dialogue&&!locked&&!activeWork;
+ walkAmount=clamp(walkAmount+(walking?1:-1)*dt*8,0,1);
+ if(walking){
+ const dx=pendingMove.target-hero.x,cruise=Staging.scale(s.scene)*120,acceleration=cruise*6;
+ const desired=Math.min(cruise,Math.sqrt(2*acceleration*Math.abs(dx)));
+ pendingMove.speed=Math.max(0,(pendingMove.speed||0)+clamp(desired-(pendingMove.speed||0),-acceleration*dt,acceleration*dt));
+ const step=Math.sign(dx)*Math.min(Math.abs(dx),dt*pendingMove.speed);hero.x+=step;walkDistance+=Math.abs(step);if(camera.w<1580&&!camera.manual&&!inspection){let target=clamp(hero.x-camera.w*.45,0,1600-camera.w);camera.x+=(target-camera.x)*Math.min(1,dt*5);setView();}if(Math.abs(dx)<3){hero.x=pendingMove.target;const cb=pendingMove.after;pendingMove=null;cb?.();}}if(activeWork&&!dialogue&&!locked){
  const task=activeWork,frame=task.advance(dt*1000),progress=frame.progress;
  $('workRing')?.setAttribute('opacity','1');$('workProgress')?.setAttribute('stroke-dashoffset',String(100.53*(1-progress)));
  if(task.claim()){
@@ -2086,6 +2109,50 @@ Homeward.define('engine/storage', [], () => {
     }
   }
   return SaveStore;
+});
+
+/* src/engine/walk-cycle.js */
+/** Human gait in local drawing units. A stance leg supports the pelvis instead
+ * of solving two raised feet beneath an already crouched body. No timers/state.
+ */
+Homeward.define('engine/walk-cycle', ['engine/kinematics'], ({solve}) => {
+  const TAU=Math.PI*2;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const smooth=t=>t*t*(3-2*t);
+  const stride=64,halfStride=16,reach=47.7;
+  const rest=Object.freeze({shoulderX:22,shoulderY:-79,handX:31.5,handY:-28.3,hipY:-48,ankleY:-3,bootOffset:-5});
+  function rotateArm(j,angle){
+    const cs=Math.cos(angle),sn=Math.sin(angle),turn=p=>{const x=p[0]-j.origin[0],y=p[1]-j.origin[1];return [j.origin[0]+x*cs-y*sn,j.origin[1]+x*sn+y*cs];};
+    const elbow=turn(j.elbow),end=turn(j.end);
+    return {...j,elbow,end,wrist:Math.atan2(end[1]-elbow[1],end[0]-elbow[0])*180/Math.PI-90};
+  }
+  function arm(side,bodyY=0,swing=0){
+    const origin=[side*rest.shoulderX,rest.shoulderY+bodyY],target=[side*rest.handX,rest.handY+bodyY];
+    return rotateArm({origin,...solve(origin,target,25,27,side>0?-1:1),requested:target},swing);
+  }
+  function sample({distance=0,scale=1,amount=1,reduced=false}={}){
+    if(![distance,scale,amount].every(Number.isFinite)||scale<=0)throw new TypeError('Invalid walk-cycle input');
+    const blend=reduced?0:clamp(amount,0,1),phase=((distance/(scale*stride))%1+1)%1;
+    const feet=[['Back',-1],['Front',1]].map(([name,side])=>{
+      const step=(phase+(side<0?.5:0))%1,swing=step>=.5,u=swing?(step-.5)*2:0;
+      const travel=swing?-halfStride+stride*.5*smooth(u):halfStride-step*stride;
+      const lift=swing?1.4*Math.sin(Math.PI*u)**2:0;
+      return {name,side,step,swing,x:travel*blend,y:rest.ankleY-lift*blend,roll:swing?-5*Math.sin(Math.PI*u)*blend:0};
+    });
+    // Both legs must reach. This raises the pelvis over the supporting foot and
+    // avoids stretching the opposite leg at heel strike. No extra walking squat.
+    const hipY=Math.max(...feet.map(f=>f.y-Math.sqrt(reach*reach-f.x*f.x)));
+    const bodyY=hipY-rest.hipY,legs={};
+    for(const f of feet){
+      const origin=[f.side*11,hipY],target=[f.side*11+f.x,f.y];
+      legs[f.name]={origin,...solve(origin,target,24,24,-1),planted:!f.swing||blend===0,roll:f.roll};
+    }
+    // Swing at the shoulder. The elbow does not repeatedly fold and unfold as a
+    // Cartesian wrist target crosses the body. Back and front arms counter-swing.
+    const swing=Math.sin(phase*TAU)*.11*blend;
+    return {phase,bodyY,legs,armFront:arm(1,bodyY,swing),armBack:arm(-1,bodyY,-swing),amount:blend};
+  }
+  return {sample,arm,rotateArm,rest,stride};
 });
 
 /* src/scenes/00-home/art.js */
