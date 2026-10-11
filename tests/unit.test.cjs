@@ -18,6 +18,17 @@ function memory(){let data=new Map();return {getItem:k=>data.get(k)??null,setIte
 test('Every module resolves without unexpected dependency cycles',()=>{
  for(const name of H.modules().filter(name=>name!=='engine/runtime'))assert.ok(H.use(name),name);
 });
+test('Character workbench resolves dependencies from its own script list',()=>{
+ const context=vm.createContext({console});
+ const workbench=path.join(root,'tools/cast-studio.html');
+ const html=fs.readFileSync(workbench,'utf8');
+ for(const match of html.matchAll(/<script src="([^"]+)"/g)){
+  const file=path.resolve(path.dirname(workbench),match[1]);
+  vm.runInContext(fs.readFileSync(file,'utf8'),context,{filename:file});
+ }
+ for(const name of context.Homeward.modules())assert.ok(context.Homeward.use(name),name);
+ assert.match(context.Homeward.use('art/cast-design').standing('希尔达'),/data-cast=/);
+});
 test('Registry reports missing and duplicate definitions',()=>{
  assert.throws(()=>H.use('missing'),/Missing/);assert.throws(()=>H.define('story',[],()=>0),/Duplicate/);
  const x=registry();x.define('cycle/a',['cycle/b'],b=>b);x.define('cycle/b',['cycle/a'],a=>a);assert.throws(()=>x.use('cycle/a'),/Circular/);
