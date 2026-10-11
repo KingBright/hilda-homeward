@@ -1,5 +1,5 @@
 {
-  "version": "3.7.0",
+  "version": "3.8.0",
   "modules": [
     "src/engine/modules.js",
     "src/art/cast-acting.js",
@@ -35,6 +35,7 @@
     "src/engine/hydraulics.js",
     "src/engine/idle-life.js",
     "src/engine/kinematics.js",
+    "src/engine/motion-policy.js",
     "src/engine/readability.js",
     "src/engine/runtime.js",
     "src/engine/score-player.js",
@@ -70,6 +71,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 315583,
-  "sha256": "39b5e33a8548bee14d6cfcc799d3d217c4a6ba528625837830e4b780e7218254"
+  "bytes": 316240,
+  "sha256": "20ff93563b98926a973c204b8e8b82333e0f7c048385146f0bed5abbc601fde8"
 }

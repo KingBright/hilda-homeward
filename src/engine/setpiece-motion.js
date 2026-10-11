@@ -5,7 +5,6 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
   function actor(base,action,reduced=false) {
     if(!action)return {...base};
     const c=action.score,p=action.sample().progress,e=action.sample().effort;
-    if(reduced)return {...base};
     if(c.effect==='clockPad')return {...base,y:mix(base.y,c.accessY,segment(p,.10,.43)*(1-segment(p,.70,.97)))};
     if(c.effect==='ladderSlide')return {...base,x:c.origin.x+(c.to-c.from)*e};
     if(c.effect==='archiveBook') {
@@ -20,19 +19,19 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
     const f=state.f,c=action?.score,p=action?.sample().progress??0;
     let david=f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
     let frida=f.fridaSafe?[842,759]:[1160,773],twig=[929,723];
-    if(!reduced&&c?.effect==='roofRescue') {
-      const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*58];
+    if(c?.effect==='roofRescue') {
+      const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*(reduced?18:58)];
     }
-    if(!reduced&&c?.effect==='roofBrace') {
+    if(c?.effect==='roofBrace') {
       const t=segment(p,.12,.88),x=mix(Stage.roof.safe[0],1069,t);david=[x,Stage.roofGround(x)];
     }
-    if(!reduced&&c?.effect==='roofLever') {
+    if(c?.effect==='roofLever') {
       const t=segment(p,.43,.84);frida=[mix(1160,842,t),mix(773,759,t)];
     }
-    if(!reduced&&c?.effect==='roofTwig') {
-      const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*64];
+    if(c?.effect==='roofTwig') {
+      const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*(reduced?18:64)];
     }
-    if(!reduced&&c?.effect==='roofBoard') {
+    if(c?.effect==='roofBoard') {
       const t=segment(p,.05,.78);
       david=[mix(david[0],1368,t),mix(david[1],578,t)];frida=[mix(frida[0],1428,t),mix(frida[1],578,t)];
     }

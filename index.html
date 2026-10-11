@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 让世界说话 V3.7。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 让动作被看见 V3.8。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -95,7 +95,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.7</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.7 让世界说话 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.8</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.8 让动作被看见 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -818,25 +818,25 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
     const c=action?.score,q=action?.sample(),p=q?.progress??0,e=q?.effort??0,reduced=s.settings.reduced;
     const stage=(a,b)=>Motion.segment(p,a,b);let fx='';
     if(s.scene===3) {
-      const dx=c?.effect==='ladderSlide'&&!reduced?(c.to-c.from)*e:0;
+      const dx=c?.effect==='ladderSlide'?(c.to-c.from)*e:0;
       set('archiveLadderShift','transform',`translate(${dx} 0)`);set('archiveBrakeShift','transform',`translate(${dx} 0)`);
       set('archiveLadderShift','opacity',preview?.kind==='ladder'?.48:1);
-      set('archiveBook','opacity',c?.effect==='archiveBook'&&p>.57&&!reduced?0:1);
+      set('archiveBook','opacity',c?.effect==='archiveBook'&&p>.57?0:1);
       const brake=c?.effect==='ladderBrake'?(c.from?26-51*e:-25+51*e):s.f.ladderBrake?26:-25;
-      set('archiveBrakePedal','transform',`rotate(${reduced?(s.f.ladderBrake?26:-25):brake} -6 5)`);
+      set('archiveBrakePedal','transform',`rotate(${brake} -6 5)`);
       if(preview?.kind==='ladder')fx=text(preview.x,579,'松手后推到这里',13,'#f1dda7');
     }
     if(s.scene===9) {
       const cast=Motion.cast(s,action,reduced);
       for(const [id,point] of [['roofDavid',cast.david],['roofFrida',cast.frida],['roofTwig',cast.twig]])set(id,'transform',`translate(${point[0].toFixed(2)} ${point[1].toFixed(2)})`);
-      const lift=s.f.fridaSafe?1:c?.effect==='roofLever'&&!reduced?stage(.12,.47):0;
+      const lift=s.f.fridaSafe?1:c?.effect==='roofLever'?stage(.12,.47):0;
       set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
       set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
       const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.roofDone&&c?.effect!=='roofBoard'?'hidden':'';
-      const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'&&!reduced?c.from+(c.to-c.from)*e:s.beaconAngle;
+      const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'?c.from+(c.to-c.from)*e:s.beaconAngle;
       set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
-      if(c?.effect==='roofAnchor'&&!reduced)fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
-      if(c?.effect==='roofRescue'&&!reduced) {
+      if(c?.effect==='roofAnchor')fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
+      if(c?.effect==='roofRescue') {
         const deploy=stage(.10,.34),endX=466+(cast.david[0]-466)*deploy,endY=658+(cast.david[1]-58-658)*deploy;
         fx=path(`M426 652Q${(426+endX)/2} ${Math.min(650,endY)-Math.sin(deploy*Math.PI)*70} ${endX} ${endY}`,'none','#ead6a5',4);
       }
@@ -1429,7 +1429,8 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     if(score?.kind==='lever'){front=[34,-70-effort*17];back=[15,-67-effort*17];}
     if(score?.kind==='throw'){front=[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*24];back=[-18,-57];}
     if(score?.kind==='gesture'){front=[38,-69];back=[-24,-45];}
-    const climbing=score?.kind==='climb'&&!reduced;
+    // Climbing is gameplay communication, not decorative motion: keep it visible in reduced mode.
+    const climbing=score?.kind==='climb';
     if(climbing){
       const atShelf=p>.43&&p<.70;
       front=atShelf?local:[22,-97-Math.sin(p*24)*14];
@@ -1584,6 +1585,21 @@ Homeward.define('engine/kinematics', [], () => {
   return {solve};
 });
 
+/* src/engine/motion-policy.js */
+/** Accessibility motion policy. Reduced motion removes decorative movement, never gameplay time. */
+Homeward.define('engine/motion-policy', [], () => {
+  function actionDuration(milliseconds){
+    if(!Number.isFinite(milliseconds)||milliseconds<=0)throw new TypeError('Invalid action duration');
+    return milliseconds;
+  }
+  function dialogueDelay(milliseconds){
+    if(!Number.isFinite(milliseconds)||milliseconds<0)throw new TypeError('Invalid dialogue delay');
+    return milliseconds;
+  }
+  function sceneTransition(reduced){return reduced?260:480;}
+  return {actionDuration,dialogueDelay,sceneTransition};
+});
+
 /* src/engine/readability.js */
 /** Selection priority is not painting order. Scene objects stay in their authored
  * scenery hierarchy; only a held item belongs in an actor's hand layer.
@@ -1603,7 +1619,7 @@ Homeward.define('engine/readability', [], () => {
 });
 
 /* src/engine/runtime.js */
-Homeward.define("engine/runtime", ["art/species-life", "engine/readability", "engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (SpeciesLife, Readability, Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["engine/motion-policy", "art/species-life", "engine/readability", "engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (MotionPolicy, SpeciesLife, Readability, Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -1812,7 +1828,7 @@ function stepTypewriter(){
   if(typewriter.index%2===1)audio.speechBlip(typewriter.who);
  }
  const delay=/[，、；]/.test(char)?110:/[。！？…\.]/.test(char)?180:28;
- typewriter.timer=setTimeout(stepTypewriter,s.settings.reduced?10:delay);
+ typewriter.timer=setTimeout(stepTypewriter,MotionPolicy.dialogueDelay(delay));
 }
 function nextLine(){
  if(!dialogue||modal)return;
@@ -1845,7 +1861,7 @@ function work(ms,label,after,override={}){
   walkTo(score.approachX,()=>work(ms,label,after,score));return;
  }
  hero.face=score.target[0]<hero.x?-1:1;
- activeWork=new ActionTrack(s.settings.reduced?Math.min(ms,300):ms,{...score,origin:{x:hero.x,y:Story.scenes[s.scene].ground(hero.x,s)}});
+ activeWork=new ActionTrack(MotionPolicy.actionDuration(ms),{...score,origin:{x:hero.x,y:Story.scenes[s.scene].ground(hero.x,s)}});
  activeWork.after=after;activeWork.request=sceneRequest;
  ui.game.classList.add('performing');
  actionLabel(label,true);updateActors();
@@ -1854,7 +1870,7 @@ function effect(kind){if(s.settings.reduced)return;if(kind==='shake'||kind==='wa
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
-function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},s.settings.reduced?120:480);}
+function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
 function start(resume=false){walkAmount=0;dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
@@ -1998,7 +2014,6 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
   function actor(base,action,reduced=false) {
     if(!action)return {...base};
     const c=action.score,p=action.sample().progress,e=action.sample().effort;
-    if(reduced)return {...base};
     if(c.effect==='clockPad')return {...base,y:mix(base.y,c.accessY,segment(p,.10,.43)*(1-segment(p,.70,.97)))};
     if(c.effect==='ladderSlide')return {...base,x:c.origin.x+(c.to-c.from)*e};
     if(c.effect==='archiveBook') {
@@ -2013,19 +2028,19 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
     const f=state.f,c=action?.score,p=action?.sample().progress??0;
     let david=f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
     let frida=f.fridaSafe?[842,759]:[1160,773],twig=[929,723];
-    if(!reduced&&c?.effect==='roofRescue') {
-      const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*58];
+    if(c?.effect==='roofRescue') {
+      const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*(reduced?18:58)];
     }
-    if(!reduced&&c?.effect==='roofBrace') {
+    if(c?.effect==='roofBrace') {
       const t=segment(p,.12,.88),x=mix(Stage.roof.safe[0],1069,t);david=[x,Stage.roofGround(x)];
     }
-    if(!reduced&&c?.effect==='roofLever') {
+    if(c?.effect==='roofLever') {
       const t=segment(p,.43,.84);frida=[mix(1160,842,t),mix(773,759,t)];
     }
-    if(!reduced&&c?.effect==='roofTwig') {
-      const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*64];
+    if(c?.effect==='roofTwig') {
+      const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*(reduced?18:64)];
     }
-    if(!reduced&&c?.effect==='roofBoard') {
+    if(c?.effect==='roofBoard') {
       const t=segment(p,.05,.78);
       david=[mix(david[0],1368,t),mix(david[1],578,t)];frida=[mix(frida[0],1428,t),mix(frida[1],578,t)];
     }

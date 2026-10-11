@@ -128,6 +128,12 @@ test('Every scene action handles empty and completed states without missing help
  }
 });
 
+test('Reduced-motion accessibility never fast-forwards gameplay or dialogue timing',()=>{
+ const P=H.use('engine/motion-policy');
+ for(const ms of [300,900,1350,2800])assert.equal(P.actionDuration(ms),ms);
+ for(const ms of [28,110,180])assert.equal(P.dialogueDelay(ms),ms);
+ assert.ok(P.sceneTransition(true)>200&&P.sceneTransition(true)<P.sceneTransition(false));
+});
 test('Action track prepares, contacts and settles without a timer',()=>{
  const {ActionTrack}=H.use('engine/action-track'),t=new ActionTrack(1000,{kind:'pull'});
  assert.equal(t.sample().phase,'prepare');t.advance(300);assert.equal(t.sample().phase,'contact');
@@ -231,7 +237,7 @@ test('Ladder movement cannot bypass the wheel brake through drag',()=>{
 test('Archive climb returns to ground; its presentation never moves the saved hero',()=>{
  const {ActionTrack}=H.use('engine/action-track'),base={x:1153,y:819},a=new ActionTrack(3800,{effect:'archiveBook',ladder:1170,origin:base});
  a.advance(1900);const pose=Motion.actor(base,a);assert.equal(pose.y,529);assert.equal(base.y,819);
- assert.equal(Motion.actor(base,a,true).y,819);a.advance(1900);assert.deepEqual(plain(Motion.actor(base,a)),base);
+ assert.equal(Motion.actor(base,a,true).y,529);a.advance(1900);assert.deepEqual(plain(Motion.actor(base,a)),base);
 });
 test('Rescue anchoring consumes equipment only when the completed action commits',()=>{
  const s=State.fresh();s.inventory=['line'];const g=gameFor(s);Story.scenes[9].act(g,'anchor','line');

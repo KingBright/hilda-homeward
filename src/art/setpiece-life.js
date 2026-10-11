@@ -42,25 +42,25 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
     const c=action?.score,q=action?.sample(),p=q?.progress??0,e=q?.effort??0,reduced=s.settings.reduced;
     const stage=(a,b)=>Motion.segment(p,a,b);let fx='';
     if(s.scene===3) {
-      const dx=c?.effect==='ladderSlide'&&!reduced?(c.to-c.from)*e:0;
+      const dx=c?.effect==='ladderSlide'?(c.to-c.from)*e:0;
       set('archiveLadderShift','transform',`translate(${dx} 0)`);set('archiveBrakeShift','transform',`translate(${dx} 0)`);
       set('archiveLadderShift','opacity',preview?.kind==='ladder'?.48:1);
-      set('archiveBook','opacity',c?.effect==='archiveBook'&&p>.57&&!reduced?0:1);
+      set('archiveBook','opacity',c?.effect==='archiveBook'&&p>.57?0:1);
       const brake=c?.effect==='ladderBrake'?(c.from?26-51*e:-25+51*e):s.f.ladderBrake?26:-25;
-      set('archiveBrakePedal','transform',`rotate(${reduced?(s.f.ladderBrake?26:-25):brake} -6 5)`);
+      set('archiveBrakePedal','transform',`rotate(${brake} -6 5)`);
       if(preview?.kind==='ladder')fx=text(preview.x,579,'松手后推到这里',13,'#f1dda7');
     }
     if(s.scene===9) {
       const cast=Motion.cast(s,action,reduced);
       for(const [id,point] of [['roofDavid',cast.david],['roofFrida',cast.frida],['roofTwig',cast.twig]])set(id,'transform',`translate(${point[0].toFixed(2)} ${point[1].toFixed(2)})`);
-      const lift=s.f.fridaSafe?1:c?.effect==='roofLever'&&!reduced?stage(.12,.47):0;
+      const lift=s.f.fridaSafe?1:c?.effect==='roofLever'?stage(.12,.47):0;
       set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
       set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
       const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.roofDone&&c?.effect!=='roofBoard'?'hidden':'';
-      const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'&&!reduced?c.from+(c.to-c.from)*e:s.beaconAngle;
+      const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'?c.from+(c.to-c.from)*e:s.beaconAngle;
       set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
-      if(c?.effect==='roofAnchor'&&!reduced)fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
-      if(c?.effect==='roofRescue'&&!reduced) {
+      if(c?.effect==='roofAnchor')fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
+      if(c?.effect==='roofRescue') {
         const deploy=stage(.10,.34),endX=466+(cast.david[0]-466)*deploy,endY=658+(cast.david[1]-58-658)*deploy;
         fx=path(`M426 652Q${(426+endX)/2} ${Math.min(650,endY)-Math.sin(deploy*Math.PI)*70} ${endX} ${endY}`,'none','#ead6a5',4);
       }

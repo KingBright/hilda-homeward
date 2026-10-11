@@ -57,7 +57,8 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     if(score?.kind==='lever'){front=[34,-70-effort*17];back=[15,-67-effort*17];}
     if(score?.kind==='throw'){front=[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*24];back=[-18,-57];}
     if(score?.kind==='gesture'){front=[38,-69];back=[-24,-45];}
-    const climbing=score?.kind==='climb'&&!reduced;
+    // Climbing is gameplay communication, not decorative motion: keep it visible in reduced mode.
+    const climbing=score?.kind==='climb';
     if(climbing){
       const atShelf=p>.43&&p<.70;
       front=atShelf?local:[22,-97-Math.sin(p*24)*14];

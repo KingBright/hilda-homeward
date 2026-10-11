@@ -11,7 +11,7 @@ mkdir -p "$OUT"
 node - "$HASH" <<'JS'
 const fs=require('fs'),hash=process.argv[2],manifest=JSON.parse(fs.readFileSync('build-manifest.json','utf8'));
 if(manifest.sha256!==hash)throw Error('The build manifest does not match index.html');
-const reports=['test-report.json','acting-report.json','art-audio-report.json','native-storage-report.json','previews/v3.5/body-report.json','previews/v3.6/life-report.json','previews/v3.7/presentation-report.json'];
+const reports=['test-report.json','acting-report.json','art-audio-report.json','native-storage-report.json','previews/v3.5/body-report.json','previews/v3.6/life-report.json','previews/v3.7/presentation-report.json','previews/v3.8/ipad-motion-report.json'];
 for(const p of reports){const r=JSON.parse(fs.readFileSync(p,'utf8'));if(!r.passed||r.artifact_sha256!==hash)throw Error('Missing, failed or stale evidence: '+p);}
 console.log('Verified current-build browser evidence:',reports.length);
 JS
