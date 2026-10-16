@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 让动作被看见 V3.8。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#152f39"><meta name="description" content="希尔达：黄昏的回声·归途。全屏、离线、十二幕非官方同人点触冒险 · 连贯的归途 V3.9。"><title>希尔达 · 黄昏的回声：归途</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23152f39'/%3E%3Cpath d='M16 51V26Q16 8 32 10Q48 8 48 26V51' fill='%235bb9cb'/%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' fill='%23f6d6b2'/%3E%3Cpath d='M17 22Q11 8 30 8Q52 8 47 22M21 45h25' stroke='%23254450' stroke-width='7'/%3E%3C/svg%3E"><style>
 /* Presentation can pause independently of saved puzzle progress. */
 #performer path,#performer ellipse{vector-effect:none}
 #heroPosition.working #performer{animation:none}
@@ -76,6 +76,8 @@
 .paused .v3-mote,.paused .v3-foreground-leaves{animation-play-state:paused}
 .reduced .v3-mote,.reduced .v3-foreground-leaves{animation:none;opacity:.35}
 #game.inspecting #sceneLabel{opacity:.32}#game.inspecting #vignette{box-shadow:inset 0 0 0 1px #cbb88a22}
+#game:has(#titleScreen:not(.hidden)) :is(#hud,#bottomBar){opacity:0;pointer-events:none}
+#game:has(#titleScreen:not(.hidden)) #actors{visibility:hidden}
 @media(max-width:700px){#hud{left:16px;right:16px}#hud nav{gap:5px}#hud nav button{width:34px;height:34px}#sceneName{font-size:19px}#focusExit{top:auto;bottom:calc(90px + var(--safe-bottom));padding:10px 17px;max-width:85vw;white-space:nowrap}.item-hero{height:185px}.item-hero svg{width:158px;height:158px}#selection{max-width:73%;gap:5px;padding-left:11px}#selection span{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#inspectSelected{padding:0 7px!important}}
 @media(max-height:500px){#focusExit{top:12px;bottom:auto;padding:8px 13px}#panel{padding:24px;max-height:93dvh}.item-hero{height:133px;float:left;width:37%;margin:8px 22px 10px 0}.item-hero svg{height:112px;width:112px}.item-hero::after{display:none}.item-panel .btnrow{clear:both}#sceneLabel{max-width:45%}}
 
@@ -95,7 +97,7 @@
  <div id="selection" class="hidden"><span></span><button id="inspectSelected" title="仔细看看物品 (E)">观察</button><button id="cancelItem" aria-label="取消使用物品">×</button></div><div id="dragGhost" class="hidden" aria-hidden="true"></div>
  <div id="toast" role="status" aria-live="polite"></div><div id="saveDot" title="自动存档" aria-label="自动存档"></div>
  <div id="panelLayer" class="hidden"><section id="panel" tabindex="-1" role="dialog" aria-modal="true" aria-label="游戏菜单"></section></div>
- <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.8</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.8 让动作被看见 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
+ <div id="titleScreen"><div class="titleShade"></div><div class="titleContent"><span class="eyebrow">A LITTLE ADVENTURE. A LONG WAY HOME.</span><div class="wordmark">hilda<span>希尔达</span></div><h2>黄昏的回声 <span>归途 · V3.9</span></h2><p>有些声音不是警报。<br>有些冒险，是为了把每个人带回家。</p><div class="startActions"><button id="startBtn">翻开这次冒险 <span>↗</span></button><button id="continueBtn" class="hidden">继续旅程 <span>→</span></button></div><div class="titleHint">点击探索 · 拖拽机关 · 耐心观察<br><span>手机横屏体验更好，竖屏可拖动画面查看两侧。</span></div></div><div class="titleFooter">V3.9 连贯的归途 · 非官方同人互动故事 · 原创剧情与矢量场景 · 可离线运行</div></div>
 </div><input id="importFile" type="file" accept="application/json,.json" hidden><noscript>请在支持 JavaScript 的浏览器中打开本游戏。</noscript>
 <script>
 /* src/engine/modules.js */
@@ -209,8 +211,8 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
       const mood = working && entry === hero ? 'resolve' : Cast.expression(scene, flags, entry.who);
       const walking=entry.slot?.dataset.gait==='walking'||entry===hero&&moving;
       const reserved=!!entry.slot?.classList.contains('bracing')
-        ||entry.slot?.id==='roofDavid'&&flags.roofBrace&&!flags.roofDone
-        ||scene===8&&((entry.who==='大卫'&&flags.leverFriend)||(entry.who==='芙丽达'&&flags.brakeFriend))
+        ||entry.slot?.id==='roofDavid'&&flags.roofBrace&&!flags.fridaSafe
+        ||scene===8&&((entry.who==='大卫'&&flags.davidHold)||(entry.who==='芙丽达'&&flags.fridaHold))
         ||working&&(entry===hero||scene===8||scene===9);
       const idle=Idle.sample({who:entry.who,time,scene,reduced,reserved,moving:walking,speaker:role==='speaker'});
       const pose = sample({who: entry.who, time, role, mood, gaze, typing, character, reduced});
@@ -303,8 +305,8 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  }
  function upper(who,rig=false,mood='curious'){
   const c=profiles[who]||profiles['妈妈'],hilda=who==='希尔达',mom=who==='妈妈';
-  const torso=p('M-23-82Q-8-92 18-83L27-44Q5-38-25-45Z',c.coat)+p('M-22-74l7-9 3 34 27 3 10-4 2 7q-28 7-51 0Z',c.coatDark,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z',c.coatLight,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z','url(#cast-knit)','none')+p('M-2-78V-49M-21-48H22','none',c.coatDark,1.15)+p('M-10-57h9v8h-10m15-8h10v8H5','none',c.coatLight,1.1)+[0,1,2].map(i=>e(1,-72+i*8,1.2,1.2,'#ecd5a4')).join('');
-  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">${hairBack(who,c)}${p('M-20-82q-18 0-16 18l3 19 17 4 6-26Z','#64594c')}${p('M-32-66l15 3-2 11-12-2Z','#a27e55')}${p('M-26-73l4 1v8l-5-1Z','#d6b77c')}${hilda?p('M-21-53H20L29-29Q1-25-28-29Z','#334552')+p('M-15-51l-4 20m18-21v22m14-21 7 19','none','#536574',1.2):''}${mom?p('M-20-61L-32-23Q2-16 32-25L19-64Z',c.coatDark):''}${torso}${p('M-13-85Q-17-68-13-46','none','#544b40',4.2)}${p('M-13-81v21','none','#bc9764',1.4)}${p('M-15-62h5v7h-5Z','#d9bd83',ink,.8)}${who==='芙丽达'?p('M16-67l7 3-3 8-8-3Z','#d2c49c',ink,1)+p('M16-61l2-3 2 4','none','#55756c',1):''}${head(who,mood,rig)}${p('M-22-91Q-3-86 22-93L24-83Q6-77-22-82Z',c.scarf)}${p('M-18-86q19 6 37-2','none',hilda?'#ed9b77':'#a4beb0',1.4)}${p('M17-84Q32-86 45-74L41-63 32-64 33-71 18-75Z',c.scarf,ink,1.4,rig?'id="rigScarf"':'class="cast-scarf"')}${p('M-21-48H21','none','#e2be8a',.7)}</g>`;
+  const torso=p('M-23-82Q-8-92 18-83L27-44Q5-38-25-45Z',c.coat)+p('M-22-74l7-9 3 34 27 3 10-4 2 7q-28 7-51 0Z',c.coatDark,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z',c.coatLight,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z','url(#cast-knit)','none')+p('M-2-78V-45M-22-46Q2-41 24-45','none',c.coatDark,1.15)+p('M-10-57h9v8h-10m15-8h10v8H5','none',c.coatLight,1.1)+[0,1,2].map(i=>e(1,-72+i*8,1.2,1.2,'#ecd5a4')).join('');
+  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">${hairBack(who,c)}${p('M-20-82q-18 0-16 18l3 19 17 4 6-26Z','#64594c')}${p('M-32-66l15 3-2 11-12-2Z','#a27e55')}${p('M-26-73l4 1v8l-5-1Z','#d6b77c')}${hilda?p('M-21-53H20L29-29Q1-25-28-29Z','#334552')+p('M-15-51l-4 20m18-21v22m14-21 7 19','none','#536574',1.2):''}${mom?p('M-20-61L-32-23Q2-16 32-25L19-64Z',c.coatDark):''}${torso}${p('M-13-85Q-17-68-13-46','none','#544b40',4.2)}${p('M-13-81v21','none','#bc9764',1.4)}${p('M-15-62h5v7h-5Z','#d9bd83',ink,.8)}${who==='芙丽达'?p('M16-67l7 3-3 8-8-3Z','#d2c49c',ink,1)+p('M16-61l2-3 2 4','none','#55756c',1):''}${head(who,mood,rig)}${p('M-22-91Q-3-86 22-93L24-83Q6-77-22-82Z',c.scarf)}${p('M-18-86q19 6 37-2','none',hilda?'#ed9b77':'#a4beb0',1.4)}${p('M17-84Q32-86 45-74L41-63 32-64 33-71 18-75Z',c.scarf,ink,1.4,rig?'id="rigScarf"':'class="cast-scarf"')}${p('M-22-45Q2-40 24-44','none','#e2be8a',.65)}</g>`;
  }
  function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
  function restingArm(name,c){
@@ -325,7 +327,7 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  function elf(){return `<g data-cast="阿尔弗" data-other-life="elf">${e(0,3,17,3,'#0d29393d')}${p('M-7-16v14m12-15 2 16','none','#405253',4)}${boot(-6,0,true)}${boot(8,0)}<g data-life-body data-life-pivot="0 -16">${p('M-11-35q11-7 22 0l4 19-26 1Z','#849078')}${p('M-13-32l-5 12 6 3m22-17 9 11-5 6','none','#aaaf88',4)}<g data-life-head data-life-pivot="0 -28">${p('M-14-43l-10-7 3 10 7 4m28-7 10-7-4 10-7 3','#edc69f')}${e(0,-46,16,19,'#f4d6b0',ink,1.4)}${p('M-19-55Q-13-74 1-87L-1-72Q14-68 20-53Z','#b95444')}${p('M-9-69l9-12-3 13 13 6','none','#e09772',1.3)}${p('M-18-54q18-8 37 0','none','#6f3939',3)}<g data-life-eye data-eye-y="-46"><g data-life-gaze>${e(-6,-46,2,2.5,ink)}${e(7,-46,2,2.5,ink)}</g></g>${p('M-15-50h13v10h-13Zm18 0h13v10H3Zm-5 4h5','none','#6b5b45',1.2)}${p('M-3-34q4 3 8-1','none','#815546',1,'data-life-mouth')}</g><g data-life-gesture>${p('M-6-30l18 1 4 20-19 2Z','#e3d4a8')}${p('M-2-24h9m-8 4h10m-9 4h7','none','#8f9475',.8)}${e(10,-12,2,2,'#b46551')}</g></g></g>`;}
  function twig(){return Twig.markup();}
 
- function troll(big=false,calm=true){return `<g data-cast="${big?'巨魔妈妈':'小巨魔'}" data-other-life="${big?'mother':'troll'}">${e(0,4,66,9,'#0b273747')}<g data-life-body data-life-pivot="0 -5">${p('M-60-7Q-75-33-60-69L-55-99Q-51-131-28-138L-11-149 14-143 34-140Q56-130 57-99l10 25q15 22 10 53L58-13 50-4 21-6 11-20-4-18-16-4-39-3-47-12Z','url(#cast-rock)',ink,2.2)}${p('M-56-62l13-17 12 12-8 35-15 8m77-54 24 9 12 32-18 9-11-28','#67837e','none')}${p('M-31-135l17-8 22 3 10 7-22 3-17 15-18-2Z','#b5beb0','none')}<g data-life-head data-life-pivot="0 -75">${p('M-41-112l-13-5-4 12 10 10m92-17 12-6 6 12-10 12','#8fa399')}<g data-life-eye data-eye-y="-96">${e(-24,-96,10,12,'#c5cbb8')}${e(27,-96,10,12,'#c5cbb8')}<g data-life-gaze>${e(-21,-95,4.4,6,ink)}${e(25,-95,4.4,6,ink)}${e(-20,-97,1.3,1.7,'#f6ecd4')}${e(26,-97,1.3,1.7,'#f6ecd4')}</g></g>${p('M-5-99l-9 28 25 2-8-25Z','#8fa6a0')}${p(calm?'M-20-57q21 15 42-1':'M-17-54q16-8 33-1','none','#324f56',2.1,'data-life-mouth')}</g>${p('M-46-46l9 5-4 14m76-22-9 9 3 12M-32-17l2 8m57-10 3 9m9-111-5 8 5 9','none','#b1bdb0',1.3)}${[-29,-18,16,31].map((x,i)=>e(x,-76+i%2*3,2.5,1.8,'#607c78')).join('')}${p('M-40-132l-1-8 10 3 4-9 8 6 8-6 7 7-6 8Z','#78936e')}${p('M-36-140l3 9m6-14 1 10m10-9-2 8','none','#bcc69b',1)}${big?p('M12-140q-3-13 6-20m-5 9-8-5m8 2 10-2','none','#93af8a',2):p('M-50-69q46 17 96 1l-5 10q-41 16-84-1Z','#b77959')}${p('M-40-63q16 6 28 6','none','#e0b58a',1.2)}</g></g>`;}
+ function troll(big=false,calm=true){return `<g data-cast="${big?'巨魔妈妈':'小巨魔'}" data-other-life="${big?'mother':'troll'}">${e(0,4,66,9,'#0b273747')}<g data-life-body data-life-pivot="0 -5">${p('M-60-7Q-75-33-60-69L-55-99Q-51-131-28-138L-11-149 14-143 34-140Q56-130 57-99l10 25q15 22 10 53L58-13 50-4 21-6 11-20-4-18-16-4-39-3-47-12Z','url(#cast-rock)',ink,2.2)}${p('M-56-62l13-17 12 12-8 35-15 8m77-54 24 9 12 32-18 9-11-28','#67837e','none')}${p('M-31-135l17-8 22 3 10 7-22 3-17 15-18-2Z','#b5beb0','none')}<g data-life-head data-life-pivot="0 -75">${p('M-41-112l-13-5-4 12 10 10m92-17 12-6 6 12-10 12','#8fa399')}<g data-life-eye data-eye-y="-96">${e(-24,-96,10,12,'#c5cbb8')}${e(27,-96,10,12,'#c5cbb8')}<g data-life-gaze>${e(-21,-95,4.4,6,ink)}${e(25,-95,4.4,6,ink)}${e(-20,-97,1.3,1.7,'#f6ecd4')}${e(26,-97,1.3,1.7,'#f6ecd4')}</g></g>${p('M-5-99l-9 28 25 2-8-25Z','#8fa6a0')}${p(calm?'M-20-61q21 14 42-1':'M-17-58q16-8 33-1','none','#324f56',2.2,'data-life-mouth')}</g>${p('M-46-46l9 5-4 14m76-22-9 9 3 12M-32-17l2 8m57-10 3 9m9-111-5 8 5 9','none','#b1bdb0',1.3)}${[-29,-18,16,31].map((x,i)=>e(x,-76+i%2*3,2.5,1.8,'#607c78')).join('')}${p('M-40-132l-1-8 10 3 4-9 8 6 8-6 7 7-6 8Z','#78936e')}${p('M-36-140l3 9m6-14 1 10m10-9-2 8','none','#bcc69b',1)}${big?p('M12-140q-3-13 6-20m-5 9-8-5m8 2 10-2','none','#93af8a',2):p('M-48-47q44 15 92 1l-5 10q-39 14-80-1Z','#b77959')}${p(big?'M-40-63q16 6 28 6':'M-38-41q16 5 28 5','none','#e0b58a',1.2)}</g></g>`;}
  function woff(){return `<g data-cast="沃夫" data-other-life="woff"><g data-life-body data-life-pivot="0 52">${p('M-80-16Q-101-27-86-47-68-62-49-43Q-3-70 49-43 67-65 84-48 101-29 81-14 99 14 73 36 40 61-16 54-60 53-80 31-92 13-80-16Z','url(#cast-woff)',ink,2)}${p('M-46-36q12-8 25-8m-19 3 6-7m9 3 6-7m-45 32-6 7m125-3 6 9','none','#f3e5c3',1.8)}${p('M-79-29q-2-16 17-14m127 0q20-3 17 16','none','#8e9b94',2)}<g data-life-head data-life-pivot="0 12"><g data-life-eye data-eye-y="5">${e(-28,5,10,12,'#f0e6cc')}${e(26,5,10,12,'#f0e6cc')}<g data-life-gaze>${e(-25,6,3.7,6.2,ink)}${e(25,6,3.7,6.2,ink)}${e(-24,3,1,1.8,'#fff2dc')}${e(26,3,1,1.8,'#fff2dc')}</g></g>${p('M-8 21q8 8 17-2','none','#576d70',1.5,'data-life-mouth')}</g>${p('M-37 49l-4 12 17-8m39-1 18 10-3-14','#8da2a0')}${e(-42,22,8,3,'#bc9f87')}${e(41,22,8,3,'#bc9f87')}</g></g>`;}
  return {profiles,defs,expression,head,upper,boot,standing,elf,twig,troll,woff};
 });
@@ -356,10 +358,11 @@ Homeward.define('art/cast-motion', [], () => {
 
 /* src/art/chapter-life.js */
 /** Three authored dioramas. Only transient presentation is animated here; state lives in scenes. */
-Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
+Homeward.define('art/chapter-life', ['art/kit','art/finishing','content/staging'], (K,F,Staging) => {
   const {path,rect,circle,ell,sceneText:text,group,rep,fern,gear}=K;
   const defs=`<defs>
     <clipPath id="northGateArch"><path d="M1240 784V464Q1249 327 1381 327T1516 464V784Z"/></clipPath>
+    <clipPath id="towerGateArch"><path d="M1168 828V303q32-126 191-126t178 126v525Z"/></clipPath>
     <linearGradient id="chapterCopper" x2=".2" y2="1"><stop stop-color="#d3be89"/><stop offset=".34" stop-color="#9e8b60"/><stop offset=".6" stop-color="#567d70"/><stop offset="1" stop-color="#b49c6d"/></linearGradient>
     <linearGradient id="chapterBeam" x1=".6" y1="0" x2=".3" y2="1"><stop stop-color="#f5d196" stop-opacity=".12"/><stop offset="1" stop-color="#edc59b" stop-opacity="0"/></linearGradient>
     <radialGradient id="chapterPool"><stop stop-color="#c5cfb7" stop-opacity=".32"/><stop offset="1" stop-color="#6aa498" stop-opacity="0"/></radialGradient>
@@ -420,15 +423,49 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
       });
     }
     if(c.effect==='intake')set('intakeRotor','transform',`rotate(${(c.from+(c.from?-p:p))*90} 350 682)`);
-    if(c.effect==='filter'){set('filterLeaves','transform',`translate(${-12*p} ${p*36})`);set('filterLeaves','opacity',1-p);}
+    if(c.effect==='filter'){set('filterLeaves','transform',`translate(${-12*p} ${p*36})`);set('filterLeaves','opacity',1-p);set('filterPole','transform',`translate(${-18*p} ${-26*p}) rotate(${-15*p})`);set('filterPole','opacity',q.progress>=.55?0:1);}
     if(c.effect==='pipe')root.querySelectorAll(`[data-pipe-rotor="${c.node}"]`).forEach(el=>el.setAttribute('transform',`rotate(${(c.from+p)*90})`));
     if(c.effect==='prime'){set('primeHandle','transform',`rotate(${-p*172} 0 8)`);set('pressureNeedle','transform',`rotate(${p*120.3} 0 -28)`);}
+    if(c.effect==='gondolaWeight'){
+      const curSum=(state.weights||[]).reduce((a,v)=>a+v,0),nextSum=curSum+(c.removing?-c.weightValue:c.weightValue);
+      set('gondolaBeam','transform',`rotate(${((curSum+(nextSum-curSum)*p)-4)*3} 0 -36)`);
+    }
+    if(c.effect==='gondolaLift'){
+      set('gondolaBrake','transform',`rotate(${p*160} 1029 633)`);
+      set('gondolaCabin','transform',`translate(${1218-24*p} ${575-24*p})`);
+    }
+    if(c.effect==='towerAlign'||c.effect==='towerDoor'){
+      const base=c.effect==='towerAlign'?c.from:state.f.gearIndex||0,delta=c.effect==='towerAlign'?((base+1)%4-base)*p:p*2;
+      root.querySelectorAll('[data-tower-gear]').forEach(el=>{
+        const k=el.dataset.towerGear,cx=el.dataset.cx,cy=el.dataset.cy,mul=k==='gearM'?1:k==='gearS'?-12/10:-12/14;
+        el.setAttribute('transform',`rotate(${(base+delta)*90*mul} ${cx} ${cy})`);
+      });
+      set('towerWitnessMark','transform',`rotate(${delta*90} 1090 486)`);
+      if(c.effect==='towerDoor'){
+        set('towerLeverArm','transform',`rotate(${p*76} 0 -26)`);
+        set('towerGateDoor','transform',`translate(0 ${-472*p})`);
+      }
+    }
+    if(c.effect==='clockBypass'&&c.mounted){
+      set('clockBypassWheel','transform',`rotate(${p*58} 0 0)`);
+      const turns=(c.from||0)+p;
+      set('clockGaugeNeedle','transform',`rotate(${Math.min(1,turns/2)*90} 0 0)`);
+    }
+    if(c.effect==='clockDrive'){
+      set('clockDriveWheel','transform',`rotate(${p*180} 662 650)`);
+    }
+    if(c.effect==='trailHood')set('trailHood'+c.node,'transform',`translate(${p*14} 0) rotate(${-70*p} 0 -12)`);
+    if(c.effect==='ridgeReunite'){
+      set('ridgeChild','transform',Staging.ridgeChild(p));
+      set('ridgeMotherArm','d',Staging.ridgeArm(p));
+    }
     let visual='';
     if(c.effect==='grapple'&&p>0&&p<1){const x=545+p*550,y=648+(556-648)*p-Math.sin(p*Math.PI)*166;
       visual=path(`M521 677Q${(521+x)/2} ${y+50} ${x} ${y}`,'none','#cab888',3)+group(x,y,1,path('M-9-5Q6-14 9 0Q9 13-5 9','none','#e1d8b4',5));
     }
     if(c.effect==='branch'&&p>0)visual=path(`M534 ${496+p*146}L505 690`,'none','#cfbb85',3);
     if(c.kind==='clear'&&p>.25&&p<.85)visual=rep(4,i=>ell(439+i*13,661+(p-.25)*90+i*7,6,3,i%2?'#bba572':'#7d936f'));
+    if(c.effect==='trailLight'&&p>.2)visual=circle(c.target[0],c.target[1]-12,18*p,'#ffe3a055');
     if(fx.innerHTML!==visual)fx.innerHTML=visual;
   }
   return {defs,scenery,animate};
@@ -522,24 +559,38 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     <pattern id="v3Fabric" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0h6M0 3h6M1 0v6M4 0v6" fill="none" stroke="#e2d5ac" stroke-opacity=".18" stroke-width=".5"/></pattern>
   </defs>`;
   const bolt=(x,y,r=4)=>circle(x,y,r,'#b4ad85','#213e43',1.5)+path(`M${x-r*.55} ${y+r*.55}l${r*1.1}-${r*1.1}`,'none','#54645a',1.3);
-  function plate(){return '';}
+  function plate(x,y,w=96){return group(x,y,1,rect(-w/2,-11,w,22,'#244347',4,'#979774',1.4)+path(`M${-w/2+11} -3H${w/2-11}M${-w/2+18} 4H${w/2-22}`,'none','#d8ca9e55',1.3)+bolt(-w/2+6,0,2.1)+bolt(w/2-6,0,2.1));}
   function vine(x,y,scale=1,flip=1){return group(x,y,scale,`<g transform="scale(${flip} 1)">${path('M0 0Q67 1 59 71t36 98','none','#2b5148',4)}${rep(10,i=>{let xx=36+Math.sin(i*.75)*24,yy=i*16;return path(`M${xx} ${yy}q${i%2?28:-29} -25 ${i%2?26:-28} 3q${i%2?-12:13} 15 ${i%2?-26:28} -3`,'#4c7460','#234843',.8);})}</g>`);}
   function motes(scene){return `<g class="v3-motes" pointer-events="none">${rep(20,i=>{let x=(i*317+scene*79)%1560+20,y=(i*117)%700+70;return circle(x,y,i%4===0?2:1,'#ecd39b','none',0,`style="animation-delay:-${i*.73}s" class="v3-mote"`);})}</g>`;}
   function observation(state){let d=details[state.scene],x=d.x,y=d.y,s='';
     if([0,11].includes(state.scene)){
       s=rect(x-12,y-51,24,103,'#9c7650',3,'#604f3c',2)+rep(8,i=>path(`M${x-10} ${y+36-i*11}h${i%2?10:17}`,'none','#e6cba2',1.5))+text(x+22,y-42,state.scene===11?'今天':'去年',9,'#cdbd90','start');
+    }else if(state.scene===1){
+      s=path(`M${x-20} ${y+38}v-85h36v85`,'none','#a1ad8b',2)+rep(7,i=>path(`M${x-18} ${y+30-i*12}h${i%3?12:22}`,'none','#d1c99e',1.5))+path(`M${x-35} ${y+17}h68`,'none','#b59b69',2);
     }else if(state.scene===2){
-      s=path(`M${x-24} ${y+37}v-34q24-32 48 0v34Z`,'#183f40','#708776',3)+path(`M${x} ${y+35}V${y-8}`,'none','#69816d',2)+circle(x+11,y+12,3,'#d7b77a')+rep(4,i=>ell(x-32+i*20,y+46,10,3,'#78917a'));
-    }else if(state.scene===6){s=path(`M${x-35} ${y+10}q30-30 57-1M${x-6} ${y-22}v39m-12-27 24 0m-12 11-15 18m15-18 12 18M${x+37} ${y-25}q20 5 5 23q-23 2-20-11q0-11 15-12`,'none','#b1b397',2.6);}
-    else if(state.scene===10){s=path(`M${x-30} ${y+12}q45-12 70 4`,'none','#547662',4)+group(x,y,.7,path('M-15 0Q-13-20 3-13Q14-19 18-10L31-6 17-3Q7 18-15 0Z','#b78354','#36564e',2)+circle(12,-10,1.5,'#243f43')+path('M-4 7l-3 8m9-6v8','none','#355d55',2));}
-    else if(state.scene===9){s=path(`M${x-22} ${y+30}v-55l22-17 22 17v55Z`,'#2c4c52','#8f9475',3)+rect(x-13,y-18,26,31,'#e9cb8b',2)+path(`M${x} ${y-18}v31`,'none','#465b52',3)+ell(x,y-2,83,101,'url(#v3Amber)');}
-    else if(state.scene===1){s=path(`M${x-20} ${y+38}v-85h36v85`,'none','#a1ad8b',2)+rep(7,i=>path(`M${x-18} ${y+30-i*12}h${i%3?12:22}`,'none','#d1c99e',1.5))+path(`M${x-35} ${y+17}h68`,'none','#b59b69',2);}
-    else{s=group(x,y,1,rect(-28,-20,56,40,'#b9ab7c',3,'#486352',1.5)+path('M-25-16L0 3 25-16M-25 16-7 1m32 15L7 1','none','#e1d1a2',1.2));}
+      s=path(`M${x-24} ${y+37}v-34q24-32 48 0v34Z`,'#183f40','#708776',3)+rect(x-28,y+34,56,7,'#8c7250',2,'#344f4b',1.4)+path(`M${x} ${y+34}V${y-8}`,'none','#69816d',2)+circle(x+11,y+12,3,'#d7b77a')+rect(x-15,y-3,10,9,'#f2d894',1.5,'#425b55',1.2)+group(x+32,y+36,.85,path('M-10 4H12L8 9H-8Z','#8eb09d','#2e4d49',1.4)+circle(0,-3,9,'#b78658','#36524e',1.6)+path('M0-3m-4 0a4 4 0 1 0 8 0a2.5 2.5 0 1 0-5 0','none','#e4cda0',1.3))+rep(4,i=>ell(x-32+i*20,y+47,10,3,'#78917a'));
+    }else if(state.scene===3){
+      s=group(x,y,1,rect(-32,-34,64,68,'#6d523b',4,'#2d4648',2)+rect(-26,-27,52,55,'#dfd0a8',2,'#6b644e',1.2)+rect(-13,-38,26,9,'#a79064',2,'#2d4648',1.5)+path('M-18-16H18M-18-7H14M-18 2H17','none','#5b695e',1.6)+circle(-15,17,5,'#b95f49','#7c3c2f',1.2)+circle(0,17,5,'#b95f49','#7c3c2f',1.2)+circle(15,17,5,'#b95f49','#7c3c2f',1.2)+rect(-21,9,42,16,'none',2,'#8d8266',1));
+    }else if(state.scene===4){
+      s=group(x,y,1,rect(-54,-26,108,52,'#32504c',6,'#959775',2)+bolt(-44,-16,2.4)+bolt(44,-16,2.4)+bolt(-44,16,2.4)+bolt(44,16,2.4)+circle(-20,1,6,'#d8caa055','#c8be96',1.4)+path('M-26-5l-2-7m5 5-1-8m5 8v-9m4 10 2-8m3 11 4-5','none','#d8caa0',1.5)+ell(18,2,11,9,'#d8caa044','#c8be96',1.6)+path('M8-6l-3-9m8 7-1-10m7 10 1-10m6 12 5-8','none','#d8caa0',2.2)+path('M-34 17H34','none','#b9b58e88',1.5));
+    }else if(state.scene===5){
+      s=group(x,y,1,rect(-6,8,12,26,'#594637',2,'#294346',1.8)+rect(-42,-18,84,30,'#8d6e4c',4,'#334e4d',2)+bolt(-34,-3,2.2)+bolt(34,-3,2.2)+path('M-24-7H22M-24 2H10','none','#ead7ad',1.8)+path('M24-8v12m-5-6h10','none','#d9a86c',1.8));
+    }else if(state.scene===6){
+      s=path(`M${x-35} ${y+10}q30-30 57-1M${x-6} ${y-22}v39m-12-27 24 0m-12 11-15 18m15-18 12 18M${x+37} ${y-25}q20 5 5 23q-23 2-20-11q0-11 15-12`,'none','#b1b397',2.6)+circle(x-26,y+12,8,'none','#b1b397',2)+circle(x+24,y+9,13,'none','#b1b397',2.2);
+    }else if(state.scene===7){
+      s=group(x,y,1,path('M-32 32V-12Q-32-34 0-34Q32-34 32-12V32Z','#3d5752','#9d9a76',2.2)+bolt(-23,23,2.3)+bolt(23,23,2.3)+path('M-7-18Q0-26 7-18L9-8H-9Z','#d2b377','#284346',1.4)+rep(5,i=>path(`M-19 ${-1+i*6}H${14-(i%3)*5}`,'none','#d8cba1',1.5)));
+    }else if(state.scene===8){
+      s=group(x,y,1,rect(-36,-28,72,54,'#4d3d31',4,'#878b6e',1.8)+rect(-28,-19,28,34,'#dfcda2',2,'#5a6456',1.2)+circle(-14,-15,2.2,'#b75d47')+path('M-23-8H-6M-23-1H-9M-23 6H-11','none','#5c695d',1.4)+path('M14-18v9','none','#c8b482',1.8)+ell(14,4,13,10,'#b87c52','#2d4748',1.8)+path('M27 2q8-4 6 5t-7 4M4 1q-7 0-6 6','none','#b87c52',2)+rect(8,-7,12,4,'#d7bc84',1.5,'#2d4748',1.2));
+    }else if(state.scene===9){
+      s=path(`M${x-22} ${y+30}v-55l22-17 22 17v55Z`,'#2c4c52','#8f9475',3)+rect(x-13,y-18,26,31,'#e9cb8b',2)+path(`M${x} ${y-18}v31`,'none','#465b52',3)+ell(x,y-2,83,101,'url(#v3Amber)');
+    }else if(state.scene===10){
+      s=path(`M${x-30} ${y+12}q45-12 70 4`,'none','#547662',4)+group(x,y,.7,path('M-15 0Q-13-20 3-13Q14-19 18-10L31-6 17-3Q7 18-15 0Z','#b78354','#36564e',2)+circle(12,-10,1.5,'#243f43')+path('M-4 7l-3 8m9-6v8','none','#355d55',2));
+    }
     return `<g id="scene-observation" class="v3-observation" opacity="${state.notes.includes(d.note)?'.66':'1'}">${s}</g>`;
   }
   function scenery(state){const i=state.scene,f=state.f;let b='';
     if([0,11].includes(i)){
-      b+=path('M949 219H1160L702 824H232Z','url(#v3Ray)')+path('M1069 219H1106L425 820H377Z','url(#v3Ray)');
+      b+=path('M949 280H1160L702 824H232Z','url(#v3Ray)')+path('M1069 280H1106L425 820H377Z','url(#v3Ray)');
       b+=rep(20,j=>path(`M${465+j*31} 800q20-13 43 2`,'none','#dac193',.7,'opacity=".14"'));
       b+=ell(1015,577,264,269,'url(#v3Amber)')+plate(842,307,84,'北门 · 旧路');
     }
@@ -549,7 +600,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
       b+=path('M0 841Q382 719 755 851T1600 818V900H0Z','url(#v3Mist)');
     }
     if(i===2){
-      b+=vine(1250,151,1.6,-1)+vine(94,172,1.3)+path('M117 243Q372 382 556 234','none','#94ac8244',2);
+      b+=vine(1365,142,1.5,-1)+vine(94,172,1.3)+path('M117 243Q372 382 556 234','none','#94ac8244',2);
       b+=rep(11,j=>circle(945+j*29,510+Math.sin(j)*24,1.8,'#e0d391','none',0,'class="v3-mote"'));
     }
     if(i===3){b+=path('M922 80H1140L821 732H422Z','url(#v3Ray)')+vine(1347,164,1.3,-1)+plate(721,389,102,'旧山路档案');}
@@ -568,8 +619,8 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     if(i===7){
       Mechanisms.gears.forEach(({x,y,radius})=>{let r=radius+12;b+=rep(6,j=>{let a=j*Math.PI/3;return bolt(x+Math.cos(a)*r,y+Math.sin(a)*r,3.3);});});
       b+=path('M1084 413l6 9 6-9','none','#f3dba0',3);
-      if(f.gearMSet){let a=(f.gearIndex||0)*Math.PI/2;
-        b+=path(`M${1090+Math.cos(a)*31} ${486+Math.sin(a)*31}L${1090+Math.cos(a)*47} ${486+Math.sin(a)*47}`,'none',f.gearAligned?'#ffedbc':'#e0bd77',4,'stroke-linecap="round"');
+      if(f.gearMSet){let a=((f.gearIndex||0)+(f.towerGate?2:0))*Math.PI/2;
+        b+=`<g id="towerWitnessMark">${path(`M${1090+Math.cos(a)*31} ${486+Math.sin(a)*31}L${1090+Math.cos(a)*47} ${486+Math.sin(a)*47}`,'none',f.gearAligned?'#ffedbc':'#e0bd77',4,'stroke-linecap="round"')}</g>`;
       }
       b+=plate(1029,660,168,f.gearAligned?'门闩已归位':'金线对准上方缺口');
       b+=ell(1165,275,144,167,'url(#v3Amber)')+ell(1538,305,123,172,'url(#v3Amber)');
@@ -581,9 +632,18 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     return `<g id="v3-scenery" pointer-events="none">${b}${observation(state)}</g>`;
   }
   function foreground(state){const i=state.scene;let b='';
+    if([0,11].includes(i)){
+      b+=path('M0 0H240L155 36H0ZM1600 0H1360L1445 36H1600Z','#3a2c24','none',0,'opacity=".55"');
+    }
     if([1,2,5,6,7,10].includes(i)){
       b+=`<g class="v3-foreground-leaves">${fern(-21,953,2.2,'#173f40')}${fern(1561,952,2.4,'#153c3e')}${fern(1506,925,1.1,'#426d58')}</g>`;
       if(i===2)b+=path('M-10-5Q167-12 286 79Q97 27 71 175L-10 292Z','#173d40')+vine(102,30,1.3)+vine(1467,-37,1.2,-1);
+    }
+    if(i===3){
+      b+=path('M0 0H210Q92 22 44 82H0ZM1600 0H1390Q1508 22 1556 82H1600Z','#1c3035','none',0,'opacity=".68"');
+    }
+    if([4,8].includes(i)){
+      b+=path('M0 0H185L128 54H0ZM1600 0H1415L1472 54H1600Z','#162f35','none',0,'opacity=".72"')+bolt(86,24,3.5)+bolt(1514,24,3.5);
     }
     if(i===9)b+=path('M-5 893l178-21 244 33H-5Z','#102f3b')+path('M1316 899l241-44 59 51Z','#132e38');
     return `<g id="v3-foreground" pointer-events="none">${b}</g>`;
@@ -691,8 +751,8 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
   function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
     ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
     ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
-    ${Cast.upper('希尔达',true)}
     <g id="rigRearArm">${limb('rigArmBack','#a95043',9)}${hand('Back')}</g>
+    ${Cast.upper('希尔达',true)}
     ${limb('rigArmFront','#c66d57',10)}
     <g id="rigTool" pointer-events="none"></g>${hand('Front')}
   </g>`;}
@@ -763,7 +823,7 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
 
 /* src/art/props.js */
 Homeward.define("art/props", ["art/kit", "art/characters"], ({P,path,rect,circle,ell,text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}) => {
-function itemArt(id){let b='';switch(id){case'lamp':case'shade':b=lamp(0,14,.65,true)+(id==='shade'?path('M-18-9H19L25 11H-23Z','#d3ab70','#445956',2):'');break;case'scarf':b=path('M-26-14Q-3-30 26-17L23-5-2-2 8 24-7 30-18-10Z','#e3b76c','#3a5153',2)+path('m-3 21-4 7m9-11-3 11','none','#b28a50',2);break;case'crank':b=path('M-26 14H-8V-13H21V1','none','#7d9e96',9)+circle(21,4,8,'#ba8c56','#3c5552',2);break;case'rope':case'line':b=rep(4,i=>`<ellipse cx="${-8+i*5}" cy="-2" rx="13" ry="25" fill="none" stroke="#c8b17e" stroke-width="4"/>`)+path('M15 18 30 27','none','#c8b17e',4);break;case'hook':b=path('M-10-29 1-16V9q0 26 20 5m-20-4q-1 26-23 5','none','#91b4b0',6);break;case'grapple':b=path('M-22 26Q-42-13-12-6T2-20','none','#c7b380',4)+path('M2-27V5q-4 20-18 8m18-8q5 20 20 4','none','#98bdb6',5);break;case'fork':b=path('M0 30V-4Q-21-2-21-18v-14m21 28q21 2 21-14v-14','none','#c2d0b0',5)+circle(0,6,3,'#e8c484');break;case'felt':b=path('M-26-22 23-27 31 22-22 29Z','#b4b392','#536c66',2)+path('m-20-13 37-5m-34 18 35-5m-31 18 33-5','none','#dcd4ad',3);break;case'gearS':b=gear(0,0,26,10);break;case'gearM':b=gear(0,0,30,12);break;case'gearL':b=gear(0,0,34,14);break;case'plan':b=paper(0,0,.85,'plan');break;case'pole':b=path('M-30 30 25-25','none','#c8b17e',6)+path('M18-32 32-18','none','#8baaa0',4)+path('M23-27 35-15','none','#dcd1a6',3);break;default:b=bird(0,0,.8);}return `<svg viewBox="-45 -45 90 90" xmlns="http://www.w3.org/2000/svg">${b}</svg>`;}
+function itemArt(id){let b='';switch(id){case'lamp':case'shade':b=lamp(0,14,.65,true)+(id==='shade'?path('M-18-9H19L25 11H-23Z','#d3ab70','#445956',2):'');break;case'scarf':b=path('M-26-14Q-3-30 26-17L23-5-2-2 8 24-7 30-18-10Z','#e3b76c','#3a5153',2)+path('m-3 21-4 7m9-11-3 11','none','#b28a50',2);break;case'crank':b=path('M-26 14H-8V-13H21V1','none','#7d9e96',9)+circle(21,4,8,'#ba8c56','#3c5552',2);break;case'rope':b=rep(4,i=>`<ellipse cx="${-8+i*5}" cy="-2" rx="13" ry="25" fill="none" stroke="#c8b17e" stroke-width="4"/>`)+path('M15 18 30 27','none','#c8b17e',4);break;case'line':b=rep(4,i=>`<ellipse cx="${-6+i*5}" cy="-2" rx="14" ry="24" fill="none" stroke="#d8c394" stroke-width="4.5"/>`)+rect(-4,-11,14,18,'#b95f49',2,'#35504d',1.6)+circle(-20,16,7,'none','#d6b372',3.2)+path('M-14 14 16 24','none','#d8c394',4);break;case'hook':b=path('M-10-29 1-16V9q0 26 20 5m-20-4q-1 26-23 5','none','#91b4b0',6);break;case'grapple':b=path('M-22 26Q-42-13-12-6T2-20','none','#c7b380',4)+path('M2-27V5q-4 20-18 8m18-8q5 20 20 4','none','#98bdb6',5);break;case'fork':b=path('M0 30V-4Q-21-2-21-18v-14m21 28q21 2 21-14v-14','none','#c2d0b0',5)+circle(0,6,3,'#e8c484');break;case'felt':b=path('M-26-22 23-27 31 22-22 29Z','#b4b392','#536c66',2)+path('m-20-13 37-5m-34 18 35-5m-31 18 33-5','none','#dcd4ad',3);break;case'gearS':b=gear(0,0,26,10);break;case'gearM':b=gear(0,0,30,12);break;case'gearL':b=gear(0,0,34,14);break;case'weight1':case'weight2':case'weight3':{const v=Number(id.slice(-1));b=path('M-11-28q-8-14 11-14t11 14','none','#8ba28a',4)+path('M-22-28H22L31 16H-31Z',v===1?'#b9b288':v===2?'#859a81':'#6b8c7d','#274c48',2.5)+rep(v,i=>path(`M${(i-(v-1)/2)*9} -12v16`,'none','#e4d5a5',2.5));break;}case'plan':b=paper(0,0,.85,'plan');break;case'pole':b=path('M-30 30 25-25','none','#c8b17e',6)+path('M18-32 32-18','none','#8baaa0',4)+path('M23-27 35-15','none','#dcd1a6',3);break;default:b=bird(0,0,.8);}return `<svg viewBox="-45 -45 90 90" xmlns="http://www.w3.org/2000/svg">${b}</svg>`;}
 function portrait(who){let art;if(who==='希尔达')art=hilda(0,150,1,1,false,false,false);else if(who==='枝枝')art=twig(0,70,1,false);else if(who==='阿尔弗')art=person(who,0,92,1,false);else if(who.includes('巨魔'))art=troll(0,151,1,who==='巨魔妈妈');else if(who==='沃夫')art=woff(0,27,.48);else art=person(who,0,148,1,false);return `<svg viewBox="-45 -22 90 103" xmlns="http://www.w3.org/2000/svg">${art}</svg>`;}
 function waterLines(y=710,n=30){return `<g class="ripple" opacity=".55">${rep(n,()=>{let x=rnd()*1600,yy=y+rnd()*(900-y);return path(`M${x.toFixed(1)} ${yy.toFixed(1)}q${10+rnd()*35} -3 ${30+rnd()*60} 0`,'none','#99bdb0',1.4);})}</g>`;}
 function mushrooms(x,y,s=1){return group(x,y,s,rep(3,i=>group(i*25-22,-i%2*8,.6+i*.14,`${path('M-3 0-2-26H4L7 0Z','#e5d8b0')}${path('M-22-23Q-17-56 1-52 19-49 26-20Z','#b66f50','#40605a',1)}${circle(-7,-36,3,'#e7cc9f')}${circle(11,-32,2.5,'#e7cc9f')}`)));}
@@ -786,7 +846,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
         path('M-19 20H10L17 1H-9Z','#586b50','#253f3c',3)+circle(-6,5,7,'#cdb780','#314b40',2)+
         `<g id="archiveBrakePedal" transform="rotate(${f.ladderBrake?26:-25} -6 5)">${path('M-6 5L19-8','none','#c1a971',7)}${rect(8,-14,28,11,'#cbb98d',3,'#385347',2)}</g>`+
         circle(26,22,4,f.ladderBrake?'#e3c886':'#425b48','#cbc29a',1))+`</g>`;
-      b+=rep(12,i=>group(618+(i%4)*175,436+Math.floor(i/4)*113,1,
+      b+=rep(12,i=>group(662+(i%4)*175,436+Math.floor(i/4)*113,1,
         rect(-16,-5,32,10,'#cfbf8b',2,'#52634c',1)+text(0,2,String(17+i).padStart(3,'0'),6,'#52634c')));
       b+=path('M428 158 500 167 876 827 627 827Z','url(#chapterBeam)');
       b+=group(590,775,1,rect(-30,-61,61,63,'#8b8060',3,'#345348',2)+rect(-30,-61,61,63,'url(#chapterWood)')+path('M-33-48H33M-33-16H33','none','#b9aa78',3)+text(0,-30,'待归还',10,'#d3c293'));
@@ -799,7 +859,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       })+`</g>`;
       if(f.davidSafe)b+=path('M425 652Q596 675 767 644','none','#e0c89a',5)+path('M755 742V632','none','#7d998c',7);
       b+=path('M1000 752l24-47 27 49Z','#b0a980','#345458',3)+path('M1013 743l11-22 13 24Z','#46655f');
-      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#b18545',12)}${circle(1025,716,5,'#efc8a1','#315050',1.5)}</g>`;
+      b+=`<g id="roofBraceHands" opacity="${f.roofBrace&&!f.fridaSafe?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#b18545',12)}${circle(1025,716,5,'#efc8a1','#315050',1.5)}</g>`;
       b+=path('M1220 633V591L1250 569','none','#2c4548',12)+path('M1220 633V591L1250 569','none','#a9a87f',6);
       b+=circle(1220,657,41,'#2c4950','#849d8b',3)+`<g id="roofControlWheel" transform="rotate(${s.beaconAngle??-65} 1220 657)">${circle(1220,657,29,'#4d726b','#c4b384',6)}${path('M1191 657h58m-29-29v58','none','#b8aa7c',5)}${circle(1249,657,7,'#e6c790','#3c5850',2)}</g>`;
       b+=group(1189,617,1,path('M0-9 3-3 9-2 4 3 6 9 0 5-6 9-4 3-9-2-3-3Z','#e6d7a2','#395659',1));
@@ -831,8 +891,8 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       for(const [id,point] of [['roofDavid',cast.david],['roofFrida',cast.frida],['roofTwig',cast.twig]])set(id,'transform',`translate(${point[0].toFixed(2)} ${point[1].toFixed(2)})`);
       const lift=s.f.fridaSafe?1:c?.effect==='roofLever'?stage(.12,.47):0;
       set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
-      set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
-      const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.roofDone&&c?.effect!=='roofBoard'?'hidden':'';
+      set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.fridaSafe?1:0);
+      const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.fridaSafe&&c?.effect!=='roofBoard'?'hidden':'';
       const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'?c.from+(c.to-c.from)*e:s.beaconAngle;
       set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
       if(c?.effect==='roofAnchor')fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);
@@ -911,15 +971,15 @@ Homeward.define('art/twig-design', [], () => {
     <ellipse class="twig-shadow" cy="3" rx="39" ry="5" fill="#13394235"/>
     <g class="twig-heading">
       ${limb(0,-22,true)}${limb(2,12,true)}
-      <g class="twig-torso"><g class="twig-tail">${p('M14-26Q31-55 49-55L44-47 58-45 52-39 59-38Q53-14 23-17Z','url(#cast-fur)')}${p('M28-26q17-3 23-17','none','#faf6df',3)}</g>
-      ${p('M-29-39Q-7-54 22-37L25-25Q10-16-9-23L-24-25Z','url(#cast-fur)')}${p('M-15-41Q1-45 13-39','none','#fff9e7',2)}
+      <g class="twig-torso"><g class="twig-tail">${p('M14-26Q31-56 49-55Q46-48 58-45Q52-40 59-38Q52-13 22-17Z','url(#cast-fur)')}${p('M26-25q17-4 24-18','none','#faf6df',2.8)}</g>
+      ${p('M-31-37Q-8-53 22-37Q27-29 24-23Q9-16-10-22Q-20-16-29-20Q-36-26-31-37Z','url(#cast-fur)')}${p('M-28-23q-7 5-2 9q7 2 12-4','url(#cast-fur)')}${p('M-15-41Q1-45 14-38','none','#fff9e7',2)}
       <g class="twig-head">
-        ${p('M-30-24l-8-3-10-12 1-10q9-12 20-5 15-2 18 11l-6 16Z','url(#cast-fur)')}
-        <g class="twig-ear-a">${p('M-44-49l-10-16 15 6 2 14Z','url(#cast-fur)')}${p('M-44-53l-4-7 3 10','#afbec2','none')}</g>
-        <g class="twig-ear-b">${p('M-36-54l7-18 5 20-3 6Z','url(#cast-fur)')}${p('M-31-55l2-10 2 10','#afbec2','none')}</g>
+        ${p('M-29-23Q-40-24-48-37Q-49-47-39-52Q-27-59-16-50Q-6-45-9-32Q-15-21-29-23Z','url(#cast-fur)')}
+        <g class="twig-ear-a">${p('M-44-49Q-53-62-53-65Q-43-62-39-58L-37-45Z','url(#cast-fur)')}${p('M-44-53l-4-7 3 10','#afbec2','none')}</g>
+        <g class="twig-ear-b">${p('M-36-54Q-31-69-29-72Q-25-60-24-52L-27-46Z','url(#cast-fur)')}${p('M-31-55l2-10 2 10','#afbec2','none')}</g>
         ${p('M-31-59l-6-17 2-13m-2 11-10-8m20 27 6-20 0-11m0 12 11-9','none','#758d8c',2.6)}${p('M-32-59l-5-17m11 15 6-19','none','#d7dcc4',1)}
         <g class="twig-eye"><ellipse cx="-31" cy="-42" rx="2.5" ry="3.6" fill="#263c48"/><ellipse cx="-30.3" cy="-43" rx=".7" ry="1" fill="#fff9ea"/></g>
-        ${p('M-48-41l6 2-2 4Z','#263c48')}${p('M-45-32q5 3 9 0','none','#6d9193',1)}
+        ${p('M-48-40Q-44-42-42-39Q-43-35-46-35Z','#263c48')}${p('M-45-32q5 3 9 0','none','#6d9193',1)}
       </g></g>
       ${limb(1,-29,false)}${limb(3,20,false)}
     </g></g>`;}
@@ -942,10 +1002,11 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
     const f=state.f;
     const entries={
       0:{bird:{kind:'take',target:Staging.home.bird,approachX:1042,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1245,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[655,695],approachX:724,pickup:true,prop:'scarf'}},
-      5:{line:{kind:'take',target:[336,710],approachX:286,pickup:true,prop:'line',source:'gondolaLine',twoHands:true},brake:{kind:'turn',target:[1029,633],radius:24,approachX:974}},
-      6:{holder:{kind:'place',target:[782,643],place:true,prop:'shade',approachX:731}},
-      7:Object.fromEntries([...[['gearS',453,738],['gearM',612,740],['gearL',795,725]].map(([id,x,y])=>[id,{kind:'take',target:[x,y],approachX:x-48,pickup:true,prop:id,source:'pickup-'+id,twoHands:id!=='gearS'}]),...Mechanisms.gears.map(d=>[d.socket,{kind:'place',target:[d.x,d.y],place:true,prop:d.item,approachX:d.x-50}]),['lever',{kind:'pull',target:[1358,593],travel:35}]]),
-      8:{felt:{kind:'take',target:[553,750],approachX:505,pickup:true,prop:'felt',source:'clockFelt'},bypass:{kind:'turn',target:[440,650],radius:26},drive:{kind:'turn',target:[662,650],radius:36},clapper:{kind:'climb',effect:'clockPad',target:[838,457],place:true,prop:'felt',accessY:617}},
+      5:{line:{kind:'take',target:[336,710],approachX:286,pickup:true,prop:'line',source:'gondolaLine',twoHands:true},brake:{kind:'turn',effect:'gondolaLift',target:[1029,633],radius:24,approachX:974}},
+      6:{holder:{kind:'place',target:[782,643],place:true,prop:'shade',approachX:731},tone0:{kind:'reach',target:[468,685],approachX:426},tone1:{kind:'reach',target:[586,663],approachX:544},tone2:{kind:'reach',target:[704,685],approachX:662}},
+      7:Object.fromEntries([...[['gearS',453,738],['gearM',612,740],['gearL',795,725]].map(([id,x,y])=>[id,{kind:'take',target:[x,y],approachX:x-48,pickup:true,prop:id,source:'pickup-'+id,twoHands:id!=='gearS'}]),...Mechanisms.gears.map(d=>[d.socket,{kind:'place',target:[d.x,d.y],place:true,prop:d.item,approachX:d.x-50}]),['lever',{kind:'pull',effect:'towerDoor',target:[1358,593],travel:35}]]),
+      8:{felt:{kind:'take',target:[553,750],approachX:505,pickup:true,prop:'felt',source:'clockFelt'},bypass:{kind:'turn',effect:'clockBypass',from:f.bypassTurns||0,mounted:!!f.bypassMounted,prop:'crank',target:[440,650],radius:26},drive:{kind:'turn',effect:'clockDrive',prop:'fork',target:[662,650],radius:36},clapper:{kind:'climb',effect:'clockPad',target:[838,457],place:true,prop:'felt',accessY:617},frida:{kind:'gesture',target:[1242,650],approachX:1182},david:{kind:'gesture',target:[1048,655],approachX:994}},
+      10:{trail0:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:0,prop:item||'lamp',target:[430,654],approachX:382},trail1:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:1,prop:item||'lamp',target:[731,612],approachX:682},trail2:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:2,prop:item||'lamp',target:[1025,626],approachX:978},child:{kind:'walk',effect:'ridgeReunite',target:[728,722],approachX:634,destinationX:960},alfur:{kind:'gesture',target:[812,682],approachX:762}},
       11:{mom:{kind:'gesture',target:[655,622],approachX:724},tea0:{kind:'pour',target:[736,643],approachX:679},tea1:{kind:'pour',target:[826,633],approachX:765},tea2:{kind:'pour',target:[916,643],approachX:974}},
       1:{awning:{kind:'pull',target:[962,620],travel:73,effect:'awning'},crank:{kind:'take',target:[850,624],prop:'crank',pickup:true,source:'northCrank'},
         wheel:{kind:'turn',target:[1169,653],radius:34,effect:'gate',from:f.gateTurns||0,mounted:!!f.crankMounted,prop:'crank'}},
@@ -953,7 +1014,7 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
         anchor:{kind:'throw',target:[1095,556],effect:'grapple',prop:'hook'},david:{kind:'gesture',target:[404,684]},
         winch:{kind:'turn',target:[481,651],radius:27,effect:'bridge'}},
       3:{ladderBrake:{kind:'crouch',target:[(f.ladderX??769)+82,777],effect:'ladderBrake',from:!!f.ladderBrake},book:{kind:'climb',effect:'archiveBook',target:[1170,342],ladder:f.ladderX??769}},
-      9:{anchor:{kind:'tie',target:[426,652],effect:'roofAnchor',prop:'rope'},david:f.davidSafe?{kind:'gesture',effect:'roofBrace',target:[478,657]}:{kind:'haul',effect:'roofRescue',target:[487,672]},frida:{kind:'lever',effect:'roofLever',target:[1079,710],prop:'pole'},twig:{kind:'crouch',effect:'roofTwig',target:[902,730]}},
+      9:{anchor:{kind:'tie',target:[426,652],effect:'roofAnchor',prop:'rope'},david:f.davidSafe?{kind:'gesture',effect:'roofBrace',target:[478,657]}:{kind:'haul',effect:'roofRescue',target:[487,672]},frida:{kind:'lever',effect:'roofLever',target:[1079,710],prop:'pole'},twig:{kind:'crouch',effect:'roofTwig',target:[902,730]},star:{kind:'reach',target:[1096,501]}},
       4:{intake:{kind:'turn',target:[350,682],radius:25,effect:'intake',from:f.intakeClosed?1:0},
         filter:{kind:'clear',target:[453,640],effect:'filter'},pipe0:{kind:'tool',target:[640,400],prop:'pole',effect:'pipe',node:0,from:state.valves[0]},
         pipe1:{kind:'turn',target:[640,570],radius:25,effect:'pipe',node:1,from:state.valves[1]},
@@ -961,8 +1022,8 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
         prime:{kind:'pull',target:[1128,668],effect:'prime'}}
     };
     if(scene===5&&/^weight[123]$/.test(id)){
-      const v=Number(id.at(-1)),on=state.weights.includes(v);
-      return {kind:'place',target:on?[810+v*20,574]:[425+(v-1)*113,646],approachX:on?810+v*20-50:425+(v-1)*113-50,scene,id,item};
+      const v=Number(id.at(-1)),on=state.weights.includes(v),target=Mechanisms.gondolaWeight(state,v,-53);
+      return {kind:'place',effect:'gondolaWeight',weightValue:v,removing:on,target,approachX:target[0]-50,scene,id,item};
     }
     return {...(entries[scene]?.[id]??{kind:'reach',target:null}),scene,id,item};
   }
@@ -976,18 +1037,18 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
 /* src/content/details.js */
 /** Optional environmental storytelling. Never gates the main adventure. */
 Homeward.define('content/details', [], () => [
-  {id:'detail',x:317,y:483,w:48,h:108,title:'墙上的小刻度',body:'门框上有一年又一年的铅笔刻度。妈妈每次都写日期，从不擦掉旧的一条。长大也可以被好好保存。',note:'doorMarks'},
+  {id:'detail',x:317,y:483,w:48,h:108,walkX:368,title:'墙上的小刻度',body:'门框上有一年又一年的铅笔刻度。妈妈每次都写日期，从不擦掉旧的一条。长大也可以被好好保存。',note:'doorMarks'},
   {id:'detail',x:596,y:524,w:72,h:94,title:'雨水留下的线',body:'排水口旁有去年的水痕，比这次低一截。钟不是无缘无故变响的。山里的水，早就在求助了。',note:'floodMarks'},
-  {id:'detail',x:1210,y:611,w:86,h:99,walkX:500,title:'不是脚印，是家门',body:'树根上的小窗亮了又暗。精灵把门槛垫高了一层，屋外停着一只装满被褥的蜗牛壳。',note:'smallHome'},
+  {id:'detail',x:1210,y:611,w:86,h:99,walkX:s=>s.f.bridge?1152:500,title:'不是脚印，是家门',body:'树根上的小窗亮了又暗。精灵把门槛垫高了一层，屋外停着一只装满被褥的蜗牛壳。',note:'smallHome'},
   {id:'detail',x:552,y:490,w:88,h:84,title:'一份没有寄出的申请',body:'“请在春雨前清理滤网。”申请下面盖着三枚印章，最后一栏却一直空着。阿尔弗没有说话，把纸小心收好。',note:'maintenance'},
   {id:'detail',x:816,y:322,w:128,h:64,title:'维护工的手印',body:'护盖内侧刻着一只小手和一只大手。下面写着：修机器之前，先确认所有人站在安全的地方。',note:'makers'},
-  {id:'detail',x:1030,y:731,w:112,h:55,title:'写在制动柄旁',body:'木牌上写着：先平衡，后释放；不要让最后一个人追着吊舱跑。大卫认真看了两遍。',note:'lastOne'},
-  {id:'detail',x:1081,y:715,w:100,h:62,title:'石头上的一幅画',body:'小小的圆石挨着大大的圆石，中间画着一条弯弯的路。原来这个孩子，早就画过自己回家的样子。',note:'childDrawing'},
+  {id:'detail',x:1030,y:731,w:96,h:55,title:'写在制动柄旁',body:'木牌上写着：先平衡，后释放；不要让最后一个人追着吊舱跑。大卫认真看了两遍。',note:'lastOne'},
+  {id:'detail',x:1232,y:736,w:96,h:60,walkX:1165,title:'石头上的一幅画',body:'小小的圆石挨着大大的圆石，中间画着一条弯弯的路。原来这个孩子，早就画过自己回家的样子。',note:'childDrawing'},
   {id:'detail',x:864,y:450,w:83,h:82,title:'修钟人的名字',body:'铭牌上有许多名字，字迹大小不同。最下面的一行是：钟为山里所有的居民而响。',note:'clockNames'},
   {id:'detail',x:182,y:647,w:90,h:78,title:'留给下一班的人',body:'“软垫在左下。旁路别锁死。茶壶替你留着。”有人曾经在这里守过很长的夜。',note:'nightShift'},
   {id:'detail',x:264,y:622,w:76,h:76,walkX:340,title:'风里的亮点',body:'隔着整座雨城，有一扇窗还亮着。希尔达记得那扇窗，也记得出门时答应过什么。',note:'windowLight'},
   {id:'detail',x:901,y:700,w:74,h:58,title:'第一声鸟鸣',body:'风小了。鸟儿先试了一声，然后整片树林都慢慢醒来。昨夜那么大的世界，现在没有催促任何人。',note:'firstBird'},
-  {id:'detail',x:317,y:483,w:48,h:108,title:'还没写日期的刻度',body:'妈妈说，明天再添一条吧。希尔达觉得自己也许并没有长高，却好像比昨天更知道怎样回家了。',note:'homeMarks'}
+  {id:'detail',x:317,y:483,w:48,h:108,walkX:368,title:'还没写日期的刻度',body:'妈妈说，明天再添一条吧。希尔达觉得自己也许并没有长高，却好像比昨天更知道怎样回家了。',note:'homeMarks'}
 ]);
 
 /* src/content/items.js */
@@ -1027,6 +1088,12 @@ Homeward.define('content/items', [], () => {
 /* src/content/mechanisms.js */
 /** The visible axle geometry and interaction geometry use one source of truth. */
 Homeward.define('content/mechanisms',[],()=>({
+  gondolaWeight(state,value,localY=-20){
+    const index=state.weights.indexOf(value);
+    if(index<0)return [425+(value-1)*113,691+localY];
+    const a=(state.weights.reduce((sum,v)=>sum+v,0)-4)*3*Math.PI/180,x=115+index*28,y=150+localY*.65;
+    return [810+x*Math.cos(a)-y*Math.sin(a),451+x*Math.sin(a)+y*Math.cos(a)];
+  },
   gears:[
     {item:'gearS',socket:'socketS',x:1032,y:538,radius:35,teeth:10,hit:82,label:'低处的小齿轮槽'},
     {item:'gearM',socket:'socketM',x:1090,y:486,radius:50,teeth:12,hit:100,label:'中间的对位齿轮'},
@@ -1122,7 +1189,15 @@ Homeward.define('content/staging', [], () => {
     return authored*scale(scene)/1.36;
   }
   const petDistance=scene=>85*scale(scene)/1.36;
-  return {scale,castScale,petDistance,home};
+  const ridgeGround=x=>x<=480?833:x<620?833-(x-480)*26/140:x<990?807:807+Math.min(1,(x-990)/80)*3;
+  const mix=(a,b,t)=>a+(b-a)*t;
+  const ridgeChild=t=>`translate(${mix(682,1188,t)} ${mix(785,794,t)}) scale(${mix(1.15,.95,t)})`;
+  function ridgeArm(t){
+    const a=[-58,-73,-107,-50,-73,-9,-51,-17,-60,-42,-58,-73],b=[-58,-43,-114,-81,-174,-55,-179,-33,-115,-52,-65,-19];
+    const p=a.map((v,i)=>mix(v,b[i],t));
+    return `M${p[0]} ${p[1]}Q${p[2]} ${p[3]} ${p[4]} ${p[5]}L${p[6]} ${p[7]}Q${p[8]} ${p[9]} ${p[10]} ${p[11]}Z`;
+  }
+  return {scale,castScale,petDistance,home,ridgeChild,ridgeArm,ridgeGround};
 });
 
 /* src/content/walkways.js */
@@ -1391,7 +1466,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
   }
   function sample({x=0,y=0,face=1,scale=1.36,time=0,distance=0,moving=false,walkAmount=moving?1:0,reduced=false,score=null,frame=null}={}){
     if(![x,y,face,scale,time,distance].every(Number.isFinite)||scale<=0)throw new TypeError('Invalid actor coordinates');
-    if(!score){
+    if(!score||score.kind==='walk'){
       const gait=Walk.sample({distance,scale,amount:walkAmount,reduced});
       // Locomotion owns the whole body; rare idle gestures never alter walking elbows.
       const idle=gait.amount===0?Idle.sample({who:'希尔达',time,reduced}):null;
@@ -1738,7 +1813,7 @@ function updateActors(){
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
  if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
- Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance,moving:!!pendingMove,walkAmount,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
+ Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance+(presentation.travel||0),moving:presentation.moving??!!pendingMove,walkAmount:presentation.walkAmount??walkAmount,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
  ChapterLife.animate(ui.world,activeWork,s);
  SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  CastMotion.animate(ui.world,elapsed,s.settings.reduced,activeWork,isPaused());
@@ -1890,7 +1965,7 @@ function reveal(){if(!started)return;ui.world.classList.add('revealing');$('reve
 async function fullscreen(){try{if(document.fullscreenElement){await document.exitFullscreen();}else if(ui.game.requestFullscreen){await ui.game.requestFullscreen();}else toast('当前浏览器不支持系统全屏。游戏仍会铺满网页视口。');}catch{toast('浏览器没有进入系统全屏。可以继续在当前视口游玩。');}}
 function hover(e){if(input?.moved||inventoryDrag||!canAct()){ $('hoverLabel').classList.remove('show');return;}const h=atPoint(worldPoint(e.clientX,e.clientY));if(!h){$('hoverLabel').classList.remove('show');return;}$('hoverLabel').textContent=(selected?Story.items[selected]+' → ':'')+h.label;$('hoverLabel').classList.add('show');const r=$('hoverLabel').getBoundingClientRect();$('hoverLabel').style.left=clamp(e.clientX-r.width/2,8,innerWidth-r.width-8)+'px';$('hoverLabel').style.top=clamp(e.clientY+22,8,innerHeight-r.height-85)+'px';}
 ui.viewport.addEventListener('pointerdown',e=>{if(e.button!==0||!canAct())return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY),h=atPoint(p);input={sx:e.clientX,sy:e.clientY,x:p.x,y:p.y,camX:camera.x,camY:camera.y,h,moved:false,pid:e.pointerId,oldLadder:s.f.ladderX,oldAngle:s.beaconAngle};ui.viewport.setPointerCapture?.(e.pointerId);});
-ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('gearM',e.clientX,e.clientY);} });
+ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('weight'+input.h.value,e.clientX,e.clientY);} });
 ui.viewport.addEventListener('pointerup',e=>{if(!input||input.pid!==e.pointerId)return;const down=input;input=null;hideGhost();if(!canAct())return;const p=worldPoint(e.clientX,e.clientY);if(down.moved){sceneDrag(down,{x:p.x,y:p.y,dx:(e.clientX-down.sx)/innerWidth*camera.w,dy:(e.clientY-down.sy)/innerHeight*camera.h});return;}if(down.h)interact(down.h.id);else if(p.y>Story.scenes[s.scene].ground(p.x,s)-210)walkTo(p.x,()=>save());else actionLabel('点击人物或物件调查；点击地面移动。');});
 function cancelPointer(){input=null;inventoryDrag=null;dragPreview=null;hideGhost();if(started)render();}
 ui.viewport.addEventListener('pointercancel',cancelPointer);
@@ -2008,12 +2083,13 @@ Homeward.define('engine/score-player', ['content/score'], (Score) => {
 
 /* src/engine/setpiece-motion.js */
 /** Pure, seekable staging. An interrupted performance has no permanent effects. */
-Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpieces'], ({smooth}, Stage) => {
+Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpieces','content/staging'], ({smooth}, Stage, Staging) => {
   const segment=(p,a,b)=>smooth((p-a)/(b-a));
   const mix=(a,b,t)=>a+(b-a)*t;
   function actor(base,action,reduced=false) {
     if(!action)return {...base};
     const c=action.score,p=action.sample().progress,e=action.sample().effort;
+    if(c.effect==='ridgeReunite'){const t=action.sample().effort,x=mix(base.x,c.destinationX,t);return {...base,x,y:Staging.ridgeGround(x),travel:Math.abs(x-base.x),moving:t>0&&t<1,walkAmount:segment(p,.18,.3)*(1-segment(p,.72,.86))};}
     if(c.effect==='clockPad')return {...base,y:mix(base.y,c.accessY,segment(p,.10,.43)*(1-segment(p,.70,.97)))};
     if(c.effect==='ladderSlide')return {...base,x:c.origin.x+(c.to-c.from)*e};
     if(c.effect==='archiveBook') {
@@ -2026,7 +2102,7 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
   }
   function cast(state,action,reduced=false) {
     const f=state.f,c=action?.score,p=action?.sample().progress??0;
-    let david=f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
+    let david=f.fridaSafe?[980,Stage.roofGround(980)]:f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
     let frida=f.fridaSafe?[842,759]:[1160,773],twig=[929,723];
     if(c?.effect==='roofRescue') {
       const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*(reduced?18:58)];
@@ -2036,6 +2112,7 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
     }
     if(c?.effect==='roofLever') {
       const t=segment(p,.43,.84);frida=[mix(1160,842,t),mix(773,759,t)];
+      const retreat=segment(p,.64,.96),x=mix(Stage.roof.brace[0],980,retreat);david=[x,Stage.roofGround(x)];
     }
     if(c?.effect==='roofTwig') {
       const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*(reduced?18:64)];
@@ -2176,21 +2253,21 @@ function home(S,ending=false){let f=S.f;let b=rect(0,0,1600,900,'url(#warmWall)'
 b+=path('M0 0H1600V77L0 89Z','#2b4245')+rep(6,i=>path(`M${i*295-12} 0l-5 740h20l12-740Z`,'#354c4b'));
 b+=`<g id="homeWindow" transform="translate(0 ${Staging.home.windowOffset})">`+rect(860,155,378,370,'#30484a',120)+rect(879,174,340,336,ending?'url(#dawn)':'url(#skyD)',100)+path('M880 442 944 316 1032 390 1115 284 1219 395V511H880Z',ending?'#a3afa0':'#466e76')+pine(969,529,.34,'#355d62')+pine(1165,536,.42,'#305a5e');
 b+=path('M1048 164V516M875 331H1223','none','#384f4b',11)+path('M861 153q35 165-16 374l64-8q52-173-5-369Z','#9b735c','#3d4d48',3)+path('M1217 152q-21 170 24 371l-63-9q-44-173 0-364Z','#9b735c','#3d4d48',3)+rect(848,517,400,21,'#344a49',5)+`</g>`;
-b+=path('M889 339 1217 337 1595 821 640 824Z','#f0d399','none',0,'opacity=".08"');
+b+=path('M889 425 1217 423 1595 821 640 824Z','#f0d399','none',0,'opacity=".08"');
 b+=ground(750,'#675e4d')+rep(14,i=>path(`M${i*140-260} 910 800 741`,'none','#283e3f',2,'opacity=".24"'))+rep(4,i=>path(`M0 ${775+i*i*12}H1600`,'none','#293f3e',2,'opacity=".23"'));
 b+=rect(80,246,220,501,'#293e41',15)+rect(99,267,182,456,'#60766d',9)+rect(118,289,144,391,'#7c8873',3)+path('M189 290V680','none','#4d6259',4)+circle(246,509,7,'#d0b17b');
 b+=rect(356,516,220,37,'#3d4b45',5)+rect(376,551,27,178,'#4a5149',2)+rect(536,551,27,178,'#4a5149',2)+rect(382,381,161,137,'#344b48',10)+rect(395,393,134,113,'#bb9e71',4)+rect(406,404,114,92,'#152f3a',14)+circle(465,473,100,'url(#glow)')+path('M422 497q-23-37 7-51-3 27 18 20 1-46 25-64-14 41 17 45 16-26 27-14 10 48-11 64Z','#d68e55')+path('M445 495q-20-23 0-30 5 18 17-6 19 16 9 37Z','#f2c374');
 b+=path('M413 384V63h94v321','#435752','#2d4645',3)+rect(397,363,127,25,'#4c6259',4);
 b+=rect(52,156,557,16,'#4a5c52',4)+rep(13,i=>rect(75+i*31,110-rnd()*25,20,46+rnd()*22,['#71867a','#bb946c','#71959a'][i%3],2,'#36514c',1));
 b+=rect(629,185,132,181,'#364e4c',3)+rect(640,196,110,159,'#c0bd95',2)+path('M650 309 672 259 697 287 728 229 743 306Z','#678979')+circle(709,225,17,'#e5d5a6');
-b+=path('M1260 536q30-9 64 0m-32-9V570','none','#344b4b',6)+(!f.lampTaken&&!ending?`<g id="homeLamp">${lamp(...Staging.home.lamp,1.1,true)}</g>`:'')+(!ending?path('M1320 545v78q22 19 45-8v-70Z','#c59556','#3f5651',2):'');
+b+=path('M1260 536q30-9 64 0m-32-9V570','none','#344b4b',6)+(!f.lampTaken&&!ending?`<g id="homeLamp">${lamp(...Staging.home.lamp,1.1,true)}</g>`:'')+(!ending?path('M1342 533v13q0 6 5 4','none','#b79a66',3)+circle(1342,533,3.5,'#b79a66','#344b4b',1.2)+path('M1320 545v78q22 19 45-8v-70Z','#c59556','#3f5651',2):'');
 b+=path('M1354 520q0-84 92-84t105 87v223h-216Z','#536c66','#2c4548',3)+rect(1372,558,147,148,'#8a9275',25)+path('M1375 610H1513','none','#afb294',2)+path('M1330 716h220l-13 25h-199Z','#364d4c');
 b+=ell(835,784,284,58,'#3d5752')+ell(835,784,263,49,'#9b8e68')+rep(5,i=>`<ellipse cx="835" cy="784" rx="${245-i*22}" ry="${45-i*4}" fill="none" stroke="#ccc095" stroke-width="1.5" opacity=".25"/>`);
 b+=path('M709 667 711 790h16l18-123m170 0 23 123h15l-12-123','#655d49','#344b47',3)+ell(824,650,158,48,'#a9956c')+ell(824,641,159,44,'#c0ac7e')+path('M680 640q109 32 251-1','none','#e6c795',2)+lamp(948,628,.65,ending);
 b+=`<g id="homeTeapot">`+group(807,613,1,`${ell(0,12,29,6,'#687a67')}${path('M-22-11q-9-25 18-28h21q19 12 5 49h-43Z','#739b97','#355952',2)}${path('M21-27q31-11 22 11L25-7M-18-25l-19-9 12 22','none','#789b91',6)}${path('M-12-39q8-9 23 0','none','#334e4d',4)}<g class="steam">${path('M-7-45q-10-14 0-23t0-25M11-40q10-14 0-25','none','#eee5c2',2,'opacity=".4"')}</g>`)+`</g>`;
-b+=person('妈妈',579,Staging.home.floor,1.90)+(ending?person('大卫',660,775,1.34)+person('芙丽达',1090,775,1.38)+person('阿尔弗',936,636,.72):(!f.letter?`<g id="homeBird">${bird(...Staging.home.bird,1.25)}</g>`:paper(1151,598,.7)));
-if(ending)b+=group(1400,663,1,`${path('M-45-29Q-20-42 0-25 21-41 45-28L40 34Q17 20 0 37-17 21-41 34Z','#ddcba2','#536a62',3)}${path('M0-25V37m-32-48 20 2m-20 10 20 2m-19 10 19 2m22-21 20-3m-20 15 20-3m-20 15 18-3','none','#8b9579',2)}`);
-if(ending)b+=rep(3,i=>group(736+i*90,660-i%2*10,1,`${ell(0,0,17,6,f['tea'+i]?'#cdbf8f':'#687d6e')}${path('M-17 0q0 29 16 27t18-27Z','#d3c7a6','#5a7166',2)}${path('M18 3q22 0 10 15H18','none','#d3c7a6',5)}`));
+b+=person('妈妈',579,Staging.home.floor,1.90)+(ending?person('大卫',435,775,1.34)+person('芙丽达',1165,775,1.38)+person('阿尔弗',882,628,.72):(!f.letter?`<g id="homeBird">${bird(...Staging.home.bird,1.25)}</g>`:bird(1055,592,.95)+paper(1151,598,.7)));
+if(ending)b+=group(1400,663,1,`${path('M-50 35H50L38 45H-38Z','#7d6548','#344b47',2)}${path('M-18 45-26 60M18 45 26 60','none','#5b4a37',4)}${path('M-45-29Q-20-42 0-25 21-41 45-28L40 34Q17 20 0 37-17 21-41 34Z','#ddcba2','#536a62',3)}${path('M0-25V37m-32-48 20 2m-20 10 20 2m-19 10 19 2m22-21 20-3m-20 15 20-3m-20 15 18-3','none','#8b9579',2)}`);
+if(ending)b+=rep(3,i=>group(736+i*90,660-i%2*10,1,`${ell(0,0,17,6,f['tea'+i]?'#cdbf8f':'#687d6e')}${path('M-17 0q0 29 16 27t18-27Z','#d3c7a6','#5a7166',2)}${path('M18 3q22 0 10 15H18','none','#d3c7a6',5)}${f['tea'+i]?`<g class="steam">${path('M-5-8q-6-10 0-18M6-6q6-10 0-18','none','#eee5c2',1.8,'opacity=".48"')}</g>`:''}`));
 b+=fern(37,866,2.2,'#254c4b')+fern(1564,836,2.8,'#264f4e')+particles(25);return b;}
 
 return home;
@@ -2219,7 +2296,7 @@ b+=path(`M962 388v${f.awning?278:204}`,'none','#b6a97b',5)+circle(962,398,16,'#4
 b+=rect(664,627,240,122,'#4a5c4e',8)+rep(6,i=>rect(670+i*38,631,33,110,'#6d7760',3,'#3e5751',2))+ell(847,630,37,14,'#9da37e')+(!f.crankTaken&&f.awning?`<g id="northCrank">${group(845,614,.8,itemArt('crank').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'');
 b+=path('M1064 84 1243 40 1574 70 1610 772H1033Z','url(#wall)','#23484e',4)+rect(1076,117,524,637,'url(#brick)')+path('M1215 778V459Q1222 295 1380 299 1526 301 1539 459V778Z','#254b55','#a2aa8a',17)+path('M1240 784V464Q1249 327 1381 327T1516 464V784Z','#152f40');
 b+=`<g clip-path="url(#northGateArch)"><g id="gateBars" transform="translate(0 ${-Math.min(3,f.gateTurns||0)*335/3})">${rep(9,i=>path(`M${1254+i*30} 336V799`,'none','#496c68',10))}${path('M1245 452h268M1245 605h268M1245 744h268','none','#557871',10)}</g></g>`;
-b+=`<g id="gateRotor">`+wheel(1169,653,55,(f.gateTurns||0)*65)+(!f.crankMounted?circle(1169,653,13,'#203f47'):path('M1169 653h38v-25','none','#dec493',8))+`</g>`;
+b+=`<g id="gateRotor">`+wheel(1169,653,55,(f.gateTurns||0)*65)+(!f.crankMounted||f.gateOpen?circle(1169,653,13,'#203f47'):path('M1169 653h38v-25','none','#dec493',8))+`</g>`;
 b+=path('M100 70Q544 201 1146 139T1620 201','none','#263e47',3)+rep(8,i=>lamp(217+i*169,126+Math.sin(i*.56)*25,.32,true));
 b+=ground(776,'#597975')+rep(95,()=>{let x=rnd()*1600,y=782+rnd()*130;return path(`M${x} ${y}q17-8 35 0v10h-32Z`,'none','#213f4926',2);})+ell(926,825,196,22,'#749991')+ell(251,828,109,15,'#73988d')+waterLines(842,12)+person('大卫',735,775,1.34)+lamp(1110,379,.7,true);
 b+=fern(43,871,1.8,'#294c4a')+grass(1521,813,1.4,'#254c4d')+particles(18);return b;}
@@ -2233,12 +2310,12 @@ Homeward.define('scene/1/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
   mood:'雨丝落下 / 修好的门，也要能安全地留在身后',start:375,ground:()=>793,
   intro:[['大卫','我只是来帮忙修门的。真的。'],['希尔达','当然。先把门修好，我们再决定走多远。'],['大卫','这句话听起来，比“顺便看看森林”可靠一点。']],
   hotspots:s=>[
-    H('david','询问大卫',735,688,108,183),
+    H('david','询问大卫',735,688,108,183,{walkX:665}),
     H('awning','向下拉绳，卷起雨棚',962,s.f.awning?677:601,72,114,{drag:'awning',walkX:931}),
     ...(s.f.awning&&!s.f.crankTaken?[I('crank','拿起黄铜曲柄',845,614,79,80,{walkX:806})]:[]),
     H('wheel',s.f.gateOpen?'检查锁定的棘爪':'转动城门转轮',1169,653,116,120,{walkX:1145}),
-    exit('gate','穿过北门',1380,611),exit('back','回家',364,651,{walkX:448}),
-    H('puddle','观察水洼中的倒影',953,824,234,60)
+    exit('gate','穿过北门',1380,611,{walkX:1335}),exit('back','回家',364,651,{walkX:448}),
+    H('puddle','观察水洼中的倒影',953,824,234,60,{walkX:880})
   ],
   act(g,id,item){
     if(id==='david')return one(g,'大卫',f(g,'gateOpen')?'看，三格都亮了，棘爪稳稳咬住齿轮了。我跟你一起去。':'曲柄在摊位上。先拉下右边的绳圈，把湿透的棚布卷起来。');
@@ -2285,7 +2362,7 @@ b+=`<g id="bridgeDeck">`+rep(16,i=>{let x=551+i*32,y=706+Math.sin(i/15*Math.PI)*
  return `<g data-bridge-plank="${i}" transform="translate(${x} ${y+drop}) rotate(${tilt})">${path('M0 0l26-2 14 56-27 2Z','#a2956e','#3d5f54',2)}${path('M5 5l12 42m-4-43 12 45','none','#cfb889',1,'opacity=".6"')}${circle(6,7,2,'#52665b')}${circle(23,45,2,'#52665b')}</g>`;})+`</g>`;
 
 b+=group(481,651,1,`${path('M-26 87-15-30H20L34 87Z','#6f7960','#31544f',3)}<g id="forestWinch">${wheel(0,0,43,0)}</g>`)+path('M1095 611v-72q-9-28-21-2','none','#a6b4a0',9)+(!f.ropeTaken?`<g id="forestRope">${group(330,728,.85,itemArt('rope').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'');
-b+=`<g id="vineAssembly">`+path(f.branchBent?'M220 520Q370 560 541 615':'M220 520Q370 430 541 460','none','#284f47',7,'id="bentBranch"')+path(f.branchBent?'M541 615v25':'M541 460v36','none','#598572',3)+(f.branchBent?path('M541 640L495 765','none','#c8b17e',3):'')+(!f.hookTaken?`<g id="vineHook">`+group(541,f.branchBent?642:496,.83,itemArt('hook').replace(/<svg[^>]*>|<\/svg>/g,''))+`</g>`:'')+`</g>`;
+b+=`<g id="vineAssembly">`+path('M148 548Q184 526 224 520','none','#284f47',10)+path(f.branchBent?'M220 520Q370 560 541 615':'M220 520Q370 430 541 460','none','#284f47',7,'id="bentBranch"')+path(f.branchBent?'M541 615v25':'M541 460v36','none','#598572',3)+(f.branchBent?path('M541 640L495 765','none','#c8b17e',3):'')+(!f.hookTaken?`<g id="vineHook">`+group(541,f.branchBent?642:496,.83,itemArt('hook').replace(/<svg[^>]*>|<\/svg>/g,''))+`</g>`:'')+`</g>`;
 b+=rock(294,759,1,'#7b8f77')+rock(1255,737,1.2,'#768b76')+fern(1234,742,1.2)+mushrooms(399,737,1.1)+mushrooms(1390,753,1.2)+fern(1537,889,2.4,'#2a5553')+fern(91,891,2.3,'#234c4b')+grass(527,754,1.1)+grass(1124,731,1.2);
 b+=path('M1282 778Q1293 647 1392 650Q1459 670 1443 785','none','#34574e',20)+path('M1334 787Q1361 721 1398 713','none','#a0a280',9)+rect(-30,628,1680,260,'url(#fog)',0)+particles(46,'firefly');return b;}
 
@@ -2353,10 +2430,10 @@ Homeward.define("scene/3/art", ["art/kit", "art/characters", "art/props"], ({P,p
 function archive(S){let f=S.f;let b=rect(0,0,1600,900,'url(#cave)')+path('M90 781Q20 243 309 113L696 41 1272 118Q1578 260 1530 799Z','#4e685b','#254b4b',8)+rect(150,137,1300,640,'url(#plaster)');
 b+=rep(8,i=>path(`M${90+i*204} 840Q${330+i*109} 524 ${270+i*171} -32`,'none',i%2?'#3b574d':'#48624f',31))+path('M12 24Q258 190 300 417t-84 472M1590-17q-290 275-239 471t151 451','none','#1d4244',74)+path('M-17 56q236 150 259 384T104 892M1613 27q-214 255-205 402t161 467','none','#738068',10,'opacity=".55"');
 b+=group(955,369,1,`${path('M-328-178 302-191 312 298-328 308Z','#2b4543','#7e8867',8)}${rep(4,j=>`${rect(-318,-67+j*113,625,14,'#859070',3,'#34514a',2)}${rep(20,i=>{let xx=-306+i*30,hh=45+rnd()*53;return rect(xx,-68+j*113-hh,23,hh,['#919775','#bcad79','#739587','#b58664','#708a81'][Math.floor(rnd()*5)],2,'#294943',1.5)+path(`M${xx+4} ${-78+j*113}h14`,'none','#d5c99a',2,'opacity=".5"');})}`)}`);
-b+=!f.planTaken?`<g id="archiveBook">`+group(1170,342,1,`${rect(-23,-51,46,98,'#d0bb81',3,'#365751',2)}${path('M-14-30H13M-14-23H13','none','#607e6a',2)}${path('M0-16Q-18 3-8 12Q10 24 13 8Q12-1 0-16Z','none','#607e6a',2,'data-clue="water"')}`)+`</g>`:rect(1147,291,46,98,'#182f33',3);
+b+=group(700,342,1,`${rect(-20,-47,40,94,'#93a58f',3,'#2f4e48',2)}${path('M-11-12q11-10 22 0m-18 8q11-7 18 0','none','#314f49',2)}`)+group(925,342,1,`${rect(-20,-47,40,94,'#b59a6e',3,'#2f4e48',2)}${path('M0-18l-9 14h18Zm0 10l-11 14h22Z','none','#385348',2)}`)+(!f.planTaken?`<g id="archiveBook">`+group(1170,342,1,`${rect(-23,-51,46,98,'#d0bb81',3,'#365751',2)}${path('M-14-30H13M-14-23H13','none','#607e6a',2)}${path('M0-16Q-18 3-8 12Q10 24 13 8Q12-1 0-16Z','none','#607e6a',2,'data-clue="water"')}`)+`</g>`:rect(1147,291,46,98,'#182f33',3));
 b+=ground(790,'#5e6e55')+path('M495 795H1336','none','#bdb68a',6)+path('M505 808H1327','none','#2f4e43',4);
 b+=`<g id="archiveLadderShift">`+group(f.ladderX??769,798,1,`${path('M-65 0-24-456M63 0 23-456','none','#b2a778',13)}${path('M-69-7-61-44M59-44 66-7','none','#324d45',8)}${rep(11,i=>{let yy=-29-i*38;let w=62-i*3.5;return path(`M${-w} ${yy}h${w*2}`,'none','#c2b88b',9);})}${circle(-63,1,12,'#32544d','#a6a77d',3)}${circle(65,1,12,'#32544d','#a6a77d',3)}`)+`</g>`;
-b+=group(380,670,1,`${path('M-184-90H157L187-62H-195Z','#b0a577','#3b5447',4)}${path('M-178-57v176h28l29-176m209 0 29 176h27V-57','#6e7757','#294b43',4)}${rect(-151,-38,262,98,'#506d54',3,'#274d48',3)}${rep(4,i=>rect(-143+i*64,-28,55,34,'#8b946b',2,'#34584c',2)+circle(-116+i*64,-11,4,'#d8c285'))}${paper(-22,-95,1.15,'plan')}${lamp(-121,-98,.53,true)}`)+person('阿尔弗',406,566,1.22);
+b+=group(380,670,1,`${path('M-184-90H157L187-62H-195Z','#b0a577','#3b5447',4)}${path('M-178-57v176h28l29-176m209 0 29 176h27V-57','#6e7757','#294b43',4)}${rect(-151,-38,262,98,'#506d54',3,'#274d48',3)}${rep(4,i=>rect(-143+i*64,-28,55,34,'#8b946b',2,'#34584c',2)+circle(-116+i*64,-11,4,'#d8c285'))}${paper(-22,-95,1.15,f.planTaken?'plan':'note')}${lamp(-121,-98,.53,true)}`)+person('阿尔弗',418,578,1.22);
 b+=group(339,351,1,`${path('M-116-138Q0-162 117-133L110 137-99 137Z','#aaab81','#3c5d4e',4)}${rect(-90,-110,186,215,'url(#paperlines)')}${text(0,-81,'夜 行 者 档 案',16,'#37584c')}${path('M-53-34q60-48 102-3M-58 1q59-45 115-6M-40 42q39-32 82-4','none','#627f65',3)}${circle(-49,-17,18,'none','#ac7356',4)}${text(21,88,'潮汐 · 钟声 · 归家',11,'#54725a')}`);
 b+=rep(6,i=>lamp(355+i*188,153+Math.sin(i)*22,.48,true))+path('M249 5Q808 255 1448 38','none','#163d41',5)+mushrooms(150,806,2)+mushrooms(1343,808,1.5)+fern(17,901,2.9,'#244a44')+fern(1564,860,2.5,'#204b43')+particles(55);return b;}
 
@@ -2412,7 +2489,7 @@ function pump(S){let f=S.f,vs=S.valves||[0,1,0];let b=rect(0,0,1600,900,'url(#ca
 b+=rep(5,i=>group(i*325,260,1,`${path('M-28 541V45Q0-8 31 40V541Z','#3f645e','#244a4c',5)}${rect(-37,515,79,33,'#526d60',4)}`));
 b+=path('M-20 782q438-78 699 15t988-13V910H-20Z','url(#river)')+waterLines(796,45);
 b+=path('M226 192V399H453V640H546V400H640V570H940V304h337V148','none','#213f46',43)+path('M226 192V399H453V640H546V400H640V570H940V304h337V148','none','#647e73',29)+path('M226 192V399H453V640H546V400H640V570H940V304h337V148','none','#b4b58c',3,'opacity=".7"');
-b+=group(453,640,1,`${rect(-50,-68,100,133,'#294b4e',15,'#8a9f85',5)}${rep(5,i=>path(`M${-30+i*15}-54v107`,'none','#9aa88a',4))}${!f.filter?`<g id="filterLeaves">`+rep(12,i=>group(-34+rnd()*66,-44+rnd()*75,.43+rnd()*.4,path('M0 0q-40-25-8-39 35 0 8 39Z',i%2?'#d1b172':'#8d9a69','#476450',2)))+`</g>`:''}${!f.poleTaken?path('M-30 38 34-44','none','#c8b17e',5)+circle(34,-44,4,'#ba8c56'):''}${path('M-60-80H60M-60 78H60','none','#486961',8)}`);
+b+=group(453,640,1,`${rect(-50,-68,100,133,'#294b4e',15,'#8a9f85',5)}${rep(5,i=>path(`M${-30+i*15}-54v107`,'none','#9aa88a',4))}${!f.filter?`<g id="filterLeaves">`+rep(12,i=>group(-34+rnd()*66,-44+rnd()*75,.43+rnd()*.4,path('M0 0q-40-25-8-39 35 0 8 39Z',i%2?'#d1b172':'#8d9a69','#476450',2)))+`</g>`:''}${!f.poleTaken?`<g id="filterPole">${path('M-30 38 34-44','none','#c8b17e',5)}${circle(34,-44,4,'#ba8c56')}</g>`:''}${path('M-60-80H60M-60 78H60','none','#486961',8)}`);
 b+=group(1128,496,1,`${rect(-84,-110,168,203,'#415f57',17,'#a2ab83',4)}${circle(0,-28,57,'#d2c59b','#274e4b',7)}${rep(9,i=>path(`M${Math.sin((i-4)*.3)*41} ${-28-Math.cos((i-4)*.3)*41}l${Math.sin((i-4)*.3)*8} ${-Math.cos((i-4)*.3)*8}`,'none','#526e59',2))}${path(`M0-28 ${Math.sin((f.pump?1.1:-1))*42} ${-28-Math.cos(f.pump?1.1:-1)*42}`,'none','#a2674c',4,'id="pressureNeedle"')}${circle(0,-28,7,'#33564f')}${text(0,66,f.pump?'回　流':'旁　路',14,'#cdd0a9')}`);
 const pts=[[640,400],[640,570],[940,570]],network=Hydraulics.trace(vs,!!f.filter&&!f.intakeClosed);
 let flow=f.filter&&!f.intakeClosed?'M226 192V399H453V640H546V400H587':'';
@@ -2500,26 +2577,26 @@ Homeward.define("scene/5/art", ["art/kit", "art/characters", "art/props"], ({P,p
 function lift(S){let f=S.f;let sum=(S.weights||[]).reduce((a,v)=>a+v,0);let tilt=(sum-4)*3;let b=mountains(true)+skyline()+path('M0 646Q346 665 593 852H-15Z','#3c5f5c')+path('M995 837 1357 654 1634 682V937H1009Z','#315556');
 b+=path('M-20 690 279 610 1049 663 1260 734 1229 811H-20Z','#5d7769','#274e4d',4)+path('M0 799 443 778 793 824 1212 807V919H-10Z','#31534f')+path('M18 686 988 672 1247 729','none','#a6a885',8);
 b+=path('M204 673 249 134 425 137 473 685M262 143 323 664M409 140 354 667','none','#28494c',27)+path('M220 668 263 154 411 154 452 669','none','#81957b',5)+gear(337,188,104,15,'url(#bronze)',0,true)+path('M273 96 1119-30M389 126 1658 107','none','#c5c4a0',4)+path('M259 85 1119-40M400 115 1650 94','none','#21424b',8);
-b+=group(1194,551,1,`${path('M-82-112 0-292 71-112','none','#78958d',7)}${path('M0-292v-122','none','#c8c29c',5)}${path('M-108-110H96L127-79H-129Z','#345756','#1d3f49',5)}${path('M-123-81v212h244V-81Z','#7c9278','#244a4b',6)}${rect(-105,-64,90,117,'#2e5762',7,'#b1b28a',3)}${rect(11,-64,88,117,'#2e5762',7,'#b1b28a',3)}${rect(-107,68,215,45,'#647f65',2)}${path('M0-78V130','none','#375b54',6)}${text(0,96,'山　谷　线',15,'#c8c9a0')}${path('M-132 136h267','none','#bdba8f',13)}${lamp(-120,-38,.43,true)}`);
-b+=group(810,487,1,`${path('M-22 225V-76h41v301Z','#516b5b','#274b46',4)}${path('M-91 225H85','none','#a2a480',17)}<g transform="rotate(${tilt})">${path('M-157-36H157','none','#b6b185',14)}${path('M-144-27v146m288-146v146','none','#b3b18a',3)}${path('M-202 119q59 55 117 0ZM83 119q61 55 118 0Z','#8c9c7b','#345e4e',3)}${text(-144,142,'Ⅳ',25,'#314c44')}${(S.weights||[]).map((v,i)=>group(121+i*21,102-i%2*20,.65,weight(v,0,0))).join('')}</g>${circle(0,-36,18,'#d1bf83','#31594c',3)}${text(1,-90,'平 衡 后 通 行',12,'#d4d0a9')}`);
+b+=`<g id="gondolaCabin" transform="translate(${f.lift?1194:1218} ${f.lift?551:575})">${path('M-82-112 0-292 71-112','none','#78958d',7)}${path('M0-292v-122','none','#c8c29c',5)}${path('M-108-110H96L127-79H-129Z','#345756','#1d3f49',5)}${path('M-123-81v212h244V-81Z','#7c9278','#244a4b',6)}${rect(-105,-64,90,117,'#2e5762',7,'#b1b28a',3)}${rect(11,-64,88,117,'#2e5762',7,'#b1b28a',3)}${rect(-107,68,215,45,'#647f65',2)}${path('M0-78V130','none','#375b54',6)}${text(0,96,'山　谷　线',15,'#c8c9a0')}${path('M-132 136h267','none','#bdba8f',13)}${lamp(-120,-38,.43,true)}</g>`;
+b+=group(810,487,1,`${path('M-22 225V-76h41v301Z','#516b5b','#274b46',4)}${path('M-91 225H85','none','#a2a480',17)}<g id="gondolaBeam" transform="rotate(${tilt} 0 -36)">${path('M-157-36H157','none','#b6b185',14)}${path('M-144-27v146m288-146v146','none','#b3b18a',3)}${path('M-202 119q59 55 117 0ZM83 119q61 55 118 0Z','#8c9c7b','#345e4e',3)}${text(-144,142,'Ⅳ',25,'#314c44')}${(S.weights||[]).map((v,i)=>group(115+i*28,114,.65,weight(v,0,0))).join('')}</g>${circle(0,-36,18,'#d1bf83','#31594c',3)}${text(1,-90,'平 衡 后 通 行',12,'#d4d0a9')}`);
 b+=[1,2,3].map((v,i)=>(S.weights||[]).includes(v)?'':weight(v,425+i*113,691)).join('');
 b+=!f.lineTaken?`<g id="gondolaLine">${group(336,737,1,itemArt('line').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'';
-b+=rect(979,589,100,112,'#395c58',12,'#9aac89',4)+wheel(1029,633,30,f.lift?160:0);
-b+=person('大卫',554,769,1.34)+person('芙丽达',951,765,1.38)+fern(31,858,1.9,'#274f48')+grass(1294,809,1.7)+particles(30);return b;}
+b+=rect(979,589,100,112,'#395c58',12,'#9aac89',4)+`<g id="gondolaBrake">${wheel(1029,633,30,f.lift?160:0)}</g>`;
+b+=person('大卫',235,769,1.34)+person('芙丽达',1135,765,1.38)+fern(31,858,1.9,'#274f48')+grass(1294,809,1.7)+particles(30);return b;}
 function weight(v,x,y){return group(x,y,1,`${path('M-13-44q-9-18 13-18t13 18','none','#8ba28a',5)}${path('M-27-44H27L38 9H-38Z',v===1?'#b9b288':v===2?'#859a81':'#6b8c7d','#274c48',3)}${rep(v,i=>path(`M${(i-(v-1)/2)*11} -24v19`,'none','#e4d5a5',3))}`);}
 
 return lift;
 });
 
 /* src/scenes/05-gondola/logic.js */
-Homeward.define("scene/5/logic", ["story/helpers", "content/catalog"], ({checkBeacon,H,I,exit,f,say,one,wrong,set,need,advance,book,pipeCheck,balance,lightTrail}, {items,notes}) => {
+Homeward.define("scene/5/logic", ["content/mechanisms", "story/helpers", "content/catalog"], (Mechanisms, {checkBeacon,H,I,exit,f,say,one,wrong,set,need,advance,book,pipeCheck,balance,lightTrail}, {items,notes}) => {
 
 return {
 name:'悬在雾里的升降站',english:'THE GONDOLA IN THE MIST',actLabel:'第二幕 · 山里藏着什么',mood:'山风渐强 / 一条路升起，另一条路沉没',start:402,ground:x=>783,
 intro:[['芙丽达','升降机的水轮已经转了。只是配重失去了平衡。'],['大卫','它下面为什么看不见底？'],['希尔达','因为有雾。先不讨论第二种可能。']],
-hotspots:s=>[I('line','带上应急救援绳',336,733,90,69),...[1,2,3].map((v,i)=>H('weight'+v,(s.weights.includes(v)?'取下':'放上')+['一格','两格','三格'][i]+'配重',s.weights.includes(v)?810+v*20:425+i*113,s.weights.includes(v)?588:665,79,102,{drag:'weight',value:v,walkX:700})),H('scale','查看配重横梁',811,493,340,212,{walkX:791}),H('brake','松开升降机制动',1029,631,111,120),exit('cabin','乘上升降机',1194,603,{walkX:1129}),exit('back','返回水泵房',126,683,{walkX:198})],
+hotspots:s=>[I('line','带上应急救援绳',336,733,90,69),...[1,2,3].map((v,i)=>H('weight'+v,(s.weights.includes(v)?'取下':'放上')+['一格','两格','三格'][i]+'配重',...Mechanisms.gondolaWeight(s,v),s.weights.includes(v)?46:79,s.weights.includes(v)?70:102,{drag:'weight',value:v,walkX:700})),H('scale','查看配重横梁',811,493,340,212,{walkX:791}),H('brake','松开升降机制动',1029,631,111,120),exit('cabin','乘上升降机',1194,603,{walkX:1129}),exit('back','返回水泵房',126,683,{walkX:198})],
 act(g,id,item){if(id==='line'){if(f(g,'lineTaken'))return g.toast('救援绳已经在背包里了。');return g.work(1250,'俯身托起应急绳，检查绳结后收好',()=>{set(g,'lineTaken');g.take('line');});}else if(id.startsWith('weight'))balance(g,Number(id.slice(-1)));else if(id==='scale')one(g,'芙丽达','左边刻着四格。右边的配重加起来也需要四格，横梁才会水平。');else if(id==='brake'){if(f(g,'lift'))return g.toast('轿厢停稳了。现在可以上去。');if(g.s.weights.reduce((a,b)=>a+b,0)!==4){g.effect('shake');return say(g,[['大卫','停停停！它歪了！'],['芙丽达','安全棘爪扣住了。先调平配重，再试一次。']]);}return g.work(1000,'握住制动轮，缓缓释放棘爪',()=>{set(g,'lift');g.sound('metal');g.toast('制动解开，轿厢稳稳地靠到了站台。');});}else if(id==='cabin'){if(!f(g,'lift'))return one(g,'希尔达','先调平配重，再松开站台上的制动。');if(!f(g,'lineTaken'))return one(g,'芙丽达','把左边那卷应急绳带上。这种天气，别把安全留在站台。');say(g,[['大卫','刚才那条水道……不见了。'],['芙丽达','山洪把下面的回路淹没了。升降机也不能再折返。'],['希尔达','那就往前走。找到孩子，也找到另一条回家的路。']],()=>g.go(6));}else if(id==='back')g.go(4);else wrong(g);},
-drag(g,id,p){if(id.startsWith('weight')&&Math.abs(p.x-810)<210&&Math.abs(p.y-490)<220){let v=Number(id.slice(-1));if(!g.s.weights.includes(v))balance(g,v);return true;}return false;},
+drag(g,id,p){if(id.startsWith('weight')){let v=Number(id.slice(-1)),on=g.s.weights.includes(v);if(!on&&Math.abs(p.x-810)<210&&Math.abs(p.y-490)<220||on&&(Math.abs(p.x-954)>=100||Math.abs(p.y-590)>=95)){balance(g,v);return true;}}return false;},
 objective:s=>!s.f.lineTaken?'先带上应急救援绳。':!s.f.lift?'配平吊盘，让升降机稳稳靠站。':'乘坐升降机进入深山。',
 hints:s=>['横梁左边的符号是四。右边不能太轻，也不能太重。','三个砝码分别是一、二、三格；只需要其中两个。','使用一格和三格配重，不要使用两格。再点轿厢左边的制动轮，带上绳索后上车。']};
 });
@@ -2545,8 +2622,8 @@ Homeward.define("scene/6/logic", ["story/helpers", "content/catalog"], ({checkBe
 return {
 name:'巨人掌心的避风处',english:'THE CHILD UNDER THE MOUNTAIN',actLabel:'第三幕 · 听懂它的害怕',mood:'夜已深 / 那座山，似乎也在呼吸',start:424,ground:x=>790,chapter:['ACT III','听懂它的害怕','不是每一个庞大的影子，都在挡住你的路。'],
 intro:[['大卫','希尔达……后面那座山，刚刚眨了眼。'],['希尔达','它在替这个孩子挡风。它不是要伤害我们。'],['芙丽达','小一点声。提灯也太亮了。']],
-hotspots:s=>[H('child','靠近小巨魔',956,670,152,183,{walkX:873}),H('holder','把柔和的灯放在石座上',782,672,71,90,{walkX:801}),H('song','看看石壁上的歌',610,375,214,187,{walkX:613}),...[0,1,2].map(i=>H('tone'+i,['溪流石','松针石','月亮石'][i],468+i*118,685-i%2*22,100,139,{walkX:560})),H('frida','问问芙丽达',1149,690,99,178),exit('next','穿过山的怀抱',1240,654,{walkX:1285})],
-act(g,id,item){if(id==='child'){if(f(g,'calm'))return one(g,'希尔达','阿尔弗会陪它沿着避洪小径走。我们把钟声修好，再到山脊会合。');if(!f(g,'shadePlaced')){g.effect('soft');return one(g,'芙丽达','它把眼睛捂住了。用围巾遮住提灯，让光柔和一点。');}one(g,'希尔达','它在敲石头，像是在等一段熟悉的歌。石壁上也许有线索。');}else if(id==='holder'){if(f(g,'shadePlaced'))return g.toast('暖光不再刺眼，孩子慢慢放松了。');if(!need(g,'shade',item,'它需要柔和的光。把妈妈的围巾和提灯组合起来。'))return;return g.work(1250,'扶住石灯，铺好围巾，让光柔和下来',()=>{g.consume('shade');g.take('lamp',false);set(g,'shadePlaced');g.sound('warm');say(g,[['希尔达','这样好多了，对不对？我们不急。'],['芙丽达','围巾留在石灯上就好。我们仍可以带走提灯。']]);});}else if(id==='song'){book(g,'song');g.playSequence([0,1,0,2]);}else if(id.startsWith('tone')){if(f(g,'calm'))return g.pulse('tone'+id.slice(-1),Number(id.slice(-1)));if(!f(g,'shadePlaced'))return one(g,'希尔达','先让它安心。害怕的时候，谁都听不进去歌。');let v=Number(id.slice(-1));g.pulse('tone'+v,v);g.s.melody.push(v);if(g.s.melody.length===4){if(g.s.melody.every((k,i)=>k===[0,1,0,2][i])){g.work(1400,'走近小巨魔，伸出手接过音叉',()=>{set(g,'calm');g.take('fork',false);book(g,'child');say(g,[['希尔达','它把一支音叉放到了我手里……钟楼缺的，是不是这个？'],['阿尔弗','原来它只是想把音叉送回去。钟声太响，它的妈妈不敢接近城墙。'],['芙丽达','我们去修好钟。阿尔弗，你带它走山背后的避洪小径。'],['希尔达','在山脊的路灯下会合。一个都不能少。']]);},{kind:'receive',pickup:true,prop:'fork',target:[919,688],approachX:870});}else g.toast('最后一块石头没有回应。再听一遍石壁上的歌。');g.s.melody=[];}g.commit();}else if(id==='frida')one(g,'芙丽达',f(g,'calm')?'我和大卫跟你去钟楼。阿尔弗知道另一条通往山脊的路。':'先遮住刺眼的灯，再用石壁记着的顺序敲石头。');else if(id==='next')advance(g,f(g,'calm'),7,'先帮这个孩子平静下来。它已经一个人等得够久了。');else wrong(g);},
+hotspots:s=>[H('child','靠近小巨魔',956,670,152,183,{walkX:836}),H('holder','把柔和的灯放在石座上',782,672,71,90,{walkX:731}),H('song','看看石壁上的歌',610,375,214,187,{walkX:613}),...[0,1,2].map(i=>H('tone'+i,['溪流石','松针石','月亮石'][i],468+i*118,685-i%2*22,100,139,{walkX:426+i*118})),H('frida','问问芙丽达',1149,690,99,178,{walkX:1085}),exit('next','穿过山的怀抱',1240,654,{walkX:1285})],
+act(g,id,item){if(id==='child'){if(f(g,'calm'))return one(g,'希尔达','阿尔弗会陪它沿着避洪小径走。我们把钟声修好，再到山脊会合。');if(!f(g,'shadePlaced')){g.effect('soft');return one(g,'芙丽达','它把眼睛捂住了。用围巾遮住提灯，让光柔和一点。');}one(g,'希尔达','它在敲石头，像是在等一段熟悉的歌。石壁上也许有线索。');}else if(id==='holder'){if(f(g,'shadePlaced'))return g.toast('暖光不再刺眼，孩子慢慢放松了。');if(!need(g,'shade',item,'它需要柔和的光。把妈妈的围巾和提灯组合起来。'))return;return g.work(1250,'扶住石灯，铺好围巾，让光柔和下来',()=>{g.consume('shade');g.take('lamp',false);set(g,'shadePlaced');g.sound('warm');say(g,[['希尔达','这样好多了，对不对？我们不急。'],['芙丽达','围巾留在石灯上就好。我们仍可以带走提灯。']]);});}else if(id==='song'){book(g,'song');g.playSequence([0,1,0,2]);}else if(id.startsWith('tone')){if(f(g,'calm'))return g.pulse('tone'+id.slice(-1),Number(id.slice(-1)));if(!f(g,'shadePlaced'))return one(g,'希尔达','先让它安心。害怕的时候，谁都听不进去歌。');let v=Number(id.slice(-1));g.pulse('tone'+v,v);g.s.melody.push(v);if(g.s.melody.length===4){if(g.s.melody.every((k,i)=>k===[0,1,0,2][i])){g.work(1400,'走近小巨魔，伸出手接过音叉',()=>{set(g,'calm');g.take('fork',false);book(g,'child');say(g,[['希尔达','它把一支音叉放到了我手里……钟楼缺的，是不是这个？'],['阿尔弗','原来它只是想把音叉送回去。钟声太响，它的妈妈不敢接近城墙。'],['芙丽达','我们去修好钟。阿尔弗，你带它走山背后的避洪小径。'],['希尔达','在山脊的路灯下会合。一个都不能少。']]);},{kind:'receive',pickup:true,prop:'fork',target:[888,688],approachX:836});}else g.toast('最后一块石头没有回应。再听一遍石壁上的歌。');g.s.melody=[];}g.commit();}else if(id==='frida')one(g,'芙丽达',f(g,'calm')?'我和大卫跟你去钟楼。阿尔弗知道另一条通往山脊的路。':'先遮住刺眼的灯，再用石壁记着的顺序敲石头。');else if(id==='next')advance(g,f(g,'calm'),7,'先帮这个孩子平静下来。它已经一个人等得够久了。');else wrong(g);},
 objective:s=>!s.f.shadePlaced?'用柔和的灯光安抚小巨魔。':!s.f.calm?'听石壁的歌，敲响三块回声石。':'让阿尔弗照看孩子，和同伴去钟楼。',
 hints:s=>['孩子怕强光，也怕突如其来的声音。','把围巾和提灯组合，放到石座上。再点击高处的石壁，观察回声石亮起的顺序。','组合遮光提灯并使用后，依次点击：溪流、松针、溪流、月亮。']};
 });
@@ -2555,15 +2632,15 @@ hints:s=>['孩子怕强光，也怕突如其来的声音。','把围巾和提灯
 Homeward.define("scene/7/art", ["content/walkways", "content/mechanisms", "art/kit", "art/characters", "art/props"], (Walkways, Mechanisms, {P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function gate(S){let f=S.f;let b=mountains(true)+path('M832 55 1611 84V900H778Z','#43676a','#244b54',6)+rect(828,81,772,744,'url(#brick)');
 b+=path('M1137 829V286Q1188 116 1391 150 1552 158 1568 321V829Z','#1c424e','#8b9f87',17)+path('M1168 828V303q32-126 191-126t178 126v525Z','#152f3f');
-b+=`<g transform="translate(0 ${f.towerGate?-472:0})">${path('M1177 810V312q20-126 182-127t167 129v496Z','#526f67','#254c4d',4)}${rep(10,i=>path(`M${1190+i*34} 193v620`,'none','#354f4d',8))}${path('M1179 353H1535M1179 626H1535','none','#96a285',15)}${circle(1348,447,84,'none','#aab18e',6)}${path('M1348 365v164m-82-82h164','none','#aab18e',4)}</g>`;
+b+=`<g clip-path="url(#towerGateArch)"><g id="towerGateDoor" transform="translate(0 ${f.towerGate?-472:0})">${path('M1177 810V312q20-126 182-127t167 129v496Z','#526f67','#254c4d',4)}${rep(10,i=>path(`M${1190+i*34} 193v620`,'none','#354f4d',8))}${path('M1179 353H1535M1179 626H1535','none','#96a285',15)}${circle(1348,447,84,'none','#aab18e',6)}${path('M1348 365v164m-82-82h164','none','#aab18e',4)}</g></g>`;
 b+=path('M918 657V108L1036 71 1102 99V673Z','#5b7c73','#274e51',5)+rect(927,121,166,530,'url(#brick)')+path('M900 100 1011 9 1125 91 1113 127H906Z','#2e5058','#203f4c',5)+windowArt(973,165,65,130,true);
 b+=path('M-20 815 570 769 832 657H1189L1545 774V938H-20Z','#42665e','#2b514d',3)+path('M-10 825 722 775 921 708H1196L1464 814','none','#a0a688',5)+path('M722 775v29l210-58h267l266 90M916 709v31m99-32 3 31m98-30 9 31','none','#1c4449',3);
 b+=pine(90,838,1.75,'#21454e')+pine(393,779,1.35,'#2b575a')+pine(635,733,1.1,'#2c5a5c')+rock(367,813,1.4,'#637f6d')+mushrooms(446,835,1.1);
 b+=`<g id="towerServiceRamp" pointer-events="none">`+path(Walkways.towerPath()+'L1540 894H60Z','#48685b','#2b514d',3)+path(Walkways.towerPath(-4),'none','#bcba8e',5)+rep(24,i=>{const x=825+i*22,y=Walkways.towerGround(x);return path(`M${x} ${y+7}l15 7m-12 0v17`,'none','#718775',2);})+text(1128,591,'检修坡道',11,'#d0c59b')+`</g>`;
-b+=path('M914 593 1173 315 1263 362 1060 650Z','#496b62','#88a187',4)+Mechanisms.gears.map(({x,y,radius:r,item:k})=>f[k+'Set']?gear(x,y,r,r===35?10:r===50?12:14,'url(#bronze)',(f.gearIndex||0)*90*(k==='gearM'?1:k==='gearS'?-1.2:-.857),!!f.towerGate):circle(x,y,r,'none','#b9bb9255',3)+circle(x,y,8,'#1d4448','#a3b499',3)).join('');
+b+=path('M914 593 1173 315 1263 362 1060 650Z','#496b62','#88a187',4)+Mechanisms.gears.map(({x,y,radius:r,item:k})=>f[k+'Set']?`<g data-tower-gear="${k}" data-cx="${x}" data-cy="${y}" transform="rotate(${((f.gearIndex||0)+(f.towerGate?2:0))*90*(k==='gearM'?1:k==='gearS'?-12/10:-12/14)} ${x} ${y})">${gear(x,y,r,r===35?10:r===50?12:14,'url(#bronze)',0,!!f.towerGate)}</g>`:circle(x,y,r,'none','#b9bb9255',3)+circle(x,y,8,'#1d4448','#a3b499',3)).join('');
 b+=[['gearS',453,765,35,10],['gearM',612,771,50,12],['gearL',795,763,68,14]].map(([id,x,y,r,n])=>f[id+'Taken']?'':`<g id="pickup-${id}">${gear(x,y,r,n)}</g>`).join('');
-b+=group(1370,684,1,`${rect(-17,-76,34,98,'#2b5354',6,'#adb18c',3)}${path(f.towerGate?'M0-26 37-10':'M0-26-12-91','none','#acb8a1',9)}${circle(f.towerGate?37:-12,f.towerGate?-10:-91,12,'#d7bf89','#3c5d55',3)}`);
-b+=lamp(1165,286,.9,true)+lamp(1536,321,.82,true)+fern(31,923,2.6,'#204c48')+fern(1559,883,1.9,'#234b49')+person('芙丽达',790,805,1.38)+particles(34);return b;}
+b+=group(1370,684,1,`${rect(-17,-76,34,98,'#2b5354',6,'#adb18c',3)}<g id="towerLeverArm" transform="rotate(${f.towerGate?76:0} 0 -26)">${path('M0-26-12-91','none','#acb8a1',9)}${circle(-12,-91,12,'#d7bf89','#3c5d55',3)}</g>`);
+b+=lamp(1165,286,.9,true)+lamp(1536,321,.82,true)+fern(31,923,2.6,'#204c48')+fern(1559,883,1.9,'#234b49')+person('芙丽达',312,824,1.38)+particles(34);return b;}
 
 return gate;
 });
@@ -2577,7 +2654,7 @@ intro:[['希尔达','门上的齿轮拆散了，却没有被带走。'],['芙丽
 hotspots:s=>[...([['gearS',453,765,82],['gearM',612,771,112],['gearL',795,763,151]].filter(([id])=>!s.f[id+'Taken']).map(([id,x,y,w])=>I(id,'拿起'+items[id],x,y,w,w))),...Mechanisms.gears.map(d=>H(d.socket,d.label,d.x,d.y,d.hit,d.hit,{walkX:d.x-50})),H('lever','拉动开门拉杆',1370,641,79,143,{walkX:1341}),exit('next','走进钟楼',1355,463,{walkX:1290}),H('etching','辨认门上的古老纹章',1360,261,214,134,{walkX:1235})],
 act(g,id,item){if(id.startsWith('gear')){if(f(g,id+'Taken'))return;return g.work(id==='gearL'?1550:1250,'托住轮缘，拿起'+items[id]+'并收好',()=>{set(g,id+'Taken');g.take(id);});}else if(id.startsWith('socket')){const k='gear'+id.slice(-1);if(f(g,k+'Set')){
 if(k==='gearM'&&!f(g,'towerGate')){if(!['gearS','gearM','gearL'].every(key=>f(g,key+'Set')))return g.toast('等三枚齿轮都装好，再慢慢转动对位轮。');
-const index=((g.s.f.gearIndex||0)+1)%4;set(g,'gearIndex',index);set(g,'gearAligned',index===Mechanisms.witnessIndex);g.sound('metal');return g.toast(index===Mechanisms.witnessIndex?'轮缘的金色刻线与机架顶端重合了。现在可以拉动门柄。':'轮缘上有一条金色刻线。让它对准机架顶端的缺口。');}
+const from=g.s.f.gearIndex||0,index=(from+1)%4;return g.work(680,'转动对位轮，留意轮缘上的金色刻线',()=>{set(g,'gearIndex',index);set(g,'gearAligned',index===Mechanisms.witnessIndex);g.sound('metal');g.toast(index===Mechanisms.witnessIndex?'轮缘的金色刻线与机架顶端重合了。现在可以拉动门柄。':'轮缘上有一条金色刻线。让它对准机架顶端的缺口。');},{kind:'turn',effect:'towerAlign',target:[1090,486],radius:30,approachX:1040,from});}
 return g.toast('这枚齿轮已经咬合了。');} if(!need(g,k,item,'空槽的大小与齿轮不一样。看看轮缘能否刚好咬合。'))return;if(k==='gearL'){g.work(1450,'沿检修斜坡走近，双手托稳大齿轮，对准高处轴承',()=>{g.consume(k);set(g,k+'Set');g.sound('metal');g.toast('大齿轮落进高处主轴，沉沉地咬合了。');book(g,'gears');});}else{return g.work(1100,'双手托住轮缘，对准轴承后推入',()=>{g.consume(k);set(g,k+'Set');g.sound('metal');g.toast('齿轮落进轴承，轮缘彼此咬合。');book(g,'gears');});}}else if(id==='lever'){if(f(g,'towerGate'))return g.toast('门已经打开。');if(!['gearS','gearM','gearL'].every(k=>f(g,k+'Set')))return one(g,'芙丽达','拉杆动了，力量却传不到门上。还有空着的齿轮轴。');if(!f(g,'gearAligned'))return one(g,'芙丽达','齿轮在转，但门闩没有归位。转动中间的轮子，让轮缘上的金线对准上面的缺口。');g.work(1150,'把尘封的门慢慢拉开',()=>{set(g,'towerGate');g.sound('wood');g.toast('门后的钟声，近得像一颗不安的心。');});}else if(id==='next')advance(g,f(g,'towerGate'),8,'开门的力量，需要经过每一枚齿轮。');else if(id==='etching')g.sketch('oldFriends','门上的两个手印','一个小小的人类手印，挨着一个大大的巨魔手印。时间没有把它们分开。');else wrong(g);},
 objective:s=>!s.f.towerGate?'装好三枚齿轮，再让中轮金线对准机架缺口。':'进入水钟的机械心脏。',
 hints:s=>['地上的齿轮并没有丢失，只是离开了轴承。','轮子有三种大小，空槽也一样。先拿起来，再放回对应的槽。','小齿轮放最低的小轴；中齿轮放中间；大齿轮放最高。装齐后转中轮，让金线朝上，再拉右侧拉杆。']};
@@ -2588,17 +2665,18 @@ Homeward.define("scene/8/art", ["art/kit", "art/characters", "art/props"], ({P,p
 function heart(S){let f=S.f;let b=rect(0,0,1600,900,'url(#cave)')+rect(90,36,1430,780,'#486a65',20)+rect(90,36,1430,780,'url(#brick)',20)+path('M145 830V190Q250-2 802 0 1380-11 1496 181V831','none','#25484b',61)+path('M180 810V200Q300 27 802 34T1462 209V810','none','#80927b',8);
 b+=rep(3,i=>windowArt(255+i*477,90,102,246,false))+path('M327 115 615 786H946L354 105Z','#dbe5bf','none',0,'opacity=".035"')+path('M790 95 1122 808H1337L815 94Z','#dbe5bf','none',0,'opacity=".045"');
 b+=path('M162 831V481H450V206h293M1170 236h231v539H964V625','none','#183c44',48)+path('M162 831V481H450V206h293M1170 236h231v539H964V625','none','#859578',30)+path('M162 831V481H450V206h293M1170 236h231v539H964V625','none','#b9b68a',3);
-b+=gear(594,250,107,16,'#60745b',0,!f.heart)+gear(1063,273,154,20,'#6f8063',0,!f.heart)+gear(1415,430,107,14,'#546d57',0,!f.heart)+path('M504 22V170M1251 7v222','none','#2e4a49',11)+bell(838,450,1.64,!!f.damped);
+b+=gear(594,250,107,16,'#60745b',0,!!f.heart)+gear(1063,273,154,20,'#6f8063',0,!!f.heart)+gear(1415,430,107,14,'#546d57',0,!!f.heart)+path('M504 22V170M1251 7v222','none','#2e4a49',11)+bell(838,450,1.64,!!f.damped);
 b+=path('M838 55V-25M749 243V42h186v201','none','#324d4b',19)+path('M749 64h186','none','#a5a985',4);
 b+=path('M0 803q216-65 398 3t444-15 760 10V934H0Z','url(#river)')+waterLines(813,33)+ground(802,'#425f51')+path('M48 792H1512M45 829H1516','none','#87977c',8)+rep(20,i=>path(`M${64+i*77} 792v38`,'none','#223e3f',5));
-b+=path('M440 536V650','none','#87967b',10)+group(440,650,1,`${rect(-55,-83,110,160,'#426c61',12,'#b5b68b',4)}${wheel(0,0,50,(f.bypassTurns||0)*58)}${text(0,109,'旁路 · 先泄压',13,'#ccd0a3')}`);
-b+=path('M662 482V650','none','#819578',12)+gear(662,650,72,14,'url(#bronze)',(f.drive||0)*2,!!f.heart)+path('M662 650h34v-28','none','#e0c491',9)+text(662,750,'排洪飞轮',13,'#c4c99c');
+b+=path('M440 536V650','none','#87967b',10)+group(440,650,1,`${rect(-55,-83,110,160,'#426c61',12,'#b5b68b',4)}<g id="clockBypassWheel">${wheel(0,0,50,(f.bypassTurns||0)*58)}${f.bypassMounted&&!f.bypass?path('M0 0h34v-22','none','#dec493',7):''}</g>${text(0,109,'旁路 · 先泄压',13,'#ccd0a3')}`);
+b+=path('M662 482V650','none','#819578',12)+`<g id="clockDriveWheel" transform="rotate(${f.heart?180:0} 662 650)">${gear(662,650,72,14,'url(#bronze)',(f.drive||0)*2,!!f.heart)}${path('M662 650h34v-28','none','#e0c491',9)}${f.heart?path('M662 650v-22m-7-10v10h14v-10','none','#d8e4be',3.5):''}</g>`+text(662,750,'排洪飞轮',13,'#c4c99c');
 b+=`<g id="clockAccess" pointer-events="none">`+path('M765 833V600h45v233M754 617H889v13H754Z','#526b5b','#a8b18b',4)+rep(8,i=>path(`M765 ${625+i*27}h45`,'none','#c5b98c',5))+path('M834 630v201m47-201v200','none','#304d44',9)+text(822,581,'检修踏台',11,'#d4c69a')+`</g>`;
-b+=group(1211,610,1,`${rect(-33,-12,66,99,'#385c51',8,'#a2ad81',3)}${path(f.fridaHold?'M0 24 44 3':'M0 24-15-81','none','#95ac94',9)}${circle(f.fridaHold?44:-15,f.fridaHold?3:-81,13,'#d8bd85','#416453',3)}${text(0,120,'保持旁路',12,'#c9c59b')}`)+person('芙丽达',1272,778,1.38)+person('大卫',1070,780,1.34);
-b+=group(1016,641,1,`${rect(-25,-50,50,100,'#577760',5,'#a6b089',3)}${path(f.davidHold?'M-25 0H29':'M0-43V47','none','#cfc69a',9)}${circle(0,0,9,'#2e5850')}`);
+b+=group(1211,610,1,`${rect(-33,-12,66,99,'#385c51',8,'#a2ad81',3)}${path(f.fridaHold?'M0 24 44 3':'M0 24-15-81','none','#95ac94',9)}${circle(f.fridaHold?44:-15,f.fridaHold?3:-81,13,'#d8bd85','#416453',3)}${f.fridaHold?circle(40,5,5.5,'#c68960','#2c4a4c',1.5):''}${text(0,120,'保持旁路',12,'#c9c59b')}`);
+b+=group(1016,641,1,`${rect(-25,-50,50,100,'#577760',5,'#a6b089',3)}${path(f.davidHold?'M-25 0H29':'M0-43V47','none','#cfc69a',9)}${circle(0,0,9,'#2e5850')}${f.davidHold?circle(26,0,5.5,'#efc8a1','#2c4a4c',1.5):''}`);
+b+=person('芙丽达',1272,778,1.38)+person('大卫',1082,780,1.34);
 b+=!f.feltTaken?`<g id="clockFelt">${group(553,768,.88,itemArt('felt').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'';
 b+=group(303,681,1,`${rect(-80,-57,160,109,'#c9bb91',4,'#496856',4)}${path('M-62 27V-25h40v52H20V-9h43','none','#608471',3)}${text(0,-39,'水 → 旁路 → 钟',12,'#486955')}`);
-b+=group(965,525,1,`${circle(0,0,40,'#c7c19b','#335b4d',7)}${path(`M0 0 ${f.damped&&!f.bypass?-29:f.bypass?23:-25} -24`,'none','#9b5e42',4)}${text(0,68,f.bypass?'压力稳定':'洪水压力',10,'#cbd0aa')}`);
+b+=group(965,525,1,`${circle(0,0,40,'#c7c19b','#335b4d',7)}${path('M0 0-25-24','none','#9b5e42',4,`id="clockGaugeNeedle" transform="rotate(${Math.min(1,(f.bypass?2:f.bypassTurns||0)/2)*90})"`)}${circle(0,0,5,'#335b4d')}${text(0,68,f.bypass?'压力稳定':'洪水压力',10,'#cbd0aa')}`);
 b+=lamp(167,529,.79,true)+lamp(1470,650,.67,true)+path('M1420 771V681l23-171 51-72 61 89v244Z','#254b49','#7d9879',4)+path('M1470 755V541l28-48 26 57v205Z','#133440')+rect(0,620,1600,250,'url(#fog)')+particles(40);return b;}
 
 return heart;
@@ -2610,7 +2688,7 @@ Homeward.define("scene/8/logic", ["story/helpers", "content/catalog"], ({checkBe
 return {
 name:'水钟的机械心脏',english:'THE HEART OF THE WATER CLOCK',actLabel:'第四幕 · 别松开我的手',mood:'先让水找到出口，再让钟安静',start:411,ground:x=>833,chapter:['ACT IV','别松开我的手','有些机关，必须由朋友一起转动。'],
 intro:[['大卫','终于到了。把钟停下来，我们就能走了吧？'],['芙丽达','别急。图纸上有一句被折住了：停钟，也会锁住泄洪闸。'],['希尔达','所以我们不是来让它停止。是来教它重新好好工作。']],
-hotspots:s=>[H('plan','再看一眼维护图',303,677,170,133,{walkX:351}),H('bypass','打开泄压旁路',440,650,122,150,{walkX:385}),...(!s.f.feltTaken?[I('felt','拾起羊毛毡',553,768,99,75)]:[]),H('clapper','给钟舌加上软垫',838,457,171,117,{walkX:789}),H('frida','请芙丽达稳住旁路拉杆',1272,677,96,209,{walkX:1182}),H('david','请大卫稳住制动杆',1070,683,107,204,{walkX:994}),H('drive','摇动排洪飞轮',662,650,170,155,{walkX:608}),exit('next','爬上屋顶',1481,633,{walkX:1440})],
+hotspots:s=>[H('plan','再看一眼维护图',303,677,170,133,{walkX:351}),H('bypass','打开泄压旁路',440,650,122,150,{walkX:385}),...(!s.f.feltTaken?[I('felt','拾起羊毛毡',553,768,99,75)]:[]),H('clapper','给钟舌加上软垫',838,457,171,117,{walkX:789}),H('frida','请芙丽达稳住旁路拉杆',1272,677,96,209,{walkX:1182}),H('david','请大卫稳住制动杆',1082,683,107,204,{walkX:994}),H('drive','摇动排洪飞轮',662,650,170,155,{walkX:608}),exit('next','爬上屋顶',1481,633,{walkX:1440})],
 act(g,id,item){if(id==='plan'){book(g,'bypass');one(g,'芙丽达','先旁路、再缓冲、两人稳住制动，最后转飞轮。顺序错了，水会替我们做决定。');}else if(id==='bypass'){if(f(g,'bypass'))return g.toast('旁路已经全开，压力稳定了。');if(!f(g,'bypassMounted')){if(!need(g,'crank',item,'阀轴锈得拧不动。借用北门带来的曲柄。'))return;return g.work(800,'对准低处阀轴，插入曲柄',()=>{set(g,'bypassMounted');g.toast('曲柄装好了。再转两圈，把旁路完全打开。');});}else{return g.work(1000,'缓缓转动曲柄，观察旁路压力',()=>{set(g,'bypassTurns',(g.s.f.bypassTurns||0)+1);g.sound('metal');if(g.s.f.bypassTurns>=2){set(g,'bypass');book(g,'bypass');g.toast('旁路打开，洪水终于有了第二个出口。曲柄已取回。');}else g.toast('压力在下降。再转一圈。');});}}else if(id==='felt'){if(f(g,'feltTaken'))return;return g.work(1200,'俯身捏住羊毛毡边缘，折好收入背包',()=>{set(g,'feltTaken');g.take('felt');});}else if(id==='clapper'){if(f(g,'damped'))return g.toast('钟舌已经包上羊毛毡。钟声不再刺耳。');if(!need(g,'felt',item,'直接敲击的钟舌很刺耳。地上的羊毛毡能缓冲撞击。'))return;if(!f(g,'bypass')){g.effect('shake');return say(g,[['大卫','压力表！它一下就冲上去了！'],['芙丽达','快松开。羊毛毡没丢。先打开左边的泄压旁路。']]);}g.work(2800,'扶稳检修梯，登上踏台包好钟舌，再回到地面',()=>{g.consume('felt');set(g,'damped');g.sound('warm');one(g,'希尔达','这次，钟可以说话，而不用大喊大叫了。');});}else if(id==='frida'){if(!f(g,'bypass')||!f(g,'damped'))return one(g,'芙丽达','先准备旁路和钟舌。我不能一边压着拉杆，一边帮你修它们。');set(g,'fridaHold');one(g,'芙丽达','我稳住旁路。你去转飞轮，别担心这边。');}else if(id==='david'){if(!f(g,'bypass')||!f(g,'damped'))return one(g,'大卫','先把水和钟处理好。我正在练习不害怕。');set(g,'davidHold');one(g,'大卫','我还是很害怕。但我会握住它。');}else if(id==='drive'){if(f(g,'heart'))return g.toast('排洪机构已经重新运转。');if(!f(g,'fridaHold')||!f(g,'davidHold'))return one(g,'希尔达','飞轮一转，拉杆就会弹回去。要请芙丽达和大卫一起帮忙。');if(!need(g,'fork',item,'飞轮的共鸣锁缺少音叉。小巨魔给的那支，正好能嵌进去。'))return;g.work(1800,'三个人一起，让老水钟重新运转',()=>{g.consume('fork');set(g,'heart');g.effect('water');g.sound('warm');say(g,[['希尔达','它听懂了！水正在流回山谷！'],['大卫','我们做到了？我们真的……'],['芙丽达','退潮的水撞上塔基了。楼梯下面也全是水。'],['希尔达','去屋顶！拉住彼此，别回头！']]);});}else if(id==='next')advance(g,f(g,'heart'),9,'离开前必须把泄洪机构修好。阿尔弗和孩子还在山上等我们。');else wrong(g);},
 objective:s=>!s.f.bypass?'用曲柄打开泄压旁路。':!s.f.damped?'用羊毛毡给钟舌缓冲。':!s.f.fridaHold||!s.f.davidHold?'让两位同伴分别稳住机构。':!s.f.heart?'把回声音叉嵌入飞轮，重新排洪。':'水正在涌来，爬上屋顶！',
 hints:s=>['直接停钟会锁住泄洪。先看左下的维护图。','曲柄用于左边的阀，羊毛毡用于钟舌。同伴可以稳住拉杆与制动。','装上曲柄后再转旁路两次，垫上羊毛毡，分别点芙丽达和大卫；最后选音叉并点中央飞轮。']};
@@ -2696,26 +2774,26 @@ Homeward.define('scene/9/logic', ['story/helpers','content/setpieces'], ({checkB
 });
 
 /* src/scenes/10-dawn-ridge/art.js */
-Homeward.define("scene/10/art", ["art/kit", "art/characters", "art/props"], ({P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
+Homeward.define("scene/10/art", ["content/staging", "art/kit", "art/characters", "art/props"], (Staging, {P,path,rect,circle,ell,sceneText:text,group,rep,rnd,icons,icon,defs,stars,mountains,pine,tree,grass,fern,rock,ground,windowArt,lamp,bell,gear,wheel,paper,bird,setVisualState,getVisualState}, {hilda,twig,person,troll,woff}, {itemArt,portrait,waterLines,mushrooms,skyline,particles}) => {
 function ridge(S){let f=S.f;let b=mountains(false,true)+rep(15,i=>pine(i*129-50,740-rnd()*65,.58+rnd()*.54,i%2?'#648a7f':'#5b817a'));
 b+=path('M-40 780 63 701 190 735 367 673 460 708 646 646 726 684 901 628 1072 676 1311 621 1630 723V940H-40Z','#75907a','#42695c',3)+path('M972 745 1111 705 1227 871 1208 919H953Z','#2d595c')+path('M-40 847Q369 803 609 758T949 754','none','#bec0a0',36)+path('M-40 853Q369 809 609 764T949 760','none','#8a9d7e',4);
-b+=group(1340,823,2.36,`${troll(0,0,1,true)}${f.reunited?path('M-58-43Q-114-81-174-55L-179-33Q-115-52-65-19Z','#829580','#3e675c',3):path('M-58-73Q-107-50-73-9L-51-17Z','#829580','#3e675c',3)}`);
+b+=group(1340,823,2.36,`${troll(0,0,1,true)}${path(Staging.ridgeArm(f.reunited?1:0),'#829580','#3e675c',3,'id="ridgeMotherArm"')}`);
 b+=rock(300,760,.75,'#8b9c7c')+rock(804,740,.85,'#879a7c')+rock(1036,730,1,'#889d7f');
-b+=[430,731,1025].map((x,i)=>{let y=[664,622,636][i];return path(`M${x} ${y+77}v-115`,'none','#5a7662',9)+path(`M${x-31} ${y-37}h65`,'none','#536e5d',8)+lamp(x,y,.7,!!f['trail'+i])+(!f['hood'+i]?path(`M${x-22} ${y-18}h43l19 26h-79Z`,'#a2ab80','#4a6e5a',2):path(`M${x+17} ${y-40}v71l19 5V${y-44}Z`,'#8c9c76','#4a6e5a',2));}).join('');
-b+=f.reunited?troll(1249,794,.95):troll(682,785,1.15);b+=person('阿尔弗',752,795,.75)+person('大卫',321,827,1.34)+person('芙丽达',848,785,1.38)+woff(117,538,.8)+path('M1305 228 1392 191 1473 250 1561 233 1647 317','none','#e2d8b0',2,'opacity=".5"');
+b+=[430,731,1025].map((x,i)=>{let y=[664,622,636][i];return path(`M${x} ${y+77}v-115`,'none','#5a7662',9)+path(`M${x-31} ${y-37}h65`,'none','#536e5d',8)+lamp(x,y,.7,!!f['trail'+i])+group(x,y,1,`<g id="trailHood${i}" transform="translate(${f['hood'+i]?14:0} 0) rotate(${f['hood'+i]?-70:0} 0 -12)">${path('M-22-18h43l19 26h-79Z','#a2ab80','#4a6e5a',2)}</g>`);}).join('');
+b+=`<g id="ridgeChild" transform="${Staging.ridgeChild(f.reunited?1:0)}">${troll(0,0,1)}</g>`;b+=person('阿尔弗',812,706,.75)+person('大卫',295,833,1.34)+person('芙丽达',575,807,1.38)+woff(235,430,.82)+path('M1305 228 1392 191 1473 250 1561 233 1647 317','none','#e2d8b0',2,'opacity=".5"');
 b+=pine(25,899,1.55,'#325e58')+fern(59,926,2.2,'#2f5d50')+fern(1525,898,2.4,'#3c6754')+mushrooms(951,794,1)+rect(0,660,1600,255,'url(#fog)')+particles(30);return b;}
 
 return ridge;
 });
 
 /* src/scenes/10-dawn-ridge/logic.js */
-Homeward.define("scene/10/logic", ["story/helpers", "content/catalog"], ({checkBeacon,H,I,exit,f,say,one,wrong,set,need,advance,book,pipeCheck,balance,lightTrail}, {items,notes}) => {
+Homeward.define("scene/10/logic", ["content/staging", "story/helpers", "content/catalog"], (Staging, {checkBeacon,H,I,exit,f,say,one,wrong,set,need,advance,book,pipeCheck,balance,lightTrail}, {items,notes}) => {
 
 return {
-name:'黎明之前的山脊',english:'THE LAST LIGHTS HOME',actLabel:'终幕 · 我们一起回去',mood:'雨停了 / 还有最后一个孩子要回家',start:544,ground:x=>x<550?833:x<990?807:810,chapter:['EPILOGUE','我们一起回去','最漫长的夜，也会走到有光的地方。'],
+name:'黎明之前的山脊',english:'THE LAST LIGHTS HOME',actLabel:'终幕 · 我们一起回去',mood:'雨停了 / 还有最后一个孩子要回家',start:512,ground:Staging.ridgeGround,chapter:['EPILOGUE','我们一起回去','最漫长的夜，也会走到有光的地方。'],
 intro:[['阿尔弗','这里！我们在这里！孩子和我都很安全。'],['芙丽达','城门就在谷对面。但是回城的桥被洪水冲断了。'],['希尔达','先把路灯点起来。至少，让它的妈妈看见它。']],
-hotspots:s=>[...[0,1,2].map((i)=>H('trail'+i,['近处','中间','远处'][i]+'的避风路灯',[430,731,1025][i],[653,611,625][i],82,149,{walkX:[418,722,978][i]})),H('child','带小巨魔去找妈妈',s.f.reunited?1249:682,s.f.reunited?732:715,114,162,{walkX:s.f.reunited?1080:685}),H('alfur','确认阿尔弗平安',752,765,63,102,{walkX:790}),exit('hand','沿着巨魔妈妈的手掌回家',1045,734,{walkX:1014}),H('sunrise','看一眼正在亮起来的天',1190,180,147,139,{walkX:867})],
-act(g,id,item){if(id.startsWith('trail'))lightTrail(g,id,item);else if(id==='child'){if(f(g,'reunited'))return one(g,'希尔达','它回到妈妈身边了。我们也该回到自己的妈妈身边。');if(![0,1,2].every(i=>f(g,'trail'+i)))return one(g,'阿尔弗','雾还很厚。先点亮三盏路灯，她就能看清这条小路。');g.work(1250,'陪小巨魔走完最后一段路',()=>{set(g,'reunited');g.sound('warm');say(g,[['大卫','它妈妈把手伸过来了。她是在……给我们搭桥？'],['芙丽达','不是每座桥都由石头组成。'],['希尔达','谢谢你。现在，每个孩子都能回家了。']]);});}else if(id==='alfur')one(g,'阿尔弗','已确认：同行人员全部到齐。附注：这是我最喜欢的一张表。');else if(id==='hand'){if(!f(g,'reunited'))return one(g,'希尔达','先让这个孩子回到妈妈身边。我们说好了。');book(g,'ridge');g.go(11);}else if(id==='sunrise')g.sketch('dawn','天终于亮了','害怕没有一夜之间消失。但天亮时，我们学会了牵着它继续走。');else wrong(g);},
+hotspots:s=>[...[0,1,2].map((i)=>H('trail'+i,['近处','中间','远处'][i]+'的避风路灯',[430,731,1025][i],[653,611,625][i],82,149,{walkX:[382,682,978][i]})),H('child','带小巨魔去找妈妈',s.f.reunited?1188:682,s.f.reunited?732:715,114,162,{walkX:s.f.reunited?1080:634}),H('alfur','确认阿尔弗平安',812,682,63,102,{walkX:762}),exit('hand','沿着巨魔妈妈的手掌回家',1045,734,{walkX:1014}),H('sunrise','看一眼正在亮起来的天',1190,180,147,139,{walkX:867})],
+act(g,id,item){if(id.startsWith('trail'))lightTrail(g,id,item);else if(id==='child'){if(f(g,'reunited'))return one(g,'希尔达','它回到妈妈身边了。我们也该回到自己的妈妈身边。');if(![0,1,2].every(i=>f(g,'trail'+i)))return one(g,'阿尔弗','雾还很厚。先点亮三盏路灯，她就能看清这条小路。');g.work(2400,'陪小巨魔走完最后一段路',()=>{set(g,'reunited');g.sound('warm');say(g,[['大卫','它妈妈把手伸过来了。她是在……给我们搭桥？'],['芙丽达','不是每座桥都由石头组成。'],['希尔达','谢谢你。现在，每个孩子都能回家了。']]);});}else if(id==='alfur')one(g,'阿尔弗','已确认：同行人员全部到齐。附注：这是我最喜欢的一张表。');else if(id==='hand'){if(!f(g,'reunited'))return one(g,'希尔达','先让这个孩子回到妈妈身边。我们说好了。');book(g,'ridge');g.go(11);}else if(id==='sunrise')g.sketch('dawn','天终于亮了','害怕没有一夜之间消失。但天亮时，我们学会了牵着它继续走。');else wrong(g);},
 objective:s=>![0,1,2].every(i=>s.f['trail'+i])?'转好灯罩，用提灯点亮三盏路灯。':!s.f.reunited?'陪孩子回到妈妈身边。':'沿巨魔妈妈的手掌，带着朋友回家。',
 hints:s=>['风会吹灭没有遮挡的灯，但提灯里还有火。','先点击路灯，把灯罩转到背风侧；再选背包里的提灯点亮它。','每盏路灯都先点一次转灯罩，再用提灯点一次。三盏都亮后点小巨魔，最后点伸来的手掌。']};
 });
@@ -2732,8 +2810,8 @@ Homeward.define("scene/11/logic", ["story/helpers", "content/catalog"], ({maybeF
 return {
 name:'茶还是温的',english:'THE TEA IS STILL WARM',actLabel:'尾声 · 所有人，平安归来',mood:'特洛尔堡 / 清晨 / 熟悉的肉桂与苹果',start:880,ground:x=>775,
 intro:[['妈妈','你们回来了。'],['希尔达','我们回来了。每一个人。'],['妈妈','那就先坐下。故事可以慢慢讲，茶也可以慢慢喝。']],
-hotspots:s=>[H('mom','拥抱妈妈',579,610,140,295,{walkX:724}),...[0,1,2].map(i=>H('tea'+i,['给大卫','给芙丽达','给自己'][i]+'倒一杯热茶',736+i*90,669-i%2*10,76,68,{walkX:766+i*55})),H('window','看看清晨的窗外',1070,434,283,304,{walkX:1064}),H('friends','问问朋友们',1072,670,106,193),H('journal','写下最后一页手记',1400,663,99,83,{walkX:1352})],
-act(g,id,item){if(id==='mom'){if(!f(g,'hug')){set(g,'hug');say(g,[['希尔达','对不起，茶等得比我说的久了。'],['妈妈','我知道。我听见钟声变轻的时候，就知道是你们。'],['希尔达','我们没有把谁落下。'],['妈妈','那就好。欢迎回家。']],()=>maybeFinish(g));}else one(g,'妈妈','不用急着开始下一次冒险。今天，先好好待在家里。');}else if(id.startsWith('tea')){if(f(g,id))return g.toast('茶杯里升起温暖的白雾。');return g.work(1300,'端稳茶壶，慢慢把热茶倒进杯里',()=>{set(g,id);g.sound('warm');g.toast(['大卫双手捧住了杯子，终于不再发抖。','芙丽达把杯子放稳，笑着松了口气。','苹果、肉桂。和出门前一样。'][Number(id.slice(-1))]);maybeFinish(g);});}else if(id==='window')g.sketch('return','同一扇窗','昨夜世界那么大。清晨，所有的路都回到了这扇窗。');else if(id==='friends')one(g,'芙丽达','下次探险，我们至少多带一卷绳子。大卫说，两卷。');else if(id==='journal'){if(f(g,'ended'))g.openEnding();else one(g,'希尔达','先给每个人倒好茶，再抱抱妈妈。这一页，要写“平安”。');}else wrong(g);},
+hotspots:s=>[H('mom','拥抱妈妈',579,610,140,295,{walkX:724}),...[0,1,2].map(i=>H('tea'+i,['给大卫','给芙丽达','给自己'][i]+'倒一杯热茶',736+i*90,669-i%2*10,76,68,{walkX:766+i*55})),H('window','看看清晨的窗外',1070,434,283,304,{walkX:1020}),H('friends','问问朋友们',1165,670,106,193,{walkX:1035}),H('journal','写下最后一页手记',1400,663,99,83,{walkX:1352})],
+act(g,id,item){if(id==='mom'){if(!f(g,'hug'))return g.work(1250,'走近妈妈，给她一个温暖的拥抱',()=>{set(g,'hug');g.sound('warm');say(g,[['希尔达','对不起，茶等得比我说的久了。'],['妈妈','我知道。我听见钟声变轻的时候，就知道是你们。'],['希尔达','我们没有把谁落下。'],['妈妈','那就好。欢迎回家。']],()=>maybeFinish(g));});return one(g,'妈妈','不用急着开始下一次冒险。今天，先好好待在家里。');}else if(id.startsWith('tea')){if(f(g,id))return g.toast('茶杯里升起温暖的白雾。');return g.work(1300,'端稳茶壶，慢慢把热茶倒进杯里',()=>{set(g,id);g.sound('warm');g.toast(['大卫双手捧住了杯子，终于不再发抖。','芙丽达把杯子放稳，笑着松了口气。','苹果、肉桂。和出门前一样。'][Number(id.slice(-1))]);maybeFinish(g);});}else if(id==='window')g.sketch('return','同一扇窗','昨夜世界那么大。清晨，所有的路都回到了这扇窗。');else if(id==='friends')say(g,[['芙丽达','下次探险，我们至少多带一卷绳子。大卫说，两卷。'],['大卫','还有一块干毛巾。不过……今天修好的每一扇门，我都记得。'],['阿尔弗','以及完整归档的同行记录。没有一个人掉队。']]);else if(id==='journal'){if(f(g,'ended'))g.openEnding();else one(g,'希尔达','先给每个人倒好茶，再抱抱妈妈。这一页，要写“平安”。');}else wrong(g);},
 objective:s=>s.f.ended?'留下来，听朋友把昨夜的故事慢慢讲完。':!s.f.hug?'给等了一夜的妈妈一个拥抱。':'给桌上的三只杯子倒好热茶。',
 hints:s=>['现在不用赶路了。安全归来，也值得慢慢体验。','和妈妈说话，给桌上的三只杯子倒茶。','点妈妈，再点桌面从左到右的三只杯子。手记最后会记录每个人的平安。']
 };
@@ -2754,7 +2832,7 @@ const advance=(g,condition,id,line)=>condition?g.go(id):one(g,'希尔达',line);
 const book=(g,k)=>g.note(k);
 function pipeCheck(g){if(f(g,'pumpPrimed')&&f(g,'filter')&&!f(g,'intakeClosed')&&Hydraulics.trace(g.s.valves,true).connected&&!f(g,'pump')){set(g,'pump');book(g,'surge');g.effect('water');say(g,[['希尔达','水走对路了。升降机应该能动了。'],['芙丽达','等一下……下面那扇旧闸，也被水压推开了。'],['大卫','所以那个越来越大的声音，不是好消息？']],()=>g.toast('远处传来沉重的轰鸣。必须继续向山里走。'));}}
 function balance(g,v){if(f(g,'lift'))return g.toast('轿厢已经停稳，安全锁扣住了配重。不要再拆动它。');return g.work(1150,'双手托住配重，放稳后再松手',()=>{g.s.weights=g.s.weights.includes(v)?g.s.weights.filter(x=>x!==v):[...g.s.weights,v];g.commit();g.sound('metal');let sum=g.s.weights.reduce((a,b)=>a+b,0);g.toast(sum===4?'横梁水平了。现在可以松开制动。':sum<4?'吊盘太轻，横梁向左沉。':'吊盘太重，横梁向右沉。');});}
-function lightTrail(g,id,item){let i=Number(id.slice(-1));if(item==='lamp'||item==='shade'){if(!f(g,'hood'+i))return one(g,'希尔达','风会从这里灌进去。先转一下灯罩。');set(g,'trail'+i);g.sound('warm');g.toast('一盏回家的灯亮了。');if([0,1,2].every(j=>f(g,'trail'+j)))say(g,[['大卫','山那边……也亮了。'],['阿尔弗','她看见我们了！现在带孩子走过去。']]);}else if(!f(g,'hood'+i)){set(g,'hood'+i);g.toast('灯罩转到了背风侧。可以用提灯点火了。');}else g.toast(f(g,'trail'+i)?'这盏灯会一直亮到天明。':'在背包里选小提灯，再点这盏路灯。');}
+function lightTrail(g,id,item){let i=Number(id.slice(-1));if(item==='lamp'||item==='shade'){if(!f(g,'hood'+i))return one(g,'希尔达','风会从这里灌进去。先转一下灯罩。');if(f(g,'trail'+i))return g.toast('这盏灯会一直亮到天明。');return g.work(820,'举起小提灯，引燃背风处的灯芯',()=>{set(g,'trail'+i);g.sound('warm');g.toast('一盏回家的灯亮了。');if([0,1,2].every(j=>f(g,'trail'+j)))say(g,[['大卫','山那边……也亮了。'],['阿尔弗','她看见我们了！现在带孩子走过去。']]);});}else if(!f(g,'hood'+i)){return g.work(680,'伸手拨动防风罩，挡住迎面吹来的山风',()=>{set(g,'hood'+i);g.sound('metal');g.toast('灯罩转到了背风侧。可以用提灯点火了。');});}else g.toast(f(g,'trail'+i)?'这盏灯会一直亮到天明。':'在背包里选小提灯，再点这盏路灯。');}
 
 function checkBeacon(g){if(Math.abs(g.s.beaconAngle-Math.atan2(Mechanisms.beacon.target[1]-Mechanisms.beacon.pivot[1],Mechanisms.beacon.target[0]-Mechanisms.beacon.pivot[0])*180/Math.PI)<Mechanisms.beacon.tolerance&&!f(g,'beacon')){set(g,'beacon');g.sound('warm');g.toast('光落在山脊星标上。云雾里，一只沃夫回应了你。');}else g.toast('调整光轴，让指针指向远处左上方的星标。');}
 
@@ -2770,7 +2848,7 @@ const notes={...catalog.notes};
 scenes.forEach((scene,index)=>{
   const detail=details[index],hotspots=scene.hotspots,act=scene.act;
   notes[detail.note]=[detail.title,detail.body];
-  scene.hotspots=state=>[...hotspots(state),{...detail,label:'仔细看看 · '+detail.title,kind:'observe'}];
+  scene.hotspots=state=>[...hotspots(state),{...detail,walkX:typeof detail.walkX==='function'?detail.walkX(state):detail.walkX,label:'仔细看看 · '+detail.title,kind:'observe'}];
   scene.act=(game,id,item)=>{
     if(id!=='detail')return act(game,id,item);
     game.note(detail.note);game.say([['希尔达',detail.body]]);

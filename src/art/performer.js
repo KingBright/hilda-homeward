@@ -6,8 +6,8 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
   function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
     ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
     ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
-    ${Cast.upper('希尔达',true)}
     <g id="rigRearArm">${limb('rigArmBack','#a95043',9)}${hand('Back')}</g>
+    ${Cast.upper('希尔达',true)}
     ${limb('rigArmFront','#c66d57',10)}
     <g id="rigTool" pointer-events="none"></g>${hand('Front')}
   </g>`;}

@@ -19,7 +19,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
   }
   function sample({x=0,y=0,face=1,scale=1.36,time=0,distance=0,moving=false,walkAmount=moving?1:0,reduced=false,score=null,frame=null}={}){
     if(![x,y,face,scale,time,distance].every(Number.isFinite)||scale<=0)throw new TypeError('Invalid actor coordinates');
-    if(!score){
+    if(!score||score.kind==='walk'){
       const gait=Walk.sample({distance,scale,amount:walkAmount,reduced});
       // Locomotion owns the whole body; rare idle gestures never alter walking elbows.
       const idle=gait.amount===0?Idle.sample({who:'希尔达',time,reduced}):null;

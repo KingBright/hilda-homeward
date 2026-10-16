@@ -3,12 +3,12 @@ Homeward.define('scene/1/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
   mood:'雨丝落下 / 修好的门，也要能安全地留在身后',start:375,ground:()=>793,
   intro:[['大卫','我只是来帮忙修门的。真的。'],['希尔达','当然。先把门修好，我们再决定走多远。'],['大卫','这句话听起来，比“顺便看看森林”可靠一点。']],
   hotspots:s=>[
-    H('david','询问大卫',735,688,108,183),
+    H('david','询问大卫',735,688,108,183,{walkX:665}),
     H('awning','向下拉绳，卷起雨棚',962,s.f.awning?677:601,72,114,{drag:'awning',walkX:931}),
     ...(s.f.awning&&!s.f.crankTaken?[I('crank','拿起黄铜曲柄',845,614,79,80,{walkX:806})]:[]),
     H('wheel',s.f.gateOpen?'检查锁定的棘爪':'转动城门转轮',1169,653,116,120,{walkX:1145}),
-    exit('gate','穿过北门',1380,611),exit('back','回家',364,651,{walkX:448}),
-    H('puddle','观察水洼中的倒影',953,824,234,60)
+    exit('gate','穿过北门',1380,611,{walkX:1335}),exit('back','回家',364,651,{walkX:448}),
+    H('puddle','观察水洼中的倒影',953,824,234,60,{walkX:880})
   ],
   act(g,id,item){
     if(id==='david')return one(g,'大卫',f(g,'gateOpen')?'看，三格都亮了，棘爪稳稳咬住齿轮了。我跟你一起去。':'曲柄在摊位上。先拉下右边的绳圈，把湿透的棚布卷起来。');

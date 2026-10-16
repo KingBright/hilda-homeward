@@ -1,8 +1,9 @@
 /** Three authored dioramas. Only transient presentation is animated here; state lives in scenes. */
-Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
+Homeward.define('art/chapter-life', ['art/kit','art/finishing','content/staging'], (K,F,Staging) => {
   const {path,rect,circle,ell,sceneText:text,group,rep,fern,gear}=K;
   const defs=`<defs>
     <clipPath id="northGateArch"><path d="M1240 784V464Q1249 327 1381 327T1516 464V784Z"/></clipPath>
+    <clipPath id="towerGateArch"><path d="M1168 828V303q32-126 191-126t178 126v525Z"/></clipPath>
     <linearGradient id="chapterCopper" x2=".2" y2="1"><stop stop-color="#d3be89"/><stop offset=".34" stop-color="#9e8b60"/><stop offset=".6" stop-color="#567d70"/><stop offset="1" stop-color="#b49c6d"/></linearGradient>
     <linearGradient id="chapterBeam" x1=".6" y1="0" x2=".3" y2="1"><stop stop-color="#f5d196" stop-opacity=".12"/><stop offset="1" stop-color="#edc59b" stop-opacity="0"/></linearGradient>
     <radialGradient id="chapterPool"><stop stop-color="#c5cfb7" stop-opacity=".32"/><stop offset="1" stop-color="#6aa498" stop-opacity="0"/></radialGradient>
@@ -63,15 +64,49 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing'], (K,F) => {
       });
     }
     if(c.effect==='intake')set('intakeRotor','transform',`rotate(${(c.from+(c.from?-p:p))*90} 350 682)`);
-    if(c.effect==='filter'){set('filterLeaves','transform',`translate(${-12*p} ${p*36})`);set('filterLeaves','opacity',1-p);}
+    if(c.effect==='filter'){set('filterLeaves','transform',`translate(${-12*p} ${p*36})`);set('filterLeaves','opacity',1-p);set('filterPole','transform',`translate(${-18*p} ${-26*p}) rotate(${-15*p})`);set('filterPole','opacity',q.progress>=.55?0:1);}
     if(c.effect==='pipe')root.querySelectorAll(`[data-pipe-rotor="${c.node}"]`).forEach(el=>el.setAttribute('transform',`rotate(${(c.from+p)*90})`));
     if(c.effect==='prime'){set('primeHandle','transform',`rotate(${-p*172} 0 8)`);set('pressureNeedle','transform',`rotate(${p*120.3} 0 -28)`);}
+    if(c.effect==='gondolaWeight'){
+      const curSum=(state.weights||[]).reduce((a,v)=>a+v,0),nextSum=curSum+(c.removing?-c.weightValue:c.weightValue);
+      set('gondolaBeam','transform',`rotate(${((curSum+(nextSum-curSum)*p)-4)*3} 0 -36)`);
+    }
+    if(c.effect==='gondolaLift'){
+      set('gondolaBrake','transform',`rotate(${p*160} 1029 633)`);
+      set('gondolaCabin','transform',`translate(${1218-24*p} ${575-24*p})`);
+    }
+    if(c.effect==='towerAlign'||c.effect==='towerDoor'){
+      const base=c.effect==='towerAlign'?c.from:state.f.gearIndex||0,delta=c.effect==='towerAlign'?((base+1)%4-base)*p:p*2;
+      root.querySelectorAll('[data-tower-gear]').forEach(el=>{
+        const k=el.dataset.towerGear,cx=el.dataset.cx,cy=el.dataset.cy,mul=k==='gearM'?1:k==='gearS'?-12/10:-12/14;
+        el.setAttribute('transform',`rotate(${(base+delta)*90*mul} ${cx} ${cy})`);
+      });
+      set('towerWitnessMark','transform',`rotate(${delta*90} 1090 486)`);
+      if(c.effect==='towerDoor'){
+        set('towerLeverArm','transform',`rotate(${p*76} 0 -26)`);
+        set('towerGateDoor','transform',`translate(0 ${-472*p})`);
+      }
+    }
+    if(c.effect==='clockBypass'&&c.mounted){
+      set('clockBypassWheel','transform',`rotate(${p*58} 0 0)`);
+      const turns=(c.from||0)+p;
+      set('clockGaugeNeedle','transform',`rotate(${Math.min(1,turns/2)*90} 0 0)`);
+    }
+    if(c.effect==='clockDrive'){
+      set('clockDriveWheel','transform',`rotate(${p*180} 662 650)`);
+    }
+    if(c.effect==='trailHood')set('trailHood'+c.node,'transform',`translate(${p*14} 0) rotate(${-70*p} 0 -12)`);
+    if(c.effect==='ridgeReunite'){
+      set('ridgeChild','transform',Staging.ridgeChild(p));
+      set('ridgeMotherArm','d',Staging.ridgeArm(p));
+    }
     let visual='';
     if(c.effect==='grapple'&&p>0&&p<1){const x=545+p*550,y=648+(556-648)*p-Math.sin(p*Math.PI)*166;
       visual=path(`M521 677Q${(521+x)/2} ${y+50} ${x} ${y}`,'none','#cab888',3)+group(x,y,1,path('M-9-5Q6-14 9 0Q9 13-5 9','none','#e1d8b4',5));
     }
     if(c.effect==='branch'&&p>0)visual=path(`M534 ${496+p*146}L505 690`,'none','#cfbb85',3);
     if(c.kind==='clear'&&p>.25&&p<.85)visual=rep(4,i=>ell(439+i*13,661+(p-.25)*90+i*7,6,3,i%2?'#bba572':'#7d936f'));
+    if(c.effect==='trailLight'&&p>.2)visual=circle(c.target[0],c.target[1]-12,18*p,'#ffe3a055');
     if(fx.innerHTML!==visual)fx.innerHTML=visual;
   }
   return {defs,scenery,animate};

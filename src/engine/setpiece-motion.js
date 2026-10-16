@@ -1,10 +1,11 @@
 /** Pure, seekable staging. An interrupted performance has no permanent effects. */
-Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpieces'], ({smooth}, Stage) => {
+Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpieces','content/staging'], ({smooth}, Stage, Staging) => {
   const segment=(p,a,b)=>smooth((p-a)/(b-a));
   const mix=(a,b,t)=>a+(b-a)*t;
   function actor(base,action,reduced=false) {
     if(!action)return {...base};
     const c=action.score,p=action.sample().progress,e=action.sample().effort;
+    if(c.effect==='ridgeReunite'){const t=action.sample().effort,x=mix(base.x,c.destinationX,t);return {...base,x,y:Staging.ridgeGround(x),travel:Math.abs(x-base.x),moving:t>0&&t<1,walkAmount:segment(p,.18,.3)*(1-segment(p,.72,.86))};}
     if(c.effect==='clockPad')return {...base,y:mix(base.y,c.accessY,segment(p,.10,.43)*(1-segment(p,.70,.97)))};
     if(c.effect==='ladderSlide')return {...base,x:c.origin.x+(c.to-c.from)*e};
     if(c.effect==='archiveBook') {
@@ -17,7 +18,7 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
   }
   function cast(state,action,reduced=false) {
     const f=state.f,c=action?.score,p=action?.sample().progress??0;
-    let david=f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
+    let david=f.fridaSafe?[980,Stage.roofGround(980)]:f.roofBrace?[...Stage.roof.brace]:f.davidSafe?[...Stage.roof.safe]:[...Stage.roof.david];
     let frida=f.fridaSafe?[842,759]:[1160,773],twig=[929,723];
     if(c?.effect==='roofRescue') {
       const t=segment(p,.34,.90);david=[mix(670,Stage.roof.safe[0],t),mix(710,Stage.roof.safe[1],t)-Math.sin(t*Math.PI)*(reduced?18:58)];
@@ -27,6 +28,7 @@ Homeward.define('engine/setpiece-motion', ['engine/action-track','content/setpie
     }
     if(c?.effect==='roofLever') {
       const t=segment(p,.43,.84);frida=[mix(1160,842,t),mix(773,759,t)];
+      const retreat=segment(p,.64,.96),x=mix(Stage.roof.brace[0],980,retreat);david=[x,Stage.roofGround(x)];
     }
     if(c?.effect==='roofTwig') {
       const t=segment(p,.23,.85);twig=[mix(929,c.origin.x+45,t),mix(723,c.origin.y,t)-Math.sin(t*Math.PI)*(reduced?18:64)];

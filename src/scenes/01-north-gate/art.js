@@ -8,7 +8,7 @@ b+=path(`M962 388v${f.awning?278:204}`,'none','#b6a97b',5)+circle(962,398,16,'#4
 b+=rect(664,627,240,122,'#4a5c4e',8)+rep(6,i=>rect(670+i*38,631,33,110,'#6d7760',3,'#3e5751',2))+ell(847,630,37,14,'#9da37e')+(!f.crankTaken&&f.awning?`<g id="northCrank">${group(845,614,.8,itemArt('crank').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'');
 b+=path('M1064 84 1243 40 1574 70 1610 772H1033Z','url(#wall)','#23484e',4)+rect(1076,117,524,637,'url(#brick)')+path('M1215 778V459Q1222 295 1380 299 1526 301 1539 459V778Z','#254b55','#a2aa8a',17)+path('M1240 784V464Q1249 327 1381 327T1516 464V784Z','#152f40');
 b+=`<g clip-path="url(#northGateArch)"><g id="gateBars" transform="translate(0 ${-Math.min(3,f.gateTurns||0)*335/3})">${rep(9,i=>path(`M${1254+i*30} 336V799`,'none','#496c68',10))}${path('M1245 452h268M1245 605h268M1245 744h268','none','#557871',10)}</g></g>`;
-b+=`<g id="gateRotor">`+wheel(1169,653,55,(f.gateTurns||0)*65)+(!f.crankMounted?circle(1169,653,13,'#203f47'):path('M1169 653h38v-25','none','#dec493',8))+`</g>`;
+b+=`<g id="gateRotor">`+wheel(1169,653,55,(f.gateTurns||0)*65)+(!f.crankMounted||f.gateOpen?circle(1169,653,13,'#203f47'):path('M1169 653h38v-25','none','#dec493',8))+`</g>`;
 b+=path('M100 70Q544 201 1146 139T1620 201','none','#263e47',3)+rep(8,i=>lamp(217+i*169,126+Math.sin(i*.56)*25,.32,true));
 b+=ground(776,'#597975')+rep(95,()=>{let x=rnd()*1600,y=782+rnd()*130;return path(`M${x} ${y}q17-8 35 0v10h-32Z`,'none','#213f4926',2);})+ell(926,825,196,22,'#749991')+ell(251,828,109,15,'#73988d')+waterLines(842,12)+person('大卫',735,775,1.34)+lamp(1110,379,.7,true);
 b+=fern(43,871,1.8,'#294c4a')+grass(1521,813,1.4,'#254c4d')+particles(18);return b;}

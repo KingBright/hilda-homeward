@@ -46,3 +46,34 @@ test('Species blinking stays bounded, deterministic and respects reduced motion'
   for(let i=0;i<1200;i++){const a=S.sample({kind,time:i/100}),b=S.sample({kind,time:i/100});assert.equal(JSON.stringify(a),JSON.stringify(b));assert.ok(a.blink>=.059&&a.blink<=1);low=Math.min(low,a.blink);high=Math.max(high,a.blink);}
   assert.ok(low<.1&&high===1,kind);const still=S.sample({kind,reduced:true});for(const time of [0,3,15])assert.equal(JSON.stringify(S.sample({kind,time,reduced:true})),JSON.stringify(still));}
 });
+test('Performer rear arm renders behind torso, observation details are bespoke, and ridge ground is continuous',()=>{
+ const P=H.use('art/performer').markup(),F=H.use('art/finishing'),Props=H.use('art/props'),State=H.use('engine/state'),story=H.use('story');
+ assert.ok(P.indexOf('id="rigRearArm"')<P.indexOf('id="rigUpper"')&&P.indexOf('id="rigRearArm"')<P.indexOf('id="rigArmFront"'));
+ for(let sc=2;sc<=8;sc++){const s=State.fresh();s.scene=sc;const obs=F.scenery(s);assert.ok(obs.includes('id="scene-observation"'),`scene ${sc}`);assert.ok(!obs.includes('M-15-9H15V9H-15Z'),`scene ${sc} fallback envelope`);}
+ assert.notEqual(Props.itemArt('rope'),Props.itemArt('line'));
+ for(const w of ['weight1','weight2','weight3'])assert.match(Props.itemArt(w),/<svg/);
+ const g10=story.scenes[10].ground;
+ for(const x of [480,620,990,1070])assert.ok(Math.abs(g10(x-.01)-g10(x+.01))<.01);
+});
+
+test('Placed gondola weights remain individually clickable at their rendered positions',()=>{
+ const state=H.use('engine/state').fresh(),story=H.use('story'),geometry=H.use('content/mechanisms');state.scene=5;
+ for(const weights of [[],[1],[3,1],[1,2,3]]){
+  state.weights=weights;
+  const hotspots=story.scenes[5].hotspots(state);
+  for(const value of [1,2,3]){
+   const [x,y]=geometry.gondolaWeight(state,value);
+   assert.equal(R.pick(hotspots,{x,y}).id,'weight'+value);
+  }
+ }
+});
+test('Ridge escort finishes on the saved destination and rooftop support ends without a cast jump',()=>{
+ const State=H.use('engine/state'),Motion=H.use('engine/setpiece-motion'),Stage=H.use('content/staging'),Score=H.use('content/choreography'),Track=H.use('engine/action-track').ActionTrack;
+ const s=State.fresh();s.scene=10;const base={x:634,y:Stage.ridgeGround(634)},score=Score.score(10,'child',s,null),action=new Track(2400,score);
+ assert.equal(Motion.actor(base,action).x,base.x);action.advance(2400);
+ for(const reduced of [false,true]){const final=Motion.actor(base,action,reduced);assert.equal(final.x,score.destinationX);assert.equal(final.y,Stage.ridgeGround(final.x));assert.equal(final.walkAmount,0);}
+ s.scene=9;s.f.roofBrace=true;s.f.davidSafe=true;
+ const rescue=new Track(1500,{effect:'roofLever'});rescue.advance(1500);
+ const endpoint=Motion.cast(s,rescue);s.f.fridaSafe=true;
+ assert.deepEqual(endpoint,Motion.cast(s,null));
+});

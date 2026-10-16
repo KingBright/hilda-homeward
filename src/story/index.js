@@ -5,7 +5,7 @@ const notes={...catalog.notes};
 scenes.forEach((scene,index)=>{
   const detail=details[index],hotspots=scene.hotspots,act=scene.act;
   notes[detail.note]=[detail.title,detail.body];
-  scene.hotspots=state=>[...hotspots(state),{...detail,label:'仔细看看 · '+detail.title,kind:'observe'}];
+  scene.hotspots=state=>[...hotspots(state),{...detail,walkX:typeof detail.walkX==='function'?detail.walkX(state):detail.walkX,label:'仔细看看 · '+detail.title,kind:'observe'}];
   scene.act=(game,id,item)=>{
     if(id!=='detail')return act(game,id,item);
     game.note(detail.note);game.say([['希尔达',detail.body]]);

@@ -10,7 +10,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
         path('M-19 20H10L17 1H-9Z','#586b50','#253f3c',3)+circle(-6,5,7,'#cdb780','#314b40',2)+
         `<g id="archiveBrakePedal" transform="rotate(${f.ladderBrake?26:-25} -6 5)">${path('M-6 5L19-8','none','#c1a971',7)}${rect(8,-14,28,11,'#cbb98d',3,'#385347',2)}</g>`+
         circle(26,22,4,f.ladderBrake?'#e3c886':'#425b48','#cbc29a',1))+`</g>`;
-      b+=rep(12,i=>group(618+(i%4)*175,436+Math.floor(i/4)*113,1,
+      b+=rep(12,i=>group(662+(i%4)*175,436+Math.floor(i/4)*113,1,
         rect(-16,-5,32,10,'#cfbf8b',2,'#52634c',1)+text(0,2,String(17+i).padStart(3,'0'),6,'#52634c')));
       b+=path('M428 158 500 167 876 827 627 827Z','url(#chapterBeam)');
       b+=group(590,775,1,rect(-30,-61,61,63,'#8b8060',3,'#345348',2)+rect(-30,-61,61,63,'url(#chapterWood)')+path('M-33-48H33M-33-16H33','none','#b9aa78',3)+text(0,-30,'待归还',10,'#d3c293'));
@@ -23,7 +23,7 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       })+`</g>`;
       if(f.davidSafe)b+=path('M425 652Q596 675 767 644','none','#e0c89a',5)+path('M755 742V632','none','#7d998c',7);
       b+=path('M1000 752l24-47 27 49Z','#b0a980','#345458',3)+path('M1013 743l11-22 13 24Z','#46655f');
-      b+=`<g id="roofBraceHands" opacity="${f.roofBrace?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#b18545',12)}${circle(1025,716,5,'#efc8a1','#315050',1.5)}</g>`;
+      b+=`<g id="roofBraceHands" opacity="${f.roofBrace&&!f.fridaSafe?1:0}">${path('M1052 704Q1037 703 1025 716M1090 704Q1065 717 1031 721','none','#b18545',12)}${circle(1025,716,5,'#efc8a1','#315050',1.5)}</g>`;
       b+=path('M1220 633V591L1250 569','none','#2c4548',12)+path('M1220 633V591L1250 569','none','#a9a87f',6);
       b+=circle(1220,657,41,'#2c4950','#849d8b',3)+`<g id="roofControlWheel" transform="rotate(${s.beaconAngle??-65} 1220 657)">${circle(1220,657,29,'#4d726b','#c4b384',6)}${path('M1191 657h58m-29-29v58','none','#b8aa7c',5)}${circle(1249,657,7,'#e6c790','#3c5850',2)}</g>`;
       b+=group(1189,617,1,path('M0-9 3-3 9-2 4 3 6 9 0 5-6 9-4 3-9-2-3-3Z','#e6d7a2','#395659',1));
@@ -55,8 +55,8 @@ Homeward.define('art/setpiece-life', ['art/kit','art/finishing','content/setpiec
       for(const [id,point] of [['roofDavid',cast.david],['roofFrida',cast.frida],['roofTwig',cast.twig]])set(id,'transform',`translate(${point[0].toFixed(2)} ${point[1].toFixed(2)})`);
       const lift=s.f.fridaSafe?1:c?.effect==='roofLever'?stage(.12,.47):0;
       set('roofBeam','transform',`rotate(${lift*24} 1225 720)`);
-      set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.roofDone?1:0);
-      const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.roofDone&&c?.effect!=='roofBoard'?'hidden':'';
+      set('roofBraceHands','opacity',s.f.roofBrace&&!s.f.fridaSafe?1:0);
+      const arms=node('roofDavid')?.querySelector('.person-arms');if(arms)arms.style.visibility=s.f.roofBrace&&!s.f.fridaSafe&&c?.effect!=='roofBoard'?'hidden':'';
       const angle=preview?.kind==='beacon'?preview.angle:c?.effect==='roofBeacon'?c.from+(c.to-c.from)*e:s.beaconAngle;
       set('roofLightBeam','transform',`rotate(${angle} 1292 490)`);set('roofOpticPointer','transform',`rotate(${angle} 1292 490)`);set('roofControlWheel','transform',`rotate(${angle} 1220 657)`);
       if(c?.effect==='roofAnchor')fx=path(`M${415+Math.sin(p*16)*10} ${653+e*14}q-34-31-1-37t26 34q-17 24-31 4`,'none','#ddc390',4);

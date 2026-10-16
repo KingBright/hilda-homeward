@@ -82,8 +82,8 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
       const mood = working && entry === hero ? 'resolve' : Cast.expression(scene, flags, entry.who);
       const walking=entry.slot?.dataset.gait==='walking'||entry===hero&&moving;
       const reserved=!!entry.slot?.classList.contains('bracing')
-        ||entry.slot?.id==='roofDavid'&&flags.roofBrace&&!flags.roofDone
-        ||scene===8&&((entry.who==='大卫'&&flags.leverFriend)||(entry.who==='芙丽达'&&flags.brakeFriend))
+        ||entry.slot?.id==='roofDavid'&&flags.roofBrace&&!flags.fridaSafe
+        ||scene===8&&((entry.who==='大卫'&&flags.davidHold)||(entry.who==='芙丽达'&&flags.fridaHold))
         ||working&&(entry===hero||scene===8||scene===9);
       const idle=Idle.sample({who:entry.who,time,scene,reduced,reserved,moving:walking,speaker:role==='speaker'});
       const pose = sample({who: entry.who, time, role, mood, gaze, typing, character, reduced});

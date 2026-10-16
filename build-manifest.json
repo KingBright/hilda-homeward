@@ -1,5 +1,5 @@
 {
-  "version": "3.8.0",
+  "version": "3.9.0",
   "modules": [
     "src/engine/modules.js",
     "src/art/cast-acting.js",
@@ -71,6 +71,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 316240,
-  "sha256": "20ff93563b98926a973c204b8e8b82333e0f7c048385146f0bed5abbc601fde8"
+  "bytes": 326877,
+  "sha256": "d5c55afcca7bcf9d6963d51bb91952e7cde6ea30db9a80d4bd4bd91cc07118b7"
 }
