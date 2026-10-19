@@ -1,0 +1,173 @@
+/* Phaser 4 HD Stage Layer & Machinarium Contraption Workbench */
+#phaserStage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+#phaserStage canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  object-fit: cover;
+}
+
+/* Machinarium-Style Doodle Thought Bubble above Hero */
+#thoughtBubble {
+  position: absolute;
+  left: var(--thought-x, 50%);
+  top: var(--thought-y, 32%);
+  width: 236px;
+  height: 112px;
+  transform: translate(-38%, -100%) scale(1);
+  transform-origin: 20% 95%;
+  pointer-events: none;
+  z-index: 26;
+  filter: drop-shadow(0 10px 22px rgba(7, 20, 26, 0.52));
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#thoughtBubble.hidden {
+  opacity: 0;
+  transform: translate(-38%, -92%) scale(0.84);
+  display: none;
+}
+
+#thoughtBubble .doodle-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Native Modal Dialog for Machinarium Close-Up Contraption Workbench */
+dialog#contraptionModal {
+  margin: auto;
+  padding: 0;
+  border: 2px solid #c9b079;
+  border-radius: 18px;
+  background: linear-gradient(165deg, #1b3840 0%, #12272e 100%);
+  color: #f3e4c2;
+  max-width: min(820px, 94vw);
+  width: 780px;
+  max-height: 90vh;
+  box-shadow: 0 24px 64px rgba(4, 14, 18, 0.78), inset 0 1px 0 rgba(255, 240, 200, 0.22);
+  overflow: auto;
+}
+
+dialog#contraptionModal:modal {
+  /* MANDATORY per prevent-page-scroll-under-modal-dialog: contain scroll chaining inside the modal */
+  overscroll-behavior: contain;
+}
+
+dialog#contraptionModal::backdrop {
+  /* MANDATORY per prevent-page-scroll-under-modal-dialog: make ::backdrop a non-scrollable scroll container */
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(8, 21, 27, 0.68);
+  backdrop-filter: blur(4px);
+}
+
+.contraption-shell {
+  padding: 20px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contraption-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid rgba(212, 188, 134, 0.24);
+  padding-bottom: 10px;
+}
+
+.contraption-header .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: #d9bc82;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.contraption-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #f9ecd0;
+}
+
+.contraption-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #bfd0ca;
+  line-height: 1.45;
+}
+
+.contraption-canvas-wrap {
+  position: relative;
+  border-radius: 12px;
+  border: 1.5px solid rgba(210, 184, 128, 0.42);
+  overflow: hidden;
+  background: #142a31;
+}
+
+#contraptionCanvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 720 / 320;
+  display: block;
+  cursor: pointer;
+}
+
+.contraption-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.contraption-step-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 188, 134, 0.32);
+  background: rgba(20, 46, 54, 0.86);
+  color: #f2e2be;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+
+.contraption-step-btn:hover:not(:disabled) {
+  border-color: #f0d290;
+  background: rgba(34, 72, 82, 0.92);
+  transform: translateY(-1px);
+}
+
+.contraption-step-btn.done {
+  border-color: rgba(132, 218, 172, 0.48);
+  background: rgba(26, 62, 52, 0.65);
+  color: #b4f0cf;
+}
+
+.contraption-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+.contraption-engine-badge {
+  font-size: 11px;
+  color: #9cb6b2;
+  letter-spacing: 0.04em;
+}

@@ -10,4 +10,5 @@ tests/fixtures.json
 tests/failure-state.json
 native-storage-report.json
 regression-report.json
+phaser-contraptions-report.json
 tests/regression-failure-*.json

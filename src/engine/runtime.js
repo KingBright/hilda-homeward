@@ -1,4 +1,4 @@
-Homeward.define("engine/runtime", ["engine/motion-policy", "art/species-life", "engine/readability", "engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (MotionPolicy, SpeciesLife, Readability, Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
+Homeward.define("engine/runtime", ["engine/phaser-stage", "engine/contraptions", "engine/motion-policy", "art/species-life", "engine/readability", "engine/animal-life", "art/creature-life", "content/staging", "art/cast-acting", "art/cast-motion", "engine/setpiece-motion", "content/setpieces", "art/setpiece-life", "engine/action-track", "content/choreography", "art/performer", "art/chapter-life", "art", "story", "engine/state", "engine/audio", "engine/dom", "engine/storage", "content/items", "engine/camera"], (PhaserStage, Contraptions, MotionPolicy, SpeciesLife, Readability, Animal, CreatureLife, Staging, CastActing, CastMotion, SetpieceMotion, Stage, SetpieceLife, {ActionTrack}, Choreography, Performer, ChapterLife, Art, Story, {fresh,validate,boolFlags,numericFlags,sketches}, Soundscape, {patchSvg}, SaveStore, Items, {focusFrame}) => {
 const $=id=>document.getElementById(id), KEY='hilda-echoes-homeward-v3', BACKUP=KEY+'-backup';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -9,12 +9,13 @@ catch{storageOK=false;store=new SaveStore({getItem(){return null;},setItem(){thr
 let dragPreview=null;
 let inspection=false,renderQueued=false,rainNodes=[],currentInteraction=null,walkDistance=0,walkAmount=0;
 
-let started=false,titleMode=true,selected=null,bagOpen=false,modal=false,dialogue=null,activeHotspots=[],pendingMove=null,activeWork=null,sequenceActive=false,locked=false;
+let started=false,titleMode=true,selected=null,bagOpen=false,modal=false,dialogue=null,activeHotspots=[],pendingMove=null,activeWork=null,sequenceActive=false,locked=false,thoughtOpen=false,thoughtTimer=null,contraptionZones=[];
 let hero={x:790,y:822,face:1},petX=714,saveTimer,toastTimer,labelTimer,revealTimer,chapterTimer,transitionTimer,saveIndicatorTimer;
 const pet=new Animal.Follower(petX,1);
 let camera={x:0,y:0,w:1600,h:900,manual:false},input=null,inventoryDrag=null,frameTime=0,elapsed=0,sceneClock=0,lastRenderTime=0,focusBeforePanel=null;
 let panelReturn='',pauseRestoreFocus=null,sceneRequest=0;
-const ui={game:$('game'),world:$('world'),viewport:$('viewport')};
+const ui={game:$('game'),world:$('world'),viewport:$('viewport'),phaserStage:$('phaserStage'),thoughtBubble:$('thoughtBubble'),contraptionModal:$('contraptionModal')};
+PhaserStage.stage.mount(ui.phaserStage);
 let audio=null;
 function sound(kind){
  if(!s.settings.sound||document.hidden)return;
@@ -108,11 +109,13 @@ function updateActors(){
  p.setAttribute('transform',`translate(${presentation.x.toFixed(1)} ${presentation.y.toFixed(1)})`);
  p.setAttribute('class',(pendingMove?'walking ':'')+(activeWork?'working ':''));
  $('heroFacing').setAttribute('transform',`scale(${hero.face} 1)`);
- const t=$('twigPosition');if(t){
+ const t=$('twigPosition');
+ let petDrawX=petX,petDrawY=ground(petX,s)+1;
+ if(t){
   const aboard=index===9&&s.f.roofDone,boarding=activeWork?.score.effect==='roofBoard'&&!s.settings.reduced;
   const k=aboard?1:boarding?SetpieceMotion.segment(activeWork.sample().progress,.14,.78):0;
-  const px=petX+(1345-petX)*k,py=ground(petX,s)+1+(590-ground(petX,s)-1)*k;
-  t.setAttribute('transform',`translate(${px.toFixed(3)} ${py.toFixed(3)})`);
+  petDrawX=petX+(1345-petX)*k;petDrawY=ground(petX,s)+1+(590-ground(petX,s)-1)*k;
+  t.setAttribute('transform',`translate(${petDrawX.toFixed(3)} ${petDrawY.toFixed(3)})`);
  }
  const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
  if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
@@ -133,6 +136,27 @@ function updateActors(){
  CastActing.paint(ui.world,elapsed,acting);SpeciesLife.paint(ui.world,elapsed,acting);
  if(dialogue){CastActing.paint($('portrait'),elapsed,{...acting,portrait:true,working:false,moving:false});CreatureLife.paint($('portrait'),elapsed,{...acting,portrait:true,speaking:true});SpeciesLife.paint($('portrait'),elapsed,{...acting,portrait:true,working:false});}
  if($('workRing'))$('workRing').setAttribute('transform',`translate(${hero.x} ${hero.y-245})`);
+ PhaserStage.stage.syncFrame({
+  state:s,
+  titleMode,
+  elapsed,
+  hero:presentation,
+  petSnapshot:{...pet.snapshot(),x:petDrawX,y:petDrawY},
+  camera,
+  moving:presentation.moving??!!pendingMove,
+  walkDistance:walkDistance+(presentation.travel||0),
+  walkAmount:presentation.walkAmount??walkAmount,
+  activeWork,
+  selected,
+  paused:isPaused()
+ });
+ if(thoughtOpen&&ui.thoughtBubble){
+  const r=ui.world.getBoundingClientRect();
+  const sx=r.left+(presentation.x-camera.x)/camera.w*r.width;
+  const sy=r.top+(presentation.y-210-camera.y)/camera.h*r.height;
+  ui.thoughtBubble.style.setProperty('--thought-x',`${clamp(sx,120,innerWidth-140).toFixed(1)}px`);
+  ui.thoughtBubble.style.setProperty('--thought-y',`${clamp(sy,120,innerHeight-140).toFixed(1)}px`);
+ }
 }
 
 function isPaused(){return modal||document.hidden||titleMode;}
@@ -245,13 +269,89 @@ function work(ms,label,after,override={}){
  ui.game.classList.add('performing');
  actionLabel(label,true);updateActors();
 }
-function effect(kind){if(s.settings.reduced)return;if(kind==='shake'||kind==='water'){ui.viewport.animate?.([{transform:'translate(0,0)'},{transform:'translate(-4px,2px)'},{transform:'translate(4px,-2px)'},{transform:'translate(-2px,1px)'},{transform:'translate(0,0)'}],{duration:620});}if(kind==='water'&&s.scene!==0){$('flash').classList.remove('lightning');void $('flash').offsetWidth;$('flash').classList.add('lightning');} }
+function effect(kind){PhaserStage.stage.triggerEffect(kind,s.settings.reduced);if(s.settings.reduced)return;if(kind==='shake'||kind==='water'){ui.viewport.animate?.([{transform:'translate(0,0)'},{transform:'translate(-4px,2px)'},{transform:'translate(4px,-2px)'},{transform:'translate(-2px,1px)'},{transform:'translate(0,0)'}],{duration:620});}if(kind==='water'&&s.scene!==0){$('flash').classList.remove('lightning');void $('flash').offsetWidth;$('flash').classList.add('lightning');} }
+function toggleThoughtBubble(force){
+ if(!started||!ui.thoughtBubble)return;
+ thoughtOpen=typeof force==='boolean'?force:!thoughtOpen;
+ clearTimeout(thoughtTimer);
+ if(!thoughtOpen){
+  ui.thoughtBubble.classList.add('hidden');
+  $('thoughtBtn')?.classList.remove('active');
+  return;
+ }
+ ui.thoughtBubble.innerHTML=Contraptions.doodleMarkup(s.scene,s);
+ ui.thoughtBubble.classList.remove('hidden');
+ $('thoughtBtn')?.classList.add('active');
+ updateActors();
+ sound('paper');
+ thoughtTimer=setTimeout(()=>toggleThoughtBubble(false),6200);
+}
+function renderContraptionWorkbench(){
+ const dlg=ui.contraptionModal;if(!dlg||!dlg.open)return;
+ const spec=Contraptions.specFor(s.scene);
+ const steps=spec.steps(s);
+ const doneAll=steps.every(st=>st.done);
+ dlg.innerHTML=`<div class="contraption-shell"><header class="contraption-header"><div><span class="eyebrow">${esc(spec.code)}</span><h2 id="contraptionTitle">${esc(spec.title)}</h2><p>${esc(spec.subtitle)}</p></div><button type="button" class="closePanel" id="contraptionClose" aria-label="关闭机关工作台">×</button></header><div class="contraption-canvas-wrap"><canvas id="contraptionCanvas" width="720" height="320" aria-label="机械机关拆解蓝图"></canvas></div><div class="contraption-steps" id="contraptionSteps">${steps.map((st,idx)=>`<button type="button" class="contraption-step-btn ${st.done?'done':''}" data-step="${esc(st.id)}"><span>${idx+1}. ${esc(st.label)}</span><b>${st.done?'✓':'⚙'}</b></button>`).join('')}</div><footer class="contraption-footer"><span class="contraption-engine-badge" id="contraptionStatus">${esc(doneAll?'当前场景机关已全部啮合就绪':'点按上方齿轮节点或下方步骤即可联动测试机关')}</span><button type="button" class="panelBtn primary" id="contraptionDoneBtn">回到场景</button></footer></div>`;
+ $('contraptionClose')?.addEventListener('click',()=>closeContraptionWorkbench());
+ $('contraptionDoneBtn')?.addEventListener('click',()=>closeContraptionWorkbench());
+ $('contraptionSteps')?.querySelectorAll('[data-step]').forEach(btn=>{
+  btn.onclick=()=>{
+   Contraptions.executeContraptionStep(G,s.scene,btn.dataset.step);
+   sound('click');
+   render();
+   renderContraptionWorkbench();
+  };
+ });
+ const cvs=$('contraptionCanvas');
+ contraptionZones=Contraptions.drawWorkbenchSchematic(cvs,s.scene,s,elapsed);
+ cvs?.addEventListener('click',e=>{
+  const r=cvs.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width*720,y=(e.clientY-r.top)/r.height*320;
+  const hit=contraptionZones.find(z=>x>=z.x&&x<=z.x+z.w&&y>=z.y&&y<=z.y+z.h);
+  if(hit){
+   Contraptions.executeContraptionStep(G,s.scene,hit.id);
+   sound('gear');
+   render();
+   renderContraptionWorkbench();
+  }
+ });
+}
+function closeContraptionWorkbench(){
+ const dlg=ui.contraptionModal;
+ if(dlg?.open)dlg.close();
+ modal=false;
+ ui.game.classList.remove('paused');
+ $('contraptionBtn')?.classList.remove('active');
+}
+function openContraptionWorkbench(){
+ if(!started||!ui.contraptionModal)return;
+ toggleThoughtBubble(false);
+ toggleBag(false);
+ const dlg=ui.contraptionModal;
+ if(dlg.open){closeContraptionWorkbench();return;}
+ modal=true;
+ ui.game.classList.add('paused');
+ $('contraptionBtn')?.classList.add('active');
+ dlg.showModal();
+ renderContraptionWorkbench();
+ sound('gear');
+}
+if(ui.contraptionModal){
+ if(!('closedBy' in HTMLDialogElement.prototype)){
+  ui.contraptionModal.addEventListener('click',e=>{if(e.target===ui.contraptionModal)ui.contraptionModal.close();});
+ }
+ ui.contraptionModal.addEventListener('close',()=>{
+  modal=false;
+  ui.game.classList.remove('paused');
+  $('contraptionBtn')?.classList.remove('active');
+ });
+}
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
-function go(index){cancelPointer();closeInspection();if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
+function go(index){cancelPointer();closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){walkAmount=0;dragPreview=null;closeInspection();clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){walkAmount=0;dragPreview=null;closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
 function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
@@ -259,7 +359,7 @@ function openMenu(){if(!started)return;showPanel(`<div class="eyebrow">TAKE A BR
  $('panel').querySelectorAll('[data-volume]').forEach(el=>{el.oninput=()=>{s.settings[el.dataset.volume]=Number(el.value)/100;el.nextElementSibling.textContent=el.value+'%';audio?.update(audioState());save();};});
  $('resumePlay').onclick=closePanel;$('helpOpen').onclick=openHelp;$('soundSetting').onclick=()=>{setSound(!s.settings.sound);openMenu();};$('relaxSetting').onclick=()=>{s.settings.relaxed=!s.settings.relaxed;save();render();openMenu();};$('motionSetting').onclick=()=>{s.settings.reduced=!s.settings.reduced;save();render();openMenu();};$('exportBtn').onclick=exportSave;$('importBtn').onclick=()=>{$('importFile').value='';$('importFile').click();};$('restartBtn').onclick=confirmRestart;
 }
-function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。档案梯要先对准并锁轮；救回大卫后，请他稳住支点再撬梁。操作机关时，希尔达和同伴会交流发现；需要时也可打开手记。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。风暴逼近时会退到安全检查点，已救回的同伴、已固定的绳索和前面章节都会保留。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
+function openHelp(){showPanel(`<div class="eyebrow">THE WORLD IS THE INTERFACE</div><h2>用好奇心来操作</h2><h3>在场景里行动</h3><p>点击地面，希尔达会走过去。点击人物、门、物件，她会走近后互动。拾取、拉绳、转轮和挑杆都有接触动作；完成前离开或重载，不会提前消耗道具。手记只在你打开时出现，没有常驻任务列表。</p><h3>物件与机关</h3><p>打开背包，选择一件物品，再点场景目标；也可以直接拖过去。选中物品后背包会收起，避免遮挡场景；再打开背包，点另一件物品可以尝试组合。雨棚绳圈、档案梯子、配重和信标均可拖动，也都有点击或键盘操作。修桥要与大卫分工；清滤网前先关闭进水闸。档案梯要先对准并锁轮；救回大卫后，请他稳住支点再撬梁。操作机关时，希尔达和同伴会交流发现；需要时也可打开手记。</p><h3>看清整个世界</h3><p>手机建议横屏。竖屏可在空白处左右拖动画面，或点击边缘箭头；超宽屏可上下拖动画面查看高处。点击眼睛按钮，或按 H，会短暂标出能互动的对象。背包物品不需要丢弃。</p><h3>键盘和节奏</h3><p>Tab 选择对象，Enter / 空格互动；方向键移动；I 打开背包，J 打开手记，T 展开涂鸦想法气泡，C 打开机关拆解台，H 显示线索对象，F 切换全屏，Esc 暂停。对话可点“继续”或按空格。浏览器不支持系统全屏时，游戏仍铺满网页视口。</p><p>只有屋顶救援有风暴压力。风暴逼近时会退到安全检查点，已救回的同伴、已固定的绳索和前面章节都会保留。开启舒缓模式后不计时，剧情和结局相同。声音不是任何谜题的必要条件。</p><p class="fineprint">这是《希尔达》的非官方同人互动故事。剧情与代码矢量画面为本版本原创，不包含动画截图、配音或原声音乐。灵感参考的是场景式点触冒险的交互，不是《机械迷城》的素材或故事。</p><div class="btnrow"><button class="panelBtn primary" id="helpBack">回到冒险</button></div>`,'help');$('helpBack').onclick=closePanel;}
 function openJournal(){if(!started)return;const count=s.hints[s.scene];const hints=Story.scenes[s.scene].hints(s);const hint=hints[Math.min(hints.length-1,Math.max(0,count-1))];showPanel(`<div class="eyebrow">FIELD NOTES · ${String(s.scene+1).padStart(2,'0')}</div><h2>这次冒险的手记</h2><h3>眼前的一步</h3><p>${esc(Story.scenes[s.scene].objective(s))}</p>${count?`<p class="spoiler-hint">提示 ${count} / 3<br>${esc(hint)}</p>`:''}<div class="btnrow"><button class="panelBtn" id="hintBtn">${count<3?'给我一点'+(count?'更明确的':'')+'提示':'查看明确提示'}</button><button class="panelBtn primary" id="backFromNotes">收好手记</button></div><h3>已经发现的事</h3>${s.notes.length?s.notes.map(k=>`<div class="journalNote"><h3>${esc(Story.notes[k][0])}</h3><p>${esc(Story.notes[k][1])}</p></div>`).join(''):'<p>第一页还空着。故事会随着你的脚步慢慢展开。</p>'}<h3>路边的小小发现 ${s.sketches.length} / 6</h3>${s.sketches.map(k=>`<div class="journalNote"><h3>${esc(sketches[k][0])}</h3><p>${esc(sketches[k][1])}</p></div>`).join('')}<p class="fineprint">提示不扣分，也不会改变结局。尚未发生的剧情不会提前写在这里。</p>`,'journal');$('hintBtn').onclick=()=>{s.hints[s.scene]=Math.min(3,s.hints[s.scene]+1);save();openJournal();};$('backFromNotes').onclick=closePanel;}
 function openEnding(){showPanel(`<div class="eyebrow">EVERYONE MADE IT HOME</div><h2>所有人，平安归来。</h2><p>希尔达把围巾留给了一个害怕黑夜的孩子。<br>山里的灯照见了一对母子。<br>城里的窗，等回了一群朋友。</p><div class="journalNote"><h3>本次夜行 · 安全记录</h3><p>希尔达、芙丽达、大卫、枝枝、阿尔弗：全部平安。<br>小巨魔：已与妈妈团聚。<br>妈妈：不用再守着那盏灯等了。</p></div><p class="progressText">十二幕旅程 · ${s.sketches.length} / 6 幅观察手记 · 完整归家结局</p><p>窗外的钟声再一次响起。很轻，很准。<br>这次，它只是在提醒大家：早饭时间到了。</p><div class="btnrow"><button class="panelBtn primary" id="stayHome">留在客厅里</button><button class="panelBtn" id="endingExport">保存这次旅程</button></div><p class="fineprint">《黄昏的回声：归途》 · 非官方同人作品<br>没有必须马上开始的下一次冒险。你可以和朋友继续说说话。</p>`,'ending');$('stayHome').onclick=closePanel;$('endingExport').onclick=exportSave;}
 function confirmRestart(){showPanel(`<div class="eyebrow">A NEW FIRST PAGE</div><h2>重新翻开第一页？</h2><p>新旅程会替换这个浏览器中的 V3 当前进度。第一版《黄昏的回声》的存档不受影响。先导出一份存档，就能保留这次冒险。</p><div class="btnrow"><button class="panelBtn" id="cancelRestart">继续现在的旅程</button><button class="panelBtn danger" id="confirmRestart">确认重新开始</button></div><div class="btnrow"><button class="panelBtn" id="beforeRestartExport">先导出当前进度</button></div>`,'confirm');$('cancelRestart').onclick=closePanel;$('confirmRestart').onclick=()=>{closePanel();start(false);};$('beforeRestartExport').onclick=exportSave;}
@@ -268,9 +368,9 @@ async function importSave(file){if(!file)return;if(file.size>256000)return toast
 function reveal(){if(!started)return;ui.world.classList.add('revealing');$('revealBtn').classList.add('active');clearTimeout(revealTimer);revealTimer=setTimeout(()=>{ui.world.classList.remove('revealing');$('revealBtn').classList.remove('active');},3800);actionLabel('人物、机关、出口：留意画面里亮起的轮廓。');}
 async function fullscreen(){try{if(document.fullscreenElement){await document.exitFullscreen();}else if(ui.game.requestFullscreen){await ui.game.requestFullscreen();}else toast('当前浏览器不支持系统全屏。游戏仍会铺满网页视口。');}catch{toast('浏览器没有进入系统全屏。可以继续在当前视口游玩。');}}
 function hover(e){if(input?.moved||inventoryDrag||!canAct()){ $('hoverLabel').classList.remove('show');return;}const h=atPoint(worldPoint(e.clientX,e.clientY));if(!h){$('hoverLabel').classList.remove('show');return;}$('hoverLabel').textContent=(selected?Story.items[selected]+' → ':'')+h.label;$('hoverLabel').classList.add('show');const r=$('hoverLabel').getBoundingClientRect();$('hoverLabel').style.left=clamp(e.clientX-r.width/2,8,innerWidth-r.width-8)+'px';$('hoverLabel').style.top=clamp(e.clientY+22,8,innerHeight-r.height-85)+'px';}
-ui.viewport.addEventListener('pointerdown',e=>{if(e.button!==0||!canAct())return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY),h=atPoint(p);input={sx:e.clientX,sy:e.clientY,x:p.x,y:p.y,camX:camera.x,camY:camera.y,h,moved:false,pid:e.pointerId,oldLadder:s.f.ladderX,oldAngle:s.beaconAngle};ui.viewport.setPointerCapture?.(e.pointerId);});
-ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('weight'+input.h.value,e.clientX,e.clientY);} });
-ui.viewport.addEventListener('pointerup',e=>{if(!input||input.pid!==e.pointerId)return;const down=input;input=null;hideGhost();if(!canAct())return;const p=worldPoint(e.clientX,e.clientY);if(down.moved){sceneDrag(down,{x:p.x,y:p.y,dx:(e.clientX-down.sx)/innerWidth*camera.w,dy:(e.clientY-down.sy)/innerHeight*camera.h});return;}if(down.h)interact(down.h.id);else if(p.y>Story.scenes[s.scene].ground(p.x,s)-210)walkTo(p.x,()=>save());else actionLabel('点击人物或物件调查；点击地面移动。');});
+ui.viewport.addEventListener('pointerdown',e=>{if(e.button!==0||!canAct())return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY),h=atPoint(p),onHero=!h&&Math.abs(p.x-hero.x)<46&&p.y>hero.y-210&&p.y<hero.y+12;input={sx:e.clientX,sy:e.clientY,x:p.x,y:p.y,camX:camera.x,camY:camera.y,h,onHero,moved:false,pid:e.pointerId,oldLadder:s.f.ladderX,oldAngle:s.beaconAngle};ui.viewport.setPointerCapture?.(e.pointerId);});
+ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(input.onHero&&Math.abs(dy)>Math.abs(dx)){PhaserStage.stage.setPosture(clamp(-dy*.24,-22,18));return;}if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('weight'+input.h.value,e.clientX,e.clientY);} });
+ui.viewport.addEventListener('pointerup',e=>{if(!input||input.pid!==e.pointerId)return;const down=input;input=null;hideGhost();if(!canAct())return;const p=worldPoint(e.clientX,e.clientY);if(down.moved){if(down.onHero){actionLabel('希尔达调整了身姿观察四周。');return;}sceneDrag(down,{x:p.x,y:p.y,dx:(e.clientX-down.sx)/innerWidth*camera.w,dy:(e.clientY-down.sy)/innerHeight*camera.h});return;}if(down.onHero){toggleThoughtBubble();return;}if(down.h)interact(down.h.id);else if(p.y>Story.scenes[s.scene].ground(p.x,s)-210){PhaserStage.stage.setPosture(0);walkTo(p.x,()=>save());}else actionLabel('点击人物或物件调查；点击地面移动。');});
 function cancelPointer(){input=null;inventoryDrag=null;dragPreview=null;hideGhost();if(started)render();}
 ui.viewport.addEventListener('pointercancel',cancelPointer);
 window.addEventListener('blur',cancelPointer);
@@ -282,10 +382,13 @@ document.addEventListener('pointermove',e=>{if(!inventoryDrag||inventoryDrag.pid
 document.addEventListener('pointerup',e=>{if(!inventoryDrag||inventoryDrag.pid!==e.pointerId)return;const d=inventoryDrag;inventoryDrag=null;hideGhost();if(!canAct())return;if(!d.moved){selectItem(d.id);return;}const el=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-item]');if(el&&el.dataset.item!==d.id){if(!combo(d.id,el.dataset.item)){selected=d.id;renderInventory();toast('这些物品暂时不能组合。');}return;}const h=atPoint(worldPoint(e.clientX,e.clientY));selected=d.id;renderInventory();if(h)interact(h.id,d.id);else{toggleBag(false);toast('物品没有丢失。选好它以后，再点场景里的目标。');}});
 document.addEventListener('pointercancel',()=>{inventoryDrag=null;hideGhost();});
 $('focusBtn').onclick=toggleInspection;$('focusExit').onclick=closeInspection;$('inspectSelected').onclick=()=>inspectItem(selected);
+if($('thoughtBtn'))$('thoughtBtn').onclick=()=>toggleThoughtBubble();
+if($('contraptionBtn'))$('contraptionBtn').onclick=()=>openContraptionWorkbench();
+if(ui.thoughtBubble)ui.thoughtBubble.onclick=()=>openContraptionWorkbench();
 $('nextLine').onclick=nextLine;$('speech').onclick=e=>{if(e.target!==$('nextLine')&&!$('nextLine').contains(e.target))nextLine();};$('bagBtn').onclick=()=>{if(started&&!modal)toggleBag();};$('closeBag').onclick=()=>toggleBag(false);$('cancelItem').onclick=()=>{selected=null;renderInventory();};$('journalBtn').onclick=openJournal;$('menuBtn').onclick=openMenu;$('audioBtn').onclick=()=>setSound(!s.settings.sound);$('revealBtn').onclick=reveal;$('fullBtn').onclick=fullscreen;$('startBtn').onclick=()=>{if(saved){started=true;s=clone(saved);hero.x=s.heroX;showPanel(`<div class="eyebrow">A NEW JOURNEY</div><h2>已有一段旅程</h2><p>要从头开始，还是继续之前的冒险？新的旅程会替换当前 V3 进度。</p><div class="btnrow"><button class="panelBtn" id="keepSaved">继续已有旅程</button><button class="panelBtn primary" id="newFromTitle">重新开始</button></div>`);$('keepSaved').onclick=()=>{closePanel();start(true);};$('newFromTitle').onclick=()=>{closePanel();start(false);};}else start(false);};$('continueBtn').onclick=()=>start(true);$('importFile').onchange=e=>importSave(e.target.files[0]);
 function panBy(dir){if(!started||modal)return;camera.manual=true;camera.x=clamp(camera.x+dir*camera.w*.55,0,1600-camera.w);setView();}
 $('panLeft').onclick=()=>panBy(-1);$('panRight').onclick=()=>panBy(1);
-document.addEventListener('keydown',e=>{if(e.key==='Tab'&&modal){let els=[...$('panel').querySelectorAll('button:not([disabled]),input,a')];if(!els.length)return;let first=els[0],last=els[els.length-1];if(e.shiftKey&&(document.activeElement===first||document.activeElement===$('panel'))){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}return;}if(!started)return;if(e.key==='Escape'){e.preventDefault();if(modal)closePanel();else if(inspection){closeInspection();}else if(bagOpen){toggleBag(false);selected=null;renderInventory();}else openMenu();return;}if(modal)return;if((e.key===' '||e.key==='Enter')&&dialogue){e.preventDefault();nextLine();return;}const key=e.key.toLowerCase();if(key==='e'){e.preventDefault();if(selected)inspectItem(selected);else toggleInspection();}else if(key==='h'){e.preventDefault();reveal();}else if(key==='j'){e.preventDefault();openJournal();}else if(key==='i'){e.preventDefault();toggleBag();}else if(key==='f'){e.preventDefault();fullscreen();}else if(key==='arrowleft'||key==='arrowright'||key==='a'||key==='d'){if(!canAct())return;e.preventDefault();walkTo(hero.x+((key==='arrowleft'||key==='a')?-85:85),()=>save());}});
+document.addEventListener('keydown',e=>{if(e.key==='Tab'&&modal){if(ui.contraptionModal?.open)return;let els=[...$('panel').querySelectorAll('button:not([disabled]),input,a')];if(!els.length)return;let first=els[0],last=els[els.length-1];if(e.shiftKey&&(document.activeElement===first||document.activeElement===$('panel'))){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}return;}if(!started)return;if(e.key==='Escape'){if(ui.contraptionModal?.open){closeContraptionWorkbench();return;}e.preventDefault();if(modal)closePanel();else if(thoughtOpen){toggleThoughtBubble(false);}else if(inspection){closeInspection();}else if(bagOpen){toggleBag(false);selected=null;renderInventory();}else openMenu();return;}if(modal)return;if((e.key===' '||e.key==='Enter')&&dialogue){e.preventDefault();nextLine();return;}const key=e.key.toLowerCase();if(key==='e'){e.preventDefault();if(selected)inspectItem(selected);else toggleInspection();}else if(key==='t'){e.preventDefault();toggleThoughtBubble();}else if(key==='c'){e.preventDefault();openContraptionWorkbench();}else if(key==='h'){e.preventDefault();reveal();}else if(key==='j'){e.preventDefault();openJournal();}else if(key==='i'){e.preventDefault();toggleBag();}else if(key==='f'){e.preventDefault();fullscreen();}else if(key==='arrowup'||key==='w'){if(!canAct())return;e.preventDefault();PhaserStage.stage.setPosture(15);}else if(key==='arrowdown'||key==='s'){if(!canAct())return;e.preventDefault();PhaserStage.stage.setPosture(-18);}else if(key==='arrowleft'||key==='arrowright'||key==='a'||key==='d'){if(!canAct())return;e.preventDefault();PhaserStage.stage.setPosture(0);walkTo(hero.x+((key==='arrowleft'||key==='a')?-85:85),()=>save());}});
 window.addEventListener('resize',()=>{if(inspection)Object.assign(camera,focusFrame(s.scene,innerWidth/innerHeight));calcCamera(false);});document.addEventListener('fullscreenchange',()=>calcCamera(false));window.addEventListener('pagehide',()=>save(true));
 document.addEventListener('visibilitychange',()=>{ui.game.classList.toggle('paused',document.hidden||modal);if(document.hidden){save(true);audio?.pause();}else if(audio&&s.settings.sound)audio.resume().catch(()=>{});frameTime=performance.now();});
 let audioTick=0;
@@ -312,7 +415,7 @@ function tick(now){if(!document.hidden&&audio&&s.settings.sound&&now-audioTick>1
 }updateActors();}requestAnimationFrame(tick);}
 const G={get s(){return s;},set:setFlag,commit,take,consume,toast:think,sound,say,go,work,effect,note:addNote,sketch,pulse,playSequence,finish,openEnding};
 updateTools();if(saved){$('continueBtn').classList.remove('hidden');$('continueBtn').innerHTML='继续旅程 <span>→</span>';}render();calcCamera(true);requestAnimationFrame(tick);
-if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,camera:clone(camera),hero:clone(hero),pet:pet.snapshot(),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,audio:()=>audio?.debug()||null,flush:()=>save(true)};
+if(new URLSearchParams(location.search).has('test')||window.__HILDA_TEST_REQUESTED__===true)window.HildaTest={state:()=>clone(s),ui:()=>({started,titleMode,locked,dialogue:dialogue?clone({lines:dialogue.lines,index:dialogue.index}):null,moving:!!pendingMove,working:!!activeWork,performance:activeWork?{...activeWork.sample(),score:clone(activeWork.score)}:null,sequenceActive,modal,selected,bagOpen,inspection,thoughtOpen,contraptionOpen:!!ui.contraptionModal?.open,camera:clone(camera),hero:clone(hero),pet:pet.snapshot(),storageOK}),hotspots:()=>clone(activeHotspots),validate,loadFixture:v=>{saved=validate(v);start(true);},resetRoof,audio:()=>audio?.debug()||null,phaser:()=>PhaserStage.stage.getStatus(),contraption:()=>Contraptions.specFor(s.scene),openWorkbench:openContraptionWorkbench,closeWorkbench:closeContraptionWorkbench,toggleThought:toggleThoughtBubble,setPosture:v=>PhaserStage.stage.setPosture(v),flush:()=>save(true)};
 
 return G;
 });

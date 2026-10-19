@@ -1,5 +1,6 @@
 {
-  "version": "3.9.0",
+  "version": "4.0.0",
+  "engine": "phaser@4.2.1",
   "modules": [
     "src/engine/modules.js",
     "src/art/cast-acting.js",
@@ -31,11 +32,14 @@
     "src/engine/audio.js",
     "src/engine/body-motion.js",
     "src/engine/camera.js",
+    "src/engine/contraptions.js",
     "src/engine/dom.js",
+    "src/engine/hd-assets.js",
     "src/engine/hydraulics.js",
     "src/engine/idle-life.js",
     "src/engine/kinematics.js",
     "src/engine/motion-policy.js",
+    "src/engine/phaser-stage.js",
     "src/engine/readability.js",
     "src/engine/runtime.js",
     "src/engine/score-player.js",
@@ -71,6 +75,6 @@
     "src/story/index.js",
     "src/bootstrap.js"
   ],
-  "bytes": 326877,
-  "sha256": "d5c55afcca7bcf9d6963d51bb91952e7cde6ea30db9a80d4bd4bd91cc07118b7"
+  "bytes": 1778607,
+  "sha256": "71c0080582cdebc5f2eddbcf0fcb71176833f63e8a590e6135b56f9e12fea91d"
 }
