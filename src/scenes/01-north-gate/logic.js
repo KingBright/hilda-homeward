@@ -7,8 +7,8 @@ Homeward.define('scene/1/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
     H('awning','向下拉绳，卷起雨棚',962,s.f.awning?677:601,72,114,{drag:'awning',walkX:931}),
     ...(s.f.awning&&!s.f.crankTaken?[I('crank','拿起黄铜曲柄',845,614,79,80,{walkX:806})]:[]),
     H('wheel',s.f.gateOpen?'检查锁定的棘爪':'转动城门转轮',1169,653,116,120,{walkX:1145}),
-    exit('gate','穿过北门',1380,611,{walkX:1335}),exit('back','回家',364,651,{walkX:448}),
-    H('puddle','观察水洼中的倒影',953,824,234,60,{walkX:880})
+    exit('gate','穿过北门',1380,611,{walkX:1335}),exit('back','回家',431,645,{walkX:448}),
+    H('puddle','观察水洼中的倒影',926,825,244,60,{walkX:880})
   ],
   act(g,id,item){
     if(id==='david')return one(g,'大卫',f(g,'gateOpen')?'看，三格都亮了，棘爪稳稳咬住齿轮了。我跟你一起去。':'曲柄在摊位上。先拉下右边的绳圈，把湿透的棚布卷起来。');

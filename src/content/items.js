@@ -27,6 +27,7 @@ Homeward.define('content/items', [], () => {
     {trail0:['lamp','shade'],trail1:['lamp','shade'],trail2:['lamp','shade']},{}
   ];
   function canUse(scene,id,item) { return !item || (uses[scene]?.[id]??[]).includes(item); }
+  function acceptsItem(scene,id) { return (uses[scene]?.[id]?.length??0)>0; }
   function recipeFor(a,b) { return recipes.find(r=>r.inputs.includes(a)&&r.inputs.includes(b)&&a!==b)?.output??null; }
-  return {itemSpecs,recipes,canUse,recipeFor};
+  return {itemSpecs,recipes,canUse,acceptsItem,recipeFor};
 });

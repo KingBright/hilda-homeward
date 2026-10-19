@@ -9,7 +9,7 @@ Homeward.define('scene/9/logic', ['story/helpers','content/setpieces'], ({checkB
     name:'风暴之上的约定',english:'NO ONE LEFT BEHIND',actLabel:'第四幕 · 别松开我的手',mood:'钟楼屋顶 / 谁都不能被留在风里',start:315,ground:Stage.roofGround,
     intro:[['大卫','我在这里！瓦片掉了，我过不去！'],['芙丽达','背包被横梁压住了。先固定绳子，不要跳过来！'],['希尔达','先稳住，再伸手。我们一个接一个来，谁都不会被留下。']],
     hotspots:s=>[H('anchor','把救援绳固定到近处铁环',426,652,83,115,{walkX:415}),
-      H('david',!s.f.davidSafe?'把绳端送给大卫':!s.f.roofBrace?'请大卫稳住横梁支点':'与稳住支点的大卫交谈',!s.f.davidSafe?670:s.f.roofBrace?1069:Stage.roof.safe[0],!s.f.davidSafe?629:s.f.roofBrace?671:661,92,184,{walkX:!s.f.davidSafe?453:s.f.roofBrace?1003:421}),
+      H('david',!s.f.davidSafe?'把绳端送给大卫':!s.f.roofBrace?'请大卫稳住横梁支点':'与稳住支点的大卫交谈',!s.f.davidSafe?670:s.f.fridaSafe?980:s.f.roofBrace?1069:Stage.roof.safe[0],!s.f.davidSafe?629:s.f.roofBrace?671:661,92,184,{walkX:!s.f.davidSafe?453:s.f.fridaSafe?915:s.f.roofBrace?1003:421}),
       H('frida',s.f.fridaSafe?'和安全返回的芙丽达交谈':'和大卫配合，撬起压住芙丽达的横梁',s.f.fridaSafe?842:1160,s.f.fridaSafe?665:670,110,190,{walkX:s.f.fridaSafe?790:950}),
       H('beacon','转动低处检修轮，调整信标光轴',1220,657,90,105,{drag:'beacon',walkX:1169}),
       ...(!s.f.twigSafe?[H('twig','蹲下接住枝枝',929,696,106,72,{walkX:875})]:[]),

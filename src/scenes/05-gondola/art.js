@@ -7,7 +7,7 @@ b+=group(810,487,1,`${path('M-22 225V-76h41v301Z','#516b5b','#274b46',4)}${path(
 b+=[1,2,3].map((v,i)=>(S.weights||[]).includes(v)?'':weight(v,425+i*113,691)).join('');
 b+=!f.lineTaken?`<g id="gondolaLine">${group(336,737,1,itemArt('line').replace(/<svg[^>]*>|<\/svg>/g,''))}</g>`:'';
 b+=rect(979,589,100,112,'#395c58',12,'#9aac89',4)+`<g id="gondolaBrake">${wheel(1029,633,30,f.lift?160:0)}</g>`;
-b+=person('大卫',235,769,1.34)+person('芙丽达',1135,765,1.38)+fern(31,858,1.9,'#274f48')+grass(1294,809,1.7)+particles(30);return b;}
+b+=person('大卫',235,769,1.34)+person('芙丽达',1345,769,1.38)+fern(31,858,1.9,'#274f48')+grass(1294,809,1.7)+particles(30);return b;}
 function weight(v,x,y){return group(x,y,1,`${path('M-13-44q-9-18 13-18t13 18','none','#8ba28a',5)}${path('M-27-44H27L38 9H-38Z',v===1?'#b9b288':v===2?'#859a81':'#6b8c7d','#274c48',3)}${rep(v,i=>path(`M${(i-(v-1)/2)*11} -24v19`,'none','#e4d5a5',3))}`);}
 
 return lift;

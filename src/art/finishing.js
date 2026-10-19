@@ -10,7 +10,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
     <pattern id="v3Fabric" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0h6M0 3h6M1 0v6M4 0v6" fill="none" stroke="#e2d5ac" stroke-opacity=".18" stroke-width=".5"/></pattern>
   </defs>`;
   const bolt=(x,y,r=4)=>circle(x,y,r,'#b4ad85','#213e43',1.5)+path(`M${x-r*.55} ${y+r*.55}l${r*1.1}-${r*1.1}`,'none','#54645a',1.3);
-  function plate(x,y,w=96){return group(x,y,1,rect(-w/2,-11,w,22,'#244347',4,'#979774',1.4)+path(`M${-w/2+11} -3H${w/2-11}M${-w/2+18} 4H${w/2-22}`,'none','#d8ca9e55',1.3)+bolt(-w/2+6,0,2.1)+bolt(w/2-6,0,2.1));}
+  function plate(){return '';}
   function vine(x,y,scale=1,flip=1){return group(x,y,scale,`<g transform="scale(${flip} 1)">${path('M0 0Q67 1 59 71t36 98','none','#2b5148',4)}${rep(10,i=>{let xx=36+Math.sin(i*.75)*24,yy=i*16;return path(`M${xx} ${yy}q${i%2?28:-29} -25 ${i%2?26:-28} 3q${i%2?-12:13} 15 ${i%2?-26:28} -3`,'#4c7460','#234843',.8);})}</g>`);}
   function motes(scene){return `<g class="v3-motes" pointer-events="none">${rep(20,i=>{let x=(i*317+scene*79)%1560+20,y=(i*117)%700+70;return circle(x,y,i%4===0?2:1,'#ecd39b','none',0,`style="animation-delay:-${i*.73}s" class="v3-mote"`);})}</g>`;}
   function observation(state){let d=details[state.scene],x=d.x,y=d.y,s='';
@@ -51,6 +51,7 @@ Homeward.define('art/finishing', ['art/kit','content/details','content/mechanism
       b+=path('M0 841Q382 719 755 851T1600 818V900H0Z','url(#v3Mist)');
     }
     if(i===2){
+      b+=path('M1142 660Q1176 558 1212 556Q1248 558 1284 658Z','#2f574d','#1f3f3c',3)+path('M1128 660Q1210 646 1296 660','none','#496e5d',6);
       b+=vine(1365,142,1.5,-1)+vine(94,172,1.3)+path('M117 243Q372 382 556 234','none','#94ac8244',2);
       b+=rep(11,j=>circle(945+j*29,510+Math.sin(j)*24,1.8,'#e0d391','none',0,'class="v3-mote"'));
     }

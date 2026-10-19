@@ -12,7 +12,7 @@ b+=text(1292,605,'检修轮控制光轴',12,'#d0d1a9');
 b+=path('M412 717V646q15-21 28 0','none','#abb89b',11)+(f.roofAnchor?path(f.davidSafe?'M418 652q164-52 331 40':'M418 652q70-58 117-3','none','#ddc390',5):'');
 b+=!f.fridaSafe?group(1172,740,1,rect(-22,-38,42,38,'#a69d75',5,'#2b4b50',3)+path('M-10-38v-13h19v13','none','#b9b089',4)):'';
 b+=`<g id="roofBeam" transform="rotate(${f.fridaSafe?24:0} 1225 720)">${path('M1040 703 1226 686 1230 713 1044 730Z','#857958','#284c4b',4)}${path('M1046 714 1224 698','none','#c9b783',2)}</g>`;
-b+=`<g id="roofDavid" transform="translate(${f.roofBrace?1069:f.davidSafe?466:670} ${f.roofBrace?773:f.davidSafe?767:710})">${person('大卫',0,0,1.34)}</g>`;
+b+=`<g id="roofDavid" transform="translate(${f.fridaSafe?980:f.roofBrace?1069:f.davidSafe?478:670} ${f.fridaSafe?773:f.roofBrace?773:f.davidSafe?767:710})">${person('大卫',0,0,1.34)}</g>`;
 b+=`<g id="roofFrida" transform="translate(${f.fridaSafe?842:1160} ${f.fridaSafe?759:773})">${person('芙丽达',0,0,1.38)}</g>`;
 b+=!f.twigSafe?`<g id="roofTwig" transform="translate(929 723)">${twig(0,0,.95)}</g>`:'';
 if(f.beacon)b+=`<g id="roofWoff" transform="translate(1395 651)">${woff(0,0,1.52)}</g>`+path('M1288 641q50-26 87-17','none','#dbcb9c',3);

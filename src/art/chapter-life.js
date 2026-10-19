@@ -17,8 +17,8 @@ Homeward.define('art/chapter-life', ['art/kit','art/finishing','content/staging'
     if(S.scene===1){
       b+=path('M638 551 778 551 1013 887H498Z','url(#chapterBeam)')+path('M1110 389 1098 419 1224 802 981 802Z','url(#chapterBeam)');
       b+=rep(9,i=>path(`M${1092+i*54} 279q16-9 35 3`,'none','#aab299',1,'opacity=".35"'));
-      b+=F.plate(1168,742,132,'转轮三周 · 棘爪锁定')+group(1205,607,.64,gear(0,0,23,12,'#9ca082',0)+path('M-4-27 27-39 38-30 12-11Z','#667f6d','#274a4c',2));
-      b+=rep(3,i=>circle(1220,710+i*19,5,i<(f.gateTurns||0)?'#e4c486':'#365951','#9aaa8b',1.5));
+      b+=group(1205,607,.64,gear(0,0,23,12,'#9ca082',0)+path('M-4-27 27-39 38-30 12-11Z','#667f6d','#274a4c',2));
+      b+=rect(1131,722,76,20,'#243d41',6,'#8d9a82',1.8)+rep(3,i=>circle(1147+i*22,732,5,i<(f.gateTurns||0)?'#e4c486':'#365951','#9aaa8b',1.5));
       b+=group(699,704,1,rect(-19,-43,39,41,'#9b8662',4,'#42564b',2)+rect(-19,-43,39,41,'url(#chapterWood)',4)+path('M-19-27H20M0-43V-3','none','#3e594d',3));
       b+=group(1517,787,.7,path('M-21 0V-44h42V0Z','#405d50','#1e4249',3)+fern(0,-38,.45,'#6a8b66'));
       b+=ripples(1)+`<g id="gateDepthGlow" opacity="${f.gateOpen?.8:.14}">${path('M1256 778 1518 778 1580 899 1140 899Z','url(#chapterBeam)')}${path('M1378 338v418','none','#d4cb9c',2,'opacity=".2"')}</g>`;

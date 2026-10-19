@@ -81,7 +81,7 @@ function inspectItem(id){
 function calcCamera(reset=false){if(inspection&&!reset){setView();return;}let ww=innerWidth,hh=innerHeight,ratio=ww/hh;if(ratio>=16/9){camera.w=1600;camera.h=1600/ratio;camera.x=0;camera.y=reset||!camera.manual?Math.max(0,900-camera.h):clamp(camera.y,0,900-camera.h);}else{camera.h=900;camera.w=900*ratio;camera.y=0;if(reset||!camera.manual)camera.x=clamp(hero.x-camera.w*.45,0,1600-camera.w);else camera.x=clamp(camera.x,0,1600-camera.w);}setView();}
 function setView(){ui.world.setAttribute('viewBox',`${camera.x.toFixed(2)} ${camera.y.toFixed(2)} ${camera.w.toFixed(2)} ${camera.h.toFixed(2)}`);$('panLeft').style.opacity=camera.x<1?'.25':'.85';$('panRight').style.opacity=camera.x+camera.w>1599?'.25':'.85';}
 function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
-function worldPoint(x,y){const r=ui.world.getBoundingClientRect();return {x:camera.x+(x-r.left)/r.width*camera.w,y:camera.y+(y-r.top)/r.height*camera.h};}
+function worldPoint(x,y){const ctm=ui.world.getScreenCTM?.();if(ctm&&ctm.a&&ctm.d){const pt=new DOMPoint(x,y).matrixTransform(ctm.inverse());return {x:pt.x,y:pt.y};}const r=ui.world.getBoundingClientRect();return {x:camera.x+(x-r.left)/r.width*camera.w,y:camera.y+(y-r.top)/r.height*camera.h};}
 function atPoint(p){return Readability.pick(activeHotspots,p);}
 function render(){
  const index=titleMode?7:s.scene,artState=titleMode?{...s,scene:7}:s,scene=Story.scenes[index];
@@ -181,19 +181,28 @@ function arriveAndAct(h,item,invoke){
 function interact(id,itemOverride){
  if(!canAct())return;
  const h=activeHotspots.find(v=>v.id===id);if(!h)return;
- const item=itemOverride??selected;
+ let item=itemOverride??selected;
  if(item&&!s.inventory.includes(item))return;
+ if(item&&itemOverride===undefined&&(h.kind==='exit'||h.kind==='take'||!Items.acceptsItem(s.scene,id)))item=null;
  if(item&&!Items.canUse(s.scene,id,item)){sound('wood');think('「'+Story.items[item]+'」不适合这个位置。先取消选中，再观察「'+h.label+'」。');return;}
  toggleBag(false);$('hoverLabel').classList.remove('show');
  arriveAndAct(h,item,()=>Story.scenes[s.scene].act(G,id,item));
 }
 function sceneDrag(down,payload){
- const h=down.h;if(!h?.drag||!Story.scenes[s.scene].drag)return;
- // Live dragging is a preview. Restore it before walking and committing the action.
+ const h=down.h;if(!h)return;
  dragPreview=null;
+ const dist=Math.hypot(payload.x-down.x,payload.y-down.y);
+ if(!h.drag||!Story.scenes[s.scene].drag){
+  if(atPoint(payload)?.id===h.id||dist<48)interact(h.id);
+  return;
+ }
+ // Live dragging is a preview. Restore it before walking and committing the action.
  render();toggleBag(false);
  arriveAndAct(h,null,()=>{
-  if(!Story.scenes[s.scene].drag(G,h.id,payload))toast('拖动后放在合适的位置。也可以点按操作。');
+  if(!Story.scenes[s.scene].drag(G,h.id,payload)){
+   if(dist<52)Story.scenes[s.scene].act(G,h.id,null);
+   else toast('拖动后放在合适的位置。也可以点按操作。');
+  }
  });
 }
 
@@ -367,15 +376,16 @@ function exportSave(){save(true);const blob=new Blob([JSON.stringify(s,null,2)],
 async function importSave(file){if(!file)return;if(file.size>256000)return toast('这份文件太大，不像有效的游戏存档。');try{const v=validate(JSON.parse(await file.text()));showPanel(`<div class="eyebrow">CONTINUE A JOURNEY</div><h2>载入这份进度？</h2><p>地点：${esc(Story.scenes[v.scene].name)}<br>已探索：${v.visited.length} / 12 个场景。</p><p>载入后将替换当前 V3 进度。取消不会改变正在进行的旅程。</p><div class="btnrow"><button class="panelBtn" id="cancelImport">取消</button><button class="panelBtn primary" id="confirmImport">确认载入</button></div>`,'import');$('cancelImport').onclick=closePanel;$('confirmImport').onclick=()=>{saved=clone(v);closePanel();start(true);save(true);};}catch(e){toast('无法载入：'+e.message);}}
 function reveal(){if(!started)return;ui.world.classList.add('revealing');$('revealBtn').classList.add('active');clearTimeout(revealTimer);revealTimer=setTimeout(()=>{ui.world.classList.remove('revealing');$('revealBtn').classList.remove('active');},3800);actionLabel('人物、机关、出口：留意画面里亮起的轮廓。');}
 async function fullscreen(){try{if(document.fullscreenElement){await document.exitFullscreen();}else if(ui.game.requestFullscreen){await ui.game.requestFullscreen();}else toast('当前浏览器不支持系统全屏。游戏仍会铺满网页视口。');}catch{toast('浏览器没有进入系统全屏。可以继续在当前视口游玩。');}}
-function hover(e){if(input?.moved||inventoryDrag||!canAct()){ $('hoverLabel').classList.remove('show');return;}const h=atPoint(worldPoint(e.clientX,e.clientY));if(!h){$('hoverLabel').classList.remove('show');return;}$('hoverLabel').textContent=(selected?Story.items[selected]+' → ':'')+h.label;$('hoverLabel').classList.add('show');const r=$('hoverLabel').getBoundingClientRect();$('hoverLabel').style.left=clamp(e.clientX-r.width/2,8,innerWidth-r.width-8)+'px';$('hoverLabel').style.top=clamp(e.clientY+22,8,innerHeight-r.height-85)+'px';}
-ui.viewport.addEventListener('pointerdown',e=>{if(e.button!==0||!canAct())return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY),h=atPoint(p),onHero=!h&&Math.abs(p.x-hero.x)<46&&p.y>hero.y-210&&p.y<hero.y+12;input={sx:e.clientX,sy:e.clientY,x:p.x,y:p.y,camX:camera.x,camY:camera.y,h,onHero,moved:false,pid:e.pointerId,oldLadder:s.f.ladderX,oldAngle:s.beaconAngle};ui.viewport.setPointerCapture?.(e.pointerId);});
-ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>9)input.moved=true;if(!input.moved)return;$('hoverLabel').classList.remove('show');if(input.onHero&&Math.abs(dy)>Math.abs(dx)){PhaserStage.stage.setPosture(clamp(-dy*.24,-22,18));return;}if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('weight'+input.h.value,e.clientX,e.clientY);} });
-ui.viewport.addEventListener('pointerup',e=>{if(!input||input.pid!==e.pointerId)return;const down=input;input=null;hideGhost();if(!canAct())return;const p=worldPoint(e.clientX,e.clientY);if(down.moved){if(down.onHero){actionLabel('希尔达调整了身姿观察四周。');return;}sceneDrag(down,{x:p.x,y:p.y,dx:(e.clientX-down.sx)/innerWidth*camera.w,dy:(e.clientY-down.sy)/innerHeight*camera.h});return;}if(down.onHero){toggleThoughtBubble();return;}if(down.h)interact(down.h.id);else if(p.y>Story.scenes[s.scene].ground(p.x,s)-210){PhaserStage.stage.setPosture(0);walkTo(p.x,()=>save());}else actionLabel('点击人物或物件调查；点击地面移动。');});
-function cancelPointer(){input=null;inventoryDrag=null;dragPreview=null;hideGhost();if(started)render();}
+function setHoveredHotspot(id){ui.world.querySelectorAll('.hotspot.hovered').forEach(el=>{if(el.dataset.hotspot!==id)el.classList.remove('hovered');});if(id)ui.world.querySelector(`.hotspot[data-hotspot="${id}"]`)?.classList.add('hovered');}
+function hover(e){if(input?.moved||inventoryDrag||!canAct()){setHoveredHotspot(null);$('hoverLabel').classList.remove('show');return;}const h=atPoint(worldPoint(e.clientX,e.clientY));setHoveredHotspot(h?.id||null);if(!h){$('hoverLabel').classList.remove('show');return;}const prefix=selected&&Items.acceptsItem(s.scene,h.id)?Story.items[selected]+' → ':'';$('hoverLabel').textContent=prefix+h.label;$('hoverLabel').classList.add('show');const r=$('hoverLabel').getBoundingClientRect();$('hoverLabel').style.left=clamp(e.clientX-r.width/2,8,innerWidth-r.width-8)+'px';$('hoverLabel').style.top=clamp(e.clientY+22,8,innerHeight-r.height-85)+'px';}
+ui.viewport.addEventListener('pointerdown',e=>{if(e.button!==0)return;if(dialogue&&started&&!isPaused()){e.preventDefault();nextLine();return;}if(!canAct())return;e.preventDefault();if(bagOpen)toggleBag(false);const p=worldPoint(e.clientX,e.clientY),h=atPoint(p),onHero=!h&&Math.abs(p.x-hero.x)<40&&p.y>hero.y-190&&p.y<hero.y;input={sx:e.clientX,sy:e.clientY,x:p.x,y:p.y,camX:camera.x,camY:camera.y,h,onHero,moved:false,postured:false,pid:e.pointerId,oldLadder:s.f.ladderX,oldAngle:s.beaconAngle};ui.viewport.setPointerCapture?.(e.pointerId);});
+ui.viewport.addEventListener('pointermove',e=>{if(!input){if(e.pointerType==='mouse')hover(e);return;}if(input.pid!==e.pointerId)return;const dx=e.clientX-input.sx,dy=e.clientY-input.sy;if(Math.hypot(dx,dy)>14)input.moved=true;if(!input.moved)return;setHoveredHotspot(null);$('hoverLabel').classList.remove('show');if(input.onHero&&Math.abs(dy)>Math.abs(dx)*1.3&&Math.abs(dy)>22){input.postured=true;PhaserStage.stage.setPosture(clamp(-dy*.24,-22,18));return;}if(!input.h){camera.manual=true;camera.x=clamp(input.camX-dx/innerWidth*camera.w,0,1600-camera.w);camera.y=clamp(input.camY-dy/innerHeight*camera.h,0,900-camera.h);setView();return;}let p=worldPoint(e.clientX,e.clientY);if(input.h.drag==='ladder'&&!s.f.ladderBrake){dragPreview={kind:'ladder',x:Stage.snapLadder(p.x)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='beacon'&&s.f.fridaSafe&&!s.f.beacon){dragPreview={kind:'beacon',angle:Stage.wheelAngle(p)};if(performance.now()-lastRenderTime>55){render();lastRenderTime=performance.now();}}else if(input.h.drag==='weight'){showGhost('weight'+input.h.value,e.clientX,e.clientY);} });
+ui.viewport.addEventListener('pointerup',e=>{if(!input||input.pid!==e.pointerId)return;const down=input;input=null;hideGhost();if(!canAct())return;const p=worldPoint(e.clientX,e.clientY);if(down.moved){if(down.postured){actionLabel('希尔达调整了身姿观察四周。');return;}if(down.h){sceneDrag(down,{x:p.x,y:p.y,dx:(e.clientX-down.sx)/innerWidth*camera.w,dy:(e.clientY-down.sy)/innerHeight*camera.h});return;}if(!inspection&&Math.hypot(e.clientX-down.sx,e.clientY-down.sy)<36&&p.y>140){PhaserStage.stage.setPosture(0);walkTo(p.x,()=>save());}return;}const h=down.h||atPoint(p);if(h)interact(h.id);else if(p.y>140){PhaserStage.stage.setPosture(0);walkTo(p.x,()=>save());}});
+function cancelPointer(){input=null;inventoryDrag=null;dragPreview=null;setHoveredHotspot(null);hideGhost();if(started)render();}
 ui.viewport.addEventListener('pointercancel',cancelPointer);
 window.addEventListener('blur',cancelPointer);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelPointer();});
-ui.viewport.addEventListener('pointerleave',()=>{$('hoverLabel').classList.remove('show');});
+ui.viewport.addEventListener('pointerleave',()=>{setHoveredHotspot(null);$('hoverLabel').classList.remove('show');});
 function showGhost(id,x,y){$('dragGhost').classList.remove('hidden');$('dragGhost').innerHTML=Art.itemArt(id);$('dragGhost').style.left=x+'px';$('dragGhost').style.top=y+'px';}
 function hideGhost(){$('dragGhost').classList.add('hidden');}
 document.addEventListener('pointermove',e=>{if(!inventoryDrag||inventoryDrag.pid!==e.pointerId)return;const d=inventoryDrag;if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>9)d.moved=true;if(d.moved){showGhost(d.id,e.clientX,e.clientY);const t=document.elementFromPoint(e.clientX,e.clientY);if(!t?.closest('#pocket')){$('pocket').classList.add('hidden');bagOpen=false;}}});

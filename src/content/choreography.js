@@ -9,7 +9,7 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
       7:Object.fromEntries([...[['gearS',453,738],['gearM',612,740],['gearL',795,725]].map(([id,x,y])=>[id,{kind:'take',target:[x,y],approachX:x-48,pickup:true,prop:id,source:'pickup-'+id,twoHands:id!=='gearS'}]),...Mechanisms.gears.map(d=>[d.socket,{kind:'place',target:[d.x,d.y],place:true,prop:d.item,approachX:d.x-50}]),['lever',{kind:'pull',effect:'towerDoor',target:[1358,593],travel:35}]]),
       8:{felt:{kind:'take',target:[553,750],approachX:505,pickup:true,prop:'felt',source:'clockFelt'},bypass:{kind:'turn',effect:'clockBypass',from:f.bypassTurns||0,mounted:!!f.bypassMounted,prop:'crank',target:[440,650],radius:26},drive:{kind:'turn',effect:'clockDrive',prop:'fork',target:[662,650],radius:36},clapper:{kind:'climb',effect:'clockPad',target:[838,457],place:true,prop:'felt',accessY:617},frida:{kind:'gesture',target:[1242,650],approachX:1182},david:{kind:'gesture',target:[1048,655],approachX:994}},
       10:{trail0:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:0,prop:item||'lamp',target:[430,654],approachX:382},trail1:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:1,prop:item||'lamp',target:[731,612],approachX:682},trail2:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:2,prop:item||'lamp',target:[1025,626],approachX:978},child:{kind:'walk',effect:'ridgeReunite',target:[728,722],approachX:634,destinationX:960},alfur:{kind:'gesture',target:[812,682],approachX:762}},
-      11:{mom:{kind:'gesture',target:[655,622],approachX:724},tea0:{kind:'pour',target:[736,643],approachX:679},tea1:{kind:'pour',target:[826,633],approachX:765},tea2:{kind:'pour',target:[916,643],approachX:974}},
+      11:{mom:{kind:'gesture',target:[655,622],approachX:724},tea0:{kind:'pour',target:[726,629],approachX:669},tea1:{kind:'pour',target:[802,621],approachX:745},tea2:{kind:'pour',target:[878,629],approachX:936}},
       1:{awning:{kind:'pull',target:[962,620],travel:73,effect:'awning'},crank:{kind:'take',target:[850,624],prop:'crank',pickup:true,source:'northCrank'},
         wheel:{kind:'turn',target:[1169,653],radius:34,effect:'gate',from:f.gateTurns||0,mounted:!!f.crankMounted,prop:'crank'}},
       2:{rope:{kind:'crouch',target:[331,708],prop:'rope',pickup:true,source:'forestRope'},hook:{kind:f.branchBent?'take':'pull',target:[541,f.branchBent?620:688],effect:f.branchBent?'unhook':'branch',prop:f.branchBent?'hook':'rope',pickup:!!f.branchBent,source:'vineHook'},
@@ -31,6 +31,9 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
   }
   function companion(scene,state,heroX) {
     if(scene===2&&!state.f.bridge) return {david:state.f.bridgeBrace?380:425,bracing:!!state.f.bridgeBrace};
+    if(scene===3) return {david:heroX<580?255:Math.max(255,Math.min(1320,heroX-175))};
+    if(scene===4) return {david:heroX<340?195:225,frida:1255};
+    if(scene===7) return {david:185};
     return {david:Math.max(85,Math.min(1490,heroX-175)),frida:Math.max(65,Math.min(1490,heroX-270))};
   }
   return {score,companion};
