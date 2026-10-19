@@ -6,7 +6,7 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
   hotspots:s=>[
     ...(!s.f.ropeTaken?[I('rope','检查并收起旧绳圈',331,725,72,65,{walkX:296})]:[]),
     ...(!s.f.hookTaken?[H('hook',s.f.branchBent?'取下树枝上的铁钩':'观察高处的铁钩',541,s.f.branchBent?642:496,75,95,{walkX:495})]:[]),
-    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:412,642,76,114,{walkX:440})]:[]),
+    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:412,642,76,114,{walkX:310})]:[]),
     H('anchor','对岸的固定铁环',1095,556,85,122,{walkX:s.f.bridge?1042:516}),
     H('winch','转动桥边绞盘',481,651,98,116,{walkX:446}),
     H('stream','观察逆流的溪水',790,776,193,82,{walkX:s.f.bridge?774:492}),

@@ -346,3 +346,15 @@ test('Malformed mixer values are rejected without overwriting progress',()=>{
  for(const v of [-.1,1.1,NaN,Infinity,'0.5',null]){const s=State.fresh();s.settings.musicVolume=v;assert.throws(()=>State.validate(s),/音量设置无效/);}
 });
 test('Invalid score positions are rejected',()=>{assert.throws(()=>Score.eventsForBar(null,0));assert.throws(()=>Score.eventsForBar(Score.cueFor(0),-1));});
+test('Conversational approach chooses nearest valid side, avoids NPC overlap and stays in place when already comfortable',()=>{
+ const C=H.use('content/choreography'),s=State.fresh();
+ const mom={id:'mom',x:579,walkX:724};
+ assert.equal(C.resolveApproach(0,mom,C.score(0,'mom',s,null,800),s,800).approachX,800);
+ assert.equal(C.resolveApproach(0,mom,C.score(0,'mom',s,null,300),s,300).approachX,437);
+ assert.equal(C.resolveApproach(0,mom,C.score(0,'mom',s,null,980),s,980).approachX,721);
+ assert.equal(C.score(0,'mom',s,null,300).approachX,434);
+ assert.equal(C.score(0,'mom',s,null,980).approachX,724);
+ const david={id:'david',x:735,walkX:665};
+ assert.equal(C.resolveApproach(1,david,C.score(1,'david',s,null,375),s,375).approachX,607);
+ assert.equal(C.resolveApproach(1,david,C.score(1,'david',s,null,1145),s,1145).approachX,863);
+});

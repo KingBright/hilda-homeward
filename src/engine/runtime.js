@@ -47,16 +47,40 @@ function think(t,time=3300){toast(t,time);$('toast').classList.add('thought');}
 function actionLabel(t,sticky=false){$('actionLabel').textContent=t;$('actionLabel').classList.add('show');clearTimeout(labelTimer);if(!sticky)labelTimer=setTimeout(()=>$('actionLabel').classList.remove('show'),3800);}
 function setFlag(k,v=true){if(!boolFlags.has(k)&&!numericFlags[k])throw Error('Unknown state key '+k);s.f[k]=v;commit();}
 function commit(){if(!renderQueued){renderQueued=true;requestAnimationFrame(()=>{renderQueued=false;render();});}save();}
-function take(k,announce=true){if(!Object.hasOwn(Story.items,k))throw Error('Unknown item '+k);if(!s.inventory.includes(k))s.inventory.push(k);renderInventory();save();if(announce){think(Story.items[k]+'收好了。');sound('warm');} $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});}
-function consume(k){s.inventory=s.inventory.filter(v=>v!==k);if(selected===k)selected=null;renderInventory();save();}
+let pendingRewards=[];
+function flushRewards(){
+ if(!pendingRewards.length||dialogue)return;
+ const items=pendingRewards.splice(0,pendingRewards.length);
+ renderInventory();
+ think('获得'+items.map(k=>'「'+Story.items[k]+'」').join('、')+' · 已收入背包。');
+ sound('warm');
+ $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});
+}
+function take(k,announce=true){
+ if(!Object.hasOwn(Story.items,k))throw Error('Unknown item '+k);
+ if(!s.inventory.includes(k))s.inventory.push(k);
+ if(announce==='silent'){renderInventory();save();return;}
+ if(!announce||dialogue){
+  if(!pendingRewards.includes(k))pendingRewards.push(k);
+  renderInventory();save();
+  queueMicrotask(()=>{if(!dialogue)flushRewards();});
+  return;
+ }
+ renderInventory();save();
+ think('获得「'+Story.items[k]+'」· 已收入背包。');
+ sound('warm');
+ $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});
+}
+function consume(k){s.inventory=s.inventory.filter(v=>v!==k);pendingRewards=pendingRewards.filter(v=>v!==k);if(selected===k)selected=null;renderInventory();save();}
 function addNote(k){if(!s.notes.includes(k)){s.notes.push(k);save();} }
-function sketch(k,title,body){if(!Object.hasOwn(sketches,k))return;if(!s.sketches.includes(k)){s.sketches.push(k);save();toast('观察手记 '+s.sketches.length+' / 6 · '+title);}say([['希尔达',body]]);}
-function combo(a,b){const output=Items.recipeFor(a,b);if(!output)return false;consume(a);consume(b);take(output,false);selected=output;renderInventory();toast(output==='shade'?'组合完成 · 把围巾叠在提灯一侧做成遮光屏风，光线柔和了':'组合完成 · '+Story.items[output]);sound('wood');return true;}
+function sketch(k,title,body){if(!Object.hasOwn(sketches,k))return;const freshSketch=!s.sketches.includes(k);if(freshSketch){s.sketches.push(k);save();}say([['希尔达',body]],()=>{if(freshSketch)toast('观察手记 '+s.sketches.length+' / 6 · '+title);});}
+function combo(a,b){const output=Items.recipeFor(a,b);if(!output)return false;consume(a);consume(b);take(output,'silent');selected=output;renderInventory();toast(output==='shade'?'组合完成 · 把围巾叠在提灯一侧做成遮光屏风，光线柔和了':'组合完成 · '+Story.items[output]);sound('wood');return true;}
 function selectItem(id){if(!s.inventory.includes(id))return;if(selected===id){selected=null;}else if(selected&&!combo(selected,id)){selected=id;}else if(!selected)selected=id;renderInventory();if(selected){toggleBag(false);think('先把'+Story.items[selected]+'拿在手里。');}}
 function toggleBag(force){if(activeWork&&force!==false)return;if(force!==false&&!bagOpen&&pendingMove?.after)pendingMove=null;bagOpen=typeof force==='boolean'?force:!bagOpen;$('pocket').classList.toggle('hidden',!bagOpen);$('bagBtn').setAttribute('aria-expanded',String(bagOpen));renderInventory();}
 function renderInventory(){
- $('bagCount').textContent=s.inventory.length;
- $('items').innerHTML=s.inventory.length?s.inventory.map(k=>`<button class="item ${selected===k?'selected':''}" data-item="${k}" aria-label="${esc(Story.items[k])}" aria-pressed="${selected===k}">${Art.itemArt(k)}<span>${esc(Story.items[k])}</span></button>`).join(''):'<p style="font-size:11px;color:#becabb;margin:8px">背包还空着。带上一点好奇心就好。</p>';
+ const visibleItems=dialogue&&pendingRewards.length?s.inventory.filter(k=>!pendingRewards.includes(k)):s.inventory;
+ $('bagCount').textContent=visibleItems.length;
+ $('items').innerHTML=visibleItems.length?visibleItems.map(k=>`<button class="item ${selected===k?'selected':''}" data-item="${k}" aria-label="${esc(Story.items[k])}" aria-pressed="${selected===k}">${Art.itemArt(k)}<span>${esc(Story.items[k])}</span></button>`).join(''):'<p style="font-size:11px;color:#becabb;margin:8px">背包还空着。带上一点好奇心就好。</p>';
  document.querySelectorAll('.item').forEach(el=>{el.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();e.stopPropagation();inventoryDrag={id:el.dataset.item,startX:e.clientX,startY:e.clientY,moved:false,pid:e.pointerId};el.setPointerCapture?.(e.pointerId);});el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectItem(el.dataset.item);}});});
  $('selection').classList.toggle('hidden',!selected);$('selection').querySelector('span').textContent=selected?'使用 '+Story.items[selected]:'';
  $('pocketCaption').textContent=selected?'已选择 '+Story.items[selected]+' · 放到目标上，或再选物品组合':'选择或拖动物品，放到场景中的目标上。';
@@ -83,6 +107,16 @@ function setView(){ui.world.setAttribute('viewBox',`${camera.x.toFixed(2)} ${cam
 function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
 function worldPoint(x,y){const ctm=ui.world.getScreenCTM?.();if(ctm&&ctm.a&&ctm.d){const pt=new DOMPoint(x,y).matrixTransform(ctm.inverse());return {x:pt.x,y:pt.y};}const r=ui.world.getBoundingClientRect();return {x:camera.x+(x-r.left)/r.width*camera.w,y:camera.y+(y-r.top)/r.height*camera.h};}
 function atPoint(p){return Readability.pick(activeHotspots,p);}
+function actorWorldPos(el){
+ let x=0,y=0,cur=el?.parentElement;
+ while(cur&&cur!==ui.world){
+  const tr=cur.getAttribute('transform')||'';
+  const m=tr.match(/translate\(\s*([+-]?\d+(?:\.\d+)?)[,\s]+([+-]?\d+(?:\.\d+)?)\s*\)/);
+  if(m){x+=Number(m[1]);y+=Number(m[2]);}
+  cur=cur.parentElement;
+ }
+ return {x,y};
+}
 function render(){
  const index=titleMode?7:s.scene,artState=titleMode?{...s,scene:7}:s,scene=Story.scenes[index];
  const visualState=dragPreview?.kind==='ladder'?{...artState,f:{...artState.f,ladderX:dragPreview.x}}:dragPreview?.kind==='beacon'?{...artState,beaconAngle:dragPreview.angle}:artState;
@@ -108,6 +142,36 @@ function updateActors(){
  const presentation=SetpieceMotion.actor(index===9&&s.f.roofDone?{...hero,x:1392,y:575}:hero,activeWork,s.settings.reduced);
  p.setAttribute('transform',`translate(${presentation.x.toFixed(1)} ${presentation.y.toFixed(1)})`);
  p.setAttribute('class',(pendingMove?'walking ':'')+(activeWork?'working ':''));
+ const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
+ if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
+ if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
+ ChapterLife.animate(ui.world,activeWork,s);
+ SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
+ if(!isPaused()){
+  if(dialogue&&!activeWork&&!pendingMove){
+   const lineWho=dialogue.lines[dialogue.index]?.[0];
+   const partner=(lineWho&&lineWho!=='希尔达')?lineWho:dialogue.lines.map(l=>l[0]).find(w=>w&&w!=='希尔达');
+   if(partner){
+    const pNode=[...ui.world.querySelectorAll(`[data-cast="${partner}"]`)].find(n=>!n.closest('#heroPosition'));
+    if(pNode){
+     const px=actorWorldPos(pNode).x;
+     if(Math.abs(px-presentation.x)>8){hero.face=px<presentation.x?-1:1;pet.side=hero.face;}
+    }
+   }
+  }
+  for(const node of ui.world.querySelectorAll('[data-cast="妈妈"],[data-cast="大卫"],[data-cast="芙丽达"]')){
+   if(node.closest('#heroPosition'))continue;
+   const nx=actorWorldPos(node).x;
+   let face=node.getAttribute('transform')==='scale(-1 1)'?-1:1;
+   if(index===2&&node.dataset.cast==='大卫'&&!s.f.bridge&&!dialogue)face=1;
+   else if(index===9&&node.dataset.cast==='大卫'&&s.f.roofBrace&&!s.f.fridaSafe&&!dialogue)face=-1;
+   else if(Math.abs(presentation.x-nx)>10)face=presentation.x<nx?-1:1;
+   const tf=face<0?'scale(-1 1)':'';
+   if((node.getAttribute('transform')||'')!==tf){
+    if(tf)node.setAttribute('transform',tf);else node.removeAttribute('transform');
+   }
+  }
+ }
  $('heroFacing').setAttribute('transform',`scale(${hero.face} 1)`);
  const t=$('twigPosition');
  let petDrawX=petX,petDrawY=ground(petX,s)+1;
@@ -117,12 +181,7 @@ function updateActors(){
   petDrawX=petX+(1345-petX)*k;petDrawY=ground(petX,s)+1+(590-ground(petX,s)-1)*k;
   t.setAttribute('transform',`translate(${petDrawX.toFixed(3)} ${petDrawY.toFixed(3)})`);
  }
- const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
- if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
- if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
  Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance+(presentation.travel||0),moving:presentation.moving??!!pendingMove,walkAmount:presentation.walkAmount??walkAmount,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
- ChapterLife.animate(ui.world,activeWork,s);
- SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  CastMotion.animate(ui.world,elapsed,s.settings.reduced,activeWork,isPaused());
  CreatureLife.paint(ui.world,elapsed,{scene:index,flags:s.f,paused:isPaused(),reduced:s.settings.reduced,pet:{...pet.snapshot(),boarding:activeWork?.score.effect==='roofBoard'},heroX:hero.x,ground:x=>ground(x,s),speaking:!!dialogue});
  const held=activeWork?.score,heldProgress=activeWork?.sample().progress??0;
@@ -162,17 +221,19 @@ function updateActors(){
 function isPaused(){return modal||document.hidden||titleMode;}
 function canAct(){return started&&!isPaused()&&!dialogue&&!locked&&!activeWork&&!sequenceActive;}
 function walkLimit(x){if(s.scene===2&&!s.f.bridge)return clamp(x,135,545);if(s.scene===9&&!s.f.davidSafe)return clamp(x,200,466);if(s.scene===10&&!s.f.reunited)return clamp(x,145,1036);return clamp(x,90,1510);}
-function walkTo(x,after){x=walkLimit(x);if(!inspection)camera.manual=false;hero.face=x<hero.x?-1:1;if(Math.abs(x-hero.x)<8){after?.();return;}pendingMove={target:x,after,speed:0};$('hoverLabel').classList.remove('show');}
+function walkTo(x,after){x=walkLimit(x);if(!inspection)camera.manual=false;if(Math.abs(x-hero.x)<8){after?.();return;}hero.face=x<hero.x?-1:1;pendingMove={target:x,after,speed:0};$('hoverLabel').classList.remove('show');}
 /** Pointer, keyboard, inventory drops and scene drags use the same arrival boundary. */
 function arriveAndAct(h,item,invoke){
  const scene=s.scene,request=sceneRequest;
- const planned=Choreography.score(scene,h.id,s,item);
- walkTo(planned.approachX??h.walkX??(h.kind==='take'?h.x-48:h.x),()=>{
+ const planned=Choreography.score(scene,h.id,s,item,hero.x);
+ const resolved=Choreography.resolveApproach(scene,h,planned,s,hero.x,walkLimit);
+ walkTo(resolved.approachX,()=>{
   if(request!==sceneRequest||scene!==s.scene||!canAct())return;
   const live=Story.scenes[scene].hotspots(s).find(v=>v.id===h.id);
   if(!live||item&&(!s.inventory.includes(item)||!Items.canUse(scene,h.id,item)))return;
-  hero.face=(planned.target?.[0]??live.x)<hero.x?-1:1;
-  currentInteraction={scene,id:h.id,item,target:[live.x,live.y]};
+  const targetX=resolved.targetX??planned.target?.[0]??live.x;
+  if(Math.abs(targetX-hero.x)>4){hero.face=targetX<hero.x?-1:1;pet.side=hero.face;}
+  currentInteraction={scene,id:h.id,item,target:[targetX,live.y]};
   try{invoke();if(item&&selected===item){selected=null;renderInventory();}save();}
   catch(e){console.error('Interaction failed:',e);toast('动作没有完成，物品和进度仍保留。可以重新尝试。');}
   finally{currentInteraction=null;}
@@ -207,7 +268,7 @@ function sceneDrag(down,payload){
 }
 
 let typewriter={timer:null,fullText:'',index:0,who:'',busy:false};
-function say(lines,after){if(!Array.isArray(lines)||!lines.length){after?.();return;}pendingMove=null;dialogue={lines,index:0,after};toggleBag(false);$('speech').classList.remove('hidden');showLine();}
+function say(lines,after){if(!Array.isArray(lines)||!lines.length){after?.();flushRewards();return;}pendingMove=null;dialogue={lines,index:0,after};toggleBag(false);$('speech').classList.remove('hidden');showLine();}
 function showLine(){
  if(!dialogue)return;
  const [who,line]=dialogue.lines[dialogue.index];
@@ -256,6 +317,8 @@ function nextLine(){
   dialogue=null;
   $('speech').classList.add('hidden');
   cb?.();
+  flushRewards();
+  updateActors();
   save();
  }else showLine();
 }
@@ -267,7 +330,7 @@ function work(ms,label,after,override={}){
  if(activeWork)return;
  pendingMove=null;
  const ctx=currentInteraction??{scene:s.scene,id:'work',item:null};
- const score={...Choreography.score(ctx.scene,ctx.id,s,ctx.item),...override};
+ const score={...Choreography.score(ctx.scene,ctx.id,s,ctx.item,hero.x),...override};
  score.target??=ctx.target??[hero.x+hero.face*45,Story.scenes[s.scene].ground(hero.x,s)-115];
  if(Number.isFinite(score.approachX)&&Math.abs(hero.x-walkLimit(score.approachX))>8){
   walkTo(score.approachX,()=>work(ms,label,after,score));return;
@@ -358,9 +421,9 @@ if(ui.contraptionModal){
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
-function go(index){cancelPointer();closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
+function go(index){cancelPointer();closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;pendingRewards=[];cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){walkAmount=0;dragPreview=null;closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){walkAmount=0;dragPreview=null;pendingRewards=[];closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
 function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}

@@ -4,7 +4,7 @@ b+=path('M-40 780 63 701 190 735 367 673 460 708 646 646 726 684 901 628 1072 67
 b+=group(1340,823,2.36,`${troll(0,0,1,true)}${path(Staging.ridgeArm(f.reunited?1:0),'#829580','#3e675c',3,'id="ridgeMotherArm"')}`);
 b+=rock(300,760,.75,'#8b9c7c')+rock(804,740,.85,'#879a7c')+rock(918,746,.78,'#889d7f');
 b+=[430,731,1025].map((x,i)=>{let y=[664,622,636][i];return path(`M${x} ${y+77}v-115`,'none','#5a7662',9)+path(`M${x-31} ${y-37}h65`,'none','#536e5d',8)+lamp(x,y,.7,!!f['trail'+i])+group(x,y,1,`<g id="trailHood${i}" transform="translate(${f['hood'+i]?14:0} 0) rotate(${f['hood'+i]?-70:0} 0 -12)">${path('M-22-18h43l19 26h-79Z','#a2ab80','#4a6e5a',2)}</g>`);}).join('');
-b+=person('阿尔弗',812,680,.75)+`<g id="ridgeChild" transform="${Staging.ridgeChild(f.reunited?1:0)}">${troll(0,0,1)}</g>`;b+=person('大卫',265,833,1.34)+person('芙丽达',518,826,1.38)+woff(235,430,.82)+path('M1305 228 1392 191 1473 250 1561 233 1647 317','none','#e2d8b0',2,'opacity=".5"');
+b+=person('阿尔弗',812,680,.75)+`<g id="ridgeChild" transform="${Staging.ridgeChild(f.reunited?1:0)}">${troll(0,0,1)}</g>`;b+=person('大卫',235,835,1.34)+person('芙丽达',358,829,1.38)+woff(235,430,.82)+path('M1305 228 1392 191 1473 250 1561 233 1647 317','none','#e2d8b0',2,'opacity=".5"');
 b+=pine(25,899,1.55,'#325e58')+fern(59,926,2.2,'#2f5d50')+fern(1525,898,2.4,'#3c6754')+mushrooms(951,794,1)+rect(0,660,1600,255,'url(#fog)')+particles(30);return b;}
 
 return ridge;

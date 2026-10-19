@@ -1337,16 +1337,16 @@ return {items,notes};
 /* src/content/choreography.js */
 /** World-space contact points. Acting, mechanism motion and footprints share this score. */
 Homeward.define('content/choreography', ['content/staging','content/mechanisms'], (Staging,Mechanisms) => {
-  function score(scene,id,state,item) {
-    const f=state.f;
+  function score(scene,id,state,item,heroX) {
+    const f=state.f,momLeft=Number.isFinite(heroX)&&heroX<579;
     const entries={
-      0:{bird:{kind:'take',target:Staging.home.bird,approachX:980,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1178,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[655,695],approachX:724,pickup:true,prop:'scarf'}},
+      0:{bird:{kind:'take',target:Staging.home.bird,approachX:980,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1178,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[momLeft?503:655,695],approachX:momLeft?434:724,pickup:true,prop:'scarf'}},
       5:{line:{kind:'take',target:[336,710],approachX:286,pickup:true,prop:'line',source:'gondolaLine',twoHands:true},brake:{kind:'turn',effect:'gondolaLift',target:[1029,633],radius:24,approachX:974}},
       6:{holder:{kind:'place',target:[782,643],place:true,prop:'shade',approachX:731},tone0:{kind:'reach',target:[468,685],approachX:426},tone1:{kind:'reach',target:[586,663],approachX:544},tone2:{kind:'reach',target:[704,685],approachX:662}},
       7:Object.fromEntries([...[['gearS',453,738],['gearM',612,740],['gearL',795,725]].map(([id,x,y])=>[id,{kind:'take',target:[x,y],approachX:x-48,pickup:true,prop:id,source:'pickup-'+id,twoHands:id!=='gearS'}]),...Mechanisms.gears.map(d=>[d.socket,{kind:'place',target:[d.x,d.y],place:true,prop:d.item,approachX:d.x-50}]),['lever',{kind:'pull',effect:'towerDoor',target:[1358,593],travel:35}]]),
-      8:{felt:{kind:'take',target:[553,750],approachX:505,pickup:true,prop:'felt',source:'clockFelt'},bypass:{kind:'turn',effect:'clockBypass',from:f.bypassTurns||0,mounted:!!f.bypassMounted,prop:'crank',target:[440,650],radius:26},drive:{kind:'turn',effect:'clockDrive',prop:'fork',target:[662,650],radius:36},clapper:{kind:'climb',effect:'clockPad',target:[838,457],place:true,prop:'felt',accessY:617},frida:{kind:'gesture',target:[1242,650],approachX:1182},david:{kind:'gesture',target:[1048,655],approachX:994}},
+      8:{felt:{kind:'take',target:[553,750],approachX:505,pickup:true,prop:'felt',source:'clockFelt'},bypass:{kind:'turn',effect:'clockBypass',from:f.bypassTurns||0,mounted:!!f.bypassMounted,prop:'crank',target:[440,650],radius:26},drive:{kind:'turn',effect:'clockDrive',prop:'fork',target:[662,650],radius:36},clapper:{kind:'climb',effect:'clockPad',target:[838,457],place:true,prop:'felt',accessY:617},frida:{kind:'gesture',target:[1242,650],approachX:1175},david:{kind:'gesture',target:[1048,655],approachX:968}},
       10:{trail0:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:0,prop:item||'lamp',target:[430,654],approachX:382},trail1:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:1,prop:item||'lamp',target:[731,612],approachX:682},trail2:{kind:item?'place':'turn',effect:item?'trailLight':'trailHood',node:2,prop:item||'lamp',target:[1025,626],approachX:978},child:{kind:'walk',effect:'ridgeReunite',target:[728,722],approachX:634,destinationX:960},alfur:{kind:'gesture',target:[812,682],approachX:762}},
-      11:{mom:{kind:'gesture',target:[655,622],approachX:724},tea0:{kind:'pour',target:[726,629],approachX:669},tea1:{kind:'pour',target:[802,621],approachX:745},tea2:{kind:'pour',target:[878,629],approachX:936}},
+      11:{mom:{kind:'gesture',target:[momLeft?503:655,622],approachX:momLeft?434:724},tea0:{kind:'pour',target:[726,629],approachX:669},tea1:{kind:'pour',target:[802,621],approachX:745},tea2:{kind:'pour',target:[878,629],approachX:936}},
       1:{awning:{kind:'pull',target:[962,620],travel:73,effect:'awning'},crank:{kind:'take',target:[850,624],prop:'crank',pickup:true,source:'northCrank'},
         wheel:{kind:'turn',target:[1169,653],radius:34,effect:'gate',from:f.gateTurns||0,mounted:!!f.crankMounted,prop:'crank'}},
       2:{rope:{kind:'crouch',target:[331,708],prop:'rope',pickup:true,source:'forestRope'},hook:{kind:f.branchBent?'take':'pull',target:[541,f.branchBent?620:688],effect:f.branchBent?'unhook':'branch',prop:f.branchBent?'hook':'rope',pickup:!!f.branchBent,source:'vineHook'},
@@ -1368,12 +1368,68 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
   }
   function companion(scene,state,heroX) {
     if(scene===2&&!state.f.bridge) return {david:state.f.bridgeBrace?380:425,bracing:!!state.f.bridgeBrace};
-    if(scene===3) return {david:heroX<580?255:Math.max(255,Math.min(1320,heroX-175))};
-    if(scene===4) return {david:heroX<340?195:225,frida:1255};
+    if(scene===2) return {david:heroX<235?heroX+145:Math.max(85,Math.min(1490,heroX-175))};
+    if(scene===3) return {david:heroX<720?255:Math.max(555,Math.min(1320,heroX-175))};
+    if(scene===4) return {david:heroX<265?365:heroX<355?165:225,frida:1255};
     if(scene===7) return {david:185};
     return {david:Math.max(85,Math.min(1490,heroX-175)),frida:Math.max(65,Math.min(1490,heroX-270))};
   }
-  return {score,companion};
+  function obstaclesFor(scene,state,heroX) {
+    const f=state.f,comp=companion(scene,state,heroX);
+    if(scene===0) return [[579,116]];
+    if(scene===1) return [[735,106]];
+    if(scene===2) return [[comp.david,96]];
+    if(scene===3) return [[418,90],[comp.david,92]];
+    if(scene===4) return [[1255,104],[comp.david,92]];
+    if(scene===5) return [[235,96],[1345,104]];
+    if(scene===6) return [[245,96],[956,112],[1149,102]];
+    if(scene===7) return [[185,92],[312,98]];
+    if(scene===8) return [[1082,88],[1272,88]];
+    if(scene===9) return [[!f.davidSafe?670:f.fridaSafe?980:f.roofBrace?1069:478,90],[f.fridaSafe?842:1160,92]];
+    if(scene===10) return [[235,92],[358,92],[f.reunited?1188:682,102],[812,76]];
+    if(scene===11) return [[375,98],[579,116],[1225,104]];
+    return [];
+  }
+  function talkSpec(scene,id,state) {
+    const f=state.f;
+    if(scene===0&&id==='mom'&&(!f.letter||f.promise)) return {x:579,min:116,ideal:142,max:225};
+    if(scene===1&&id==='david') return {x:735,min:106,ideal:128,max:205};
+    if(scene===2&&id==='david') return {x:f.bridgeBrace?380:425,min:90,ideal:115,max:185};
+    if(scene===3&&id==='alfur') return {x:418,min:90,ideal:114,max:185};
+    if(scene===4&&id==='gauge') return {x:1255,min:104,ideal:135,max:200,leftOnly:true};
+    if(scene===6&&id==='child') return {x:956,min:112,ideal:126,max:190,leftOnly:true};
+    if(scene===6&&id==='frida') return {x:1149,min:100,ideal:118,max:185};
+    if(scene===8&&id==='david') return {x:1082,min:88,ideal:110,max:175};
+    if(scene===8&&id==='frida') return {x:1272,min:88,ideal:98,max:175};
+    if(scene===9&&id==='david'&&(!f.roofAnchor||f.roofBrace)) return {x:!f.davidSafe?670:f.fridaSafe?980:1069,min:88,ideal:112,max:220};
+    if(scene===9&&id==='frida'&&f.fridaSafe) return {x:842,min:88,ideal:108,max:175};
+    if(scene===10&&id==='alfur') return {x:812,min:82,ideal:108,max:175};
+    if(scene===10&&id==='child'&&(f.reunited||![0,1,2].every(i=>f['trail'+i]))) return {x:f.reunited?1188:682,min:96,ideal:114,max:185,leftOnly:true};
+    if(scene===11&&id==='mom'&&f.hug) return {x:579,min:116,ideal:142,max:225};
+    if(scene===11&&id==='friends') return {x:1225,min:104,ideal:132,max:205};
+    return null;
+  }
+  function resolveApproach(scene,h,planned,state,heroX,limitFn=x=>x) {
+    const spec=talkSpec(scene,h.id,state);
+    if(!spec) return {approachX:planned.approachX??h.walkX??(h.kind==='take'?h.x-48:h.x),targetX:planned.target?.[0]??h.x};
+    const others=obstaclesFor(scene,state,heroX).filter(([ox])=>Math.abs(ox-spec.x)>24);
+    const clear=x=>Math.abs(limitFn(x)-x)<2&&others.every(([ox,r])=>Math.abs(x-ox)>=r);
+    const unobstructed=x=>!others.some(([ox])=>ox>Math.min(x,spec.x)+18&&ox<Math.max(x,spec.x)-18);
+    const d=Math.abs(heroX-spec.x);
+    if(d>=spec.min&&d<=spec.max&&clear(heroX)&&unobstructed(heroX)&&(!spec.leftOnly||heroX<spec.x)){
+      return {approachX:heroX,targetX:spec.x};
+    }
+    const left=limitFn(spec.x-spec.ideal),right=limitFn(spec.x+spec.ideal);
+    const leftOK=Math.abs(left-spec.x)>=spec.min-8&&clear(left);
+    const rightOK=!spec.leftOnly&&Math.abs(right-spec.x)>=spec.min-8&&clear(right);
+    if(leftOK&&rightOK){
+      return {approachX:Math.abs(heroX-left)<=Math.abs(heroX-right)?left:right,targetX:spec.x};
+    }
+    if(leftOK) return {approachX:left,targetX:spec.x};
+    if(rightOK) return {approachX:right,targetX:spec.x};
+    return {approachX:limitFn(planned.approachX??h.walkX??left),targetX:spec.x};
+  }
+  return {score,companion,resolveApproach};
 });
 
 /* src/content/details.js */
@@ -3578,16 +3634,40 @@ function think(t,time=3300){toast(t,time);$('toast').classList.add('thought');}
 function actionLabel(t,sticky=false){$('actionLabel').textContent=t;$('actionLabel').classList.add('show');clearTimeout(labelTimer);if(!sticky)labelTimer=setTimeout(()=>$('actionLabel').classList.remove('show'),3800);}
 function setFlag(k,v=true){if(!boolFlags.has(k)&&!numericFlags[k])throw Error('Unknown state key '+k);s.f[k]=v;commit();}
 function commit(){if(!renderQueued){renderQueued=true;requestAnimationFrame(()=>{renderQueued=false;render();});}save();}
-function take(k,announce=true){if(!Object.hasOwn(Story.items,k))throw Error('Unknown item '+k);if(!s.inventory.includes(k))s.inventory.push(k);renderInventory();save();if(announce){think(Story.items[k]+'收好了。');sound('warm');} $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});}
-function consume(k){s.inventory=s.inventory.filter(v=>v!==k);if(selected===k)selected=null;renderInventory();save();}
+let pendingRewards=[];
+function flushRewards(){
+ if(!pendingRewards.length||dialogue)return;
+ const items=pendingRewards.splice(0,pendingRewards.length);
+ renderInventory();
+ think('获得'+items.map(k=>'「'+Story.items[k]+'」').join('、')+' · 已收入背包。');
+ sound('warm');
+ $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});
+}
+function take(k,announce=true){
+ if(!Object.hasOwn(Story.items,k))throw Error('Unknown item '+k);
+ if(!s.inventory.includes(k))s.inventory.push(k);
+ if(announce==='silent'){renderInventory();save();return;}
+ if(!announce||dialogue){
+  if(!pendingRewards.includes(k))pendingRewards.push(k);
+  renderInventory();save();
+  queueMicrotask(()=>{if(!dialogue)flushRewards();});
+  return;
+ }
+ renderInventory();save();
+ think('获得「'+Story.items[k]+'」· 已收入背包。');
+ sound('warm');
+ $('bagBtn').animate?.([{transform:'translateY(0)'},{transform:'translateY(-5px)'},{transform:'translateY(0)'}],{duration:380});
+}
+function consume(k){s.inventory=s.inventory.filter(v=>v!==k);pendingRewards=pendingRewards.filter(v=>v!==k);if(selected===k)selected=null;renderInventory();save();}
 function addNote(k){if(!s.notes.includes(k)){s.notes.push(k);save();} }
-function sketch(k,title,body){if(!Object.hasOwn(sketches,k))return;if(!s.sketches.includes(k)){s.sketches.push(k);save();toast('观察手记 '+s.sketches.length+' / 6 · '+title);}say([['希尔达',body]]);}
-function combo(a,b){const output=Items.recipeFor(a,b);if(!output)return false;consume(a);consume(b);take(output,false);selected=output;renderInventory();toast(output==='shade'?'组合完成 · 把围巾叠在提灯一侧做成遮光屏风，光线柔和了':'组合完成 · '+Story.items[output]);sound('wood');return true;}
+function sketch(k,title,body){if(!Object.hasOwn(sketches,k))return;const freshSketch=!s.sketches.includes(k);if(freshSketch){s.sketches.push(k);save();}say([['希尔达',body]],()=>{if(freshSketch)toast('观察手记 '+s.sketches.length+' / 6 · '+title);});}
+function combo(a,b){const output=Items.recipeFor(a,b);if(!output)return false;consume(a);consume(b);take(output,'silent');selected=output;renderInventory();toast(output==='shade'?'组合完成 · 把围巾叠在提灯一侧做成遮光屏风，光线柔和了':'组合完成 · '+Story.items[output]);sound('wood');return true;}
 function selectItem(id){if(!s.inventory.includes(id))return;if(selected===id){selected=null;}else if(selected&&!combo(selected,id)){selected=id;}else if(!selected)selected=id;renderInventory();if(selected){toggleBag(false);think('先把'+Story.items[selected]+'拿在手里。');}}
 function toggleBag(force){if(activeWork&&force!==false)return;if(force!==false&&!bagOpen&&pendingMove?.after)pendingMove=null;bagOpen=typeof force==='boolean'?force:!bagOpen;$('pocket').classList.toggle('hidden',!bagOpen);$('bagBtn').setAttribute('aria-expanded',String(bagOpen));renderInventory();}
 function renderInventory(){
- $('bagCount').textContent=s.inventory.length;
- $('items').innerHTML=s.inventory.length?s.inventory.map(k=>`<button class="item ${selected===k?'selected':''}" data-item="${k}" aria-label="${esc(Story.items[k])}" aria-pressed="${selected===k}">${Art.itemArt(k)}<span>${esc(Story.items[k])}</span></button>`).join(''):'<p style="font-size:11px;color:#becabb;margin:8px">背包还空着。带上一点好奇心就好。</p>';
+ const visibleItems=dialogue&&pendingRewards.length?s.inventory.filter(k=>!pendingRewards.includes(k)):s.inventory;
+ $('bagCount').textContent=visibleItems.length;
+ $('items').innerHTML=visibleItems.length?visibleItems.map(k=>`<button class="item ${selected===k?'selected':''}" data-item="${k}" aria-label="${esc(Story.items[k])}" aria-pressed="${selected===k}">${Art.itemArt(k)}<span>${esc(Story.items[k])}</span></button>`).join(''):'<p style="font-size:11px;color:#becabb;margin:8px">背包还空着。带上一点好奇心就好。</p>';
  document.querySelectorAll('.item').forEach(el=>{el.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();e.stopPropagation();inventoryDrag={id:el.dataset.item,startX:e.clientX,startY:e.clientY,moved:false,pid:e.pointerId};el.setPointerCapture?.(e.pointerId);});el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectItem(el.dataset.item);}});});
  $('selection').classList.toggle('hidden',!selected);$('selection').querySelector('span').textContent=selected?'使用 '+Story.items[selected]:'';
  $('pocketCaption').textContent=selected?'已选择 '+Story.items[selected]+' · 放到目标上，或再选物品组合':'选择或拖动物品，放到场景中的目标上。';
@@ -3614,6 +3694,16 @@ function setView(){ui.world.setAttribute('viewBox',`${camera.x.toFixed(2)} ${cam
 function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
 function worldPoint(x,y){const ctm=ui.world.getScreenCTM?.();if(ctm&&ctm.a&&ctm.d){const pt=new DOMPoint(x,y).matrixTransform(ctm.inverse());return {x:pt.x,y:pt.y};}const r=ui.world.getBoundingClientRect();return {x:camera.x+(x-r.left)/r.width*camera.w,y:camera.y+(y-r.top)/r.height*camera.h};}
 function atPoint(p){return Readability.pick(activeHotspots,p);}
+function actorWorldPos(el){
+ let x=0,y=0,cur=el?.parentElement;
+ while(cur&&cur!==ui.world){
+  const tr=cur.getAttribute('transform')||'';
+  const m=tr.match(/translate\(\s*([+-]?\d+(?:\.\d+)?)[,\s]+([+-]?\d+(?:\.\d+)?)\s*\)/);
+  if(m){x+=Number(m[1]);y+=Number(m[2]);}
+  cur=cur.parentElement;
+ }
+ return {x,y};
+}
 function render(){
  const index=titleMode?7:s.scene,artState=titleMode?{...s,scene:7}:s,scene=Story.scenes[index];
  const visualState=dragPreview?.kind==='ladder'?{...artState,f:{...artState.f,ladderX:dragPreview.x}}:dragPreview?.kind==='beacon'?{...artState,beaconAngle:dragPreview.angle}:artState;
@@ -3639,6 +3729,36 @@ function updateActors(){
  const presentation=SetpieceMotion.actor(index===9&&s.f.roofDone?{...hero,x:1392,y:575}:hero,activeWork,s.settings.reduced);
  p.setAttribute('transform',`translate(${presentation.x.toFixed(1)} ${presentation.y.toFixed(1)})`);
  p.setAttribute('class',(pendingMove?'walking ':'')+(activeWork?'working ':''));
+ const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
+ if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
+ if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
+ ChapterLife.animate(ui.world,activeWork,s);
+ SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
+ if(!isPaused()){
+  if(dialogue&&!activeWork&&!pendingMove){
+   const lineWho=dialogue.lines[dialogue.index]?.[0];
+   const partner=(lineWho&&lineWho!=='希尔达')?lineWho:dialogue.lines.map(l=>l[0]).find(w=>w&&w!=='希尔达');
+   if(partner){
+    const pNode=[...ui.world.querySelectorAll(`[data-cast="${partner}"]`)].find(n=>!n.closest('#heroPosition'));
+    if(pNode){
+     const px=actorWorldPos(pNode).x;
+     if(Math.abs(px-presentation.x)>8){hero.face=px<presentation.x?-1:1;pet.side=hero.face;}
+    }
+   }
+  }
+  for(const node of ui.world.querySelectorAll('[data-cast="妈妈"],[data-cast="大卫"],[data-cast="芙丽达"]')){
+   if(node.closest('#heroPosition'))continue;
+   const nx=actorWorldPos(node).x;
+   let face=node.getAttribute('transform')==='scale(-1 1)'?-1:1;
+   if(index===2&&node.dataset.cast==='大卫'&&!s.f.bridge&&!dialogue)face=1;
+   else if(index===9&&node.dataset.cast==='大卫'&&s.f.roofBrace&&!s.f.fridaSafe&&!dialogue)face=-1;
+   else if(Math.abs(presentation.x-nx)>10)face=presentation.x<nx?-1:1;
+   const tf=face<0?'scale(-1 1)':'';
+   if((node.getAttribute('transform')||'')!==tf){
+    if(tf)node.setAttribute('transform',tf);else node.removeAttribute('transform');
+   }
+  }
+ }
  $('heroFacing').setAttribute('transform',`scale(${hero.face} 1)`);
  const t=$('twigPosition');
  let petDrawX=petX,petDrawY=ground(petX,s)+1;
@@ -3648,12 +3768,7 @@ function updateActors(){
   petDrawX=petX+(1345-petX)*k;petDrawY=ground(petX,s)+1+(590-ground(petX,s)-1)*k;
   t.setAttribute('transform',`translate(${petDrawX.toFixed(3)} ${petDrawY.toFixed(3)})`);
  }
- const placement=Choreography.companion(index,s,hero.x),d=$('davidFollow'),fr=$('fridaFollow');
- if(d){d.setAttribute('transform',`translate(${placement.david} ${ground(placement.david,s)+4})`);d.classList.toggle('bracing',!!placement.bracing);}
- if(fr)fr.setAttribute('transform',`translate(${placement.frida} ${ground(placement.frida,s)+7})`);
  Performer.paint($('performer'),{...presentation,time:elapsed,distance:walkDistance+(presentation.travel||0),moving:presentation.moving??!!pendingMove,walkAmount:presentation.walkAmount??walkAmount,reduced:s.settings.reduced,action:activeWork,selected,scene:index,flags:s.f});
- ChapterLife.animate(ui.world,activeWork,s);
- SetpieceLife.animate(ui.world,activeWork,s,dragPreview);
  CastMotion.animate(ui.world,elapsed,s.settings.reduced,activeWork,isPaused());
  CreatureLife.paint(ui.world,elapsed,{scene:index,flags:s.f,paused:isPaused(),reduced:s.settings.reduced,pet:{...pet.snapshot(),boarding:activeWork?.score.effect==='roofBoard'},heroX:hero.x,ground:x=>ground(x,s),speaking:!!dialogue});
  const held=activeWork?.score,heldProgress=activeWork?.sample().progress??0;
@@ -3693,17 +3808,19 @@ function updateActors(){
 function isPaused(){return modal||document.hidden||titleMode;}
 function canAct(){return started&&!isPaused()&&!dialogue&&!locked&&!activeWork&&!sequenceActive;}
 function walkLimit(x){if(s.scene===2&&!s.f.bridge)return clamp(x,135,545);if(s.scene===9&&!s.f.davidSafe)return clamp(x,200,466);if(s.scene===10&&!s.f.reunited)return clamp(x,145,1036);return clamp(x,90,1510);}
-function walkTo(x,after){x=walkLimit(x);if(!inspection)camera.manual=false;hero.face=x<hero.x?-1:1;if(Math.abs(x-hero.x)<8){after?.();return;}pendingMove={target:x,after,speed:0};$('hoverLabel').classList.remove('show');}
+function walkTo(x,after){x=walkLimit(x);if(!inspection)camera.manual=false;if(Math.abs(x-hero.x)<8){after?.();return;}hero.face=x<hero.x?-1:1;pendingMove={target:x,after,speed:0};$('hoverLabel').classList.remove('show');}
 /** Pointer, keyboard, inventory drops and scene drags use the same arrival boundary. */
 function arriveAndAct(h,item,invoke){
  const scene=s.scene,request=sceneRequest;
- const planned=Choreography.score(scene,h.id,s,item);
- walkTo(planned.approachX??h.walkX??(h.kind==='take'?h.x-48:h.x),()=>{
+ const planned=Choreography.score(scene,h.id,s,item,hero.x);
+ const resolved=Choreography.resolveApproach(scene,h,planned,s,hero.x,walkLimit);
+ walkTo(resolved.approachX,()=>{
   if(request!==sceneRequest||scene!==s.scene||!canAct())return;
   const live=Story.scenes[scene].hotspots(s).find(v=>v.id===h.id);
   if(!live||item&&(!s.inventory.includes(item)||!Items.canUse(scene,h.id,item)))return;
-  hero.face=(planned.target?.[0]??live.x)<hero.x?-1:1;
-  currentInteraction={scene,id:h.id,item,target:[live.x,live.y]};
+  const targetX=resolved.targetX??planned.target?.[0]??live.x;
+  if(Math.abs(targetX-hero.x)>4){hero.face=targetX<hero.x?-1:1;pet.side=hero.face;}
+  currentInteraction={scene,id:h.id,item,target:[targetX,live.y]};
   try{invoke();if(item&&selected===item){selected=null;renderInventory();}save();}
   catch(e){console.error('Interaction failed:',e);toast('动作没有完成，物品和进度仍保留。可以重新尝试。');}
   finally{currentInteraction=null;}
@@ -3738,7 +3855,7 @@ function sceneDrag(down,payload){
 }
 
 let typewriter={timer:null,fullText:'',index:0,who:'',busy:false};
-function say(lines,after){if(!Array.isArray(lines)||!lines.length){after?.();return;}pendingMove=null;dialogue={lines,index:0,after};toggleBag(false);$('speech').classList.remove('hidden');showLine();}
+function say(lines,after){if(!Array.isArray(lines)||!lines.length){after?.();flushRewards();return;}pendingMove=null;dialogue={lines,index:0,after};toggleBag(false);$('speech').classList.remove('hidden');showLine();}
 function showLine(){
  if(!dialogue)return;
  const [who,line]=dialogue.lines[dialogue.index];
@@ -3787,6 +3904,8 @@ function nextLine(){
   dialogue=null;
   $('speech').classList.add('hidden');
   cb?.();
+  flushRewards();
+  updateActors();
   save();
  }else showLine();
 }
@@ -3798,7 +3917,7 @@ function work(ms,label,after,override={}){
  if(activeWork)return;
  pendingMove=null;
  const ctx=currentInteraction??{scene:s.scene,id:'work',item:null};
- const score={...Choreography.score(ctx.scene,ctx.id,s,ctx.item),...override};
+ const score={...Choreography.score(ctx.scene,ctx.id,s,ctx.item,hero.x),...override};
  score.target??=ctx.target??[hero.x+hero.face*45,Story.scenes[s.scene].ground(hero.x,s)-115];
  if(Number.isFinite(score.approachX)&&Math.abs(hero.x-walkLimit(score.approachX))>8){
   walkTo(score.approachX,()=>work(ms,label,after,score));return;
@@ -3889,9 +4008,9 @@ if(ui.contraptionModal){
 function pulse(id,n=0){requestAnimationFrame(()=>{const el=$(id)?.querySelector('circle');if(el){el.classList.add('spark-active');setTimeout(()=>el.isConnected&&el.classList.remove('spark-active'),550);}});if(s.settings.sound){try{if(!audio)audio=new Soundscape(()=>s.settings);audio.resume().catch(()=>{});audio.note([293.66,369.99,493.88][n],.7,0,.4);}catch{}}}
 async function playSequence(seq){if(sequenceActive)return;sequenceActive=true;actionLabel('石壁上的记号亮起了，跟着光慢慢记住它。',true);let current=s.scene,request=sceneRequest;for(let i=0;i<seq.length;i++){await new Promise(r=>setTimeout(r,i===0?180:850));while(isPaused())await new Promise(r=>setTimeout(r,150));if(s.scene!==current||sceneRequest!==request)break;pulse('tone'+seq[i],seq[i]);toast((i+1)+' / '+seq.length+' · '+['溪流','松针','月亮'][seq[i]],750);}await new Promise(r=>setTimeout(r,650));if(sceneRequest!==request)return;sequenceActive=false;$('actionLabel').classList.remove('show');}
 function resetRoof(){if(s.scene!==9||s.f.roofDone)return;cancelPointer();pendingMove=null;cancelWork();s=Stage.retreat(s);hero.x=s.heroX;petX=hero.x-75;pet.reset(petX,hero.face);selected=null;render();say([['芙丽达','先退到稳固的横梁后面，等这阵风过去。'],['希尔达','已经救回的同伴都在，固定好的绳索也还在。我们从安全的地方接着来。']],()=>toast('已退回安全检查点。完成的救援和前面章节都已保留。'));save(true);}
-function go(index){cancelPointer();closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
+function go(index){cancelPointer();closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);if(index<0||index>=Story.scenes.length)return;sceneRequest++;const request=sceneRequest;locked=true;pendingMove=null;pendingRewards=[];cancelWork();selected=null;toggleBag(false);$('transition').classList.add('dark');$('hoverLabel').classList.remove('show');clearTimeout(transitionTimer);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;clearTimeout(chapterTimer);s.scene=index;hero.x=Story.scenes[index].start;petX=hero.x-Staging.petDistance(index);pet.reset(petX,1);camera.manual=false;sceneClock=0;if(!s.visited.includes(index))s.visited.push(index);if(index===9&&!s.f.roofDone)s.danger=0;render();calcCamera(true);$('sceneLabel').classList.remove('quiet');if(s.settings.sound&&audio)audio.scene(index);save(true);$('transition').classList.remove('dark');let first=!s.seen.includes(index);if(first)s.seen.push(index);transitionTimer=setTimeout(()=>{if(request!==sceneRequest)return;locked=false;if(first)say(Story.scenes[index].intro);save();},first&&Story.scenes[index].chapter?1300:380);},MotionPolicy.sceneTransition(s.settings.reduced));}
 function chapter(data){const el=$('chapterCard');el.querySelector('span').textContent=data[0];el.querySelector('h2').textContent=data[1];el.querySelector('p').textContent=data[2];el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(chapterTimer);chapterTimer=setTimeout(()=>el.classList.add('hidden'),3700);}
-function start(resume=false){walkAmount=0;dragPreview=null;closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
+function start(resume=false){walkAmount=0;dragPreview=null;pendingRewards=[];closeInspection();toggleThoughtBubble(false);closeContraptionWorkbench();PhaserStage.stage.setPosture(0);clearTimeout(typewriter.timer);typewriter.busy=false;clearTimeout(transitionTimer);clearTimeout(chapterTimer);clearTimeout(saveTimer);if(resume&&saved)s=clone(saved);else{s=fresh();saved=null;}started=true;titleMode=false;selected=null;dialogue=null;cancelWork();pendingMove=null;sequenceActive=false;modal=false;locked=false;bagOpen=false;input=null;inventoryDrag=null;hideGhost();$('pocket').classList.add('hidden');sceneRequest++;$('titleScreen').classList.add('hidden');$('speech').classList.add('hidden');$('panelLayer').classList.add('hidden');$('chapterCard').classList.add('hidden');ui.game.classList.remove('paused');hero.x=s.heroX||Story.scenes[s.scene].start;petX=hero.x-Staging.petDistance(s.scene);pet.reset(petX,1);camera.manual=false;render();calcCamera(true);if(audio)setSound(s.settings.sound);if(resume){if(!s.visited.includes(s.scene))s.visited.push(s.scene);if(s.settings.sound)setSound(true);if(s.scene===9&&!s.f.roofDone)s.danger=0;save();}else go(0);}
 function finish(){save(true);say([['希尔达','手记最后一行：本次夜行，所有同行者均已安全抵达。'],['妈妈','很好。现在，把第一句话讲给我们听吧。']],openEnding);}
 function showPanel(html,type='menu'){cancelPointer();focusBeforePanel=document.activeElement;panelReturn=type;modal=true;ui.game.classList.add('paused');$('panelLayer').classList.remove('hidden');$('panel').innerHTML=`<button class="closePanel" aria-label="回到冒险" data-close>×</button>${html}`;$('panel').querySelector('[data-close]').addEventListener('click',closePanel);$('panel').focus();$('hoverLabel').classList.remove('show');audio?.update(audioState());}
 function closePanel(){modal=false;$('panelLayer').classList.add('hidden');ui.game.classList.remove('paused');audio?.update(audioState());if(focusBeforePanel&&focusBeforePanel.isConnected)focusBeforePanel.focus({preventScroll:true});}
@@ -4326,7 +4445,7 @@ Homeward.define('scene/2/logic', ['story/helpers'], ({H,I,exit,f,say,one,set,nee
   hotspots:s=>[
     ...(!s.f.ropeTaken?[I('rope','检查并收起旧绳圈',331,725,72,65,{walkX:296})]:[]),
     ...(!s.f.hookTaken?[H('hook',s.f.branchBent?'取下树枝上的铁钩':'观察高处的铁钩',541,s.f.branchBent?642:496,75,95,{walkX:495})]:[]),
-    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:412,642,76,114,{walkX:440})]:[]),
+    ...(!s.f.bridge?[H('david',s.f.bridgeBrace?'大卫正稳住制动':'请大卫帮忙稳住制动',s.f.bridgeBrace?380:412,642,76,114,{walkX:310})]:[]),
     H('anchor','对岸的固定铁环',1095,556,85,122,{walkX:s.f.bridge?1042:516}),
     H('winch','转动桥边绞盘',481,651,98,116,{walkX:446}),
     H('stream','观察逆流的溪水',790,776,193,82,{walkX:s.f.bridge?774:492}),
@@ -4556,7 +4675,7 @@ b+=path('M-20 793Q-33 500 136 385 331 302 472 345 579 180 727 172 925 150 1012 3
 b+=path('M274 492q87 19 147-8m288-97q55 45 120 15','none','#345b58',9)+path('M376 467q-37 40 20 89m320-202q-28 25 16 63','none','#466e62',6)+path('M642 403 596 519 692 510Z','#638471','#395f57',4)+path('M457 580q133 62 277-6','none','#335952',7);
 b+=ground(763,'#698571')+tree(84,812,1.35,'#234c47')+pine(1483,832,1.73,'#21474b')+fern(1440,833,2.2,'#315e4f')+mushrooms(176,792,1.1)+rock(1355,788,1.45,'#66856e');
 b+=group(610,375,1,`${path('M-87-57 93-69 113 93-83 108-114 25Z','#7c967b','#486a58',3)}${path('M-63-20q16-19 32 0t32 0m-31 51 14-26 14 26h-28m35 29q18-20 38 0m-98 27q17-16 35 0','none','#c7c49b',4)}${text(0,-36,'轻声 · 再轻声',13,'#d2cb9e')}`);
-b+=troll(956,750,1.35)+(!f.calm?group(956,750,1.35,`${path('M-54-20Q-70-45-52-91L-37-88-36-60-28-26M53-21Q73-47 51-90L35-88 36-58 29-25Z','#96a58b','#345c57',3)}${path('M-11-39q12-8 24 0','none','#365c56',2)}`):'')+person('芙丽达',1149,779,1.38)+person('大卫',326,776,1.34)+person('阿尔弗',1039,755,.75);
+b+=troll(956,750,1.35)+(!f.calm?group(956,750,1.35,`${path('M-54-20Q-70-45-52-91L-37-88-36-60-28-26M53-21Q73-47 51-90L35-88 36-58 29-25Z','#96a58b','#345c57',3)}${path('M-11-39q12-8 24 0','none','#365c56',2)}`):'')+person('芙丽达',1149,779,1.38)+person('大卫',245,776,1.34)+person('阿尔弗',1042,648,.75);
 b+=rock(782,718,.47,'#788e70')+(f.shadePlaced?lamp(782,681,.68,true)+path('M767 656H797L801 674H763Z','#bea771'):circle(782,678,14,'#3f6253'));
 b+=rep(3,i=>group(468+i*118,722-i%2*22,1,`${path('M-41 20-51-25Q-50-93-1-92T47-24L42 20Z','#7c9580','#375f59',3)}${path('M-29-62Q0-81 29-62','none','#b7c09a',2)}${circle(0,-29,19,'#547d70','#b5bd96',2)}${i===0?path('M-12-26q6-8 12 0t12 0','none','#dae0b2',2):i===1?path('M0-45-13-22H13ZM0-22v8','none','#dae0b2',2):path('M6-45Q-17-24 7-13Q-14-12-13-28T6-45Z','#dae0b2')}`,'id="tone'+i+'"'));
 b+=fern(330,873,1.5,'#365e4f')+fern(47,926,2.5,'#204e48')+rect(0,598,1600,250,'url(#fog)')+particles(54,'firefly');return b;}
@@ -4728,7 +4847,7 @@ b+=path('M-40 780 63 701 190 735 367 673 460 708 646 646 726 684 901 628 1072 67
 b+=group(1340,823,2.36,`${troll(0,0,1,true)}${path(Staging.ridgeArm(f.reunited?1:0),'#829580','#3e675c',3,'id="ridgeMotherArm"')}`);
 b+=rock(300,760,.75,'#8b9c7c')+rock(804,740,.85,'#879a7c')+rock(918,746,.78,'#889d7f');
 b+=[430,731,1025].map((x,i)=>{let y=[664,622,636][i];return path(`M${x} ${y+77}v-115`,'none','#5a7662',9)+path(`M${x-31} ${y-37}h65`,'none','#536e5d',8)+lamp(x,y,.7,!!f['trail'+i])+group(x,y,1,`<g id="trailHood${i}" transform="translate(${f['hood'+i]?14:0} 0) rotate(${f['hood'+i]?-70:0} 0 -12)">${path('M-22-18h43l19 26h-79Z','#a2ab80','#4a6e5a',2)}</g>`);}).join('');
-b+=person('阿尔弗',812,680,.75)+`<g id="ridgeChild" transform="${Staging.ridgeChild(f.reunited?1:0)}">${troll(0,0,1)}</g>`;b+=person('大卫',265,833,1.34)+person('芙丽达',518,826,1.38)+woff(235,430,.82)+path('M1305 228 1392 191 1473 250 1561 233 1647 317','none','#e2d8b0',2,'opacity=".5"');
+b+=person('阿尔弗',812,680,.75)+`<g id="ridgeChild" transform="${Staging.ridgeChild(f.reunited?1:0)}">${troll(0,0,1)}</g>`;b+=person('大卫',235,835,1.34)+person('芙丽达',358,829,1.38)+woff(235,430,.82)+path('M1305 228 1392 191 1473 250 1561 233 1647 317','none','#e2d8b0',2,'opacity=".5"');
 b+=pine(25,899,1.55,'#325e58')+fern(59,926,2.2,'#2f5d50')+fern(1525,898,2.4,'#3c6754')+mushrooms(951,794,1)+rect(0,660,1600,255,'url(#fog)')+particles(30);return b;}
 
 return ridge;
