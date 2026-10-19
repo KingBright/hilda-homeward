@@ -15,7 +15,7 @@ const reports=['test-report.json','acting-report.json','art-audio-report.json','
 for(const p of reports){const r=JSON.parse(fs.readFileSync(p,'utf8'));if(!r.passed||r.artifact_sha256!==hash)throw Error('Missing, failed or stale evidence: '+p);}
 console.log('Verified current-build browser evidence:',reports.length);
 JS
-if nc -z -G 2 192.168.2.200 22 2>/dev/null; then HOST=192.168.2.200; PORT=22; else HOST=hackerlife.fun; PORT=222; fi
+if ssh -p 22 -o BatchMode=yes -o ConnectTimeout=2 root@192.168.2.200 true 2>/dev/null; then HOST=192.168.2.200; PORT=22; else HOST=hackerlife.fun; PORT=222; fi
 SSH=(ssh -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=10 "root@$HOST")
 TMP="/var/www/games/hilda/.upload-${STAMP}.html"
 "${SSH[@]}" "umask 022; mkdir -p /var/www/games/hilda; cat > '$TMP'" < index.html

@@ -3,7 +3,7 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
   function score(scene,id,state,item) {
     const f=state.f;
     const entries={
-      0:{bird:{kind:'take',target:Staging.home.bird,approachX:1042,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1245,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[655,695],approachX:724,pickup:true,prop:'scarf'}},
+      0:{bird:{kind:'take',target:Staging.home.bird,approachX:980,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1178,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[655,695],approachX:724,pickup:true,prop:'scarf'}},
       5:{line:{kind:'take',target:[336,710],approachX:286,pickup:true,prop:'line',source:'gondolaLine',twoHands:true},brake:{kind:'turn',effect:'gondolaLift',target:[1029,633],radius:24,approachX:974}},
       6:{holder:{kind:'place',target:[782,643],place:true,prop:'shade',approachX:731},tone0:{kind:'reach',target:[468,685],approachX:426},tone1:{kind:'reach',target:[586,663],approachX:544},tone2:{kind:'reach',target:[704,685],approachX:662}},
       7:Object.fromEntries([...[['gearS',453,738],['gearM',612,740],['gearL',795,725]].map(([id,x,y])=>[id,{kind:'take',target:[x,y],approachX:x-48,pickup:true,prop:id,source:'pickup-'+id,twoHands:id!=='gearS'}]),...Mechanisms.gears.map(d=>[d.socket,{kind:'place',target:[d.x,d.y],place:true,prop:d.item,approachX:d.x-50}]),['lever',{kind:'pull',effect:'towerDoor',target:[1358,593],travel:35}]]),

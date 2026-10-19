@@ -406,7 +406,17 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
         for(const arm of entry.arms){
           const front=arm.name==='front',origin=[front?22:-22,-79],target=front?idle.front:idle.back;
           const strideArm=gait.amount>0?Walk.arm(front?1:-1,0,(front?1:-1)*Math.sin(gait.phase*Math.PI*2)*.11*gait.amount):null;
-          const j=strideArm||solve(origin,target,25,27,front?-1:1);
+          let j=strideArm;
+          if(!j){
+            if(front&&idle.gesture>.02){
+              const n=solve(origin,[31.5,-28.3],25,27,-1),c=solve(origin,target,25,27,1);
+              const g=Math.min(1,idle.gesture);
+              const elbow=[n.elbow[0]+(c.elbow[0]-n.elbow[0])*g,n.elbow[1]+(c.elbow[1]-n.elbow[1])*g];
+              j={origin,elbow,end:c.end};
+            }else{
+              j=solve(origin,target,25,27,front?-1:1);
+            }
+          }
           const fmt=a=>a.map(n=>n.toFixed(3));
           const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
           arm.paths.forEach(n=>put(n,'d',d));
@@ -438,20 +448,37 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
 /** Shared production drawings: the stage actor and dialogue portraits use the
  * same head/costume layers. No independent portrait-only redesigns or bitmaps. */
 Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
- const ink='#263c48';
+ const ink='#233844';
  const p=(d,f='none',s=ink,w=1.55,extra='')=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
  const e=(x,y,rx,ry,f,s='none',w=1)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" stroke="${s}" stroke-width="${w}"/>`;
  const profiles={
-  '希尔达':{skin:'#f3cda8',shade:'#dca17e',hair:'#398eaa',light:'#77c6d5',coat:'#b75848',coatLight:'#dd8770',coatDark:'#7f3c39',scarf:'#c64f45',trousers:'#314652'},
-  '大卫':{skin:'#efc8a1',shade:'#cc9979',hair:'#855d3e',light:'#ba8a58',coat:'#b18545',coatLight:'#d7b779',coatDark:'#7f623c',scarf:'#6b8e8b',trousers:'#3d5361'},
-  '芙丽达':{skin:'#ae7653',shade:'#80503e',hair:'#302e30',light:'#55403a',coat:'#ccaa58',coatLight:'#ead28b',coatDark:'#988044',scarf:'#638b8b',trousers:'#344952'},
-  '妈妈':{skin:'#efd0af',shade:'#d3a086',hair:'#64483e',light:'#906b53',coat:'#8d6470',coatLight:'#b99093',coatDark:'#634550',scarf:'#c6bb91',trousers:'#394950'}
+  '希尔达':{skin:'url(#cast-skin-hilda)',skinSolid:'#f4cfb0',shade:'#d99b78',blush:'#e88d76',hair:'url(#cast-hair-hilda)',hairSolid:'#358ba7',hairDark:'#215e75',light:'#83d4e3',coat:'url(#cast-coat-hilda)',coatSolid:'#be5948',coatLight:'#e48d75',coatDark:'#7e3835',scarf:'url(#cast-scarf-hilda)',scarfSolid:'#c84d42',trousers:'#2f4553',eye:'#233844',iris:'#3e6e7c'},
+  '大卫':{skin:'url(#cast-skin-david)',skinSolid:'#f0c9a3',shade:'#ca9474',blush:'#df8f73',hair:'url(#cast-hair-david)',hairSolid:'#865d3d',hairDark:'#593b25',light:'#c49462',coat:'url(#cast-coat-david)',coatSolid:'#b58847',coatLight:'#dcc082',coatDark:'#7c5e38',scarf:'#688e8a',scarfSolid:'#688e8a',trousers:'#3c5260',eye:'#263840',iris:'#5c4636'},
+  '芙丽达':{skin:'url(#cast-skin-frida)',skinSolid:'#b07855',shade:'#7f4e3b',blush:'#9c5644',hair:'url(#cast-hair-frida)',hairSolid:'#2d2b2e',hairDark:'#19181b',light:'#624d47',coat:'url(#cast-coat-frida)',coatSolid:'#cfa954',coatLight:'#eed690',coatDark:'#94783c',scarf:'#5d8989',scarfSolid:'#5d8989',trousers:'#334852',eye:'#1f2e35',iris:'#3c302c'},
+  '妈妈':{skin:'url(#cast-skin-mom)',skinSolid:'#f0d1b2',shade:'#d19d82',blush:'#df927c',hair:'url(#cast-hair-mom)',hairSolid:'#66493f',hairDark:'#432e27',light:'#9b755d',coat:'url(#cast-coat-mom)',coatSolid:'#916572',coatLight:'#c1969a',coatDark:'#61424d',scarf:'#cbc096',scarfSolid:'#cbc096',trousers:'#384850',eye:'#243842',iris:'#54464b'}
  };
  const defs=`<defs>
-  <pattern id="cast-knit" width="6" height="5" patternUnits="userSpaceOnUse"><path d="M1 1l1 2 1-2m2 3 1 1" fill="none" stroke="#fff2d1" stroke-opacity=".2" stroke-width=".55"/></pattern>
-  <linearGradient id="cast-fur" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#fff7df"/><stop offset=".6" stop-color="#e8ead9"/><stop offset="1" stop-color="#adc6c9"/></linearGradient>
-  <linearGradient id="cast-rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9bafa7"/><stop offset=".48" stop-color="#778e8a"/><stop offset="1" stop-color="#4b6569"/></linearGradient>
-  <linearGradient id="cast-woff" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#ead9b7"/><stop offset=".6" stop-color="#c2b493"/><stop offset="1" stop-color="#8da2a0"/></linearGradient>
+  <pattern id="cast-knit" width="6" height="5" patternUnits="userSpaceOnUse"><path d="M1 1l1 2 1-2m2 3 1 1" fill="none" stroke="#fff4d8" stroke-opacity=".28" stroke-width=".65"/></pattern>
+  <linearGradient id="cast-fur" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#fff9e6"/><stop offset=".58" stop-color="#ebeede"/><stop offset="1" stop-color="#abc4c7"/></linearGradient>
+  <linearGradient id="cast-rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a2b6ae"/><stop offset=".48" stop-color="#788f8b"/><stop offset="1" stop-color="#486266"/></linearGradient>
+  <linearGradient id="cast-woff" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#f0e0be"/><stop offset=".6" stop-color="#c6b896"/><stop offset="1" stop-color="#8ca19f"/></linearGradient>
+  <linearGradient id="cast-skin-hilda" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#fae0c7"/><stop offset=".65" stop-color="#f2cba8"/><stop offset="1" stop-color="#dfb08c"/></linearGradient>
+  <linearGradient id="cast-skin-david" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#f7dac0"/><stop offset=".65" stop-color="#eec69f"/><stop offset="1" stop-color="#d8a882"/></linearGradient>
+  <linearGradient id="cast-skin-frida" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#c28a66"/><stop offset=".65" stop-color="#ae7552"/><stop offset="1" stop-color="#8e5a3e"/></linearGradient>
+  <linearGradient id="cast-skin-mom" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#f8e1c8"/><stop offset=".65" stop-color="#efd0b0"/><stop offset="1" stop-color="#dbb292"/></linearGradient>
+  <linearGradient id="cast-hair-hilda" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#53b4cc"/><stop offset=".52" stop-color="#378da9"/><stop offset="1" stop-color="#23637b"/></linearGradient>
+  <linearGradient id="cast-hair-david" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#9e714c"/><stop offset=".55" stop-color="#82593a"/><stop offset="1" stop-color="#5c3d26"/></linearGradient>
+  <linearGradient id="cast-hair-frida" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#433e42"/><stop offset=".55" stop-color="#2c292c"/><stop offset="1" stop-color="#181619"/></linearGradient>
+  <linearGradient id="cast-hair-mom" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#7d5b4f"/><stop offset=".55" stop-color="#62463c"/><stop offset="1" stop-color="#442f28"/></linearGradient>
+  <linearGradient id="cast-coat-hilda" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#d86c57"/><stop offset=".55" stop-color="#b85646"/><stop offset="1" stop-color="#8b3c35"/></linearGradient>
+  <linearGradient id="cast-coat-david" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#c99b56"/><stop offset=".55" stop-color="#b08343"/><stop offset="1" stop-color="#825f32"/></linearGradient>
+  <linearGradient id="cast-coat-frida" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#e0bc68"/><stop offset=".55" stop-color="#caa552"/><stop offset="1" stop-color="#967838"/></linearGradient>
+  <linearGradient id="cast-coat-mom" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#a87b88"/><stop offset=".55" stop-color="#8c626f"/><stop offset="1" stop-color="#654450"/></linearGradient>
+  <linearGradient id="cast-scarf-hilda" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#df6152"/><stop offset=".6" stop-color="#c34b40"/><stop offset="1" stop-color="#94342f"/></linearGradient>
+  <linearGradient id="cast-skirt" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#3e5666"/><stop offset="1" stop-color="#263844"/></linearGradient>
+  <linearGradient id="cast-satchel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#967452"/><stop offset=".6" stop-color="#6f563e"/><stop offset="1" stop-color="#4d3b2c"/></linearGradient>
+  <linearGradient id="cast-boot-front" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#a87959"/><stop offset=".58" stop-color="#8e6246"/><stop offset="1" stop-color="#684632"/></linearGradient>
+  <linearGradient id="cast-boot-back" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#855f48"/><stop offset=".6" stop-color="#6d4c39"/><stop offset="1" stop-color="#513729"/></linearGradient>
  </defs>`;
  function expression(scene=0,flags={},who='希尔达'){
   if(scene===9&&!flags.roofDone){if(who==='大卫'&&!flags.davidSafe||who==='芙丽达'&&!flags.fridaSafe)return 'worried';return 'resolve';}
@@ -461,38 +488,131 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  }
  function eyes(c,mood='curious',rig=false){
   const worried=mood==='worried',resolve=mood==='resolve',happy=mood==='relieved';
-  const brows=worried?'M-13-122q5-5 10-2m12-1q6-2 11 2':resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1';
+  const brows=worried?'M-13.5-122.5q5-5.2 10.5-1.8m11.5-1.2q6-2.2 11 2.2':resolve?'M-13.5-125l10.2 3.8m11.6 0 10.2-4.8':'M-13.5-123.2q5.2-3.4 10.4-.8m11.6-1q5.2-2.2 10.2 1.2';
   const mouth=worried?'M1-94q5-5 10 0':happy?'M-1-96q7 9 14-1':resolve?'M1-94q5 1 10-1':'M0-95q6 5 12-1';
-  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}<g class="cast-pupils">${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}</g>${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth" class="cast-mouth"':'class="cast-mouth"')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
+  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>`+
+   `${e(-7,-112,6,7.6,'#fff8e7',ink,1.15)}${e(13,-111,5.6,7.3,'#fff8e7',ink,1.15)}`+
+   `${p('M-12.6-114.8Q-7-119.5-1.2-114.2M7.6-113.8Q13-118.4 18.4-113.2','none','#d9c4a3',1.1)}`+
+   `<g class="cast-pupils">`+
+    `${e(-5.3,-111,3.3,5.1,c.iris||ink)}${e(14.6,-110,3.1,4.9,c.iris||ink)}`+
+    `${e(-5.2,-111,2.2,3.6,ink)}${e(14.7,-110,2.1,3.5,ink)}`+
+    `${e(-4.1,-113.2,1.25,1.7,'#fffdf5')}${e(15.7,-112.2,1.15,1.6,'#fffdf5')}`+
+    `${e(-6.3,-109.2,.65,.8,'#ffffffb8')}${e(13.6,-108.3,.6,.75,'#ffffffb8')}`+
+   `</g>`+
+   `${p('M-13.2-116.5Q-7-121.2-.8-116.2M7.2-115.5Q13.2-120 18.8-115.2','none',ink,1.45)}`+
+  `</g>`+
+  `${p(brows,'none',c.hairDark||ink,1.7,rig?'id="rigBrows"':'')}`+
+  `${p('M3.2-109.5Q1.4-103.5 5.8-103.2','none',c.shade,1.35)}`+
+  `${p(mouth,'none',ink,1.35,rig?'id="rigMouth" class="cast-mouth"':'class="cast-mouth"')}`+
+  `${e(-13.2,-101.2,4.4,2.3,c.blush||c.shade)}${e(19.8,-100.2,3.4,2,c.blush||c.shade)}`;
  }
  function hairBack(who,c){
-  if(who==='希尔达')return p('M-22-139Q-45-127-35-106L-38-88-32-91-35-72-28-77-22-61-13-69 12-61 27-72 25-64Q43-89 28-121L22-140Z',c.hair)+p('M-27-127q-11 19-4 39m8-25q-7 31 4 43m42-44q9 22-1 39','none',c.light,1.6);
-  if(who==='芙丽达')return p('M-24-125Q-43-123-34-109-46-99-33-88-42-72-25-68-24-58-12-65 3-55 13-64 32-57 32-70 49-76 36-89 45-103 32-111 41-128 23-134Z',c.hair)+p('M-29-101q-9 5-1 12m-4 9q-3 7 5 8m60-32q10 3 1 9m0 12q9 2 2 8','none',c.light,2);
-  if(who==='妈妈')return p('M-22-134Q-38-119-28-81Q-8-69 29-81L28-128Z',c.hair)+p('M-26-115q-4 25 3 30m44-27q8 19 2 31','none',c.light,1.6);
-  return p('M-26-123q-5 23 6 33l6-8 25 7 13-17-6-19Z',c.hair);
+  if(who==='希尔达'){
+   return p('M-22-139C-42-130-43-105-37-87C-41-77-37-65-29-58C-22-53-12-56-6-61L14-59C23-56 32-62 35-72C42-88 38-113 28-127L22-140Z',c.hair,ink,1.65)+
+    p('M-34-103C-37-87-33-70-24-60M-21-106C-24-86-18-69-10-61M27-109C33-92 31-75 23-64','none',c.hairDark,1.25)+
+    p('M-29-127C-38-108-34-86-26-67M-18-112C-22-89-16-73-9-63M24-118C32-98 30-79 22-66','none',c.light,1.75);
+  }
+  if(who==='芙丽达'){
+   return p('M-25-127C-44-124-45-103-35-94C-46-83-41-64-25-62C-22-52-7-53 2-61C12-53 28-55 32-67C47-70 48-88 37-96C46-107 41-127 23-134Z',c.hair,ink,1.65)+
+    p('M-31-102q-8 6-1 13m-3 9q-3 7 6 8m58-32q9 4 1 10m0 11q8 3 2 9','none',c.light,2);
+  }
+  if(who==='妈妈'){
+   return p('M-23-135C-39-120-36-92-29-76C-22-66-6-68 4-73C15-69 27-71 31-81C36-97 34-119 28-131Z',c.hair,ink,1.65)+
+    p('M-27-116C-32-96-28-82-22-75M26-114C32-96 29-82 23-75','none',c.light,1.7);
+  }
+  return p('M-26-124C-32-104-25-88-18-86L-11-94L15-87L28-104L22-123Z',c.hair,ink,1.6);
  }
  function head(who,mood='curious',rig=false){
   const c=profiles[who]||profiles['妈妈'];
   let front='';
-  if(who==='希尔达')front=p('M-26-129q-2-19 21-18 18-8 30 10l5 17-10-5-2 6-14-11q-6 15-19 17l2-12-12 15Z',c.hair)+p('M-22-133q13-14 28-10m-11 7q-3 12-12 15m26-19 12 12','none',c.light,2)+p('M-28-141q-10-10 7-16l12-3q23-10 37 6l8 13q-23-7-44 2Z','#304757')+p('M-20-150q19-10 35-2','none','#527183',1.7)+p('M2-162l2-6','none',ink,2.3);
-  else if(who==='大卫')front=p('M-29-119q-9-17 4-22l-3-9 14 2q8-14 19-4l11-5 3 11q13-2 14 9 7 9-4 16l-9-10q-3 9-14 11l3-11q-12 11-23 9l-6 11Z',c.hair)+p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+p('M-16-103h2m3 1h1m26-1h2','none','#b8835b',1.2);
-  else if(who==='芙丽达')front=p('M-28-120q-16-10-5-22-1-16 13-16 10-13 22-7 13-9 24 3 18-2 18 14 14 11 1 20l-8 16-6-18q-10 8-14-1-11 9-16 0-7 10-18 11Z',c.hair)+p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.2)+p('M22-132l8-8','none','#d7ba71',2.8);
-  else front=p('M-28-124q-4-27 20-29 26-9 37 14l1 25-8-14q-16 6-19-9-12 17-29 23Z',c.hair)+p('M-22-134q10-15 21-14m7 5q12 1 16 10','none',c.light,1.8);
-  return `<g class="cast-attention"><g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g></g>`;
+  if(who==='希尔达'){
+   front=p('M-27-129C-28-146-7-151 12-146C28-149 39-138 42-123C43-114 39-104 34-99L28-109L24-101L13-115C7-101-5-96-17-97L-13-110L-25-96C-29-105-29-118-27-129Z',c.hair,ink,1.6)+
+    p('M-22-134C-10-146 8-146 23-139M-7-127C-10-115-16-107-23-103M18-132C26-124 31-114 34-104','none',c.light,1.95)+
+    p('M-29-140C-36-150-22-158-6-159C14-165 34-156 41-143L46-131C26-138 2-137-29-140Z','#2b4252',ink,1.6)+
+    p('M-24-141C-4-145 19-144 41-135','none','#49697d',2)+
+    p('M-18-151C-2-158 16-157 31-149','none','#64899e',1.5)+
+    p('M3-160Q5-166 7-168','none',ink,2.4);
+  }else if(who==='大卫'){
+   front=p('M-29-119C-37-134-26-143-16-141L-19-149L-4-146C4-158 16-154 23-146L33-150L35-139C46-140 49-130 44-121C49-113 41-106 34-104L27-115C23-106 14-103 4-104L7-115C-4-105-15-105-24-108L-29-98Z',c.hair,ink,1.55)+
+    p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+
+    p('M-16-103h1.8m3.2 1.2h1.5m25-1.2h1.8','none','#b8835b',1.3);
+  }else if(who==='芙丽达'){
+   front=p('M-28-120C-43-129-35-143-24-143C-24-157-10-159 1-153C11-164 24-159 31-149C44-155 54-144 51-131C62-122 54-108 42-104L35-90L30-108C21-101 15-103 11-110C2-102-4-103-9-110C-15-101-22-100-28-104Z',c.hair,ink,1.6)+
+    p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.1)+
+    p('M21-131l8-8m-6 10 8-8','none','#e5c878',2.2);
+  }else{
+   front=p('M-28-124C-32-149-11-156 10-154C32-159 46-143 47-122L47-98L39-112C25-106 19-112 15-122C4-106-11-100-28-100Z',c.hair,ink,1.6)+
+    p('M-22-135C-12-149 1-149 14-144M19-139C31-137 37-128 39-116','none',c.light,1.85);
+  }
+  return `<g class="cast-attention"><g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">`+
+   `${p('M-20-128C-10-141 11-140 20-130C26-122 26-107 24-98C20-85 8-84-2-85C-14-86-21-95-21-106Z',c.skin,ink,1.55)}`+
+   `${p('M-19-109C-29-116-30-102-21-99C-17-98-15-101-16-105',c.skin,ink,1.4)}`+
+   `${p('M-24-108q-2.5 2.5 0 5.5','none',c.shade,1.25)}`+
+   `${p('M-15-91Q2-81 17-95L15-87Q1-79-14-88Z',c.shade,'none')}`+
+   `${eyes(c,mood,rig)}${front}`+
+   `${who==='妈妈'?e(-25.5,-97.5,2.2,3.2,'#ecd694',ink,.9):''}`+
+  `</g></g>`;
  }
  function upper(who,rig=false,mood='curious'){
   const c=profiles[who]||profiles['妈妈'],hilda=who==='希尔达',mom=who==='妈妈';
-  const torso=p('M-23-82Q-8-92 18-83L27-44Q5-38-25-45Z',c.coat)+p('M-22-74l7-9 3 34 27 3 10-4 2 7q-28 7-51 0Z',c.coatDark,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z',c.coatLight,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z','url(#cast-knit)','none')+p('M-2-78V-45M-22-46Q2-41 24-45','none',c.coatDark,1.15)+p('M-10-57h9v8h-10m15-8h10v8H5','none',c.coatLight,1.1)+[0,1,2].map(i=>e(1,-72+i*8,1.2,1.2,'#ecd5a4')).join('');
-  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">${hairBack(who,c)}${p('M-20-82q-18 0-16 18l3 19 17 4 6-26Z','#64594c')}${p('M-32-66l15 3-2 11-12-2Z','#a27e55')}${p('M-26-73l4 1v8l-5-1Z','#d6b77c')}${hilda?p('M-21-53H20L29-29Q1-25-28-29Z','#334552')+p('M-15-51l-4 20m18-21v22m14-21 7 19','none','#536574',1.2):''}${mom?p('M-20-61L-32-23Q2-16 32-25L19-64Z',c.coatDark):''}${torso}${p('M-13-85Q-17-68-13-46','none','#544b40',4.2)}${p('M-13-81v21','none','#bc9764',1.4)}${p('M-15-62h5v7h-5Z','#d9bd83',ink,.8)}${who==='芙丽达'?p('M16-67l7 3-3 8-8-3Z','#d2c49c',ink,1)+p('M16-61l2-3 2 4','none','#55756c',1):''}${head(who,mood,rig)}${p('M-22-91Q-3-86 22-93L24-83Q6-77-22-82Z',c.scarf)}${p('M-18-86q19 6 37-2','none',hilda?'#ed9b77':'#a4beb0',1.4)}${p('M17-84Q32-86 45-74L41-63 32-64 33-71 18-75Z',c.scarf,ink,1.4,rig?'id="rigScarf"':'class="cast-scarf"')}${p('M-22-45Q2-40 24-44','none','#e2be8a',.65)}</g>`;
+  const satchel=p('M-21-81C-36-81-38-66-35-50L-32-38C-27-34-18-33-13-36L-8-64Z','url(#cast-satchel)',ink,1.5)+
+   p('M-34-66L-16-62L-18-50L-33-53Z','#b58d61',ink,1.2)+
+   p('M-28-74L-22-72L-22-63L-29-64Z','#e8cf97',ink,1)+
+   e(-25,-56,1.6,2,'#ecd396',ink,.7);
+  const skirt=hilda?p('M-22-53H21L30-28Q2-23-29-28Z','url(#cast-skirt)',ink,1.55)+
+   p('M-14-51l-5 21m13-22-1 22m13-22 3 22m10-21 6 20','none','#1d2c36',1.25)+
+   p('M-26-31Q2-26 27-31','none','#567082',1):'';
+  const momSkirt=mom?p('M-21-60L-33-22Q2-15 33-24L20-62Z',c.coatDark,ink,1.55)+
+   p('M-15-56l-7 32m16-33-2 34m16-33 5 33','none','#49303a',1.2):'';
+  const torso=p('M-23-82C-10-92 12-91 20-82L28-44C12-38-9-38-26-44Z',c.coat,ink,1.6)+
+   p('M-23-73l8-9 3 35 26 2 10-4 2 6q-28 7-51 0Z',c.coatDark,'none')+
+   p('M-12-81Q1-86 14-80L19-53H-14Z',c.coatLight,'none')+
+   p('M-12-81Q1-86 14-80L19-53H-14Z','url(#cast-knit)','none')+
+   p('M-15-82L-7-70L-2-78M14-81L7-70L-2-78','none',c.coatDark,1.3)+
+   p('M-2-78V-43M-23-46Q2-40 25-45','none',c.coatDark,1.25)+
+   p('M-19-58h11v9h-11Zm27 0h11v9H8Z',c.coatSolid||c.coatDark,ink,1.05)+
+   p('M-20-58h12m15 0h12','none',c.coatLight,1.35)+
+   [0,1,2].map(i=>e(1.2,-72+i*8.5,1.45,1.45,'#f3dca8',ink,.7)).join('');
+  const strap=p('M-13-85Q-17-67-13-45','none','#4e4033',4.6)+
+   p('M-13-84Q-17-67-13-46','none','#c49c68',1.6)+
+   p('M-15.5-63h5.5v7.5h-5.5Z','#e5c88c',ink,.9);
+  const badge=who==='芙丽达'?p('M15-68l8 3-3 9-8-3Z','#decfa4',ink,1)+p('M16-62l2-3 2 4','none','#4d7067',1.1):'';
+  const scarf=p('M-23-91C-6-85 12-86 23-93L25-82C9-76-8-76-23-81Z',c.scarf,ink,1.5)+
+   p('M-18-86q19 6 37-2','none',hilda?'#f6aa88':'#b2cbc0',1.45)+
+   p('M17-84Q33-86 45-74L41-62 31-63 32-71 18-75Z',c.scarf,ink,1.45,rig?'id="rigScarf"':'class="cast-scarf"');
+  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">`+
+   `${hairBack(who,c)}${satchel}${skirt}${momSkirt}${torso}${strap}${badge}`+
+   `${head(who,mood,rig)}${scarf}`+
+   `${p('M-23-45Q2-39 25-44','none','#edd09f',.85)}`+
+  `</g>`;
  }
- function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
+ function boot(x,y,back=false){
+  const fill=back?'url(#cast-boot-back)':'url(#cast-boot-front)';
+  const cuff=back?'#d5c7a8':'#efe3c4';
+  return p(`M${x-6.5} ${y-9.5}Q${x} ${y-11} ${x+6.5} ${y-9.5}L${x+7} ${y-5.2}Q${x} ${y-4} ${x-7} ${y-5.2}Z`,cuff,ink,1.35)+
+   p(`M${x-6} ${y-5.8}H${x+6}L${x+7.2} ${y-1}C${x+15} ${y-.4} ${x+20.5} ${y+2.2} ${x+20.5} ${y+6.8}H${x-7.2}L${x-6.8} ${y+.5}Z`,fill,ink,1.5)+
+   p(`M${x-7.4} ${y+5.2}H${x+20.8}V${y+8.2}H${x-7.4}Z`,'#2b3b42',ink,1.25)+
+   p(`M${x-3.2} ${y-4.2}l7.5 1.6m-7 2.2 8.2 1.6m-7.5 2.2 7.8 1.4`,'none','#ead4a8',1.05)+
+   p(`M${x+9.5} ${y+1.4}q4.8-.8 8 2.2`,'none',back?'#9c7658':'#c89e74',1.1);
+ }
  function restingArm(name,c){
-  const x=name==='back'?-22:22,hx=name==='back'?-31.5:31.5;
-  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -28.3) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+  const x=name==='back'?-22:22,ex=name==='back'?-29.794:29.794,hx=name==='back'?-31.5:31.5;
+  const d=`M${x} -79L${ex} -55.246L${hx} -28.3`;
+  const sleeve=name==='back'?c.coatDark:c.coatSolid||c.coat;
+  return `<g data-rest-arm="${name}">`+
+   `${p(d,'none',ink,11.4)}`+
+   `<path class="rest-sleeve" d="${d}" fill="none" stroke="${sleeve}" stroke-width="8.8" stroke-linecap="round" stroke-linejoin="round"/>`+
+   `<g class="rest-hand" transform="translate(${hx} -28.3) scale(${name==='back'?-1:1} 1)">`+
+    `${p('M-5-6.2Q0-7.2 5-6.2L5.4-2.4Q0-1.5-5.4-2.4Z',c.coatDark,ink,1.2)}`+
+    `${p('M-4.2-2.6Q0-3.4 4.2-2.6L4.6 2.8Q4.2 7.2.8 7.8L-2.8 6.4Q-4.8 4-4.5-.5Z',c.skinSolid||c.skin,ink,1.15)}`+
+    `${p('M3.2-1.5Q6.4-.8 6 2.4Q4.6 3.6 2.8 1.8','none',ink,1.1)}`+
+    `${p('M3.1-1.3Q5.8-.7 5.5 2.1Q4.3 3.1 2.8 1.6',c.skinSolid||c.skin,'none')}`+
+    `${p('M-.8 2.2l.8 3.6m-2.4-3.4.6 3.2','none',c.shade,.85)}`+
+   `</g></g>`;
  }
  function restingLeg(name,c){
   const x=name==='back'?-11:11,d=`M${x} -50.7L${x+2.67} -26.85L${x} -3`;
-  return `<g class="cast-leg-${name}" data-rest-leg="${name}">${p(d,'none',ink,11)}${p(d,'none',c.trousers,8.5)}<g class="cast-foot" transform="translate(${x} -3)">${boot(0,-5,name==='back')}</g></g>`;
+  return `<g class="cast-leg-${name}" data-rest-leg="${name}">${p(d,'none',ink,11.2)}${p(d,'none',c.trousers,8.6)}<g class="cast-foot" transform="translate(${x} -3)">${boot(0,-5,name==='back')}</g></g>`;
  }
  function standing(who,mood='curious'){
   const c=profiles[who]||profiles['妈妈'];
@@ -922,16 +1042,28 @@ return {P,path,rect,circle,ell,text,sceneText,group,rep,rnd,icons,icon,defs,star
 /* src/art/performer.js */
 /** Shared drawings driven by rigid, seekable whole-body motion. */
 Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/props','content/staging'], (Motion,Cast,Props,Staging) => {
-  const path=(id,d,fill,stroke='#24434a',width=2)=>`<path id="${id}" d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
-  const limb=(id,color,width)=>path(id,'M0 0L0 1','none','#263c48',width+2.2)+path(id+'Fill','M0 0L0 1','none',color,width);
-  const hand=name=>`<g id="rigHand${name}">${path('rigPalm'+name,'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z','#f3cda8','#35464e',1.1)}${path('rigFingers'+name,'M0 2l1 4m-4-5 1 4','none','#c28f71',.7)}</g>`;
+  const ink='#233844';
+  const path=(id,d,fill,stroke=ink,width=2)=>`<path id="${id}" d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const limb=(id,color,width,highlight)=>path(id,'M0 0L0 1','none',ink,width+2.6)+path(id+'Fill','M0 0L0 1','none',color,width)+(highlight?path(id+'Light','M0 0L0 1','none',highlight,Math.max(1.4,width*.26)):'');
+  const hand=name=>{
+    const sleeve=name==='Front'?'#8a3c35':'#6e302b';
+    const trim=name==='Front'?'#f3e2c0':'#d9c7a6';
+    const skin=name==='Front'?'#f4cfb0':'#e2b896';
+    return `<g id="rigHand${name}">`+
+      `<path id="rigCuff${name}" d="M-5.2-6.4Q0-7.4 5.2-6.4L5.6-2.5Q0-1.6-5.6-2.5Z" fill="${sleeve}" stroke="${ink}" stroke-width="1.25" stroke-linejoin="round"/>`+
+      `<path id="rigTrim${name}" d="M-4.6-3.2Q0-2.4 4.6-3.2" fill="none" stroke="${trim}" stroke-width="1.5" stroke-linecap="round"/>`+
+      `${path('rigPalm'+name,'M-4.2-2.4Q0-3.3 4.2-2.4L4.6 2.8Q4.2 7.2.8 7.8L-2.8 6.4Q-4.8 4-4.4-.5Z',skin,ink,1.2)}`+
+      `${path('rigThumb'+name,'M3-1.5Q6.3-.7 5.8 2.4Q4.4 3.5 2.5 1.7',skin,ink,1.15)}`+
+      `${path('rigFingers'+name,'M-.8 2.2l.7 3.6m-2.3-3.4.5 3.2','none','#c58d6e',.85)}`+
+    `</g>`;
+  };
   function markup(){return `<g id="performer" data-cast="希尔达" transform="scale(1.36)"><ellipse id="rigShadow" cy="3" rx="28" ry="5" fill="#0b2c353d"/>
-    ${limb('rigLegBack','#2b404e',9)}<g id="rigBootBack"></g>
-    ${limb('rigLegFront','#354b59',10)}<g id="rigBootFront"></g>
-    <g id="rigRearArm">${limb('rigArmBack','#a95043',9)}${hand('Back')}</g>
+    ${limb('rigLegBack','#293e4c',9.2)}<g id="rigBootBack"></g>
+    ${limb('rigLegFront','#354d5d',10.2,'#527084')}<g id="rigBootFront"></g>
+    <g id="rigRearArm">${limb('rigArmBack','#9e473c',9.2)}${hand('Back')}</g>
     ${Cast.upper('希尔达',true)}
-    ${limb('rigArmFront','#c66d57',10)}
-    <g id="rigTool" pointer-events="none"></g>${hand('Front')}
+    <g id="rigTool" pointer-events="none"></g>
+    ${limb('rigArmFront','#c45b49',10.2,'#e28870')}${hand('Front')}
   </g>`;}
   let cachedRoot=null,nodes={};
   const fixed=n=>Number(n).toFixed(3);
@@ -940,6 +1072,25 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     if(!artwork.has(id))artwork.set(id,Props.itemArt(id).replace(/<svg[^>]*>|<\/svg>/g,''));
     return artwork.get(id);
   }
+  const ITEM_GRIPS={
+    lamp:{dx:0,dy:21,size:.86},
+    shade:{dx:0,dy:21,size:.86},
+    gearS:{dx:2,dy:17,size:.76},
+    gearM:{dx:2,dy:21,size:.82},
+    gearL:{dx:2,dy:25,size:.88},
+    line:{dx:2,dy:18,size:.68},
+    rope:{dx:2,dy:18,size:.68},
+    felt:{dx:2,dy:14,size:.64},
+    crank:{dx:0,dy:10,size:.66},
+    scarf:{dx:2,dy:12,size:.64},
+    fork:{dx:0,dy:14,size:.65},
+    letter:{dx:2,dy:12,size:.58},
+    hook:{dx:0,dy:15,size:.64},
+    grapple:{dx:0,dy:15,size:.64},
+    weight1:{dx:0,dy:23,size:.70},
+    weight2:{dx:0,dy:23,size:.70},
+    weight3:{dx:0,dy:23,size:.70}
+  };
   function paint(root,{x,y,face,time,distance,moving,walkAmount,reduced,action,selected,scene=0,flags={}}){
     if(!root)return;
     if(root!==cachedRoot||!nodes.rigHead?.isConnected){cachedRoot=root;nodes={};root.querySelectorAll('[id]').forEach(el=>nodes[el.id]=el);}
@@ -951,31 +1102,40 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
     attr('rigHead','transform',`rotate(${fixed(pose.headTilt)} 0 -87)`);
     // Shared cast acting owns eye timing so a paused blink is not overwritten.
     const mood=Cast.expression(scene,flags,'希尔达');
-    attr('rigBrows','d',score||mood==='resolve'?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1');
+    attr('rigBrows','d',score||mood==='resolve'?'M-13.5-125l10.2 3.8m11.6 0 10.2-4.8':'M-13.5-123.2q5.2-3.4 10.4-.8m11.6-1q5.2-2.2 10.2 1.2');
     const wind=reduced?0:Math.sin(time*3)*1.4+(moving?3:0);
     attr('rigScarf','d',`M16-82Q31 ${-74-wind} 44 ${-70-wind}L37 ${-61-wind} 18-70Z`);
-    const draw=(id,j)=>{const d=`M${j.origin.map(fixed)}L${j.elbow.map(fixed)}L${j.end.map(fixed)}`;attr(id,'d',d);attr(id+'Fill','d',d);};
+    const draw=(id,j)=>{
+      const d=`M${j.origin.map(fixed)}L${j.elbow.map(fixed)}L${j.end.map(fixed)}`;
+      attr(id,'d',d);attr(id+'Fill','d',d);
+      if(nodes[id+'Light'])attr(id+'Light','d',d);
+    };
+    const holdingLantern=!action&&['lamp','shade'].includes(selected);
+    const gripActive=pose.grip||holdingLantern;
     for(const name of ['Back','Front']){
       const leg=pose.legs[name];draw('rigLeg'+name,leg);
       const boot=nodes['rigBoot'+name];if(boot){if(!boot.firstChild)boot.innerHTML=Cast.boot(0,-5,name==='Back');attr('rigBoot'+name,'transform',`translate(${leg.end.map(fixed).join(' ')}) rotate(${fixed(leg.roll||0)} 0 3)`);}
       const arm=pose['arm'+name];draw('rigArm'+name,arm);
+      const closed=name==='Front'?gripActive:(pose.grip&&!!score?.twoHands);
       attr('rigHand'+name,'transform',`translate(${arm.end.map(fixed).join(' ')}) rotate(${fixed(arm.wrist)}) scale(${name==='Front'?1:-1} 1)`);
-      attr('rigPalm'+name,'d',pose.grip?'M-4-5Q1-7 5-3L5 3Q2 7-3 5L-6 1-7-3Q-6-5-3-1L0 0-1-4Z':'M-4-5Q0-7 4-4L5 2Q4 7 1 8L-3 6-5 1-7-1Q-8-4-5-3Z');
-      attr('rigFingers'+name,'d',pose.grip?'M-2 1l5 1m-5 1 4 1':'M0 2l1 4m-4-5 1 4');
+      attr('rigPalm'+name,'d',closed?'M-4.2-2.4Q0-3.4 4.4-2.2L5 1.8Q4.4 5.5.8 5.8L-3.2 5Q-4.8 2.8-4.4-.5Z':'M-4.2-2.4Q0-3.3 4.2-2.4L4.6 2.8Q4.2 7.2.8 7.8L-2.8 6.4Q-4.8 4-4.4-.5Z');
+      attr('rigThumb'+name,'d',closed?'M2.2-.8Q5.5-.2 5 2.3Q3.4 3.3 1.2 1.7':'M3-1.5Q6.3-.7 5.8 2.4Q4.4 3.5 2.5 1.7');
+      attr('rigFingers'+name,'d',closed?'M-2.8 1.2Q0 2.1 3.4 1M-2.4 3.1Q.2 3.9 3 2.7':'M-.8 2.2l.7 3.6m-2.3-3.4.5 3.2');
     }
-    const h=pose.armFront.end;let tool='';
+    const h=pose.armFront.end,b=pose.armBack.end;let tool='';
     if((score?.pickup||score?.place)&&pose.propVisible){
-      const prop=score.prop||score.item;
+      const prop=score.prop||score.item||(score.weightValue?'weight'+score.weightValue:null);
       if(prop){
-        const size={gearS:.89,gearM:1.10,gearL:1.31,scarf:.62,fork:.65,letter:.58}[prop]??.64;
-        tool=`<g data-held-item="${prop}" opacity="${fixed(pose.propOpacity)}" transform="translate(${fixed(h[0])} ${fixed(h[1]+14)}) scale(${size})">${prop==='letter'?item('plan'):item(prop)}</g>`;
+        const cfg=ITEM_GRIPS[prop]||{dx:0,dy:15,size:.64};
+        const sway=score.pickup&&pose.transfer>0?Math.sin(pose.transfer*Math.PI)*-6:0;
+        tool=`<g data-held-item="${prop}" opacity="${fixed(pose.propOpacity)}" transform="translate(${fixed(h[0]+cfg.dx)} ${fixed(h[1]+cfg.dy)}) rotate(${fixed(sway)} 0 ${fixed(-cfg.dy)}) scale(${cfg.size})">${prop==='letter'?item('plan'):item(prop)}</g>`;
       }
     }else if(score?.kind==='pour'&&frame.reach>.2){
       const tilt=Math.sin(frame.effort*Math.PI)*28,tx=(score.target[0]-x)/scale*face,ty=(score.target[1]-y)/scale;
-      tool=`<g data-held-item="teapot" transform="translate(${h[0]} ${h[1]}) rotate(${tilt})"><path d="M-15-8Q-19-21 0-22Q20-20 18-6L14 11H-13Z" fill="#739b97" stroke="#355952" stroke-width="1.5"/><path d="M15-10l15-10-8 20M-15-12q-21-9-14 9l13 7" fill="none" stroke="#88aaa1" stroke-width="4"/><path d="M-10-22h20" stroke="#31534f" stroke-width="3"/></g>`;
-      if(frame.effort>.15&&frame.effort<.83)tool+=`<path d="M${h[0]+24} ${h[1]-3}Q${tx} ${h[1]+12} ${tx} ${ty}" fill="none" stroke="#dbb36d" stroke-width="1.3" opacity=".8"/>`;
+      tool=`<g data-held-item="teapot" transform="translate(${fixed(h[0]+16)} ${fixed(h[1]+4)}) rotate(${fixed(tilt)} -16 -4)"><path d="M-15-8Q-19-21 0-22Q20-20 18-6L14 11H-13Z" fill="#739b97" stroke="#355952" stroke-width="1.5"/><path d="M15-10l15-10-8 20M-15-12q-21-9-14 9l13 7" fill="none" stroke="#88aaa1" stroke-width="4"/><path d="M-10-22h20" stroke="#31534f" stroke-width="3"/></g>`;
+      if(frame.effort>.15&&frame.effort<.83)tool+=`<path d="M${fixed(h[0]+38)} ${fixed(h[1]+1)}Q${fixed(tx)} ${fixed(h[1]+14)} ${fixed(tx)} ${fixed(ty)}" fill="none" stroke="#dbb36d" stroke-width="1.5" opacity=".85"/>`;
     }else if(score?.kind==='climb'&&score.effect==='archiveBook'&&frame.progress>.57&&frame.progress<.98){
-      tool=`<g transform="translate(${h[0]-13} ${h[1]-9})"><rect width="27" height="36" rx="2" fill="#d0bb81" stroke="#365751" stroke-width="2"/><path d="M7 9h13M7 15h13M7 21h9" stroke="#607e6a" stroke-width="1.5"/></g>`;
+      tool=`<g transform="translate(${fixed(h[0]-13)} ${fixed(h[1]-6)})"><rect width="27" height="36" rx="2" fill="#d0bb81" stroke="#365751" stroke-width="2"/><path d="M7 9h13M7 15h13M7 21h9" stroke="#607e6a" stroke-width="1.5"/></g>`;
     }else if(['tool','lever'].includes(score?.kind)&&frame.reach>.1){
       let tip=[...score.target];
       if(score.kind==='lever'){
@@ -983,11 +1143,11 @@ Homeward.define('art/performer', ['engine/body-motion','art/cast-design','art/pr
         tip=[1225+dx*Math.cos(a)-dy*Math.sin(a),720+dx*Math.sin(a)+dy*Math.cos(a)];
       }
       const tx=(tip[0]-x)/scale*face,ty=(tip[1]-y)/scale;
-      tool=`<path d="M${h[0]-6} ${h[1]+18}L${tx} ${ty+4}q5-12 10-5" fill="none" stroke="#253d43" stroke-width="5" stroke-linecap="round"/><path d="M${h}L${tx} ${ty+4}" stroke="#ccb384" stroke-width="3"/>`;
+      tool=`<path d="M${fixed(b[0]-4)} ${fixed(b[1]+3)}L${fixed(h[0])} ${fixed(h[1])}L${fixed(tx)} ${fixed(ty+2)}q5-12 10-5" fill="none" stroke="#253d43" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M${fixed(b[0]-4)} ${fixed(b[1]+3)}L${fixed(h[0])} ${fixed(h[1])}L${fixed(tx)} ${fixed(ty+2)}" fill="none" stroke="#d4bc8c" stroke-width="3.2" stroke-linecap="round"/>`;
     }else if(score?.prop==='rope'&&frame.reach>.1){
-      tool=`<ellipse cx="${h[0]}" cy="${h[1]+12}" rx="12" ry="15" fill="none" stroke="#c4ad7d" stroke-width="3"/>`;
-    }else if(!action&&['lamp','shade'].includes(selected)){
-      tool=`<g transform="translate(${h[0]} ${h[1]+13})"><circle r="23" fill="#e5ba5830"/><path d="M-6-5V-12Q0-22 6-12V-5" fill="none" stroke="#b49767" stroke-width="2"/><rect x="-9" y="-5" width="18" height="23" rx="4" fill="#dab779" stroke="#635444" stroke-width="2"/><path d="M0 14Q-8 5 0 0Q6 8 0 14" fill="#fff0b0"/></g>`;
+      tool=`<ellipse cx="${fixed(h[0])}" cy="${fixed(h[1]+13)}" rx="12" ry="15" fill="none" stroke="#c4ad7d" stroke-width="3.2"/>`;
+    }else if(holdingLantern){
+      tool=`<g transform="translate(${fixed(h[0])} ${fixed(h[1]+15)})"><circle r="24" fill="#e5ba5834"/><path d="M-6-5V-12Q0-21 6-12V-5" fill="none" stroke="#b49767" stroke-width="2.2"/><rect x="-9" y="-5" width="18" height="23" rx="4" fill="#dab779" stroke="#4a3e33" stroke-width="2"/><path d="M-6-2H6V14H-6Z" fill="#f5d993"/><path d="M0 13Q-7 5 0-1Q6 6 0 13" fill="#fff4bd"/></g>`;
     }
     if(nodes.rigTool&&nodes.rigTool.innerHTML!==tool)nodes.rigTool.innerHTML=tool;
     attr('rigShadow','opacity',score?.kind==='climb'&&!reduced?'.15':'1');
@@ -1142,24 +1302,25 @@ Homeward.define('art/species-life', [], () => {
 /* src/art/twig-design.js */
 /** A real layered quadruped: four limbs and independent torso, head, ears and tail. */
 Homeward.define('art/twig-design', [], () => {
-  const p=(d,f='none',s='#344c54',w=1.5)=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"/>`;
-  const limb=(i,x,far)=>`<g data-twig-leg="${i}">${p(`M${x} -28L${x+3} -14L${x} 0`,'none','#354d56',far?7:8)}<path class="twig-leg-fill" d="M${x} -28L${x+3} -14L${x} 0" fill="none" stroke="${far?'#a8c1be':'#e8eddf'}" stroke-width="${far?4.5:5.5}" stroke-linecap="round" stroke-linejoin="round"/><g class="twig-hoof" transform="translate(${x} 0)">${p('M-3-2L-4 1H4L3-2Z',far?'#91aaa9':'#cbd8cc','#526f73',.7)}</g></g>`;
+  const p=(d,f='none',s='#2f464e',w=1.55)=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const limb=(i,x,far)=>`<g data-twig-leg="${i}">${p(`M${x} -28L${x+3} -14L${x} 0`,'none','#2f464e',far?7.2:8.2)}<path class="twig-leg-fill" d="M${x} -28L${x+3} -14L${x} 0" fill="none" stroke="${far?'#b2c8c5':'#eff3e6'}" stroke-width="${far?4.8:5.8}" stroke-linecap="round" stroke-linejoin="round"/><g class="twig-hoof" transform="translate(${x} 0)">${p('M-3.4-2.4L-4.4 1.2H4.2L3.2-2.4Z',far?'#4c6468':'#364d52','#263a40',.8)}</g></g>`;
   function markup(){return `<g data-cast="枝枝" data-animal-rig="twig">
-    <ellipse class="twig-shadow" cy="3" rx="39" ry="5" fill="#13394235"/>
+    <ellipse class="twig-shadow" cy="3" rx="39" ry="5" fill="#13394238"/>
     <g class="twig-heading">
       ${limb(0,-22,true)}${limb(2,12,true)}
-      <g class="twig-torso"><g class="twig-tail">${p('M14-26Q31-56 49-55Q46-48 58-45Q52-40 59-38Q52-13 22-17Z','url(#cast-fur)')}${p('M26-25q17-4 24-18','none','#faf6df',2.8)}</g>
-      ${p('M-31-37Q-8-53 22-37Q27-29 24-23Q9-16-10-22Q-20-16-29-20Q-36-26-31-37Z','url(#cast-fur)')}${p('M-28-23q-7 5-2 9q7 2 12-4','url(#cast-fur)')}${p('M-15-41Q1-45 14-38','none','#fff9e7',2)}
+      <g class="twig-torso"><g class="twig-tail">${p('M13-26C28-55 46-58 53-53C49-47 58-45 61-41C55-37 61-34 59-29C50-11 26-14 19-18Z','url(#cast-fur)')}${p('M23-24C36-27 46-36 51-46','none','#fffdf0',2.8)}</g>
+      ${p('M-32-37C-12-54 16-48 23-36C28-28 25-21 17-19C4-16-9-21-19-18C-27-15-35-22-32-37Z','url(#cast-fur)')}${p('M-30-24C-37-18-32-11-23-13C-17-14-12-19-15-24','url(#cast-fur)')}${p('M-17-41Q1-46 15-37','none','#fffdf2',2.2)}
       <g class="twig-head">
-        ${p('M-29-23Q-40-24-48-37Q-49-47-39-52Q-27-59-16-50Q-6-45-9-32Q-15-21-29-23Z','url(#cast-fur)')}
-        <g class="twig-ear-a">${p('M-44-49Q-53-62-53-65Q-43-62-39-58L-37-45Z','url(#cast-fur)')}${p('M-44-53l-4-7 3 10','#afbec2','none')}</g>
-        <g class="twig-ear-b">${p('M-36-54Q-31-69-29-72Q-25-60-24-52L-27-46Z','url(#cast-fur)')}${p('M-31-55l2-10 2 10','#afbec2','none')}</g>
-        ${p('M-31-59l-6-17 2-13m-2 11-10-8m20 27 6-20 0-11m0 12 11-9','none','#758d8c',2.6)}${p('M-32-59l-5-17m11 15 6-19','none','#d7dcc4',1)}
-        <g class="twig-eye"><ellipse cx="-31" cy="-42" rx="2.5" ry="3.6" fill="#263c48"/><ellipse cx="-30.3" cy="-43" rx=".7" ry="1" fill="#fff9ea"/></g>
-        ${p('M-48-40Q-44-42-42-39Q-43-35-46-35Z','#263c48')}${p('M-45-32q5 3 9 0','none','#6d9193',1)}
+        ${p('M-29-23C-40-24-49-35-48-41C-48-49-39-54-29-56C-19-57-10-49-9-38C-9-26-17-21-29-23Z','url(#cast-fur)')}
+        <g class="twig-ear-a">${p('M-43-49C-52-60-54-65-51-67C-44-64-39-58-37-46Z','url(#cast-fur)')}${p('M-44-53l-4-8 4 10','#a9bcc0','none')}</g>
+        <g class="twig-ear-b">${p('M-36-54C-32-68-30-73-27-72C-24-62-23-53-27-46Z','url(#cast-fur)')}${p('M-31-55l2-11 2 11','#a9bcc0','none')}</g>
+        ${p('M-31-59l-6-17 2-13m-2 11-10-8m20 27 6-20 0-11m0 12 11-9','none','#6d8685',2.7)}${p('M-32-59l-5-17m11 15 6-19','none','#e4e8d3',1.1)}
+        <g class="twig-eye"><ellipse cx="-31" cy="-42" rx="2.7" ry="3.8" fill="#233844"/><ellipse cx="-30.2" cy="-43.2" rx=".85" ry="1.15" fill="#fffdf4"/><ellipse cx="-31.8" cy="-40.8" rx=".45" ry=".55" fill="#ffffffb0"/></g>
+        ${p('M-48.5-40.5Q-44.5-43-42-39.5Q-43-35-46.5-35.5Z','#233844')}${p('M-45-32q5 3 9.5-.2','none','#688a8c',1.1)}
       </g></g>
       ${limb(1,-29,false)}${limb(3,20,false)}
-    </g></g>`;}
+    </g></g>`;
+  }
   return {markup};
 });
 
@@ -1178,7 +1339,7 @@ Homeward.define('content/choreography', ['content/staging','content/mechanisms']
   function score(scene,id,state,item) {
     const f=state.f;
     const entries={
-      0:{bird:{kind:'take',target:Staging.home.bird,approachX:1042,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1245,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[655,695],approachX:724,pickup:true,prop:'scarf'}},
+      0:{bird:{kind:'take',target:Staging.home.bird,approachX:980,pickup:true,prop:'letter',source:'homeBird'},lamp:{kind:'take',target:Staging.home.lampGrip,approachX:1178,pickup:true,prop:'lamp',source:'homeLamp'},mom:{kind:'receive',target:[655,695],approachX:724,pickup:true,prop:'scarf'}},
       5:{line:{kind:'take',target:[336,710],approachX:286,pickup:true,prop:'line',source:'gondolaLine',twoHands:true},brake:{kind:'turn',effect:'gondolaLift',target:[1029,633],radius:24,approachX:974}},
       6:{holder:{kind:'place',target:[782,643],place:true,prop:'shade',approachX:731},tone0:{kind:'reach',target:[468,685],approachX:426},tone1:{kind:'reach',target:[586,663],approachX:544},tone2:{kind:'reach',target:[704,685],approachX:662}},
       7:Object.fromEntries([...[['gearS',453,738],['gearM',612,740],['gearL',795,725]].map(([id,x,y])=>[id,{kind:'take',target:[x,y],approachX:x-48,pickup:true,prop:id,source:'pickup-'+id,twoHands:id!=='gearS'}]),...Mechanisms.gears.map(d=>[d.socket,{kind:'place',target:[d.x,d.y],place:true,prop:d.item,approachX:d.x-50}]),['lever',{kind:'pull',effect:'towerDoor',target:[1358,593],travel:35}]]),
@@ -1630,9 +1791,9 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
   const segment=(p,a,b)=>smooth((p-a)/(b-a));
   const bones=Object.freeze({upperArm:25,forearm:27,thigh:24,shin:24});
   const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
-  function articulated(origin,rest,target,bend,reach){
+  function articulated(origin,rest,target,bend,reach,contactBend=bend){
     const a=bones.upperArm,b=bones.forearm;
-    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,bend);
+    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,contactBend);
     const angle=j=>Math.atan2(j.elbow[1]-origin[1],j.elbow[0]-origin[0]);
     const elbowAngle=j=>wrap(Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])-angle(j));
     const upper=angle(neutral)+wrap(angle(contact)-angle(neutral))*reach;
@@ -1648,7 +1809,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       // Locomotion owns the whole body; rare idle gestures never alter walking elbows.
       const idle=gait.amount===0?Idle.sample({who:'希尔达',time,reduced}):null;
       let front=gait.armFront;
-      if(idle?.gesture>0){const target=[idle.front[0],idle.front[1]+gait.bodyY];front=articulated(front.origin,front.end,target,-1,idle.gesture*.3);}
+      if(idle?.gesture>0){const target=[idle.front[0],idle.front[1]+gait.bodyY];front=articulated(front.origin,front.end,target,-1,idle.gesture*.3,1);}
       return {offset:[0,gait.bodyY],armFront:front,armBack:gait.armBack,legs:gait.legs,
         gaitPhase:gait.phase,walkAmount:gait.amount,contact:null,pickup:false,acquired:false,transfer:0,
         grip:false,propVisible:false,propOpacity:0,headTilt:0};
@@ -1669,18 +1830,22 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     if(score?.kind==='pull')world[1]+=effort*(score.travel??18);
     if(score?.kind==='pour'){world[0]-=face*40;world[1]-=42;}
     const local=[(world[0]-x)/scale*face,(world[1]-y)/scale];
-    const low=limit((local[1]+43)*.85,0,34);
-    const crouch=low*envelope*(1-transfer*.7)-2.7*(1-envelope);
+    const low=limit((local[1]+25)*.82,0,28);
+    const highLift=local[1]<-90?limit((-90-local[1])*.32,0,5.5):0;
+    const crouch=(low-highLift)*envelope*(1-transfer*.7)-2.7*(1-envelope);
     const anticipation=score&&!reduced?Math.sin(segment(p,0,.18)*Math.PI)*-1.4:0;
-    const lean=score?limit((local[0]-27)*.13,-7,10)*envelope+anticipation:wave*.6;
+    const lean=score?limit((local[0]-34)*.22,-5,10)*envelope+anticipation:wave*.6;
     const bob=moving&&!reduced?-Math.abs(Math.cos(gait*Math.PI*2))*1.1:breathe;
     const offset=[lean,crouch+bob];
-    let front=local,back=[local[0]-17,local[1]+6];
-    if(pickup){front=point(local,[-18,-59],transfer);back=score.twoHands?point(back,[-35,-59],transfer):[-25,-50];}
-    if(score?.kind==='tool'){front=[31,-91];back=[4,-74];}
+    let front=local,back=[local[0]-15,local[1]+5];
+    if(pickup){
+      front=point(local,[20,-48],transfer);
+      back=score.twoHands?point(back,[4,-47],transfer):[-25,-48];
+    }
+    if(score?.kind==='tool'){front=[32,-88];back=[10,-72];}
     if(score?.kind==='lever'){front=[34,-70-effort*17];back=[15,-67-effort*17];}
     if(score?.kind==='throw'){front=[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*24];back=[-18,-57];}
-    if(score?.kind==='gesture'){front=[38,-69];back=[-24,-45];}
+    if(score?.kind==='gesture'){front=[36,-66];back=[-24,-45];}
     // Climbing is gameplay communication, not decorative motion: keep it visible in reduced mode.
     const climbing=score?.kind==='climb';
     if(climbing){
@@ -1689,9 +1854,11 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       back=[-16,-94+Math.sin(p*24)*14];
     }
     const idle=!score&&!moving?Idle.sample({who:'希尔达',time,reduced}):null;
-    const armFront=articulated([22+lean,-79+crouch+bob],[31.5+lean,-28.3+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
-    const backReach=pickup&&!score.twoHands?envelope*.3:envelope*.9;
-    const armBack=articulated([-22+lean,-79+crouch+bob],[-31.5+lean,-28.3+crouch+bob],back,1,backReach);
+    const shoulderShift=score?limit((44-front[0])*.38,0,6.5)*envelope:0;
+    // Use anatomical elbow-down/back (+1) when reaching for targets so the elbow never folds across the face or hyperextends backward.
+    const armFront=articulated([22+lean-shoulderShift,-79+crouch+bob],[31.5+lean,-28.3+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope,1);
+    const backReach=pickup&&!score.twoHands?envelope*.25:envelope*.9;
+    const armBack=articulated([-22+lean,-79+crouch+bob],[-31.5+lean,-28.3+crouch+bob],back,1,backReach,1);
     const legs={};
     for(const [name,sign] of [['Back',-1],['Front',1]]){
       const step=(gait+(sign<0?.5:0))%1;
@@ -2911,10 +3078,10 @@ Homeward.define('engine/idle-life', [], () => {
   const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
   const pulse=(t,a,b,c,d)=>smooth((t-a)/(b-a))*(1-smooth((t-c)/(d-c)));
   const profiles=Object.freeze({
-    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[-8,-58],label:'check-satchel'}),
-    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[-8,-61],label:'hold-strap'}),
-    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[12,-77],label:'adjust-scarf'}),
-    '妈妈':Object.freeze({period:19.1,phase:2.7,breath:1.4,hand:[33,-44],label:'open-palm'})
+    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[18,-45],label:'check-satchel'}),
+    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[16,-47],label:'hold-strap'}),
+    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[22,-51],label:'adjust-scarf'}),
+    '妈妈':Object.freeze({period:19.1,phase:11.7,breath:1.4,hand:[33,-36],label:'open-palm'})
   });
   function sample({who='妈妈',time=0,reduced=false,moving=false,reserved=false,speaker=false,scene=0}={}){
     const p=Object.hasOwn(profiles,who)?profiles[who]:profiles['妈妈'];
@@ -2925,7 +3092,7 @@ Homeward.define('engine/idle-life', [], () => {
     const blinkPhase=t%(5.1+p.phase*.11),blink=reduced?1:1-.94*pulse(blinkPhase,.18,.235,.285,.36);
     const talk=reserved||moving||reduced||!speaker?0:pulse(q,1.2,1.8,2.1,2.9)*.14;
     const reach=Math.max(gesture,talk);
-    const target=speaker&&gesture<.1?[36,-66]:p.hand;
+    const target=speaker&&gesture<.1?[34,-48]:p.hand;
     return {gesture:reach,front:[31.5+(target[0]-31.5)*reach,-28.3+(target[1]+28.3)*reach],
       back:[-31.5,-28.3],shift,
       breath:reserved||reduced?0:Math.sin(t*p.breath)*.28,
@@ -4045,7 +4212,7 @@ Homeward.define("scene/0/logic", ["story/helpers", "content/catalog"], ({checkBe
 return {
 name:'一封黄昏来信',english:'THE LETTER AT THE WINDOW',actLabel:'序章 · 灯还亮着',mood:'特洛尔堡 / 黄昏 / 茶壶刚刚烧开',start:800,ground:x=>775,chapter:['PROLOGUE','灯还亮着','出门之前，有人替你留了一盏灯。'],
 intro:[['妈妈','茶快好了。今晚就别跑太远，好吗？'],['希尔达','我保证。除非……窗外真的有一只纸做的鸟。']],
-hotspots:s=>[H('bird','查看窗边的纸鸟',1090,577,90,80,{walkX:1042}),H('mom','和妈妈说话',579,610,140,295,{walkX:724}),...(!s.f.lampTaken?[I('lamp','拿起小提灯',1292,604,76,112,{walkX:1245})]:[]),exit('leave','出门',189,488,{walkX:275}),H('teapot','闻一闻刚泡的茶',805,613,93,87),H('picture','看看墙上的山景',695,273,116,151)],
+hotspots:s=>[H('bird','查看窗边的纸鸟',1090,577,90,80,{walkX:980}),H('mom','和妈妈说话',579,610,140,295,{walkX:724}),...(!s.f.lampTaken?[I('lamp','拿起小提灯',1292,604,76,112,{walkX:1178})]:[]),exit('leave','出门',189,488,{walkX:275}),H('teapot','闻一闻刚泡的茶',805,613,93,87),H('picture','看看墙上的山景',695,273,116,151)],
 act(g,id,item){if(id==='bird'){if(f(g,'letter'))return one(g,'希尔达','北山的钟，还有那个不敢回家的孩子。阿尔弗需要我们。');return g.work(1300,'托住纸鸟，展开窗边的来信',()=>{set(g,'letter');book(g,'letter');say(g,[['希尔达','“希尔达：钟楼又响了。那个孩子还在森林里。”'],['阿尔弗','“我想它不是在闹事。它只是很害怕。北门见。阿尔弗。”'],['希尔达','枝枝，我们恐怕得把茶留到回来再喝了。']]);});}else if(id==='lamp'){if(f(g,'lampTaken'))return;return g.work(1350,'握住提环，从挂钩取下提灯，再收好',()=>{set(g,'lampTaken');g.take('lamp');});}else if(id==='mom'){if(!f(g,'letter'))return one(g,'妈妈','先看看那只鸟吧。它敲窗户比你有耐心得多。');if(!f(g,'promise')){return g.work(1250,'接过妈妈递来的围巾，轻轻收好',()=>{set(g,'promise');g.take('scarf',false);book(g,'promise');say(g,[['妈妈','围巾带上。找到朋友，然后一起回来。'],['希尔达','不落下任何一个。我保证。'],['妈妈','那我把茶壶留在炉子边。']]);});}else one(g,'妈妈','灯、围巾、朋友。最重要的东西都带好了。');}else if(id==='leave'){advance(g,f(g,'letter')&&f(g,'promise')&&f(g,'lampTaken'),1,!f(g,'letter')?'纸鸟好像有话要说。':!f(g,'promise')?'先跟妈妈说一声。她不应该只能靠猜。':'山里天黑得早。带上门边的小提灯。');}else if(id==='teapot')one(g,'希尔达','肉桂和苹果。回来时应该还是这个味道。');else if(id==='picture')g.sketch('mountain','妈妈画的山','画里那条小路，最后总会回到有灯的窗前。');else wrong(g);},
 objective:s=>!s.f.letter?'看看敲窗的纸鸟。':!s.f.promise?'把来信的事告诉妈妈。':!s.f.lampTaken?'拿上挂钩上的小提灯。':'从左边的家门出发。',
 hints:s=>['先观察窗户、炉火和门边。','纸鸟带着求助信；妈妈会准备围巾，挂钩上有提灯。','点窗边纸鸟，再点妈妈，再拿右侧挂钩上的提灯，最后点最左边的门。']};

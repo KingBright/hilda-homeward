@@ -1,20 +1,37 @@
 /** Shared production drawings: the stage actor and dialogue portraits use the
  * same head/costume layers. No independent portrait-only redesigns or bitmaps. */
 Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
- const ink='#263c48';
+ const ink='#233844';
  const p=(d,f='none',s=ink,w=1.55,extra='')=>`<path d="${d}" fill="${f}" stroke="${s}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
  const e=(x,y,rx,ry,f,s='none',w=1)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" stroke="${s}" stroke-width="${w}"/>`;
  const profiles={
-  '希尔达':{skin:'#f3cda8',shade:'#dca17e',hair:'#398eaa',light:'#77c6d5',coat:'#b75848',coatLight:'#dd8770',coatDark:'#7f3c39',scarf:'#c64f45',trousers:'#314652'},
-  '大卫':{skin:'#efc8a1',shade:'#cc9979',hair:'#855d3e',light:'#ba8a58',coat:'#b18545',coatLight:'#d7b779',coatDark:'#7f623c',scarf:'#6b8e8b',trousers:'#3d5361'},
-  '芙丽达':{skin:'#ae7653',shade:'#80503e',hair:'#302e30',light:'#55403a',coat:'#ccaa58',coatLight:'#ead28b',coatDark:'#988044',scarf:'#638b8b',trousers:'#344952'},
-  '妈妈':{skin:'#efd0af',shade:'#d3a086',hair:'#64483e',light:'#906b53',coat:'#8d6470',coatLight:'#b99093',coatDark:'#634550',scarf:'#c6bb91',trousers:'#394950'}
+  '希尔达':{skin:'url(#cast-skin-hilda)',skinSolid:'#f4cfb0',shade:'#d99b78',blush:'#e88d76',hair:'url(#cast-hair-hilda)',hairSolid:'#358ba7',hairDark:'#215e75',light:'#83d4e3',coat:'url(#cast-coat-hilda)',coatSolid:'#be5948',coatLight:'#e48d75',coatDark:'#7e3835',scarf:'url(#cast-scarf-hilda)',scarfSolid:'#c84d42',trousers:'#2f4553',eye:'#233844',iris:'#3e6e7c'},
+  '大卫':{skin:'url(#cast-skin-david)',skinSolid:'#f0c9a3',shade:'#ca9474',blush:'#df8f73',hair:'url(#cast-hair-david)',hairSolid:'#865d3d',hairDark:'#593b25',light:'#c49462',coat:'url(#cast-coat-david)',coatSolid:'#b58847',coatLight:'#dcc082',coatDark:'#7c5e38',scarf:'#688e8a',scarfSolid:'#688e8a',trousers:'#3c5260',eye:'#263840',iris:'#5c4636'},
+  '芙丽达':{skin:'url(#cast-skin-frida)',skinSolid:'#b07855',shade:'#7f4e3b',blush:'#9c5644',hair:'url(#cast-hair-frida)',hairSolid:'#2d2b2e',hairDark:'#19181b',light:'#624d47',coat:'url(#cast-coat-frida)',coatSolid:'#cfa954',coatLight:'#eed690',coatDark:'#94783c',scarf:'#5d8989',scarfSolid:'#5d8989',trousers:'#334852',eye:'#1f2e35',iris:'#3c302c'},
+  '妈妈':{skin:'url(#cast-skin-mom)',skinSolid:'#f0d1b2',shade:'#d19d82',blush:'#df927c',hair:'url(#cast-hair-mom)',hairSolid:'#66493f',hairDark:'#432e27',light:'#9b755d',coat:'url(#cast-coat-mom)',coatSolid:'#916572',coatLight:'#c1969a',coatDark:'#61424d',scarf:'#cbc096',scarfSolid:'#cbc096',trousers:'#384850',eye:'#243842',iris:'#54464b'}
  };
  const defs=`<defs>
-  <pattern id="cast-knit" width="6" height="5" patternUnits="userSpaceOnUse"><path d="M1 1l1 2 1-2m2 3 1 1" fill="none" stroke="#fff2d1" stroke-opacity=".2" stroke-width=".55"/></pattern>
-  <linearGradient id="cast-fur" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#fff7df"/><stop offset=".6" stop-color="#e8ead9"/><stop offset="1" stop-color="#adc6c9"/></linearGradient>
-  <linearGradient id="cast-rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9bafa7"/><stop offset=".48" stop-color="#778e8a"/><stop offset="1" stop-color="#4b6569"/></linearGradient>
-  <linearGradient id="cast-woff" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#ead9b7"/><stop offset=".6" stop-color="#c2b493"/><stop offset="1" stop-color="#8da2a0"/></linearGradient>
+  <pattern id="cast-knit" width="6" height="5" patternUnits="userSpaceOnUse"><path d="M1 1l1 2 1-2m2 3 1 1" fill="none" stroke="#fff4d8" stroke-opacity=".28" stroke-width=".65"/></pattern>
+  <linearGradient id="cast-fur" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#fff9e6"/><stop offset=".58" stop-color="#ebeede"/><stop offset="1" stop-color="#abc4c7"/></linearGradient>
+  <linearGradient id="cast-rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a2b6ae"/><stop offset=".48" stop-color="#788f8b"/><stop offset="1" stop-color="#486266"/></linearGradient>
+  <linearGradient id="cast-woff" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#f0e0be"/><stop offset=".6" stop-color="#c6b896"/><stop offset="1" stop-color="#8ca19f"/></linearGradient>
+  <linearGradient id="cast-skin-hilda" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#fae0c7"/><stop offset=".65" stop-color="#f2cba8"/><stop offset="1" stop-color="#dfb08c"/></linearGradient>
+  <linearGradient id="cast-skin-david" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#f7dac0"/><stop offset=".65" stop-color="#eec69f"/><stop offset="1" stop-color="#d8a882"/></linearGradient>
+  <linearGradient id="cast-skin-frida" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#c28a66"/><stop offset=".65" stop-color="#ae7552"/><stop offset="1" stop-color="#8e5a3e"/></linearGradient>
+  <linearGradient id="cast-skin-mom" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#f8e1c8"/><stop offset=".65" stop-color="#efd0b0"/><stop offset="1" stop-color="#dbb292"/></linearGradient>
+  <linearGradient id="cast-hair-hilda" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#53b4cc"/><stop offset=".52" stop-color="#378da9"/><stop offset="1" stop-color="#23637b"/></linearGradient>
+  <linearGradient id="cast-hair-david" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#9e714c"/><stop offset=".55" stop-color="#82593a"/><stop offset="1" stop-color="#5c3d26"/></linearGradient>
+  <linearGradient id="cast-hair-frida" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#433e42"/><stop offset=".55" stop-color="#2c292c"/><stop offset="1" stop-color="#181619"/></linearGradient>
+  <linearGradient id="cast-hair-mom" x1=".1" y1="0" x2=".85" y2="1"><stop stop-color="#7d5b4f"/><stop offset=".55" stop-color="#62463c"/><stop offset="1" stop-color="#442f28"/></linearGradient>
+  <linearGradient id="cast-coat-hilda" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#d86c57"/><stop offset=".55" stop-color="#b85646"/><stop offset="1" stop-color="#8b3c35"/></linearGradient>
+  <linearGradient id="cast-coat-david" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#c99b56"/><stop offset=".55" stop-color="#b08343"/><stop offset="1" stop-color="#825f32"/></linearGradient>
+  <linearGradient id="cast-coat-frida" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#e0bc68"/><stop offset=".55" stop-color="#caa552"/><stop offset="1" stop-color="#967838"/></linearGradient>
+  <linearGradient id="cast-coat-mom" x1=".15" y1="0" x2=".85" y2="1"><stop stop-color="#a87b88"/><stop offset=".55" stop-color="#8c626f"/><stop offset="1" stop-color="#654450"/></linearGradient>
+  <linearGradient id="cast-scarf-hilda" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#df6152"/><stop offset=".6" stop-color="#c34b40"/><stop offset="1" stop-color="#94342f"/></linearGradient>
+  <linearGradient id="cast-skirt" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#3e5666"/><stop offset="1" stop-color="#263844"/></linearGradient>
+  <linearGradient id="cast-satchel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#967452"/><stop offset=".6" stop-color="#6f563e"/><stop offset="1" stop-color="#4d3b2c"/></linearGradient>
+  <linearGradient id="cast-boot-front" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#a87959"/><stop offset=".58" stop-color="#8e6246"/><stop offset="1" stop-color="#684632"/></linearGradient>
+  <linearGradient id="cast-boot-back" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#855f48"/><stop offset=".6" stop-color="#6d4c39"/><stop offset="1" stop-color="#513729"/></linearGradient>
  </defs>`;
  function expression(scene=0,flags={},who='希尔达'){
   if(scene===9&&!flags.roofDone){if(who==='大卫'&&!flags.davidSafe||who==='芙丽达'&&!flags.fridaSafe)return 'worried';return 'resolve';}
@@ -24,38 +41,131 @@ Homeward.define('art/cast-design', ['art/twig-design'], Twig => {
  }
  function eyes(c,mood='curious',rig=false){
   const worried=mood==='worried',resolve=mood==='resolve',happy=mood==='relieved';
-  const brows=worried?'M-13-122q5-5 10-2m12-1q6-2 11 2':resolve?'M-13-125l10 4m12 0 10-5':'M-13-123q5-3 10-1m12-1q5-2 10 1';
+  const brows=worried?'M-13.5-122.5q5-5.2 10.5-1.8m11.5-1.2q6-2.2 11 2.2':resolve?'M-13.5-125l10.2 3.8m11.6 0 10.2-4.8':'M-13.5-123.2q5.2-3.4 10.4-.8m11.6-1q5.2-2.2 10.2 1.2';
   const mouth=worried?'M1-94q5-5 10 0':happy?'M-1-96q7 9 14-1':resolve?'M1-94q5 1 10-1':'M0-95q6 5 12-1';
-  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>${e(-7,-112,5.8,7.4,'#fff4da')}${e(13,-111,5.4,7.1,'#fff4da')}<g class="cast-pupils">${e(-5.4,-111,2.9,4.8,ink)}${e(14.7,-110,2.8,4.6,ink)}${e(-4.5,-113,1,1.5,'#fff9ed')}${e(15.5,-112,1,1.4,'#fff9ed')}</g>${p('M-13-117q5-5 10-1m11-1q5-4 10 1','none',c.hair,1.1)}</g>${p(brows,'none',c.hair,1.6,rig?'id="rigBrows"':'')}${p('M3-109q-1 6 3 6','none',c.shade,1.3)}${p(mouth,'none',c.hair,1.25,rig?'id="rigMouth" class="cast-mouth"':'class="cast-mouth"')}${e(-13,-101,4,2,c.shade)}${e(20,-100,3,1.8,c.shade)}`;
+  return `<g ${rig?'id="rigEyes"':'class="cast-blink"'}>`+
+   `${e(-7,-112,6,7.6,'#fff8e7',ink,1.15)}${e(13,-111,5.6,7.3,'#fff8e7',ink,1.15)}`+
+   `${p('M-12.6-114.8Q-7-119.5-1.2-114.2M7.6-113.8Q13-118.4 18.4-113.2','none','#d9c4a3',1.1)}`+
+   `<g class="cast-pupils">`+
+    `${e(-5.3,-111,3.3,5.1,c.iris||ink)}${e(14.6,-110,3.1,4.9,c.iris||ink)}`+
+    `${e(-5.2,-111,2.2,3.6,ink)}${e(14.7,-110,2.1,3.5,ink)}`+
+    `${e(-4.1,-113.2,1.25,1.7,'#fffdf5')}${e(15.7,-112.2,1.15,1.6,'#fffdf5')}`+
+    `${e(-6.3,-109.2,.65,.8,'#ffffffb8')}${e(13.6,-108.3,.6,.75,'#ffffffb8')}`+
+   `</g>`+
+   `${p('M-13.2-116.5Q-7-121.2-.8-116.2M7.2-115.5Q13.2-120 18.8-115.2','none',ink,1.45)}`+
+  `</g>`+
+  `${p(brows,'none',c.hairDark||ink,1.7,rig?'id="rigBrows"':'')}`+
+  `${p('M3.2-109.5Q1.4-103.5 5.8-103.2','none',c.shade,1.35)}`+
+  `${p(mouth,'none',ink,1.35,rig?'id="rigMouth" class="cast-mouth"':'class="cast-mouth"')}`+
+  `${e(-13.2,-101.2,4.4,2.3,c.blush||c.shade)}${e(19.8,-100.2,3.4,2,c.blush||c.shade)}`;
  }
  function hairBack(who,c){
-  if(who==='希尔达')return p('M-22-139Q-45-127-35-106L-38-88-32-91-35-72-28-77-22-61-13-69 12-61 27-72 25-64Q43-89 28-121L22-140Z',c.hair)+p('M-27-127q-11 19-4 39m8-25q-7 31 4 43m42-44q9 22-1 39','none',c.light,1.6);
-  if(who==='芙丽达')return p('M-24-125Q-43-123-34-109-46-99-33-88-42-72-25-68-24-58-12-65 3-55 13-64 32-57 32-70 49-76 36-89 45-103 32-111 41-128 23-134Z',c.hair)+p('M-29-101q-9 5-1 12m-4 9q-3 7 5 8m60-32q10 3 1 9m0 12q9 2 2 8','none',c.light,2);
-  if(who==='妈妈')return p('M-22-134Q-38-119-28-81Q-8-69 29-81L28-128Z',c.hair)+p('M-26-115q-4 25 3 30m44-27q8 19 2 31','none',c.light,1.6);
-  return p('M-26-123q-5 23 6 33l6-8 25 7 13-17-6-19Z',c.hair);
+  if(who==='希尔达'){
+   return p('M-22-139C-42-130-43-105-37-87C-41-77-37-65-29-58C-22-53-12-56-6-61L14-59C23-56 32-62 35-72C42-88 38-113 28-127L22-140Z',c.hair,ink,1.65)+
+    p('M-34-103C-37-87-33-70-24-60M-21-106C-24-86-18-69-10-61M27-109C33-92 31-75 23-64','none',c.hairDark,1.25)+
+    p('M-29-127C-38-108-34-86-26-67M-18-112C-22-89-16-73-9-63M24-118C32-98 30-79 22-66','none',c.light,1.75);
+  }
+  if(who==='芙丽达'){
+   return p('M-25-127C-44-124-45-103-35-94C-46-83-41-64-25-62C-22-52-7-53 2-61C12-53 28-55 32-67C47-70 48-88 37-96C46-107 41-127 23-134Z',c.hair,ink,1.65)+
+    p('M-31-102q-8 6-1 13m-3 9q-3 7 6 8m58-32q9 4 1 10m0 11q8 3 2 9','none',c.light,2);
+  }
+  if(who==='妈妈'){
+   return p('M-23-135C-39-120-36-92-29-76C-22-66-6-68 4-73C15-69 27-71 31-81C36-97 34-119 28-131Z',c.hair,ink,1.65)+
+    p('M-27-116C-32-96-28-82-22-75M26-114C32-96 29-82 23-75','none',c.light,1.7);
+  }
+  return p('M-26-124C-32-104-25-88-18-86L-11-94L15-87L28-104L22-123Z',c.hair,ink,1.6);
  }
  function head(who,mood='curious',rig=false){
   const c=profiles[who]||profiles['妈妈'];
   let front='';
-  if(who==='希尔达')front=p('M-26-129q-2-19 21-18 18-8 30 10l5 17-10-5-2 6-14-11q-6 15-19 17l2-12-12 15Z',c.hair)+p('M-22-133q13-14 28-10m-11 7q-3 12-12 15m26-19 12 12','none',c.light,2)+p('M-28-141q-10-10 7-16l12-3q23-10 37 6l8 13q-23-7-44 2Z','#304757')+p('M-20-150q19-10 35-2','none','#527183',1.7)+p('M2-162l2-6','none',ink,2.3);
-  else if(who==='大卫')front=p('M-29-119q-9-17 4-22l-3-9 14 2q8-14 19-4l11-5 3 11q13-2 14 9 7 9-4 16l-9-10q-3 9-14 11l3-11q-12 11-23 9l-6 11Z',c.hair)+p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+p('M-16-103h2m3 1h1m26-1h2','none','#b8835b',1.2);
-  else if(who==='芙丽达')front=p('M-28-120q-16-10-5-22-1-16 13-16 10-13 22-7 13-9 24 3 18-2 18 14 14 11 1 20l-8 16-6-18q-10 8-14-1-11 9-16 0-7 10-18 11Z',c.hair)+p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.2)+p('M22-132l8-8','none','#d7ba71',2.8);
-  else front=p('M-28-124q-4-27 20-29 26-9 37 14l1 25-8-14q-16 6-19-9-12 17-29 23Z',c.hair)+p('M-22-134q10-15 21-14m7 5q12 1 16 10','none',c.light,1.8);
-  return `<g class="cast-attention"><g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">${p('M-20-128Q-5-141 18-132L25-119 24-100Q19-84 3-86-15-86-21-103Z',c.skin)}${p('M-19-108q-11-9-11 2 0 9 10 9',c.skin)}${p('M-24-109q-3 2 0 6','none',c.shade,1.3)}${p('M-15-91q14 11 31-5l-3 8q-13 9-27-1Z',c.shade,'none')}${eyes(c,mood,rig)}${front}${who==='妈妈'?e(-26,-98,2,3,'#dec989',ink,.8):''}</g></g>`;
+  if(who==='希尔达'){
+   front=p('M-27-129C-28-146-7-151 12-146C28-149 39-138 42-123C43-114 39-104 34-99L28-109L24-101L13-115C7-101-5-96-17-97L-13-110L-25-96C-29-105-29-118-27-129Z',c.hair,ink,1.6)+
+    p('M-22-134C-10-146 8-146 23-139M-7-127C-10-115-16-107-23-103M18-132C26-124 31-114 34-104','none',c.light,1.95)+
+    p('M-29-140C-36-150-22-158-6-159C14-165 34-156 41-143L46-131C26-138 2-137-29-140Z','#2b4252',ink,1.6)+
+    p('M-24-141C-4-145 19-144 41-135','none','#49697d',2)+
+    p('M-18-151C-2-158 16-157 31-149','none','#64899e',1.5)+
+    p('M3-160Q5-166 7-168','none',ink,2.4);
+  }else if(who==='大卫'){
+   front=p('M-29-119C-37-134-26-143-16-141L-19-149L-4-146C4-158 16-154 23-146L33-150L35-139C46-140 49-130 44-121C49-113 41-106 34-104L27-115C23-106 14-103 4-104L7-115C-4-105-15-105-24-108L-29-98Z',c.hair,ink,1.55)+
+    p('M-21-139q10 2 17-6m9 6q8-6 15 0m-31 13 12-5','none',c.light,1.8)+
+    p('M-16-103h1.8m3.2 1.2h1.5m25-1.2h1.8','none','#b8835b',1.3);
+  }else if(who==='芙丽达'){
+   front=p('M-28-120C-43-129-35-143-24-143C-24-157-10-159 1-153C11-164 24-159 31-149C44-155 54-144 51-131C62-122 54-108 42-104L35-90L30-108C21-101 15-103 11-110C2-102-4-103-9-110C-15-101-22-100-28-104Z',c.hair,ink,1.6)+
+    p('M-24-143q-7-5-1-9m8-5q8-7 11 0m12-3q10-6 13 5m9 7q12 2 6 9m-56-5q7-7 12-1m14-5q10-5 13 4','none',c.light,2.1)+
+    p('M21-131l8-8m-6 10 8-8','none','#e5c878',2.2);
+  }else{
+   front=p('M-28-124C-32-149-11-156 10-154C32-159 46-143 47-122L47-98L39-112C25-106 19-112 15-122C4-106-11-100-28-100Z',c.hair,ink,1.6)+
+    p('M-22-135C-12-149 1-149 14-144M19-139C31-137 37-128 39-116','none',c.light,1.85);
+  }
+  return `<g class="cast-attention"><g ${rig?'id="rigHead"':''} data-cast-head="${who}" data-mood="${mood}">`+
+   `${p('M-20-128C-10-141 11-140 20-130C26-122 26-107 24-98C20-85 8-84-2-85C-14-86-21-95-21-106Z',c.skin,ink,1.55)}`+
+   `${p('M-19-109C-29-116-30-102-21-99C-17-98-15-101-16-105',c.skin,ink,1.4)}`+
+   `${p('M-24-108q-2.5 2.5 0 5.5','none',c.shade,1.25)}`+
+   `${p('M-15-91Q2-81 17-95L15-87Q1-79-14-88Z',c.shade,'none')}`+
+   `${eyes(c,mood,rig)}${front}`+
+   `${who==='妈妈'?e(-25.5,-97.5,2.2,3.2,'#ecd694',ink,.9):''}`+
+  `</g></g>`;
  }
  function upper(who,rig=false,mood='curious'){
   const c=profiles[who]||profiles['妈妈'],hilda=who==='希尔达',mom=who==='妈妈';
-  const torso=p('M-23-82Q-8-92 18-83L27-44Q5-38-25-45Z',c.coat)+p('M-22-74l7-9 3 34 27 3 10-4 2 7q-28 7-51 0Z',c.coatDark,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z',c.coatLight,'none')+p('M-12-80Q1-85 14-79L20-54-14-54Z','url(#cast-knit)','none')+p('M-2-78V-45M-22-46Q2-41 24-45','none',c.coatDark,1.15)+p('M-10-57h9v8h-10m15-8h10v8H5','none',c.coatLight,1.1)+[0,1,2].map(i=>e(1,-72+i*8,1.2,1.2,'#ecd5a4')).join('');
-  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">${hairBack(who,c)}${p('M-20-82q-18 0-16 18l3 19 17 4 6-26Z','#64594c')}${p('M-32-66l15 3-2 11-12-2Z','#a27e55')}${p('M-26-73l4 1v8l-5-1Z','#d6b77c')}${hilda?p('M-21-53H20L29-29Q1-25-28-29Z','#334552')+p('M-15-51l-4 20m18-21v22m14-21 7 19','none','#536574',1.2):''}${mom?p('M-20-61L-32-23Q2-16 32-25L19-64Z',c.coatDark):''}${torso}${p('M-13-85Q-17-68-13-46','none','#544b40',4.2)}${p('M-13-81v21','none','#bc9764',1.4)}${p('M-15-62h5v7h-5Z','#d9bd83',ink,.8)}${who==='芙丽达'?p('M16-67l7 3-3 8-8-3Z','#d2c49c',ink,1)+p('M16-61l2-3 2 4','none','#55756c',1):''}${head(who,mood,rig)}${p('M-22-91Q-3-86 22-93L24-83Q6-77-22-82Z',c.scarf)}${p('M-18-86q19 6 37-2','none',hilda?'#ed9b77':'#a4beb0',1.4)}${p('M17-84Q32-86 45-74L41-63 32-64 33-71 18-75Z',c.scarf,ink,1.4,rig?'id="rigScarf"':'class="cast-scarf"')}${p('M-22-45Q2-40 24-44','none','#e2be8a',.65)}</g>`;
+  const satchel=p('M-21-81C-36-81-38-66-35-50L-32-38C-27-34-18-33-13-36L-8-64Z','url(#cast-satchel)',ink,1.5)+
+   p('M-34-66L-16-62L-18-50L-33-53Z','#b58d61',ink,1.2)+
+   p('M-28-74L-22-72L-22-63L-29-64Z','#e8cf97',ink,1)+
+   e(-25,-56,1.6,2,'#ecd396',ink,.7);
+  const skirt=hilda?p('M-22-53H21L30-28Q2-23-29-28Z','url(#cast-skirt)',ink,1.55)+
+   p('M-14-51l-5 21m13-22-1 22m13-22 3 22m10-21 6 20','none','#1d2c36',1.25)+
+   p('M-26-31Q2-26 27-31','none','#567082',1):'';
+  const momSkirt=mom?p('M-21-60L-33-22Q2-15 33-24L20-62Z',c.coatDark,ink,1.55)+
+   p('M-15-56l-7 32m16-33-2 34m16-33 5 33','none','#49303a',1.2):'';
+  const torso=p('M-23-82C-10-92 12-91 20-82L28-44C12-38-9-38-26-44Z',c.coat,ink,1.6)+
+   p('M-23-73l8-9 3 35 26 2 10-4 2 6q-28 7-51 0Z',c.coatDark,'none')+
+   p('M-12-81Q1-86 14-80L19-53H-14Z',c.coatLight,'none')+
+   p('M-12-81Q1-86 14-80L19-53H-14Z','url(#cast-knit)','none')+
+   p('M-15-82L-7-70L-2-78M14-81L7-70L-2-78','none',c.coatDark,1.3)+
+   p('M-2-78V-43M-23-46Q2-40 25-45','none',c.coatDark,1.25)+
+   p('M-19-58h11v9h-11Zm27 0h11v9H8Z',c.coatSolid||c.coatDark,ink,1.05)+
+   p('M-20-58h12m15 0h12','none',c.coatLight,1.35)+
+   [0,1,2].map(i=>e(1.2,-72+i*8.5,1.45,1.45,'#f3dca8',ink,.7)).join('');
+  const strap=p('M-13-85Q-17-67-13-45','none','#4e4033',4.6)+
+   p('M-13-84Q-17-67-13-46','none','#c49c68',1.6)+
+   p('M-15.5-63h5.5v7.5h-5.5Z','#e5c88c',ink,.9);
+  const badge=who==='芙丽达'?p('M15-68l8 3-3 9-8-3Z','#decfa4',ink,1)+p('M16-62l2-3 2 4','none','#4d7067',1.1):'';
+  const scarf=p('M-23-91C-6-85 12-86 23-93L25-82C9-76-8-76-23-81Z',c.scarf,ink,1.5)+
+   p('M-18-86q19 6 37-2','none',hilda?'#f6aa88':'#b2cbc0',1.45)+
+   p('M17-84Q33-86 45-74L41-62 31-63 32-71 18-75Z',c.scarf,ink,1.45,rig?'id="rigScarf"':'class="cast-scarf"');
+  return `<g ${rig?'id="rigUpper"':''} data-costume="${who}">`+
+   `${hairBack(who,c)}${satchel}${skirt}${momSkirt}${torso}${strap}${badge}`+
+   `${head(who,mood,rig)}${scarf}`+
+   `${p('M-23-45Q2-39 25-44','none','#edd09f',.85)}`+
+  `</g>`;
  }
- function boot(x,y,back=false){return p(`M${x-6} ${y-8}l12 0 1 7q12 1 13 8l-27 0Z`,back?'#745442':'#92674b')+p(`M${x-6} ${y+5}h25v3h-27Z`,'#34434a')+p(`M${x-3} ${y-5}l8 2m-7 2 9 2`,'none','#d5bb8f',1)+p(`M${x+9} ${y+2}q4-1 7 2`,'none','#b58e65',1);}
+ function boot(x,y,back=false){
+  const fill=back?'url(#cast-boot-back)':'url(#cast-boot-front)';
+  const cuff=back?'#d5c7a8':'#efe3c4';
+  return p(`M${x-6.5} ${y-9.5}Q${x} ${y-11} ${x+6.5} ${y-9.5}L${x+7} ${y-5.2}Q${x} ${y-4} ${x-7} ${y-5.2}Z`,cuff,ink,1.35)+
+   p(`M${x-6} ${y-5.8}H${x+6}L${x+7.2} ${y-1}C${x+15} ${y-.4} ${x+20.5} ${y+2.2} ${x+20.5} ${y+6.8}H${x-7.2}L${x-6.8} ${y+.5}Z`,fill,ink,1.5)+
+   p(`M${x-7.4} ${y+5.2}H${x+20.8}V${y+8.2}H${x-7.4}Z`,'#2b3b42',ink,1.25)+
+   p(`M${x-3.2} ${y-4.2}l7.5 1.6m-7 2.2 8.2 1.6m-7.5 2.2 7.8 1.4`,'none','#ead4a8',1.05)+
+   p(`M${x+9.5} ${y+1.4}q4.8-.8 8 2.2`,'none',back?'#9c7658':'#c89e74',1.1);
+ }
  function restingArm(name,c){
-  const x=name==='back'?-22:22,hx=name==='back'?-31.5:31.5;
-  return `<g data-rest-arm="${name}">${p(`M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3`,'none',ink,11)}<path class="rest-sleeve" d="M${x} -79L${name==='back'?-29.794:29.794} -55.246L${hx} -28.3" fill="none" stroke="${name==='back'?c.coatDark:c.coat}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/><g class="rest-hand" transform="translate(${hx} -28.3) scale(${name==='back'?-1:1} 1)">${p('M-4-4Q0-6 4-3L4 3Q2 8-2 6L-4 2-6-1Q-6-3-3-1Z',c.skin,ink,1)}${p('M-1 2l2 3','none',c.shade,.7)}</g></g>`;
+  const x=name==='back'?-22:22,ex=name==='back'?-29.794:29.794,hx=name==='back'?-31.5:31.5;
+  const d=`M${x} -79L${ex} -55.246L${hx} -28.3`;
+  const sleeve=name==='back'?c.coatDark:c.coatSolid||c.coat;
+  return `<g data-rest-arm="${name}">`+
+   `${p(d,'none',ink,11.4)}`+
+   `<path class="rest-sleeve" d="${d}" fill="none" stroke="${sleeve}" stroke-width="8.8" stroke-linecap="round" stroke-linejoin="round"/>`+
+   `<g class="rest-hand" transform="translate(${hx} -28.3) scale(${name==='back'?-1:1} 1)">`+
+    `${p('M-5-6.2Q0-7.2 5-6.2L5.4-2.4Q0-1.5-5.4-2.4Z',c.coatDark,ink,1.2)}`+
+    `${p('M-4.2-2.6Q0-3.4 4.2-2.6L4.6 2.8Q4.2 7.2.8 7.8L-2.8 6.4Q-4.8 4-4.5-.5Z',c.skinSolid||c.skin,ink,1.15)}`+
+    `${p('M3.2-1.5Q6.4-.8 6 2.4Q4.6 3.6 2.8 1.8','none',ink,1.1)}`+
+    `${p('M3.1-1.3Q5.8-.7 5.5 2.1Q4.3 3.1 2.8 1.6',c.skinSolid||c.skin,'none')}`+
+    `${p('M-.8 2.2l.8 3.6m-2.4-3.4.6 3.2','none',c.shade,.85)}`+
+   `</g></g>`;
  }
  function restingLeg(name,c){
   const x=name==='back'?-11:11,d=`M${x} -50.7L${x+2.67} -26.85L${x} -3`;
-  return `<g class="cast-leg-${name}" data-rest-leg="${name}">${p(d,'none',ink,11)}${p(d,'none',c.trousers,8.5)}<g class="cast-foot" transform="translate(${x} -3)">${boot(0,-5,name==='back')}</g></g>`;
+  return `<g class="cast-leg-${name}" data-rest-leg="${name}">${p(d,'none',ink,11.2)}${p(d,'none',c.trousers,8.6)}<g class="cast-foot" transform="translate(${x} -3)">${boot(0,-5,name==='back')}</g></g>`;
  }
  function standing(who,mood='curious'){
   const c=profiles[who]||profiles['妈妈'];

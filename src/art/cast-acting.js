@@ -100,7 +100,17 @@ Homeward.define('art/cast-acting', ['art/cast-design','engine/idle-life','engine
         for(const arm of entry.arms){
           const front=arm.name==='front',origin=[front?22:-22,-79],target=front?idle.front:idle.back;
           const strideArm=gait.amount>0?Walk.arm(front?1:-1,0,(front?1:-1)*Math.sin(gait.phase*Math.PI*2)*.11*gait.amount):null;
-          const j=strideArm||solve(origin,target,25,27,front?-1:1);
+          let j=strideArm;
+          if(!j){
+            if(front&&idle.gesture>.02){
+              const n=solve(origin,[31.5,-28.3],25,27,-1),c=solve(origin,target,25,27,1);
+              const g=Math.min(1,idle.gesture);
+              const elbow=[n.elbow[0]+(c.elbow[0]-n.elbow[0])*g,n.elbow[1]+(c.elbow[1]-n.elbow[1])*g];
+              j={origin,elbow,end:c.end};
+            }else{
+              j=solve(origin,target,25,27,front?-1:1);
+            }
+          }
           const fmt=a=>a.map(n=>n.toFixed(3));
           const d=`M${fmt(origin)}L${fmt(j.elbow)}L${fmt(j.end)}`;
           arm.paths.forEach(n=>put(n,'d',d));

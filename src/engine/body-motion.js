@@ -6,9 +6,9 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
   const segment=(p,a,b)=>smooth((p-a)/(b-a));
   const bones=Object.freeze({upperArm:25,forearm:27,thigh:24,shin:24});
   const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
-  function articulated(origin,rest,target,bend,reach){
+  function articulated(origin,rest,target,bend,reach,contactBend=bend){
     const a=bones.upperArm,b=bones.forearm;
-    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,bend);
+    const neutral=solve(origin,rest,a,b,bend),contact=solve(origin,target,a,b,contactBend);
     const angle=j=>Math.atan2(j.elbow[1]-origin[1],j.elbow[0]-origin[0]);
     const elbowAngle=j=>wrap(Math.atan2(j.end[1]-j.elbow[1],j.end[0]-j.elbow[0])-angle(j));
     const upper=angle(neutral)+wrap(angle(contact)-angle(neutral))*reach;
@@ -24,7 +24,7 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       // Locomotion owns the whole body; rare idle gestures never alter walking elbows.
       const idle=gait.amount===0?Idle.sample({who:'希尔达',time,reduced}):null;
       let front=gait.armFront;
-      if(idle?.gesture>0){const target=[idle.front[0],idle.front[1]+gait.bodyY];front=articulated(front.origin,front.end,target,-1,idle.gesture*.3);}
+      if(idle?.gesture>0){const target=[idle.front[0],idle.front[1]+gait.bodyY];front=articulated(front.origin,front.end,target,-1,idle.gesture*.3,1);}
       return {offset:[0,gait.bodyY],armFront:front,armBack:gait.armBack,legs:gait.legs,
         gaitPhase:gait.phase,walkAmount:gait.amount,contact:null,pickup:false,acquired:false,transfer:0,
         grip:false,propVisible:false,propOpacity:0,headTilt:0};
@@ -45,18 +45,22 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
     if(score?.kind==='pull')world[1]+=effort*(score.travel??18);
     if(score?.kind==='pour'){world[0]-=face*40;world[1]-=42;}
     const local=[(world[0]-x)/scale*face,(world[1]-y)/scale];
-    const low=limit((local[1]+43)*.85,0,34);
-    const crouch=low*envelope*(1-transfer*.7)-2.7*(1-envelope);
+    const low=limit((local[1]+25)*.82,0,28);
+    const highLift=local[1]<-90?limit((-90-local[1])*.32,0,5.5):0;
+    const crouch=(low-highLift)*envelope*(1-transfer*.7)-2.7*(1-envelope);
     const anticipation=score&&!reduced?Math.sin(segment(p,0,.18)*Math.PI)*-1.4:0;
-    const lean=score?limit((local[0]-27)*.13,-7,10)*envelope+anticipation:wave*.6;
+    const lean=score?limit((local[0]-34)*.22,-5,10)*envelope+anticipation:wave*.6;
     const bob=moving&&!reduced?-Math.abs(Math.cos(gait*Math.PI*2))*1.1:breathe;
     const offset=[lean,crouch+bob];
-    let front=local,back=[local[0]-17,local[1]+6];
-    if(pickup){front=point(local,[-18,-59],transfer);back=score.twoHands?point(back,[-35,-59],transfer):[-25,-50];}
-    if(score?.kind==='tool'){front=[31,-91];back=[4,-74];}
+    let front=local,back=[local[0]-15,local[1]+5];
+    if(pickup){
+      front=point(local,[20,-48],transfer);
+      back=score.twoHands?point(back,[4,-47],transfer):[-25,-48];
+    }
+    if(score?.kind==='tool'){front=[32,-88];back=[10,-72];}
     if(score?.kind==='lever'){front=[34,-70-effort*17];back=[15,-67-effort*17];}
     if(score?.kind==='throw'){front=[25+Math.sin(effort*Math.PI)*18,-92-Math.sin(effort*Math.PI)*24];back=[-18,-57];}
-    if(score?.kind==='gesture'){front=[38,-69];back=[-24,-45];}
+    if(score?.kind==='gesture'){front=[36,-66];back=[-24,-45];}
     // Climbing is gameplay communication, not decorative motion: keep it visible in reduced mode.
     const climbing=score?.kind==='climb';
     if(climbing){
@@ -65,9 +69,11 @@ Homeward.define('engine/body-motion', ['engine/kinematics','engine/action-track'
       back=[-16,-94+Math.sin(p*24)*14];
     }
     const idle=!score&&!moving?Idle.sample({who:'希尔达',time,reduced}):null;
-    const armFront=articulated([22+lean,-79+crouch+bob],[31.5+lean,-28.3+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope);
-    const backReach=pickup&&!score.twoHands?envelope*.3:envelope*.9;
-    const armBack=articulated([-22+lean,-79+crouch+bob],[-31.5+lean,-28.3+crouch+bob],back,1,backReach);
+    const shoulderShift=score?limit((44-front[0])*.38,0,6.5)*envelope:0;
+    // Use anatomical elbow-down/back (+1) when reaching for targets so the elbow never folds across the face or hyperextends backward.
+    const armFront=articulated([22+lean-shoulderShift,-79+crouch+bob],[31.5+lean,-28.3+crouch+bob],idle?idle.front:front,-1,idle?idle.gesture*.55:envelope,1);
+    const backReach=pickup&&!score.twoHands?envelope*.25:envelope*.9;
+    const armBack=articulated([-22+lean,-79+crouch+bob],[-31.5+lean,-28.3+crouch+bob],back,1,backReach,1);
     const legs={};
     for(const [name,sign] of [['Back',-1],['Front',1]]){
       const step=(gait+(sign<0?.5:0))%1;

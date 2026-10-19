@@ -4,10 +4,10 @@ Homeward.define('engine/idle-life', [], () => {
   const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
   const pulse=(t,a,b,c,d)=>smooth((t-a)/(b-a))*(1-smooth((t-c)/(d-c)));
   const profiles=Object.freeze({
-    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[-8,-58],label:'check-satchel'}),
-    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[-8,-61],label:'hold-strap'}),
-    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[12,-77],label:'adjust-scarf'}),
-    '妈妈':Object.freeze({period:19.1,phase:2.7,breath:1.4,hand:[33,-44],label:'open-palm'})
+    '希尔达':Object.freeze({period:13.1,phase:1.7,breath:2.1,hand:[18,-45],label:'check-satchel'}),
+    '大卫':Object.freeze({period:15.7,phase:5.3,breath:1.7,hand:[16,-47],label:'hold-strap'}),
+    '芙丽达':Object.freeze({period:17.3,phase:9.1,breath:1.9,hand:[22,-51],label:'adjust-scarf'}),
+    '妈妈':Object.freeze({period:19.1,phase:11.7,breath:1.4,hand:[33,-36],label:'open-palm'})
   });
   function sample({who='妈妈',time=0,reduced=false,moving=false,reserved=false,speaker=false,scene=0}={}){
     const p=Object.hasOwn(profiles,who)?profiles[who]:profiles['妈妈'];
@@ -18,7 +18,7 @@ Homeward.define('engine/idle-life', [], () => {
     const blinkPhase=t%(5.1+p.phase*.11),blink=reduced?1:1-.94*pulse(blinkPhase,.18,.235,.285,.36);
     const talk=reserved||moving||reduced||!speaker?0:pulse(q,1.2,1.8,2.1,2.9)*.14;
     const reach=Math.max(gesture,talk);
-    const target=speaker&&gesture<.1?[36,-66]:p.hand;
+    const target=speaker&&gesture<.1?[34,-48]:p.hand;
     return {gesture:reach,front:[31.5+(target[0]-31.5)*reach,-28.3+(target[1]+28.3)*reach],
       back:[-31.5,-28.3],shift,
       breath:reserved||reduced?0:Math.sin(t*p.breath)*.28,
